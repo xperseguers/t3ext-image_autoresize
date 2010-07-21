@@ -87,6 +87,7 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 		foreach ($this->config['directories'] as $directory) {
 			$processFile |= t3lib_div::isFirstPartOfStr($relFilename, $directory);
 		}
+		$processFile &= is_file($filename);
 		$processFile &= t3lib_div::inArray($this->config['filetypes'], $imgExt);
 
 		if (!$processFile) {
@@ -102,12 +103,29 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	
 			$hash = t3lib_div::shortMD5($filename);
 			$dest = $gifCreator->tempPath . $hash . '.' . $imgExt;
-			$options = array(
-				'maxW' => $this->config['maxWidth'],
-				'maxH' => $this->config['maxHeight'],
-			);
+			$imParams = '';
+			$isRotated = FALSE;
 
-			$tempFileInfo = $gifCreator->imageMagickConvert($filename, '', '', '', '', '', $options);
+			if ($this->config['autoOrient']) {
+				$imParams = '-auto-orient';
+				$isRotated = $this->isRotated($filename);
+			}
+
+			if ($isRotated) {
+					// Invert maxWidth and maxHeight as the picture
+					// will be automatically rotated
+				$options = array(
+					'maxW' => $this->config['maxHeight'],
+					'maxH' => $this->config['maxWidth'],
+				);
+			} else {
+				$options = array(
+					'maxW' => $this->config['maxWidth'],
+					'maxH' => $this->config['maxHeight'],
+				);
+			}
+
+			$tempFileInfo = $gifCreator->imageMagickConvert($filename, '', '', '', $imParams, '', $options);
 			if ($tempFileInfo) {
 					// Replace original file
 				@unlink($filename);
@@ -119,6 +137,33 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 				);
 			}
 		}
+	}
+
+	/**
+	 * Returns TRUE if the given picture is rotated.
+	 *
+	 * @param string $filename
+	 * @return boolean
+	 * @see http://www.impulseadventure.com/photo/exif-orientation.html
+	 */
+	protected function isRotated($filename) {
+		$ret = FALSE;
+
+		if (function_exists('exif_read_data')) {
+			$exif = exif_read_data($filename);
+			if ($exif) {
+				switch ($exif/*['IFD0']*/['Orientation']) {
+					case 5: // vertical flip + 90 rotate right
+					case 6: // 90 rotate right
+					case 7: // horizontal flip + 90 rotate right
+					case 8:    // 90 rotate left
+						$ret = TRUE;
+		        		break;
+				}	
+			}
+		}
+
+		return $ret;
 	}
 
 	/**
