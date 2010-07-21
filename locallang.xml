@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for extension 'image_autoresize'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="config.directories">Directories: Comma-separated list of directories to be monitored</label>
+			<label index="config.filetypes">File Types: Comma-separated list of file types to be handled.</label>
+			<label index="config.threshold">Size Threshold: Images larger than this value will be resized (allowed units: B|K|M)</label>
+			<label index="config.maxWidth">Maximum Width: Images will be resized up to this maximum width</label>
+			<label index="config.maxHeight">Maximum Height: Images will be resized up to this maximum height</label>
+		</languageKey>
+	</data>
+	<orig_hash type="array">
+	</orig_hash>
+	<orig_text type="array">
+	</orig_text>
+</T3locallang>
