@@ -68,10 +68,6 @@ class tx_imageautoresize_expertConfiguration {
 	 * @return string HTML wizard
 	 */
 	public function expertWizard(array $params, t3lib_tsStyleConfig $pObj) {
-		// Horrible hack to have tceforms work
-		$formId = $this->extKey . '_form';
-		$GLOBALS['TYPO3_CONF_VARS']['SYS']['form_enctype'] .= '" id="' . $formId . '" onsubmit="return TBE_EDITOR.checkSubmit(1);'; 
-
 		if (t3lib_div::_GP('expert_form_submitted')) {
 			$this->processData();
 		}
@@ -82,11 +78,6 @@ class tx_imageautoresize_expertConfiguration {
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 		$this->content .= $this->buildForm();
 		$this->content .= $this->tceforms->printNeededJSFunctions();
-		// Second part of the horrible hack to have tceforms work
-		$this->content .= '
-			<script type="text/javascript">
-				document[TBE_EDITOR.formname] = document.getElementById(\'' . $formId . '\');
-			</script>';
 
 		return $this->content;
 	}
@@ -143,7 +134,7 @@ class tx_imageautoresize_expertConfiguration {
 	 */
 	protected function processData() {
 		$inputData_tmp = t3lib_div::_GP('data');
-		//t3lib_div::debug($inputData_tmp, 'data');
+		t3lib_div::debug($inputData_tmp, 'data');
 	}
 
 	/**
@@ -154,6 +145,7 @@ class tx_imageautoresize_expertConfiguration {
 	protected function initTCEForms() {
 		$this->tceforms = t3lib_div::makeInstance('t3lib_TCEforms');
 		$this->tceforms->initDefaultBEMode();
+		$this->tceforms->formName = 'tsStyleConfigForm';
 		$this->tceforms->backPath = $GLOBALS['BACK_PATH'];
 		$this->tceforms->doSaveFieldName = 'doSave';
 		$this->tceforms->localizationMode = '';
