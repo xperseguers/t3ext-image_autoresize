@@ -84,9 +84,9 @@ class tx_imageautoresize_expertConfiguration {
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 		$this->content .= $this->buildForm(unserialize($params['fieldValue']));
 		$this->content .= $this->tceforms->printNeededJSFunctions();
-
-		$this->content .= '<strong>Make sure to click twice on "Update" when changing rules!</strong>';
 		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
+
+		$this->content .= '<br /><strong>Make sure to click twice on "Update" when changing rules!</strong>';		
 
 		return $this->content;
 	}
@@ -119,7 +119,9 @@ class tx_imageautoresize_expertConfiguration {
 
 			// Remove header and footer
 		$form = preg_replace('/<h2>.*<\/h2>/', '', $form);
-		$form = preg_replace('/<span class="typo3-TCEforms-recUid">.*<\/span>/', '', $form);
+		$startFooter = strrpos($form, '<tr class="typo3-TCEforms-recHeaderRow">');
+		$endFooter = strpos($form, '</tr>', $startFooter);
+		$form = substr($form, 0, $startFooter) . substr($form, $endFooter + 5);
 
 			// Combine it all:
 		$content .= $form;
