@@ -38,6 +38,9 @@
  */
 class tx_imageautoresize_expertConfiguration {
 
+	const virtualTable = 'tx_imageautoresize_expert';
+	const virtualRecordId = 1;
+
 	/**
 	 * @var string
 	 */
@@ -68,16 +71,22 @@ class tx_imageautoresize_expertConfiguration {
 	 * @return string HTML wizard
 	 */
 	public function expertWizard(array $params, t3lib_tsStyleConfig $pObj) {
+		if ($params['fieldValue']) {
+			$params['fieldValue'] = urldecode($params['fieldValue']);
+		}
 		if (t3lib_div::_GP('expert_form_submitted')) {
-			$this->processData();
+			$params['fieldValue'] = $this->processData($params['fieldValue']);
 		}
 
 		//
 		// page content
 		//
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
-		$this->content .= $this->buildForm();
+		$this->content .= $this->buildForm(unserialize($params['fieldValue']));
 		$this->content .= $this->tceforms->printNeededJSFunctions();
+
+		$this->content .= '<strong>Make sure to click twice on "Update" when changing rules!</strong>';
+		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
 
 		return $this->content;
 	}
@@ -85,38 +94,28 @@ class tx_imageautoresize_expertConfiguration {
 	/**
 	 * Builds the expert configuration form.
 	 *
+	 * @param array $row
 	 * @return string
 	 */
-	protected function buildForm() {
+	protected function buildForm(array $row) {
 		$content = '';
 
 			// Load the configuration of virtual table 'tx_imageautoresize_expert' 
 		global $TCA;
 		include(t3lib_extMgm::extPath($this->extKey) . 'tca.php');
 
-		$trData = t3lib_div::makeInstance('t3lib_transferData');
-		$trData->addRawData = TRUE;
-		$trData->lockRecords = 0;
-		$trData->defVals = t3lib_div::_GP('defVals');
-		$trData->disableRTE = 0;
-		//$trData->prevPageID = $prevPageID;
-		$trData->fetchRecord($table, 0, 'new');
-		reset($trData->regTableItems_data);
-		$rec = current($trData->regTableItems_data);
-		$rec['uid'] = uniqid('NEW');
+		$rec['uid'] = self::virtualRecordId;
 		$rec['pid'] = 0;
-		$rec['directories'] = 'fileadmin/test/';
+		$rec = array_merge($rec, $row);
 
 			// Setting variables in TCEforms object
 		$this->tceforms->hiddenFieldList = '';
 
-		$table = 'tx_imageautoresize_expert';
-
 			// Create form
 		$form = '';
-		$form .= $this->tceforms->getMainFields($table, $rec);
+		$form .= $this->tceforms->getMainFields(self::virtualTable, $rec);
 		$form .= '<input type="hidden" name="expert_form_submitted" value="1" />';
-		$form = $this->tceforms->wrapTotal($form, $rec, $table);
+		$form = $this->tceforms->wrapTotal($form, $rec, self::virtualTable);
 
 			// Remove header and footer
 		$form = preg_replace('/<h2>.*<\/h2>/', '', $form);
@@ -130,11 +129,18 @@ class tx_imageautoresize_expertConfiguration {
 	/**
 	 * Processes submitted data.
 	 *
-	 * @return	void
+	 * @param string $serializedData
+	 * @return string
 	 */
-	protected function processData() {
+	protected function processData($serializedData) {
 		$inputData_tmp = t3lib_div::_GP('data');
-		t3lib_div::debug($inputData_tmp, 'data');
+		$data = $inputData_tmp[self::virtualTable][self::virtualRecordId];
+
+		$origData = unserialize($serializedData);
+		if (!is_array($origData)) {
+			$origData = array();
+		}
+		return serialize(array_merge($origData, $data));
 	}
 
 	/**
@@ -149,7 +155,6 @@ class tx_imageautoresize_expertConfiguration {
 		$this->tceforms->backPath = $GLOBALS['BACK_PATH'];
 		$this->tceforms->doSaveFieldName = 'doSave';
 		$this->tceforms->localizationMode = '';
-		$this->tceforms->returnUrl = 'index.php';
 		$this->tceforms->palettesCollapsed = 1;
 		$this->tceforms->disableRTE = 0;
 		$this->tceforms->enableClickMenu = TRUE;
