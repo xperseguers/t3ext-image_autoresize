@@ -86,7 +86,7 @@ class tx_imageautoresize_expertConfiguration {
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
 
-		$this->content .= '<br /><strong>Make sure to click twice on "Update" when changing rules!</strong>';		
+		$this->content .= '<br /><div style="color:red;">Make sure to <strong>click twice on "Update"</strong> when changing rules!</div>';		
 
 		return $this->content;
 	}
