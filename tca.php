@@ -82,26 +82,13 @@ $TCA['tx_imageautoresize_expert'] = array(
 				),
 			),
 		),
-		'usergroup' => array(
-			'exclude' => 0,
-			'label' => 'LLL:EXT:lang/locallang_tca.xml:be_users.usergroup',
-			'config' => array(
-				'type' => 'select',
-				'foreign_table' => 'be_groups',
-				'foreign_table_where' => 'ORDER BY be_groups.title',
-				'size' => 5,
-				'minitems' => 1,
-				'maxitems' => 99,
-				'autoSizeMax' => 10,
-			),
-		),
     ),
 	'types' => array(
 		'0' => array('showitem' =>
 				'directories,threshold,filetypes,
 			--palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgDimensions;1,
 			--div--;LLL:EXT:image_autoresize/locallang_tca.xml:tabs.begroups,
-				feature, usergroup
+				feature
 		'),
     ),
     'palettes' => array(
