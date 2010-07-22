@@ -69,7 +69,7 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	 * @param string The action
 	 * @param array The parameter sent to the action handler
 	 * @param array The results of all calls to the action handler 
-	 * @param t3lib_extFileFunctions parent object
+	 * @param t3lib_extFileFunctions Parent object
 	 * @return void
 	 */
 	public function processData_postProcessAction($action, array $cmdArr, array $result, t3lib_extFileFunctions $pObj) {
@@ -132,7 +132,10 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 				@rename($tempFileInfo[3], $filename);
 
 				$this->notify(
-					sprintf('Image %s has been automatically resized to %sx%s pixels', $relFilename, $tempFileInfo[0], $tempFileInfo[1]),
+					sprintf(
+						$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResized'),
+						$relFilename, $tempFileInfo[0], $tempFileInfo[1]
+					),
 					t3lib_FlashMessage::INFO
 				);
 			}
