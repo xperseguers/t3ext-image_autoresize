@@ -52,6 +52,11 @@ class tx_imageautoresize_expertConfiguration {
 	protected $tceforms;
 
 	/**
+	 * @var array
+	 */
+	protected $extConf;
+
+	/**
 	 * @var string
 	 */
 	protected $content;
@@ -61,6 +66,7 @@ class tx_imageautoresize_expertConfiguration {
 	 */
 	public function __construct() {
 		$this->initTCEForms();
+		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
 	}
 
 	/**
@@ -81,12 +87,19 @@ class tx_imageautoresize_expertConfiguration {
 		//
 		// page content
 		//
+		if (!$this->extConf['expert']) {
+			// TODO: do that better
+			$this->content .= '<div style="display:none;">';
+		}
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 		$this->content .= $this->buildForm(unserialize($params['fieldValue']));
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
+		if (!$this->extConf['expert']) {
+			$this->content .= '</div>';
+		}
 
-		$this->content .= '<br /><div style="color:red;">Make sure to <strong>click twice on "Update"</strong> when changing rules!</div>';		
+		$this->content .= '<br /><div style="color:red;">Make sure to <strong>click twice on "Update"</strong> when changing configuration here!</div>';
 
 		return $this->content;
 	}
