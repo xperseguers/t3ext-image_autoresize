@@ -69,11 +69,9 @@ class tx_imageautoresize_expertConfiguration {
 	 */
 	public function expertWizard(array $params, t3lib_tsStyleConfig $pObj) {
 		// Horrible hack to have tceforms work
-		$GLOBALS['TYPO3_CONF_VARS']['SYS']['form_enctype'] .= '" onsubmit="return TBE_EDITOR.checkSubmit(1);'; 
-		//tsStyleConfigForm
-		//t3lib_div::debug(t3lib_div::_GP('expertWizardSave'), 'expert');
-		//$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$this->extKey . '_expert'] = 'pi_flexform';
-		//t3lib_extMgm::addPiFlexFormValue($this->extKey . '_expert', 'FILE:EXT:' . $this->extKey . '/flexform.xml');
+		$formId = $this->extKey . '_form';
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['form_enctype'] .= '" id="' . $formId . '" onsubmit="return TBE_EDITOR.checkSubmit(1);'; 
+
 		if (t3lib_div::_GP('expert_form_submitted')) {
 			$this->processData();
 		}
@@ -84,6 +82,11 @@ class tx_imageautoresize_expertConfiguration {
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 		$this->content .= $this->buildForm();
 		$this->content .= $this->tceforms->printNeededJSFunctions();
+		// Second part of the horrible hack to have tceforms work
+		$this->content .= '
+			<script type="text/javascript">
+				document[TBE_EDITOR.formname] = document.getElementById(\'' . $formId . '\');
+			</script>';
 
 		return $this->content;
 	}
@@ -106,13 +109,12 @@ class tx_imageautoresize_expertConfiguration {
 		$trData->defVals = t3lib_div::_GP('defVals');
 		$trData->disableRTE = 0;
 		//$trData->prevPageID = $prevPageID;
-		//$trData->fetchRecord($table, $this->workspaceId, '');
+		$trData->fetchRecord($table, 0, 'new');
 		reset($trData->regTableItems_data);
 		$rec = current($trData->regTableItems_data);
-		$rec = array(
-			'uid' => 0,
-			'title' => 'test',
-		);
+		$rec['uid'] = uniqid('NEW');
+		$rec['pid'] = 0;
+		$rec['directories'] = 'fileadmin/test/';
 
 			// Setting variables in TCEforms object
 		$this->tceforms->hiddenFieldList = '';
@@ -141,7 +143,7 @@ class tx_imageautoresize_expertConfiguration {
 	 */
 	protected function processData() {
 		$inputData_tmp = t3lib_div::_GP('data');
-		t3lib_div::debug($inputData_tmp, 'data');
+		//t3lib_div::debug($inputData_tmp, 'data');
 	}
 
 	/**
@@ -154,8 +156,8 @@ class tx_imageautoresize_expertConfiguration {
 		$this->tceforms->initDefaultBEMode();
 		$this->tceforms->backPath = $GLOBALS['BACK_PATH'];
 		$this->tceforms->doSaveFieldName = 'doSave';
-		//$this->tceforms->localizationMode = t3lib_div::inList('text,media', $this->localizationMode) ? $this->localizationMode : '';	// text,media is keywords defined in TYPO3 Core API..., see "l10n_cat"
-		//$this->tceforms->returnUrl = $this->R_URI;
+		$this->tceforms->localizationMode = '';
+		$this->tceforms->returnUrl = 'index.php';
 		$this->tceforms->palettesCollapsed = 1;
 		$this->tceforms->disableRTE = 0;
 		$this->tceforms->enableClickMenu = TRUE;
