@@ -137,11 +137,12 @@ class tx_imageautoresize_expertConfiguration {
 	protected function processData($serializedData) {
 		$inputData_tmp = t3lib_div::_GP('data');
 		$data = $inputData_tmp[self::virtualTable][self::virtualRecordId];
-
+t3lib_div::debug($data, 'data');
 		$origData = unserialize($serializedData);
 		if (!is_array($origData)) {
 			$origData = array();
 		}
+
 		return serialize(array_merge($origData, $data));
 	}
 
@@ -157,7 +158,7 @@ class tx_imageautoresize_expertConfiguration {
 		$this->tceforms->backPath = $GLOBALS['BACK_PATH'];
 		$this->tceforms->doSaveFieldName = 'doSave';
 		$this->tceforms->localizationMode = '';
-		$this->tceforms->palettesCollapsed = 1;
+		$this->tceforms->palettesCollapsed = 0;
 		$this->tceforms->disableRTE = 0;
 		$this->tceforms->enableClickMenu = TRUE;
 		$this->tceforms->enableTabMenu = TRUE;

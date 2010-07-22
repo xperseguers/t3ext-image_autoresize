@@ -7,7 +7,10 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_imageautoresize_expert.directories">Directories:</label>
-			<label index="tx_imageautoresize_expert.filetypes">File types:</label>
+			<label index="tx_imageautoresize_expert.filetypes">Images:</label>
+			<label index="tx_imageautoresize_expert.threshold">Threshold:</label>
+			<label index="tx_imageautoresize_expert.maxwidth">Maximum width:</label>
+			<label index="tx_imageautoresize_expert.maxheight">Maximum height:</label>
 
 			<label index="tabs.begroups">Backend User Groups</label>
 		</languageKey>
