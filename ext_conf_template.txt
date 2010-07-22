@@ -13,5 +13,8 @@ maxWidth = 1280
 	# cat=basic; type=int+; label=LLL:EXT:image_autoresize/locallang.xml:config.maxHeight
 maxHeight = 1024
 
-	# cat=basic; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.autoOrient
+	# cat=advanced; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.autoOrient
 autoOrient = 1
+
+	# cat=advanced; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.keepMetadata
+metadata = 0

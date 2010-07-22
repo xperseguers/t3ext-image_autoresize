@@ -103,11 +103,11 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	
 			$hash = t3lib_div::shortMD5($filename);
 			$dest = $gifCreator->tempPath . $hash . '.' . $imgExt;
-			$imParams = '';
+			$imParams = $this->config['metadata'] ? '###SkipStripProfile###' : '';
 			$isRotated = FALSE;
 
 			if ($this->config['autoOrient']) {
-				$imParams = '-auto-orient';
+				$imParams .= ' -auto-orient';
 				$isRotated = $this->isRotated($filename);
 			}
 
