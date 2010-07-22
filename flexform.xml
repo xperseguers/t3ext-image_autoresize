@@ -8,14 +8,14 @@
 			<feature type="array">
 				<type>array</type>
 				<tx_templavoila type="array">
-					<title>Banners</title>
+					<title></title>
 					<eType>input</eType>
 				</tx_templavoila>
 				<el type="array">
 					<container type="array">
 						<type>array</type>
 						<tx_templavoila type="array">
-							<title>Banner</title>
+							<title>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.usergroupRuleset</title>
 						</tx_templavoila>
 						<TCEforms type="array">
 							<label></label>

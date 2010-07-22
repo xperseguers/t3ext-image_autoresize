@@ -11,8 +11,10 @@
 			<label index="tx_imageautoresize_expert.threshold">Threshold:</label>
 			<label index="tx_imageautoresize_expert.maxwidth">Maximum width:</label>
 			<label index="tx_imageautoresize_expert.maxheight">Maximum height:</label>
+			<label index="tx_imageautoresize_expert.rulesets">Rule sets (first match wins)</label>
+			<label index="tx_imageautoresize_expert.usergroupRuleset">User group rule set</label>
 
-			<label index="tabs.begroups">Backend User Groups</label>
+			<label index="tabs.rulesets">Rule Sets</label>
 		</languageKey>
 	</data>
 </T3locallang>

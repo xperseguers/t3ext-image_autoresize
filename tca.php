@@ -71,9 +71,9 @@ $TCA['tx_imageautoresize_expert'] = array(
 				'default' => 0
 			)
 		),
-		'feature' => array(
+		'rulesets' => array(
 			'exclude' => 0,
-			'label' => 'Feature',
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.rulesets',
 			'config' => array(
 				'type' => 'flex',
 				'ds_pointerField' => 'list_type',
@@ -87,8 +87,8 @@ $TCA['tx_imageautoresize_expert'] = array(
 		'0' => array('showitem' =>
 				'directories,threshold,filetypes,
 			--palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgDimensions;1,
-			--div--;LLL:EXT:image_autoresize/locallang_tca.xml:tabs.begroups,
-				feature
+			--div--;LLL:EXT:image_autoresize/locallang_tca.xml:tabs.rulesets,
+				rulesets
 		'),
     ),
     'palettes' => array(
