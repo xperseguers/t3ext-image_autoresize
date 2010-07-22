@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for extension 'image_autoresize'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_imageautoresize_expert.directories">Directories:</label>
+			<label index="tx_imageautoresize_expert.filetypes">File types:</label>
+
+			<label index="tabs.begroups">Backend User Groups</label>
+		</languageKey>
+	</data>
+</T3locallang>

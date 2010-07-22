@@ -13,12 +13,10 @@
 			<label index="config.maxHeight">Maximum height: Images will be resized up to this maximum height</label>
 			<label index="config.autoOrient">Automatic orientation: Will try to automagically orient image (useful with photos)</label>
 			<label index="config.keepMetadata">Keep profile/metadata: If active, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand']</label>
+			<label index="config.expert">Expert configuration: Enable this and save to set up advanced rules. Will completely override basic/advanced options</label>
+			<label index="config.rules">Rules</label>
 
 			<label index="message.imageResized">Image %s has been automatically resized to %sx%s pixels</label>
 		</languageKey>
 	</data>
-	<orig_hash type="array">
-	</orig_hash>
-	<orig_text type="array">
-	</orig_text>
 </T3locallang>

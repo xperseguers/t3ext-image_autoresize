@@ -18,3 +18,9 @@ autoOrient = 1
 
 	# cat=advanced; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.keepMetadata
 metadata = 0
+
+	# cat=expert; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.expert
+expert = 0
+
+	#cat=expert; type=user[EXT:image_autoresize/classes/class.tx_imageautoresize_expertconfiguration.php:&tx_imageautoresize_expertConfiguration->expertWizard]; label=LLL:EXT:image_autoresize/locallang.xml:config.rules
+rules =
