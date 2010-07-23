@@ -15,7 +15,7 @@ $TCA['tx_imageautoresize'] = array(
                 'type' => 'input',
 				'size' => '50',
 				'max' => '255',
-				'eval' => 'trim',
+				'eval' => 'trim,required',
             ),
         ),
         'file_types' => array(
@@ -24,7 +24,7 @@ $TCA['tx_imageautoresize'] = array(
                 'type' => 'input',
 				'size' => '30',
 				'max' => '100',
-				'eval' => 'trim',
+				'eval' => 'trim,required',
             ),
         ),
         'threshold' => array(
@@ -33,7 +33,7 @@ $TCA['tx_imageautoresize'] = array(
                 'type' => 'input',
 				'size' => '10',
 				'max' => '10',
-				'eval' => 'trim',
+				'eval' => 'trim,required',
             ),
         ),
         'max_width' => array(
@@ -42,7 +42,7 @@ $TCA['tx_imageautoresize'] = array(
 				'type' => 'input',
 				'size' => '5',
 				'max' => '5',
-				'eval' => 'int',
+				'eval' => 'int,required',
 				'checkbox' => '0',
 				'range' => array(
 					'upper' => '',
@@ -57,7 +57,7 @@ $TCA['tx_imageautoresize'] = array(
 				'type' => 'input',
 				'size' => '5',
 				'max' => '5',
-				'eval' => 'int',
+				'eval' => 'int,required',
 				'checkbox' => '0',
 				'range' => array(
 					'upper' => '',

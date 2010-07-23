@@ -22,8 +22,6 @@
 				They will be evaluated one after the other in order to possibly override general settings.
 				The evalutation stops as soon as a matching rule set has been found.
 			</label>
-			<label index="title.description">Title of the rule set. This is only used in this form to help you keep your rule sets organized.</label>
-        	<label index="usergroup.description">Set of backend user groups to which the rule set should be applied.</label>
         </languageKey>
     </data>
 </T3locallang>
