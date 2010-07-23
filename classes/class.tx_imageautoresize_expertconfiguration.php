@@ -163,8 +163,23 @@ class tx_imageautoresize_expertConfiguration {
 	 * Processes submitted data and stores it to localconf.php.
 	 */
 	protected function processData() {
+		$table = self::virtualTable;
+		$id    = self::virtualRecordId;
+		$field = 'rulesets';
+
 		$inputData_tmp = t3lib_div::_GP('data');
-		$data = $inputData_tmp[self::virtualTable][self::virtualRecordId];
+		$data = $inputData_tmp[$table][$id];
+
+			// Action commands (sorting order and removals of FlexForm elements)
+		$ffValue =& $data[$field];
+		$actionCMDs = t3lib_div::_GP('_ACTION_FLEX_FORMdata');
+		if (is_array($actionCMDs[$table][$id][$field]['data']))	{
+			$tcemain = t3lib_div::makeInstance('t3lib_TCEmain');
+			// Officially internal but not declared as such... 
+			$tcemain->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
+		}
+			// Renumber all FlexForm ids
+		$this->persistFlexForm($ffValue['data']);	
 
 		$newConfig = t3lib_div::array_merge_recursive_overrule($this->config, $data);
 			// Keep order of FlexForm elements
@@ -236,6 +251,27 @@ class tx_imageautoresize_expertConfiguration {
 		if ($GLOBALS['BE_USER']->uc['edit_showFieldHelp']!='text' && $this->MOD_SETTINGS['showDescriptions'])	$this->tceforms->edit_showFieldHelp='text';
 	}
 
+	/**
+	 * Persists FlexForm items by removing 'ID-' in front of new
+	 * items.
+	 *
+	 * @param array &$valueArray: by reference
+	 * @return void
+	 */
+	protected function persistFlexForm(array &$valueArray) {
+		foreach ($valueArray as $key => $value) {
+			if ($key === 'el') {
+				foreach ($value as $idx => $v) {
+					if ($v && substr($idx, 0, 3) === 'ID-') {
+						$valueArray[$key][substr($idx, 3)] = $v;
+						unset($valueArray[$key][$idx]);
+					}
+				}
+			} elseif (isset($valueArray[$key])) {
+				$this->persistFlexForm($valueArray[$key]);
+			}
+		}
+	}
 }
 
 
