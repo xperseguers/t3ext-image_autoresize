@@ -64,6 +64,11 @@ class tx_imageautoresize_expertConfiguration {
 	protected $extConf;
 
 	/**
+	 * @var array
+	 */
+	protected $config;
+
+	/**
 	 * @var string
 	 */
 	protected $content;
@@ -74,8 +79,9 @@ class tx_imageautoresize_expertConfiguration {
 	public function __construct() {
 		$this->initTCEForms();
 
+		$this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey];
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
-		$this->extConf = $config ? unserialize($config) : array();
+		$this->config = $config ? unserialize($config) : array();
 	}
 
 	/**
@@ -93,16 +99,23 @@ class tx_imageautoresize_expertConfiguration {
 		//
 		// page content
 		//
+		$row = $this->config;
+		if ($row['rulesets']) {
+			$flexObj = t3lib_div::makeInstance('t3lib_flexformtools');
+			/* @var $flexObj t3lib_flexformtools */
+			$row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);	
+		}
+
 		if (!$this->extConf['expert']) {
 			// TODO: do that better
-			$this->content .= '<div style="display:none;">';
+			//$this->content .= '<div style="display:none;">';
 		}
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
-		$this->content .= $this->buildForm($this->extConf);
+		$this->content .= $this->buildForm($row);
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
 		if (!$this->extConf['expert']) {
-			$this->content .= '</div>';
+			//$this->content .= '</div>';
 		}
 
 		return $this->content;
@@ -152,9 +165,12 @@ class tx_imageautoresize_expertConfiguration {
 	protected function processData() {
 		$inputData_tmp = t3lib_div::_GP('data');
 		$data = $inputData_tmp[self::virtualTable][self::virtualRecordId];
-t3lib_div::debug($data, 'data');
 
-		$newConfig = t3lib_div::array_merge_recursive_overrule($this->extConf, $data);
+		$newConfig = t3lib_div::array_merge_recursive_overrule($this->config, $data);
+			// Keep order of FlexForm elements
+		if ($data['rulesets']) {
+			$newConfig['rulesets'] = $data['rulesets'];
+		}
 
 			// Write back configuration to localconf.php. Don't use the tx_install methods
 			// as they add unneeded comments at the end of the file
@@ -168,7 +184,7 @@ t3lib_div::debug($data, 'data');
 		//$instObj->setValueInLocalconfFile($lines, $key, $value, FALSE);
 		//$result = $instObj->writeToLocalconf_control($lines);
 		//if ($result !== 'nochange') {
-		//	$this->extConf = $newConfig;
+		//	$this->config = $newConfig;
 		//	t3lib_extMgm::removeCacheFiles();
 		//}
 		//$instObj = null;
@@ -195,7 +211,7 @@ t3lib_div::debug($data, 'data');
 			$lines[] = '?>';
 		}
 		t3lib_div::writeFile($localconfFile, implode("\n", $lines));
-		$this->extConf = $newConfig;
+		$this->config = $newConfig;
 		t3lib_extMgm::removeCacheFiles();
 	}
 
