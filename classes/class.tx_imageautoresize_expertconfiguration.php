@@ -116,6 +116,7 @@ class tx_imageautoresize_expertConfiguration {
 			// Load the configuration of virtual table 'tx_imageautoresize_expert' 
 		global $TCA;
 		include(t3lib_extMgm::extPath($this->extKey) . 'tca.php');
+		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/locallang_csh_' . self::virtualTable . '.xml');
 
 		$rec['uid'] = self::virtualRecordId;
 		$rec['pid'] = 0;

@@ -7,13 +7,16 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tx_imageautoresize_expert.directories">Directories:</label>
-			<label index="tx_imageautoresize_expert.filetypes">Images:</label>
-			<label index="tx_imageautoresize_expert.threshold">Threshold:</label>
-			<label index="tx_imageautoresize_expert.maxwidth">Maximum width:</label>
-			<label index="tx_imageautoresize_expert.maxheight">Maximum height:</label>
-			<label index="tx_imageautoresize_expert.rulesets">Rule sets (first match wins)</label>
-			<label index="tx_imageautoresize_expert.usergroupRuleset">User group rule set</label>
+			<label index="tx_imageautoresize_expert.file_types">Image types:</label>
+			<label index="tx_imageautoresize_expert.threshold">Size threshold:</label>
+			<label index="tx_imageautoresize_expert.max_width">Maximum width:</label>
+			<label index="tx_imageautoresize_expert.max_height">Maximum height:</label>
+			<label index="tx_imageautoresize_expert.auto_orient">Automatic orientation</label>
+			<label index="tx_imageautoresize_expert.keep_metadata">Keep profile and metadata</label>
+			<label index="tx_imageautoresize_expert.rulesets">Rule sets</label>
+			<label index="tx_imageautoresize_expert.usergroup_ruleset">User group rule set</label>
 
+			<label index="tabs.options">Options</label>
 			<label index="tabs.rulesets">Rule Sets</label>
 		</languageKey>
 	</data>

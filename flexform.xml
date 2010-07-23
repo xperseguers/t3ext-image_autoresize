@@ -3,9 +3,12 @@
 		<langDisable>1</langDisable>
 	</meta>
 	<ROOT>
+		<TCEforms>
+			<cshFile>LLL:EXT:image_autoresize/locallang_csh_flexform.xml</cshFile>
+		</TCEforms>
 		<type>array</type>
 		<el>
-			<feature type="array">
+			<ruleset type="array">
 				<type>array</type>
 				<tx_templavoila type="array">
 					<title></title>
@@ -15,7 +18,7 @@
 					<container type="array">
 						<type>array</type>
 						<tx_templavoila type="array">
-							<title>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.usergroupRuleset</title>
+							<title>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.usergroup_ruleset</title>
 						</tx_templavoila>
 						<TCEforms type="array">
 							<label></label>
@@ -41,7 +44,7 @@
 					</container>
 				</el>
 				<section>1</section>
-			</feature>
+			</ruleset>
 		</el>
 	</ROOT>
 </T3DataStructure>
