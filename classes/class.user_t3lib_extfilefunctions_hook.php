@@ -51,16 +51,7 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	 * Default constructor.
 	 */
 	public function __construct() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize']);
-
-		$this->config['directories'] = t3lib_div::trimExplode(',', $this->config['directories']);
-		$this->config['filetypes'] = t3lib_div::trimExplode(',', $this->config['filetypes']);
-		$this->config['threshold'] = $this->convertHumanSizeToBytes(trim($this->config['threshold']));
-
-			// Sanitize name of the directories
-		foreach ($this->config['directories'] as &$directory) {
-			$directory = rtrim($directory, '/') . '/';
-		}
+		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff']);
 	}
 
 	/**
@@ -80,65 +71,59 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 
 			// Get the latest uploaded file name
 		$filename = array_pop($result);
-		$relFilename = substr($filename, strlen(PATH_site));
-		$imgExt = strtolower(substr($filename, strrpos($filename, '.') + 1));
+		$ruleset = $this->getRuleset($filename);
 
-		$processFile = FALSE;
-		foreach ($this->config['directories'] as $directory) {
-			$processFile |= t3lib_div::isFirstPartOfStr($relFilename, $directory);
-		}
-		$processFile &= is_file($filename);
-		$processFile &= t3lib_div::inArray($this->config['filetypes'], $imgExt);
-
-		if (!$processFile) {
-				// Early return: directory and/or file type not configured
+		if (count($ruleset) == 0) {
+				// File does not match any rule set
 			return;
 		}
 
-		if (filesize($filename) > $this->config['threshold']) {
-				// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-			$gifCreator = t3lib_div::makeInstance('tslib_gifbuilder');
-			$gifCreator->init();
-			$gifCreator->absPrefix = PATH_site;
-	
-			$hash = t3lib_div::shortMD5($filename);
-			$dest = $gifCreator->tempPath . $hash . '.' . $imgExt;
-			$imParams = $this->config['metadata'] === '1' ? '###SkipStripProfile###' : '';
-			$isRotated = FALSE;
+			// Make filename relative and extract the extension
+		$relFilename = substr($filename, strlen(PATH_site));
+		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 
-			if ($this->config['autoOrient'] !== '0') { // Default option is active but it might not be (yet) saved
-				$imParams .= ' -auto-orient';
-				$isRotated = $this->isRotated($filename);
-			}
+			// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
+		$gifCreator = t3lib_div::makeInstance('tslib_gifbuilder');
+		$gifCreator->init();
+		$gifCreator->absPrefix = PATH_site;
 
-			if ($isRotated) {
-					// Invert maxWidth and maxHeight as the picture
-					// will be automatically rotated
-				$options = array(
-					'maxW' => $this->config['maxHeight'],
-					'maxH' => $this->config['maxWidth'],
-				);
-			} else {
-				$options = array(
-					'maxW' => $this->config['maxWidth'],
-					'maxH' => $this->config['maxHeight'],
-				);
-			}
+		$hash = t3lib_div::shortMD5($filename);
+		$dest = $gifCreator->tempPath . $hash . '.' . $fileExtension;
+		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
+		$isRotated = FALSE;
 
-			$tempFileInfo = $gifCreator->imageMagickConvert($filename, '', '', '', $imParams, '', $options);
-			if ($tempFileInfo) {
-					// Replace original file
-				@unlink($filename);
-				@rename($tempFileInfo[3], $filename);
+		if ($ruleset['auto_orient'] === '1') {
+			$imParams .= ' -auto-orient';
+			$isRotated = $this->isRotated($filename);
+		}
 
-				$this->notify(
-					sprintf(
-						$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResized'),
-						$relFilename, $tempFileInfo[0], $tempFileInfo[1]
-					),
-					t3lib_FlashMessage::INFO
-				);
-			}
+		if ($isRotated) {
+				// Invert maxWidth and maxHeight as the picture
+				// will be automatically rotated
+			$options = array(
+				'maxW' => $ruleset['max_height'],
+				'maxH' => $ruleset['max_width'],
+			);
+		} else {
+			$options = array(
+				'maxW' => $ruleset['max_width'],
+				'maxH' => $ruleset['max_height'],
+			);
+		}
+
+		$tempFileInfo = $gifCreator->imageMagickConvert($filename, '', '', '', $imParams, '', $options);
+		if ($tempFileInfo) {
+				// Replace original file
+			@unlink($filename);
+			@rename($tempFileInfo[3], $filename);
+
+			$this->notify(
+				sprintf(
+					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResized'),
+					$relFilename, $tempFileInfo[0], $tempFileInfo[1]
+				),
+				t3lib_FlashMessage::INFO
+			);
 		}
 	}
 
@@ -170,21 +155,6 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	}
 
 	/**
-	 * Converts a human file size into bytes.
-	 *
-	 * @param string $size
-	 * @return integer
-	 */
-	protected function convertHumanSizeToBytes($size) {
-		if (!is_numeric($size)) {
-			$unit = strtoupper(substr($size, -1));
-			$factor = 1 * ($unit === 'K' ? 1024 : ($unit === 'M' ? 1024 * 1024 : 0));
-			$size = intval(trim(substr($size, 0, strlen($size) - 1))) * $factor;
-		}
-		return $size;
-	}
-
-	/**
 	 * Notifies the user using a Flash message.
 	 *
 	 * @param string $message The message
@@ -201,6 +171,165 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 			TRUE
 		);
 		t3lib_FlashMessageQueue::addMessage($flashMessage);
+	}
+
+	/**
+	 * Returns the rule set that applies to a given file for
+	 * current logged-in backend user.
+	 *
+	 * @param string $filename
+	 * @return array
+	 */
+	protected function getRuleset($filename) {
+		$ret = array();
+		if (!is_file($filename)) {
+				// Early return
+			return $ret;
+		}
+
+			// Make filename relative and extract the extension
+		$relFilename = substr($filename, strlen(PATH_site));
+		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
+
+		$beGroups = array_keys($GLOBALS['BE_USER']->userGroups);
+		$rulesets = $this->getHookRulesets();
+
+			// Try to find a matching ruleset
+		foreach ($rulesets as $ruleset) {
+			if (count($ruleset['usergroup']) > 0 && count(array_intersect($ruleset['usergroup'], $beGroups)) == 0) {
+					// Backend user is not member of a group configured for the current rule set
+				continue;
+			}
+			$processFile = FALSE;
+			foreach ($ruleset['directories'] as $directory) {
+				$processFile |= t3lib_div::isFirstPartOfStr($relFilename, $directory);
+			}
+			$processFile &= t3lib_div::inArray($ruleset['file_types'], $fileExtension);
+			$processFile &= (filesize($filename) > $ruleset['threshold']);
+			if ($processFile) {
+				$ret = $ruleset;
+				break;
+			}
+		}
+		return $ret;
+	}
+
+	/**
+	 * Returns the hook configuration as a meaningful ordered list
+	 * of rule sets.
+	 *
+	 * @return array
+	 */
+	protected function getHookRulesets() {
+		$general = $this->config;
+		$general['usergroup'] = '';
+		unset($general['rulesets']);
+		$general = $this->expandValuesInRuleset($general);
+		$rulesets = $this->compileRuleSets($this->config['rulesets']);
+
+			// Inherit values from general configuration in rule sets if needed
+		foreach ($rulesets as $k => &$ruleset) {
+			foreach ($general as $key => $value) {
+				if (!isset($ruleset[$key])) {
+					$ruleset[$key] = $value;
+				} elseif ($ruleset[$key] === '') {
+					$ruleset[$key] = $value;
+				}
+			}
+			if (count($ruleset['usergroup']) == 0) {
+					// Make sure not to try to override general configuration
+					// => only keep directories not present in general configuration
+				$ruleset['directories'] = array_diff($ruleset['directories'], $general['directories']);
+				if (count($ruleset['directories']) == 0) {
+					unset($rulesets[$k]);
+				}
+			}
+		}
+
+			// Use general configuration as very first rule set
+		array_unshift($rulesets, $general); 
+		return $rulesets;
+	}
+
+	/**
+	 * Compiles all rule sets.
+	 *
+	 * @param array $rulesets
+	 * @return array
+	 */
+	protected function compileRulesets(array $rulesets) {
+		$sheets = t3lib_div::resolveAllSheetsInDS($rulesets);
+		$rulesets = array();
+
+		foreach ($sheets['sheets'] as $sheet) {
+			$elements = $sheet['data']['sDEF']['lDEF']['ruleset']['el'];
+			foreach ($elements as $container) {
+				if (isset($container['container']['el'])) {
+					$values = array();
+					foreach ($container['container']['el'] as $key => $value) {
+						if ($key === 'title') {
+							continue;
+						}
+						$values[$key] = $value['vDEF'];
+					}
+					$rulesets[] = $this->expandValuesInRuleset($values);
+				}
+			}
+		}
+
+		return $rulesets;
+	}
+
+	/**
+	 * Expands values of a rule set.
+	 *
+	 * @param array $ruleset
+	 * @return array
+	 */
+	protected function expandValuesInRuleset(array $ruleset) {
+		$values = array();
+		foreach ($ruleset as $key => $value) {
+			switch ($key) {
+				case 'usergroup':
+					$value = t3lib_div::trimExplode(',', $value, TRUE);
+					break;
+				case 'directories':
+					$value = t3lib_div::trimExplode(',', $value, TRUE);
+						// Sanitize name of the directories
+					foreach ($value as &$directory) {
+						$directory = rtrim($directory, '/') . '/';
+					}
+					if (count($value) == 0) {
+							// Inherit configuration
+						$value = '';
+					}
+					break;
+				case 'file_types':
+					$value = t3lib_div::trimExplode(',', $value, TRUE);
+					if (count($value) == 0) {
+							// Inherit configuration
+						$value = '';
+					}
+					break;
+				case 'threshold':
+					if (!is_numeric($value)) {
+						$unit = strtoupper(substr($value, -1));
+						$factor = 1 * ($unit === 'K' ? 1024 : ($unit === 'M' ? 1024 * 1024 : 0));
+						$value = intval(trim(substr($value, 0, strlen($value) - 1))) * $factor;
+					}
+					// Beware: fall-back to next value processing
+				case 'max_width':
+				case 'max_height':
+					if ($value <= 0) {
+							// Inherit configuration
+						$value = '';
+					}
+					break;
+			}
+			$values[$key] = $value;
+		}
+
+		return $values;
 	}
 }
 
