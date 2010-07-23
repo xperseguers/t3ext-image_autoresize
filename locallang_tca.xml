@@ -14,6 +14,7 @@
 			<label index="tx_imageautoresize.auto_orient">Automatic orientation</label>
 			<label index="tx_imageautoresize.keep_metadata">Keep profile and metadata</label>
 			<label index="tx_imageautoresize.rulesets">Rule sets</label>
+			<label index="tx_imageautoresize.title">Title:</label>
 			<label index="tx_imageautoresize.usergroup_ruleset">User group rule set</label>
 
 			<label index="tabs.options">Options</label>

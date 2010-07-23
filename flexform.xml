@@ -4,7 +4,7 @@
 	</meta>
 	<ROOT>
 		<TCEforms>
-			<cshFile>LLL:EXT:image_autoresize/locallang_csh_flexform.xml</cshFile>
+			<cshFile>LLL:EXT:image_autoresize/locallang_csh_tx_imageautoresize.xml</cshFile>
 		</TCEforms>
 		<type>array</type>
 		<el>
@@ -26,6 +26,17 @@
 							</config>
 						</TCEforms>
 						<el type="array">
+							<title type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.title</label>
+									<config type="array">
+										<type>input</type>
+										<size>30</size>
+										<max>50</max>
+										<eval>trim</eval>
+									</config>
+								</TCEforms>
+							</title>
 							<usergroup type="array">
 								<TCEforms type="array">
 									<label>LLL:EXT:lang/locallang_tca.xml:be_users.usergroup</label>
@@ -40,6 +51,28 @@
 									</config>
 								</TCEforms>
 							</usergroup>
+							<directories type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.directories</label>
+									<config type="array">
+										<type>input</type>
+										<size>50</size>
+										<max>255</max>
+										<eval>trim</eval>
+									</config>
+								</TCEforms>
+							</directories>
+							<file_types type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.file_types</label>
+									<config type="array">
+										<type>input</type>
+										<size>30</size>
+										<max>100</max>
+										<eval>trim</eval>
+									</config>
+								</TCEforms>
+							</file_types>
 						</el>
 					</container>
 				</el>

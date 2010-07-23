@@ -7,12 +7,10 @@
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
-        	<label index="directories.description">
-        		Comma-separated list of directories to be monitored.
+        	<label index="directories.description">Comma-separated list of directories to be monitored.
         		Example: fileadmin/
         	</label>
-			<label index="file_types.description">
-				Comma-separated list of file types to be handled.
+			<label index="file_types.description">Comma-separated list of file types to be handled.
 				Example: jpg,jpeg,png,tif,tiff
 			</label>
 			<label index="threshold.description">Images larger than this value will be resized (allowed units: B|K|M).</label>
@@ -20,11 +18,12 @@
 			<label index="max_height.description">Images will be resized up to this maximum height.</label>
 			<label index="auto_orient.description">Will try to auto-magically orient image (useful with photos).</label>
 			<label index="keep_metadata.description">If active, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</label>
-			<label index="rulesets.description">
-				You may define as many rule sets as you wish.
+			<label index="rulesets.description">You may define as many rule sets as you wish.
 				They will be evaluated one after the other in order to possibly override general settings.
 				The evalutation stops as soon as a matching rule set has been found.
 			</label>
+			<label index="title.description">Title of the rule set. This is only used in this form to help you keep your rule sets organized.</label>
+        	<label index="usergroup.description">Set of backend user groups to which the rule set should be applied.</label>
         </languageKey>
     </data>
 </T3locallang>
