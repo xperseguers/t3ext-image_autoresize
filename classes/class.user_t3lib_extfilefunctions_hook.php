@@ -147,11 +147,11 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 		if (function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
 			if ($exif) {
-				switch ($exif/*['IFD0']*/['Orientation']) {
+				switch ($exif['Orientation']) {
 					case 5: // vertical flip + 90 rotate right
 					case 6: // 90 rotate right
 					case 7: // horizontal flip + 90 rotate right
-					case 8:    // 90 rotate left
+					case 8: // 90 rotate left
 						$ret = TRUE;
 		        		break;
 				}	
