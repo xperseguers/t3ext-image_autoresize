@@ -7,7 +7,8 @@
     <data type="array">
         <languageKey index="default" type="array">
         	<label index="title.description">Title of the rule set. This is only used in this form to help you keep your rule sets organized.</label>
-        	<label index="usergroup.description">Set of backend user groups to which the rule set should be applied.</label>
+        	<label index="usergroup.description">Set of backend user groups to which the rule set should be applied.
+        		May be left empty.</label>
         	<label index="directories.description">Comma-separated list of directories to be monitored.
         		Example: fileadmin/
         		If empty, the list of directories configured in General tab will be taken into account.
