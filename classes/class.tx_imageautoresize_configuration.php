@@ -245,9 +245,6 @@ class tx_imageautoresize_configuration {
 		$this->tceforms->disableRTE = 0;
 		$this->tceforms->enableClickMenu = TRUE;
 		$this->tceforms->enableTabMenu = TRUE;
-
-			// Setting external variables:
-		//if ($GLOBALS['BE_USER']->uc['edit_showFieldHelp'] != 'text' && $this->MOD_SETTINGS['showDescriptions'])	$this->tceforms->edit_showFieldHelp='text';
 	}
 
 	/**

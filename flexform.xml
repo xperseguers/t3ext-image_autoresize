@@ -73,6 +73,48 @@
 									</config>
 								</TCEforms>
 							</file_types>
+							<max_width type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_width</label>
+									<config type="array">
+										<type>input</type>
+										<size>5</size>
+										<max>5</max>
+										<eval>int</eval>
+										<checkbox>0</checkbox>
+										<range>
+											<upper></upper>
+											<lower>100</lower>
+										</range>
+										<default>0</default>
+									</config>
+								</TCEforms>
+							</max_width>
+							<max_height type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_height</label>
+									<config type="array">
+										<type>input</type>
+										<size>5</size>
+										<max>5</max>
+										<eval>int</eval>
+										<checkbox>0</checkbox>
+										<range>
+											<upper></upper>
+											<lower>100</lower>
+										</range>
+										<default>0</default>
+									</config>
+								</TCEforms>
+							</max_height>
+							<keep_metadata type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.keep_metadata</label>
+									<config type="array">
+										<type>check</type>
+									</config>
+								</TCEforms>
+							</keep_metadata>
 						</el>
 					</container>
 				</el>
