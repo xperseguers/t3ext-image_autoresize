@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "image_autoresize".
 #
-# Auto generated 21-07-2010 21:13
+# Auto generated 23-07-2010 21:07
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -40,7 +40,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:8:{s:9:"ChangeLog";s:4:"ca41";s:21:"ext_conf_template.txt";s:4:"be72";s:12:"ext_icon.gif";s:4:"5cae";s:17:"ext_localconf.php";s:4:"3dd4";s:13:"locallang.xml";s:4:"adf0";s:50:"classes/class.user_t3lib_extfilefunctions_hook.php";s:4:"9ed5";s:43:"classes/class.ux_t3lib_extfilefunctions.php";s:4:"1810";s:63:"interfaces/interface.t3lib_extfilefunctions_processdatahook.php";s:4:"fc80";}',
+	'_md5_values_when_last_written' => 'a:14:{s:9:"ChangeLog";s:4:"e5ed";s:21:"ext_conf_template.txt";s:4:"5d39";s:12:"ext_icon.gif";s:4:"5cae";s:17:"ext_localconf.php";s:4:"3dd4";s:12:"flexform.xml";s:4:"ea44";s:13:"locallang.xml";s:4:"a626";s:26:"locallang_csh_flexform.xml";s:4:"c933";s:36:"locallang_csh_tx_imageautoresize.xml";s:4:"2e02";s:17:"locallang_tca.xml";s:4:"9c88";s:7:"tca.php";s:4:"75a3";s:50:"classes/class.tx_imageautoresize_configuration.php";s:4:"b135";s:50:"classes/class.user_t3lib_extfilefunctions_hook.php";s:4:"2e2f";s:43:"classes/class.ux_t3lib_extfilefunctions.php";s:4:"1810";s:63:"interfaces/interface.t3lib_extfilefunctions_processdatahook.php";s:4:"fc80";}',
 	'suggests' => array(
 	),
 );
