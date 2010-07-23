@@ -25,6 +25,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+//include(t3lib_extMgm::extPath('install') . 'mod/class.tx_install.php');
+
 /**
  * This class provides a wizard used in EM to prepare an expert configuration
  * for this extension.
@@ -47,6 +49,11 @@ class tx_imageautoresize_expertConfiguration {
 	protected $extKey = 'image_autoresize';
 
 	/**
+	 * @var array
+	 */
+	protected $expertKey = 'image_autoresize_expert';
+
+	/**
 	 * @var t3lib_TCEforms
 	 */
 	protected $tceforms;
@@ -66,7 +73,9 @@ class tx_imageautoresize_expertConfiguration {
 	 */
 	public function __construct() {
 		$this->initTCEForms();
-		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey]);
+
+		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
+		$this->extConf = $config ? unserialize($config) : array();
 	}
 
 	/**
@@ -77,15 +86,9 @@ class tx_imageautoresize_expertConfiguration {
 	 * @return string HTML wizard
 	 */
 	public function expertWizard(array $params, t3lib_tsStyleConfig $pObj) {
-		if ($params['fieldValue']) {
-			$params['fieldValue'] = urldecode($params['fieldValue']);
-		}
 		if (t3lib_div::_GP('expert_form_submitted')) {
-			$params['fieldValue'] = $this->processData($params['fieldValue']);
+			$this->processData();
 		}
-
-		$config = unserialize($params['fieldValue']);
-		$config = is_array($config) ? $config : array();
 
 		//
 		// page content
@@ -95,14 +98,12 @@ class tx_imageautoresize_expertConfiguration {
 			$this->content .= '<div style="display:none;">';
 		}
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
-		$this->content .= $this->buildForm($config);
+		$this->content .= $this->buildForm($this->extConf);
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
 		if (!$this->extConf['expert']) {
 			$this->content .= '</div>';
 		}
-
-		$this->content .= '<br /><div style="color:red;">Make sure to <strong>click twice on "Update"</strong> when changing configuration here!</div>';
 
 		return $this->content;
 	}
@@ -146,19 +147,56 @@ class tx_imageautoresize_expertConfiguration {
 	}
 
 	/**
-	 * Processes submitted data.
-	 *
-	 * @param string $serializedData
-	 * @return string
+	 * Processes submitted data and stores it to localconf.php.
 	 */
-	protected function processData($serializedData) {
+	protected function processData() {
 		$inputData_tmp = t3lib_div::_GP('data');
 		$data = $inputData_tmp[self::virtualTable][self::virtualRecordId];
 t3lib_div::debug($data, 'data');
-		$origData = unserialize($serializedData);
-		$origData = is_array($origData) ? $origData : array();
 
-		return serialize(t3lib_div::array_merge_recursive_overrule($origData, $data));
+		$newConfig = t3lib_div::array_merge_recursive_overrule($this->extConf, $data);
+
+			// Write back configuration to localconf.php. Don't use the tx_install methods
+			// as they add unneeded comments at the end of the file
+		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $this->expertKey . '\']';
+		$value = '\'' . serialize($newConfig) . '\'';
+
+		//$instObj = t3lib_div::makeInstance('tx_install');
+		//$instObj->allowUpdateLocalConf = 1;
+		//$instObj->updateIdentity = 'TYPO3 Core Update Manager';
+		//$lines = $instObj->writeToLocalconf_control(); 
+		//$instObj->setValueInLocalconfFile($lines, $key, $value, FALSE);
+		//$result = $instObj->writeToLocalconf_control($lines);
+		//if ($result !== 'nochange') {
+		//	$this->extConf = $newConfig;
+		//	t3lib_extMgm::removeCacheFiles();
+		//}
+		//$instObj = null;
+
+		$localconfFile = PATH_site . 'typo3conf/localconf.php';
+		$lines = explode("\n", file_get_contents($localconfFile));
+		$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
+		$format = "%s = %s;\t// Modified or inserted by TYPO3 Core Update Manager.";
+		$insertPos = count($lines);
+		$pos = 0;
+		for ($i = count($lines) - 1; $i > 0 && !t3lib_div::isFirstPartOfStr($lines[$i], $marker); $i--) {
+			if (t3lib_div::isFirstPartOfStr($lines[$i], '?>')) {
+				$insertPos = $i;
+			}
+			if (t3lib_div::isFirstPartOfStr($lines[$i], $key)) {
+				$pos = $i;
+				break;
+			}
+		}
+		if ($pos) {
+			$lines[$pos] = sprintf($format, $key, $value);
+		} else {
+			$lines[$insertPos] = sprintf($format, $key, $value);
+			$lines[] = '?>';
+		}
+		t3lib_div::writeFile($localconfFile, implode("\n", $lines));
+		$this->extConf = $newConfig;
+		t3lib_extMgm::removeCacheFiles();
 	}
 
 	/**
