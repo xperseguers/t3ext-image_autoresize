@@ -6,6 +6,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="message.emptyConfiguration">Extension image_autoresize is not properly configured!</label>
 			<label index="message.imageResized">Image %s has been automatically resized to %sx%s pixels</label>
 		</languageKey>
 	</data>

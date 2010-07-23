@@ -51,7 +51,14 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	 * Default constructor.
 	 */
 	public function __construct() {
-		$this->config = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff']);
+		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
+		if (!$config) {
+			$this->notify(
+				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.emptyConfiguration'),
+				t3lib_FlashMessage::ERROR
+			);
+		}
+		$this->config = unserialize($config);
 	}
 
 	/**
@@ -225,7 +232,11 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 		$general['usergroup'] = '';
 		unset($general['rulesets']);
 		$general = $this->expandValuesInRuleset($general);
-		$rulesets = $this->compileRuleSets($this->config['rulesets']);
+		if (isset($this->config['rulesets'])) {
+			$rulesets = $this->compileRuleSets($this->config['rulesets']);
+		} else {
+			$rulesets = array();
+		}
 
 			// Inherit values from general configuration in rule sets if needed
 		foreach ($rulesets as $k => &$ruleset) {

@@ -75,7 +75,7 @@ class tx_imageautoresize_configuration {
 		$this->initTCEForms();
 
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
-		$this->config = $config ? unserialize($config) : array();
+		$this->config = $config ? unserialize($config) : $this->getDefaultConfiguration();
 	}
 
 	/**
@@ -102,6 +102,22 @@ class tx_imageautoresize_configuration {
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 
 		return $this->content;
+	}
+
+	/**
+	 * Returns the default configuration.
+	 *
+	 * @return array
+	 */
+	protected function getDefaultConfiguration() {
+		return array(
+			'directories' => 'fileadmin/',
+			'file_types'  => 'jpg,jpeg,png,tif,tiff',
+			'threshold'   => '400K',
+			'max_width'   => '1024',
+			'max_height'  => '768',
+			'auto_orient' => '1',
+		);
 	}
 
 	/**
