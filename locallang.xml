@@ -6,16 +6,6 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="config.directories">Directories: Comma-separated list of directories to be monitored</label>
-			<label index="config.filetypes">File types: Comma-separated list of file types to be handled.</label>
-			<label index="config.threshold">Size threshold: Images larger than this value will be resized (allowed units: B|K|M)</label>
-			<label index="config.maxWidth">Maximum width: Images will be resized up to this maximum width</label>
-			<label index="config.maxHeight">Maximum height: Images will be resized up to this maximum height</label>
-			<label index="config.autoOrient">Automatic orientation: Will try to automagically orient image (useful with photos)</label>
-			<label index="config.keepMetadata">Keep profile/metadata: If active, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand']</label>
-			<label index="config.expert">Expert configuration: Enable this and save to set up advanced rules. Will completely override basic/advanced options</label>
-			<label index="config.rules">Rules</label>
-
 			<label index="message.imageResized">Image %s has been automatically resized to %sx%s pixels</label>
 		</languageKey>
 	</data>

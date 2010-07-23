@@ -3,14 +3,14 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$TCA['tx_imageautoresize_expert'] = array(
+$TCA['tx_imageautoresize'] = array(
     'ctrl' => array(
 		'label' => 'title',
 		'dividers2tabs' => TRUE,
 	),
     'columns' => array(
         'directories' => array(
-            'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.directories',
+            'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.directories',
             'config'  => array(
                 'type' => 'input',
 				'size' => '50',
@@ -19,7 +19,7 @@ $TCA['tx_imageautoresize_expert'] = array(
             ),
         ),
         'file_types' => array(
-            'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.file_types',
+            'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.file_types',
             'config'  => array(
                 'type' => 'input',
 				'size' => '30',
@@ -28,7 +28,7 @@ $TCA['tx_imageautoresize_expert'] = array(
             ),
         ),
         'threshold' => array(
-            'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.threshold',
+            'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.threshold',
             'config'  => array(
                 'type' => 'input',
 				'size' => '10',
@@ -37,7 +37,7 @@ $TCA['tx_imageautoresize_expert'] = array(
             ),
         ),
         'max_width' => array(
-			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.max_width',
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_width',
 			'config' => array(
 				'type' => 'input',
 				'size' => '4',
@@ -52,7 +52,7 @@ $TCA['tx_imageautoresize_expert'] = array(
 			),
 		),
 		'max_height' => array(
-			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.max_height',
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_height',
 			'config' => array(
 				'type' => 'input',
 				'size' => '4',
@@ -67,19 +67,19 @@ $TCA['tx_imageautoresize_expert'] = array(
 			),
 		),
 		'auto_orient' => array(
-			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.auto_orient',
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.auto_orient',
 			'config' => array(
 				'type' => 'check',
 			),
 		),
 		'keep_metadata' => array(
-			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.keep_metadata',
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.keep_metadata',
 			'config' => array(
 				'type' => 'check',
 			),
 		),
 		'rulesets' => array(
-			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.rulesets',
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.rulesets',
 			'config' => array(
 				'type' => 'flex',
 				'ds_pointerField' => 'list_type',

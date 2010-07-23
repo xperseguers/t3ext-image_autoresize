@@ -1,26 +1,2 @@
-	# cat=basic; type=string; label=LLL:EXT:image_autoresize/locallang.xml:config.directories
-directories = fileadmin/
-
-	# cat=basic; type=string; label=LLL:EXT:image_autoresize/locallang.xml:config.filetypes
-filetypes = jpg,jpeg,png,tif,tiff
-
-	# cat=basic; type=string; label=LLL:EXT:image_autoresize/locallang.xml:config.threshold
-threshold = 300K
-
-	# cat=basic; type=int+; label=LLL:EXT:image_autoresize/locallang.xml:config.maxWidth
-maxWidth = 1280
-
-	# cat=basic; type=int+; label=LLL:EXT:image_autoresize/locallang.xml:config.maxHeight
-maxHeight = 1024
-
-	# cat=advanced; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.autoOrient
-autoOrient = 1
-
-	# cat=advanced; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.keepMetadata
-metadata = 0
-
-	# cat=expert; type=boolean; label=LLL:EXT:image_autoresize/locallang.xml:config.expert
-expert = 0
-
-	#cat=expert; type=user[EXT:image_autoresize/classes/class.tx_imageautoresize_expertconfiguration.php:&tx_imageautoresize_expertConfiguration->expertWizard]; label=LLL:EXT:image_autoresize/locallang.xml:config.rules
+	#cat=basic; type=user[EXT:image_autoresize/classes/class.tx_imageautoresize_expertconfiguration.php:&tx_imageautoresize_expertConfiguration->expertWizard]; label=
 rules =

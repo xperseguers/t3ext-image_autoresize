@@ -18,7 +18,7 @@
 					<container type="array">
 						<type>array</type>
 						<tx_templavoila type="array">
-							<title>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize_expert.usergroup_ruleset</title>
+							<title>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.usergroup_ruleset</title>
 						</tx_templavoila>
 						<TCEforms type="array">
 							<label></label>

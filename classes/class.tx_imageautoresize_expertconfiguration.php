@@ -40,7 +40,7 @@
  */
 class tx_imageautoresize_expertConfiguration {
 
-	const virtualTable = 'tx_imageautoresize_expert';
+	const virtualTable    = 'tx_imageautoresize';
 	const virtualRecordId = 1;
 
 	/**
@@ -51,17 +51,12 @@ class tx_imageautoresize_expertConfiguration {
 	/**
 	 * @var array
 	 */
-	protected $expertKey = 'image_autoresize_expert';
+	protected $expertKey = 'image_autoresize_ff';
 
 	/**
 	 * @var t3lib_TCEforms
 	 */
 	protected $tceforms;
-
-	/**
-	 * @var array
-	 */
-	protected $extConf;
 
 	/**
 	 * @var array
@@ -79,7 +74,6 @@ class tx_imageautoresize_expertConfiguration {
 	public function __construct() {
 		$this->initTCEForms();
 
-		$this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->extKey];
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
 		$this->config = $config ? unserialize($config) : array();
 	}
@@ -92,13 +86,10 @@ class tx_imageautoresize_expertConfiguration {
 	 * @return string HTML wizard
 	 */
 	public function expertWizard(array $params, t3lib_tsStyleConfig $pObj) {
-		if (t3lib_div::_GP('expert_form_submitted')) {
+		if (t3lib_div::_GP('form_submitted')) {
 			$this->processData();
 		}
 
-		//
-		// page content
-		//
 		$row = $this->config;
 		if ($row['rulesets']) {
 			$flexObj = t3lib_div::makeInstance('t3lib_flexformtools');
@@ -106,17 +97,9 @@ class tx_imageautoresize_expertConfiguration {
 			$row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);	
 		}
 
-		if (!$this->extConf['expert']) {
-			// TODO: do that better
-			//$this->content .= '<div style="display:none;">';
-		}
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 		$this->content .= $this->buildForm($row);
 		$this->content .= $this->tceforms->printNeededJSFunctions();
-		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
-		if (!$this->extConf['expert']) {
-			//$this->content .= '</div>';
-		}
 
 		return $this->content;
 	}
@@ -130,7 +113,7 @@ class tx_imageautoresize_expertConfiguration {
 	protected function buildForm(array $row) {
 		$content = '';
 
-			// Load the configuration of virtual table 'tx_imageautoresize_expert' 
+			// Load the configuration of virtual table 'tx_imageautoresize' 
 		global $TCA;
 		include(t3lib_extMgm::extPath($this->extKey) . 'tca.php');
 		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/locallang_csh_' . self::virtualTable . '.xml');
@@ -145,7 +128,7 @@ class tx_imageautoresize_expertConfiguration {
 			// Create form
 		$form = '';
 		$form .= $this->tceforms->getMainFields(self::virtualTable, $rec);
-		$form .= '<input type="hidden" name="expert_form_submitted" value="1" />';
+		$form .= '<input type="hidden" name="form_submitted" value="1" />';
 		$form = $this->tceforms->wrapTotal($form, $rec, self::virtualTable);
 
 			// Remove header and footer
@@ -169,29 +152,45 @@ class tx_imageautoresize_expertConfiguration {
 
 		$inputData_tmp = t3lib_div::_GP('data');
 		$data = $inputData_tmp[$table][$id];
+		$newConfig = t3lib_div::array_merge_recursive_overrule($this->config, $data);
 
 			// Action commands (sorting order and removals of FlexForm elements)
 		$ffValue =& $data[$field];
-		$actionCMDs = t3lib_div::_GP('_ACTION_FLEX_FORMdata');
-		if (is_array($actionCMDs[$table][$id][$field]['data']))	{
-			$tcemain = t3lib_div::makeInstance('t3lib_TCEmain');
-			// Officially internal but not declared as such... 
-			$tcemain->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
-		}
-			// Renumber all FlexForm ids
-		$this->persistFlexForm($ffValue['data']);	
+		if ($ffValue) {
+			$actionCMDs = t3lib_div::_GP('_ACTION_FLEX_FORMdata');
+			if (is_array($actionCMDs[$table][$id][$field]['data']))	{
+				$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+				/* @var $tce t3lib_TCEmain */
+				// Officially internal but not declared as such... 
+				$tce->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
+			}
+				// Renumber all FlexForm temporary ids
+			$this->persistFlexForm($ffValue['data']);
 
-		$newConfig = t3lib_div::array_merge_recursive_overrule($this->config, $data);
-			// Keep order of FlexForm elements
-		if ($data['rulesets']) {
-			$newConfig['rulesets'] = $data['rulesets'];
+				// Keep order of FlexForm elements
+			$newConfig[$field] = $ffValue;
 		}
 
-			// Write back configuration to localconf.php. Don't use the tx_install methods
-			// as they add unneeded comments at the end of the file
+			// Write back configuration to localconf.php.
 		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $this->expertKey . '\']';
 		$value = '\'' . serialize($newConfig) . '\'';
 
+		if ($this->writeToLocalconf($key, $value)) {
+			$this->config = $newConfig;
+			t3lib_extMgm::removeCacheFiles();	
+		}
+	}
+
+	/**
+	 * Writes a configuration line to localconf.php.
+	 * We don't use the <code>tx_install</code> methods as they add unneeded
+	 * comments at the end of the file.
+	 *
+	 * @param string $key
+	 * @param string $value
+	 * @return boolean
+	 */
+	protected function writeToLocalconf($key, $value) {
 		//$instObj = t3lib_div::makeInstance('tx_install');
 		//$instObj->allowUpdateLocalConf = 1;
 		//$instObj->updateIdentity = 'TYPO3 Core Update Manager';
@@ -208,6 +207,7 @@ class tx_imageautoresize_expertConfiguration {
 		$lines = explode("\n", file_get_contents($localconfFile));
 		$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
 		$format = "%s = %s;\t// Modified or inserted by TYPO3 Core Update Manager.";
+
 		$insertPos = count($lines);
 		$pos = 0;
 		for ($i = count($lines) - 1; $i > 0 && !t3lib_div::isFirstPartOfStr($lines[$i], $marker); $i--) {
@@ -225,9 +225,8 @@ class tx_imageautoresize_expertConfiguration {
 			$lines[$insertPos] = sprintf($format, $key, $value);
 			$lines[] = '?>';
 		}
-		t3lib_div::writeFile($localconfFile, implode("\n", $lines));
-		$this->config = $newConfig;
-		t3lib_extMgm::removeCacheFiles();
+
+		return t3lib_div::writeFile($localconfFile, implode("\n", $lines));
 	}
 
 	/**
@@ -248,7 +247,7 @@ class tx_imageautoresize_expertConfiguration {
 		$this->tceforms->enableTabMenu = TRUE;
 
 			// Setting external variables:
-		if ($GLOBALS['BE_USER']->uc['edit_showFieldHelp']!='text' && $this->MOD_SETTINGS['showDescriptions'])	$this->tceforms->edit_showFieldHelp='text';
+		//if ($GLOBALS['BE_USER']->uc['edit_showFieldHelp'] != 'text' && $this->MOD_SETTINGS['showDescriptions'])	$this->tceforms->edit_showFieldHelp='text';
 	}
 
 	/**
