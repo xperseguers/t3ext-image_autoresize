@@ -105,7 +105,7 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 		}
 
 		if ($isRotated) {
-				// Invert maxWidth and maxHeight as the picture
+				// Invert max_width and max_height as the picture
 				// will be automatically rotated
 			$options = array(
 				'maxW' => $ruleset['max_height'],
