@@ -1,5 +1,6 @@
 2010-07-23  Xavier Persegeurs  <typo3@perseguers.ch>
 
+	* Raised version to 0.1.0 (beta)
 	* Implemented check against a list of rule sets
 	* Added context sensitive help to all fields
 
