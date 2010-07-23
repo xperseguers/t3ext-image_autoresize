@@ -84,6 +84,9 @@ class tx_imageautoresize_expertConfiguration {
 			$params['fieldValue'] = $this->processData($params['fieldValue']);
 		}
 
+		$config = unserialize($params['fieldValue']);
+		$config = is_array($config) ? $config : array();
+
 		//
 		// page content
 		//
@@ -92,7 +95,7 @@ class tx_imageautoresize_expertConfiguration {
 			$this->content .= '<div style="display:none;">';
 		}
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
-		$this->content .= $this->buildForm(unserialize($params['fieldValue']));
+		$this->content .= $this->buildForm($config);
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 		$this->content .= '<input type="hidden" name="' . $params['fieldName'] . '" value="' . urlencode($params['fieldValue']) . '" />';
 		if (!$this->extConf['expert']) {
@@ -153,11 +156,9 @@ class tx_imageautoresize_expertConfiguration {
 		$data = $inputData_tmp[self::virtualTable][self::virtualRecordId];
 t3lib_div::debug($data, 'data');
 		$origData = unserialize($serializedData);
-		if (!is_array($origData)) {
-			$origData = array();
-		}
+		$origData = is_array($origData) ? $origData : array();
 
-		return serialize(array_merge($origData, $data));
+		return serialize(t3lib_div::array_merge_recursive_overrule($origData, $data));
 	}
 
 	/**
