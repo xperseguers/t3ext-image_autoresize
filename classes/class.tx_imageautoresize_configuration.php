@@ -28,8 +28,8 @@
 //include(t3lib_extMgm::extPath('install') . 'mod/class.tx_install.php');
 
 /**
- * This class provides a wizard used in EM to prepare an expert configuration
- * for this extension.
+ * This class provides a wizard used in EM to prepare a configuration
+ * based on FlexForms for this extension.
  *
  * @category    Wizard
  * @package     TYPO3
@@ -38,7 +38,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
-class tx_imageautoresize_expertConfiguration {
+class tx_imageautoresize_configuration {
 
 	const virtualTable    = 'tx_imageautoresize';
 	const virtualRecordId = 1;
@@ -79,13 +79,13 @@ class tx_imageautoresize_expertConfiguration {
 	}
 
 	/**
-	 * Renders an expert wizard.
+	 * Renders a FlexForm configuration form.
 	 *
 	 * @param array	Parameter array. Contains fieldName and fieldValue.
 	 * @param t3lib_tsStyleConfig $pObj Parent object
 	 * @return string HTML wizard
 	 */
-	public function expertWizard(array $params, t3lib_tsStyleConfig $pObj) {
+	public function display(array $params, t3lib_tsStyleConfig $pObj) {
 		if (t3lib_div::_GP('form_submitted')) {
 			$this->processData();
 		}
