@@ -222,7 +222,7 @@ class tx_imageautoresize_configuration {
 		$localconfFile = PATH_site . 'typo3conf/localconf.php';
 		$lines = explode("\n", file_get_contents($localconfFile));
 		$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
-		$format = "%s = %s;\t// Modified or inserted by TYPO3 Core Update Manager.";
+		$format = "%s = %s;\t// Modified or inserted by TYPO3 Extension Manager.";
 
 		$insertPos = count($lines);
 		$pos = 0;
