@@ -40,7 +40,7 @@ if (!version_compare(TYPO3_version, '4.4.99', '>')) {
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
-class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_processDataHook, t3lib_TCEmain_processUploadHook {
+class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t3lib_TCEmain_processUploadHook {
 
 	/**
 	 * @var array

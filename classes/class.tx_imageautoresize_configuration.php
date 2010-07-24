@@ -111,7 +111,7 @@ class tx_imageautoresize_configuration {
 	 */
 	protected function getDefaultConfiguration() {
 		return array(
-			'directories' => 'fileadmin/',
+			'directories' => 'fileadmin/,uploads/',
 			'file_types'  => 'jpg,jpeg,png',
 			'threshold'   => '400K',
 			'max_width'   => '1024',
