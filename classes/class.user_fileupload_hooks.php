@@ -26,7 +26,9 @@
 ***************************************************************/
 
 if (!version_compare(TYPO3_version, '4.4.99', '>')) {
+	// Include interfaces backported from TYPO3 4.5
 	include_once(t3lib_extMgm::extPath('image_autoresize') . 'interfaces/interface.t3lib_extfilefunctions_processdatahook.php');
+	include_once(t3lib_extMgm::extPath('image_autoresize') . 'interfaces/interface.t3lib_tcemain_processuploadhook.php');
 }
 
 /**
