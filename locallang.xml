@@ -6,6 +6,16 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="extension.ai">.ai - Adobe Illustrator</label>
+			<label index="extension.bmp">.bmp - Windows OS/2 Bitmap Graphics</label>
+			<label index="extension.gif">.gif - Graphic Interchange Format</label>
+			<label index="extension.jpg">.jpg - JPEG/JIFF Image</label>
+			<label index="extension.jpeg">.jpeg - JPEG/JIFF Image</label>
+			<label index="extension.pcx">.pcx - Paintbrush Bitmap Graphic</label>
+			<label index="extension.png">.png - Portable Network Graphic</label>
+			<label index="extension.tga">.tga - Truevision Targa Graphic</label>
+			<label index="extension.tif">.tif - Tagged Image Format</label>
+			<label index="extension.tiff">.tiff - Tagged Image Format</label>
 			<label index="message.emptyConfiguration">Extension image_autoresize is not properly configured!</label>
 			<label index="message.imageResized">Image %s has been automatically resized to %sx%s pixels</label>
 		</languageKey>

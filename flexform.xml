@@ -66,10 +66,12 @@
 								<TCEforms type="array">
 									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.file_types</label>
 									<config type="array">
-										<type>input</type>
-										<size>30</size>
-										<max>100</max>
-										<eval>trim</eval>
+										<type>select</type>
+										<itemsProcFunc>tx_imageautoresize_configuration->getImageFileExtensions</itemsProcFunc>
+										<minitems>0</minitems>
+										<maxitems>20</maxitems>
+										<size>6</size>
+										<multiple>1</multiple>
 									</config>
 								</TCEforms>
 							</file_types>

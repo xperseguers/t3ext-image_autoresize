@@ -21,10 +21,12 @@ $TCA['tx_imageautoresize'] = array(
         'file_types' => array(
             'label'   => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.file_types',
             'config'  => array(
-                'type' => 'input',
-				'size' => '30',
-				'max' => '100',
-				'eval' => 'trim,required',
+                'type' => 'select',
+				'itemsProcFunc' => 'tx_imageautoresize_configuration->getImageFileExtensions',
+				'minitems' => '0',
+				'maxitems' => '20',
+				'size' => '6',
+				'multiple' => '1',
             ),
         ),
         'threshold' => array(

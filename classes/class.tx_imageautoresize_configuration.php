@@ -284,6 +284,33 @@ class tx_imageautoresize_configuration {
 			}
 		}
 	}
+
+	/**
+	 * Prepares a list of image file extensions supported by the current
+	 * TYPO3 install.
+	 * Used in tca and FlexForm for the list of file types.
+	 *
+	 * @param array $settings content element configuration
+	 * @return array content element configuration with dynamically added items
+	 */
+	public function getImageFileExtensions(array $settings) {
+		$extensions = t3lib_div::trimExplode(',', strtolower($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']), TRUE);
+			// We don't consider PDF being an image
+		if ($key = array_search('pdf', $extensions)) {
+			unset($extensions[$key]);
+		}
+		asort($extensions);
+
+		$elements = array();
+		foreach ($extensions as $extension) {
+			$label = $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:extension.' . $extension);
+			$label = $label ? $label : '.' . $extension;
+			$elements[] = array($label, $extension);
+		}
+
+		$settings['items'] = array_merge($settings['items'], $elements);
+	}
+
 }
 
 
