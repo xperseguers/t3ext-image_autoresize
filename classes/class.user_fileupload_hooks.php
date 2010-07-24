@@ -383,7 +383,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.user_t3lib_extfilefunctions_hook.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.user_t3lib_extfilefunctions_hook.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.user_fileupload_hooks.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.user_fileupload_hooks.php']);
 }
 ?>
