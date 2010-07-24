@@ -208,8 +208,8 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 				continue;
 			}
 			$processFile = FALSE;
-			foreach ($ruleset['directories'] as $directory) {
-				$processFile |= t3lib_div::isFirstPartOfStr($relFilename, $directory);
+			foreach ($ruleset['directories'] as $directoryPattern) {
+				$processFile |= preg_match($directoryPattern, $relFilename);
 			}
 			$processFile &= t3lib_div::inArray($ruleset['file_types'], $fileExtension);
 			$processFile &= (filesize($filename) > $ruleset['threshold']);
@@ -309,6 +309,7 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 						// Sanitize name of the directories
 					foreach ($value as &$directory) {
 						$directory = rtrim($directory, '/') . '/';
+						$directory = $this->getDirectoryPattern($directory);
 					}
 					if (count($value) == 0) {
 							// Inherit configuration
@@ -341,6 +342,20 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Returns a regular expression pattern to match directories.
+	 *
+	 * @param string $directory
+	 * @return string
+	 */
+	protected function getDirectoryPattern($directory) {
+        $pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
+        $pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
+        $pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
+
+        return $pattern;
 	}
 }
 

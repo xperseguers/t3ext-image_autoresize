@@ -9,6 +9,10 @@
         <languageKey index="default" type="array">
         	<label index="directories.description">Comma-separated list of directories to be monitored.
         		Example: fileadmin/
+        		
+        		Wildcard is supported:
+        		fileadmin/*/images/
+        		fileadmin/**/images/
         	</label>
 			<label index="file_types.description">Comma-separated list of file types to be handled.
 				Example: jpg,jpeg,png,tif,tiff

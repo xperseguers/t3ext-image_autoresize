@@ -1,5 +1,6 @@
 2010-07-24  Xavier Perseguers  <typo3@perseguers.ch>
 
+	* Added support for wildcard in directory name
 	* Added multi-select for the image types
 
 2010-07-23  Xavier Persegeurs  <typo3@perseguers.ch>
