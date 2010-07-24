@@ -44,7 +44,7 @@ interface t3lib_TCEmain_processUploadHook {
 	 * @param	t3lib_TCEmain		parent t3lib_TCEmain object
 	 * @return	void
 	 */
-	public function processUpload_postProcessAction($filename, t3lib_TCEmain $parentObject);
+	public function processUpload_postProcessAction(&$filename, t3lib_TCEmain $parentObject);
 
 }
 

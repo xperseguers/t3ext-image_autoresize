@@ -80,6 +80,15 @@ $TCA['tx_imageautoresize'] = array(
 				'type' => 'check',
 			),
 		),
+		'conversion_mapping' => array(
+			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.conversion_mapping',
+			'config' => array(
+				'type' => 'text',
+                'cols' => '20',
+                'rows' => '5',
+                'eval' => 'trim',
+			),
+		),
 		'rulesets' => array(
 			'label' => 'LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.rulesets',
 			'config' => array(
@@ -96,7 +105,7 @@ $TCA['tx_imageautoresize'] = array(
 				'directories,threshold,file_types,
 			--palette--;LLL:EXT:cms/locallang_ttc.php:ALT.imgDimensions;1,
 			--div--;LLL:EXT:image_autoresize/locallang_tca.xml:tabs.options,
-				auto_orient,keep_metadata,
+				auto_orient,keep_metadata,conversion_mapping,
 			--div--;LLL:EXT:image_autoresize/locallang_tca.xml:tabs.rulesets,
 				rulesets
 		'),

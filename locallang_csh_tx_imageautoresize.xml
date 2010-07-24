@@ -22,6 +22,10 @@
 			<label index="max_height.description">Images will be resized up to this maximum height.</label>
 			<label index="auto_orient.description">Will try to auto-magically orient image (useful with photos).</label>
 			<label index="keep_metadata.description">If active, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</label>
+			<label index="conversion_mapping.description">Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
+				Example:
+				bmp => jpg
+				tif => jpg</label>
 			<label index="rulesets.description">You may define as many rule sets as you wish.
 				They will be evaluated one after the other in order to possibly override general settings.
 				The evalutation stops as soon as a matching rule set has been found.

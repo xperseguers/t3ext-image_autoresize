@@ -76,6 +76,7 @@ class tx_imageautoresize_configuration {
 
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
 		$this->config = $config ? unserialize($config) : $this->getDefaultConfiguration();
+		$this->config['conversion_mapping'] = implode("\n", explode(',', $this->config['conversion_mapping']));
 	}
 
 	/**
@@ -117,6 +118,14 @@ class tx_imageautoresize_configuration {
 			'max_width'   => '1024',
 			'max_height'  => '768',
 			'auto_orient' => '1',
+			'conversion_mapping' => implode(',', array(
+				'ai => jpg',
+				'bmp => jpg',
+				'pcx => jpg',
+				'tga => jpg',
+				'tif => jpg',
+				'tiff => jpg',
+			)),
 		);
 	}
 
@@ -189,7 +198,9 @@ class tx_imageautoresize_configuration {
 
 			// Write back configuration to localconf.php.
 		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $this->expertKey . '\']';
-		$value = '\'' . serialize($newConfig) . '\'';
+		$localconfConfig = $newConfig;
+		$localconfConfig['conversion_mapping'] = implode(',', t3lib_div::trimExplode("\n", $localconfConfig['conversion_mapping'], TRUE));
+		$value = '\'' . serialize($localconfConfig) . '\'';
 
 		if ($this->writeToLocalconf($key, $value)) {
 			$this->config = $newConfig;

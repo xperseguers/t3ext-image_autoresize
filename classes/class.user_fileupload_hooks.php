@@ -47,7 +47,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	/**
 	 * @var array
 	 */
-	protected $config;
+	protected $rulesets = array();
 
 	/**
 	 * Default constructor.
@@ -60,7 +60,10 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 				t3lib_FlashMessage::ERROR
 			);
 		}
-		$this->config = unserialize($config);
+		$config = unserialize($config);
+		if (is_array($config)) {
+			$this->initializeRulesets($config);
+		}
 	}
 
 	/**
@@ -70,8 +73,8 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * @param t3lib_TCEmain Parent object
 	 * @return void
 	 */
-	public function processUpload_postProcessAction($filename, t3lib_TCEmain $parentObject) {
-		$this->processFile($filename);
+	public function processUpload_postProcessAction(&$filename, t3lib_TCEmain $parentObject) {
+		$filename = $this->processFile($filename);
 	}
 
 	/**
@@ -98,7 +101,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * Processes upload of a file.
 	 *
 	 * @param string $filename
-	 * @return void
+	 * @return string Filename that was finally written
 	 */
 	protected function processFile($filename) {
 		$ruleset = $this->getRuleset($filename);
@@ -112,13 +115,27 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		$relFilename = substr($filename, strlen(PATH_site));
 		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 
+		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
+				// File format will be converted
+			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
+			$destDirectory = dirname($filename);
+			$destFilename = basename(substr($filename, 0, strlen($filename) - strlen($fileExtension)) . $destExtension);
+
+				// Ensures $destFilename does not yet exist, otherwise make it unique!
+			$fileFunc = t3lib_div::makeInstance('t3lib_basicFileFunctions');
+			/* @var t3lib_basicFileFunctions $fileFunc */
+			$destFilename = $fileFunc->getUniqueName($destFilename, $destDirectory);
+		} else {
+				// File format stays the same
+			$destExtension = $fileExtension;
+			$destFilename = $filename;
+		}
+
 			// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
 		$gifCreator = t3lib_div::makeInstance('tslib_gifbuilder');
 		$gifCreator->init();
 		$gifCreator->absPrefix = PATH_site;
 
-		$hash = t3lib_div::shortMD5($filename);
-		$dest = $gifCreator->tempPath . $hash . '.' . $fileExtension;
 		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
 		$isRotated = FALSE;
 
@@ -141,20 +158,29 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			);
 		}
 
-		$tempFileInfo = $gifCreator->imageMagickConvert($filename, '', '', '', $imParams, '', $options);
+		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options);
 		if ($tempFileInfo) {
 				// Replace original file
 			@unlink($filename);
-			@rename($tempFileInfo[3], $filename);
+			@rename($tempFileInfo[3], $destFilename);
 
-			$this->notify(
-				sprintf(
+			if ($filename === $destFilename) {
+				$message = sprintf(
 					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResized'),
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1]
-				),
-				t3lib_FlashMessage::INFO
-			);
+				);
+			} else {
+				$message = sprintf(
+					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResizedAndRenamed'),
+					$relFilename, $tempFileInfo[0], $tempFileInfo[1], basename($destFilename)
+				);
+			}
+			$this->notify($message, t3lib_FlashMessage::INFO);
+		} else {
+				// Destination file was not written
+			$destFilename = $filename;
 		}
+		return $destFilename;
 	}
 
 	/**
@@ -166,8 +192,9 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 */
 	protected function isRotated($filename) {
 		$ret = FALSE;
+		$extension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 
-		if (function_exists('exif_read_data')) {
+		if (t3lib_div::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
 			if ($exif) {
 				switch ($exif['Orientation']) {
@@ -222,10 +249,9 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 
 		$beGroups = array_keys($GLOBALS['BE_USER']->userGroups);
-		$rulesets = $this->getHookRulesets();
 
 			// Try to find a matching ruleset
-		foreach ($rulesets as $ruleset) {
+		foreach ($this->rulesets as $ruleset) {
 			if (count($ruleset['usergroup']) > 0 && count(array_intersect($ruleset['usergroup'], $beGroups)) == 0) {
 					// Backend user is not member of a group configured for the current rule set
 				continue;
@@ -245,18 +271,22 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	}
 
 	/**
-	 * Returns the hook configuration as a meaningful ordered list
+	 * Initializes the hook configuration as a meaningful ordered list
 	 * of rule sets.
 	 *
-	 * @return array
+	 * @return void
 	 */
-	protected function getHookRulesets() {
-		$general = $this->config;
+	protected function initializeRulesets(array $config) {
+		$general = $config;
 		$general['usergroup'] = '';
 		unset($general['rulesets']);
 		$general = $this->expandValuesInRuleset($general);
-		if (isset($this->config['rulesets'])) {
-			$rulesets = $this->compileRuleSets($this->config['rulesets']);
+		if ($general['conversion_mapping'] === '') {
+			$general['conversion_mapping'] = array();
+		}
+
+		if (isset($config['rulesets'])) {
+			$rulesets = $this->compileRuleSets($config['rulesets']);
 		} else {
 			$rulesets = array();
 		}
@@ -282,7 +312,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 
 			// Use general configuration as very first rule set
 		array_unshift($rulesets, $general); 
-		return $rulesets;
+		$this->rulesets = $rulesets;
 	}
 
 	/**
@@ -360,11 +390,37 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 						$value = '';
 					}
 					break;
+				case 'conversion_mapping':
+					$mapping = t3lib_div::trimExplode(',', $value, TRUE);
+					if (count($mapping) > 0) {
+						$value = $this->expandConversionMapping($mapping);
+					} else {
+							// Inherit configuration
+						$value = '';
+					}
+					break;
 			}
 			$values[$key] = $value;
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Expands the image type conversion mapping.
+	 *
+	 * @param array $mapping Array of lines similar to "bmp => jpg", "tif => jpg"
+	 * @return array Key/Value pairs of mapping: array('bmp' => 'jpg', 'tif' => 'jpg') 
+	 */
+	protected function expandConversionMapping(array $mapping) {
+		$ret = array();
+		$matches = array();
+		foreach ($mapping as $m) {
+			if (preg_match('/^(.*)\s*=>\s*(.*)/', $m, $matches)) {
+				$ret[trim($matches[1])] = trim($matches[2]); 
+			}
+		}
+		return $ret;
 	}
 
 	/**

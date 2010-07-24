@@ -131,6 +131,17 @@
 				                    </config>
 								</TCEforms>
 							</keep_metadata>
+							<conversion_mapping>
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.conversion_mapping</label>
+									<config>
+										<type>input</type>
+										<size>50</size>
+										<max>255</max>
+										<eval>trim</eval>
+									</config>
+								</TCEforms>
+							</conversion_mapping>
 						</el>
 					</container>
 				</el>
