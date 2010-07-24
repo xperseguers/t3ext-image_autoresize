@@ -310,8 +310,8 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			}
 		}
 
-			// Use general configuration as very first rule set
-		array_unshift($rulesets, $general); 
+			// Use general configuration as very last rule set
+		$rulesets[] = $general; 
 		$this->rulesets = $rulesets;
 	}
 
