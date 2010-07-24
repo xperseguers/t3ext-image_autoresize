@@ -87,14 +87,11 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * @return void
 	 */
 	public function processData_postProcessAction($action, array $cmdArr, array $result, t3lib_extFileFunctions $pObj) {
-		if ($action !== 'upload') {
-				// Early return
-			return;
+		if ($action === 'upload') {
+				// Get the latest uploaded file name
+			$filename = array_pop($result);
+			$this->processFile($filename);
 		}
-
-			// Get the latest uploaded file name
-		$filename = array_pop($result);
-		$this->processFile($filename);
 	}
 
 	/**
@@ -316,7 +313,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	}
 
 	/**
-	 * Compiles all rule sets.
+	 * Compiles all FlexForm rule sets.
 	 *
 	 * @param array $rulesets
 	 * @return array
