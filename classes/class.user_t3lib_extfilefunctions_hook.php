@@ -40,7 +40,7 @@ if (!version_compare(TYPO3_version, '4.4.99', '>')) {
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
-class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_processDataHook {
+class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_processDataHook, t3lib_TCEmain_processUploadHook {
 
 	/**
 	 * @var array
@@ -62,7 +62,18 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 	}
 
 	/**
-	 * Post process upload of a picture and make sure it is not too big.
+	 * Post processes upload of a picture and makes sure it is not too big.
+	 *
+	 * @param string The uploaded file 
+	 * @param t3lib_TCEmain Parent object
+	 * @return void
+	 */
+	public function processUpload_postProcessAction($filename, t3lib_TCEmain $parentObject) {
+		$this->processFile($filename);
+	}
+
+	/**
+	 * Post processes upload of a picture and makes sure it is not too big.
 	 *
 	 * @param string The action
 	 * @param array The parameter sent to the action handler
@@ -78,6 +89,16 @@ class user_t3lib_extFileFunctions_hook implements t3lib_extFileFunctions_process
 
 			// Get the latest uploaded file name
 		$filename = array_pop($result);
+		$this->processFile($filename);
+	}
+
+	/**
+	 * Processes upload of a file.
+	 *
+	 * @param string $filename
+	 * @return void
+	 */
+	protected function processFile($filename) {
 		$ruleset = $this->getRuleset($filename);
 
 		if (count($ruleset) == 0) {

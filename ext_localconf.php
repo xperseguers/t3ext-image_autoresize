@@ -9,4 +9,7 @@ if (!version_compare(TYPO3_version, '4.4.99', '>')) {
 }
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_extfilefunc.php']['processData'][] = 'EXT:' . $_EXTKEY . '/classes/class.user_t3lib_extfilefunctions_hook.php:user_t3lib_extFileFunctions_hook';
 
+if (version_compare(TYPO3_version, '4.4.99', '>')) {
+	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processUpload'][] = 'EXT:' . $_EXTKEY . '/classes/class.user_t3lib_extfilefunctions_hook.php:user_t3lib_extFileFunctions_hook';
+}
 ?>
