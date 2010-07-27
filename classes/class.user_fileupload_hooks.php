@@ -105,7 +105,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 
 		if (count($ruleset) == 0) {
 				// File does not match any rule set
-			return;
+			return $filename;
 		}
 
 			// Make filename relative and extract the extension
