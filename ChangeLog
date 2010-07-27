@@ -1,5 +1,7 @@
 2010-07-27  Xavier Perseguers  <typo3@perseguers.ch>
 
+	* Release to TER
+	* Raised version to 0.5.1
 	* Fixed bug #9057: No file returned by the hook if it does not match any rule set (thanks to Rachel Foucard)
 	* Release to TER
 	* Boosted up version to 0.5.0
