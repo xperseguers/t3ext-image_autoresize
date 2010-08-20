@@ -1,3 +1,7 @@
+2010-08-21  Xavier Perseguers  <typo3@perseguers.ch>
+
+	* Raised version to 1.0.0: Extension is now considered stable
+
 2010-07-28  Xavier Perseguers  <typo3@perseguers.ch>
 
 	* Updated documentation to fix inconsistencies when rendered as HTML on TER
