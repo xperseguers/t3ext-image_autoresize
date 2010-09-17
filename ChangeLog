@@ -1,3 +1,7 @@
+2010-09-17  Xavier Perseguers  <typo3@perseguers.ch>
+
+	* Added information about incompatibility with kb_filequota in TYPO3 < 4.5.0 (thanks to Katja Lampela)
+
 2010-08-21  Xavier Perseguers  <typo3@perseguers.ch>
 
 	* Raised version to 1.0.0: Extension is now considered stable
