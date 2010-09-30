@@ -29,7 +29,7 @@
  * This class extends t3lib_TCEmain to provide the hook needed
  * to automatically resize huge picture upon upload. It is only needed
  * for TYPO3 4.3 and TYPO3 4.4.
- * 
+ *
  * @category    XClass
  * @package     TYPO3
  * @subpackage  tx_imageautoresize

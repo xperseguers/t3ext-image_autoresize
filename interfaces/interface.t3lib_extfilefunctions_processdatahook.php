@@ -40,7 +40,7 @@ interface t3lib_extFileFunctions_processDataHook {
 	 *
 	 * @param	string		The action
 	 * @param	array		The parameter sent to the action handler
-	 * @param	array		The results of all calls to the action handler 
+	 * @param	array		The results of all calls to the action handler
 	 * @param	t3lib_extFileFunctions		parent t3lib_extFileFunctions object
 	 * @return	void
 	 */

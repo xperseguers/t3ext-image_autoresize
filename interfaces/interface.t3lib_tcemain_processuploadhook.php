@@ -40,7 +40,7 @@ interface t3lib_TCEmain_processUploadHook {
 	/**
 	 * Post-process a file upload.
 	 *
-	 * @param	string		The uploaded file 
+	 * @param	string		The uploaded file
 	 * @param	t3lib_TCEmain		parent t3lib_TCEmain object
 	 * @return	void
 	 */

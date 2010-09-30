@@ -95,7 +95,7 @@ class tx_imageautoresize_configuration {
 		if ($row['rulesets']) {
 			$flexObj = t3lib_div::makeInstance('t3lib_flexformtools');
 			/* @var $flexObj t3lib_flexformtools */
-			$row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);	
+			$row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);
 		}
 
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
@@ -138,7 +138,7 @@ class tx_imageautoresize_configuration {
 	protected function buildForm(array $row) {
 		$content = '';
 
-			// Load the configuration of virtual table 'tx_imageautoresize' 
+			// Load the configuration of virtual table 'tx_imageautoresize'
 		global $TCA;
 		include(t3lib_extMgm::extPath($this->extKey) . 'tca.php');
 		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/locallang_csh_' . self::virtualTable . '.xml');
@@ -186,7 +186,7 @@ class tx_imageautoresize_configuration {
 			if (is_array($actionCMDs[$table][$id][$field]['data']))	{
 				$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 				/* @var $tce t3lib_TCEmain */
-				// Officially internal but not declared as such... 
+				// Officially internal but not declared as such...
 				$tce->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
 			}
 				// Renumber all FlexForm temporary ids
@@ -204,7 +204,7 @@ class tx_imageautoresize_configuration {
 
 		if ($this->writeToLocalconf($key, $value)) {
 			$this->config = $newConfig;
-			t3lib_extMgm::removeCacheFiles();	
+			t3lib_extMgm::removeCacheFiles();
 		}
 	}
 
@@ -221,7 +221,7 @@ class tx_imageautoresize_configuration {
 		//$instObj = t3lib_div::makeInstance('tx_install');
 		//$instObj->allowUpdateLocalConf = 1;
 		//$instObj->updateIdentity = 'TYPO3 Core Update Manager';
-		//$lines = $instObj->writeToLocalconf_control(); 
+		//$lines = $instObj->writeToLocalconf_control();
 		//$instObj->setValueInLocalconfFile($lines, $key, $value, FALSE);
 		//$result = $instObj->writeToLocalconf_control($lines);
 		//if ($result !== 'nochange') {

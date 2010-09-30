@@ -29,7 +29,7 @@
  * This class extends t3lib_extFileFunctions to provide the hook needed
  * to automatically resize huge picture upon upload. It is only needed
  * for TYPO3 4.3 and TYPO3 4.4.
- * 
+ *
  * @category    XClass
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
@@ -113,11 +113,11 @@ class ux_t3lib_extFileFunctions extends t3lib_extFileFunctions {
 						if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_extfilefunc.php']['processData'])) {
 							foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_extfilefunc.php']['processData'] as $classRef) {
 								$hookObject = t3lib_div::getUserObj($classRef);
-				
+
 								if (!($hookObject instanceof t3lib_extFileFunctions_processDataHook)) {
 									throw new UnexpectedValueException('$hookObject must implement interface t3lib_extFileFunctions_processDataHook', 1279719168);
 								}
-				
+
 								$hookObject->processData_postProcessAction($action, $cmdArr, $result[$action], $this);
 							}
 						}
