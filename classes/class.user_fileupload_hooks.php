@@ -69,7 +69,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	/**
 	 * Post processes upload of a picture and makes sure it is not too big.
 	 *
-	 * @param string The uploaded file 
+	 * @param string The uploaded file
 	 * @param t3lib_TCEmain Parent object
 	 * @return void
 	 */
@@ -82,7 +82,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 *
 	 * @param string The action
 	 * @param array The parameter sent to the action handler
-	 * @param array The results of all calls to the action handler 
+	 * @param array The results of all calls to the action handler
 	 * @param t3lib_extFileFunctions Parent object
 	 * @return void
 	 */
@@ -136,7 +136,8 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
 		$isRotated = FALSE;
 
-		if ($ruleset['auto_orient'] === '1') {
+			// Auto orientation is not available when using GraphicsMagick
+		if ($ruleset['auto_orient'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] !== 'gm') {
 			$imParams .= ' -auto-orient';
 			$isRotated = $this->isRotated($filename);
 		}
@@ -201,7 +202,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 					case 8: // 90 rotate left
 						$ret = TRUE;
 		        		break;
-				}	
+				}
 			}
 		}
 
@@ -308,7 +309,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		}
 
 			// Use general configuration as very last rule set
-		$rulesets[] = $general; 
+		$rulesets[] = $general;
 		$this->rulesets = $rulesets;
 	}
 
@@ -407,14 +408,14 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * Expands the image type conversion mapping.
 	 *
 	 * @param array $mapping Array of lines similar to "bmp => jpg", "tif => jpg"
-	 * @return array Key/Value pairs of mapping: array('bmp' => 'jpg', 'tif' => 'jpg') 
+	 * @return array Key/Value pairs of mapping: array('bmp' => 'jpg', 'tif' => 'jpg')
 	 */
 	protected function expandConversionMapping(array $mapping) {
 		$ret = array();
 		$matches = array();
 		foreach ($mapping as $m) {
 			if (preg_match('/^(.*)\s*=>\s*(.*)/', $m, $matches)) {
-				$ret[trim($matches[1])] = trim($matches[2]); 
+				$ret[trim($matches[1])] = trim($matches[2]);
 			}
 		}
 		return $ret;

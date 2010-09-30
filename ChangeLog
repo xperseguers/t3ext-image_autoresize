@@ -1,3 +1,7 @@
+2010-09-30  Xavier Perseguers  <typo3@perseguers.ch>
+
+	* Fixed bug #9980: No resizing if option 'automatic orientation' is activated and TYPO3 is using GraphicsMagick
+
 2010-09-17  Xavier Perseguers  <typo3@perseguers.ch>
 
 	* Added information about incompatibility with kb_filequota in TYPO3 < 4.5.0 (thanks to Katja Lampela)

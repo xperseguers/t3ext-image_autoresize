@@ -9,7 +9,7 @@
         <languageKey index="default" type="array">
         	<label index="directories.description">Comma-separated list of directories to be monitored.
         		Example: fileadmin/
-        		
+
         		Wildcard is supported:
         		fileadmin/*/images/
         		fileadmin/**/images/
@@ -20,7 +20,7 @@
 			<label index="threshold.description">Images larger than this value will be resized (allowed units: B|K|M).</label>
 			<label index="max_width.description">Images will be resized up to this maximum width.</label>
 			<label index="max_height.description">Images will be resized up to this maximum height.</label>
-			<label index="auto_orient.description">Will try to auto-magically orient image (useful with photos).</label>
+			<label index="auto_orient.description">Will try to auto-magically orient image (useful with photos). Beware: this option is not available when using GraphicsMagick and will automatically be deactivated if needed to prevent errors.</label>
 			<label index="keep_metadata.description">If active, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</label>
 			<label index="conversion_mapping.description">Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
 				Example:
