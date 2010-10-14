@@ -169,6 +169,8 @@ class tx_imageautoresize_configuration {
 
 	/**
 	 * Processes submitted data and stores it to localconf.php.
+	 *
+	 * @return void
 	 */
 	protected function processData() {
 		$table = self::virtualTable;
@@ -196,7 +198,7 @@ class tx_imageautoresize_configuration {
 			$newConfig[$field] = $ffValue;
 		}
 
-			// Write back configuration to localconf.php.
+			// Write back configuration to localconf.php
 		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $this->expertKey . '\']';
 		$localconfConfig = $newConfig;
 		$localconfConfig['conversion_mapping'] = implode(',', t3lib_div::trimExplode("\n", $localconfConfig['conversion_mapping'], TRUE));

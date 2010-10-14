@@ -1,3 +1,7 @@
+2010-10-14  Xavier Perseguers  <typo3@perseguers.ch>
+
+	* Added feature #10252: Allow resizing to be deactivated with a rule
+
 2010-09-30  Xavier Perseguers  <typo3@perseguers.ch>
 
 	* Fixed bug #9980: No resizing if option 'automatic orientation' is activated and TYPO3 is using GraphicsMagick

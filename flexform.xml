@@ -75,6 +75,18 @@
 									</config>
 								</TCEforms>
 							</file_types>
+							<threshold type="array">
+								<TCEforms type="array">
+									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.threshold</label>
+									<config type="array">
+										<type>input</type>
+										<size>10</size>
+										<max>10</max>
+										<eval>trim</eval>
+										<checkbox>0</checkbox>
+									</config>
+								</TCEforms>
+							</threshold>
 							<max_width type="array">
 								<TCEforms type="array">
 									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_width</label>
