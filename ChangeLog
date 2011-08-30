@@ -1,5 +1,6 @@
 2011-08-30  Xavier Perseguers  <xavier@typo3.org>
 
+	* [TASK][DOC] #9399: DAM is currently not compatible
 	* [BUGFIX] #12892: Does not work with GraphicsMagick
 	* [BUGFIX] #28912: New file won't get created if dimensions equal (thanks to Thomas Deinhamer)
 	* [TASK] CGL cleanup
