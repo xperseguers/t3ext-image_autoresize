@@ -15,12 +15,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'This extension allows you to automatically resize down huge pictures uploaded by your editors.',
 	'category' => 'be',
 	'author' => 'Xavier Perseguers',
-	'author_email' => 'typo3@perseguers.ch',
+	'author_email' => 'xavier@typo3.org',
 	'shy' => '',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => '',
+	'doNotLoadInFE' => 1,
 	'state' => 'stable',
 	'internal' => '',
 	'uploadfolder' => 0,
@@ -33,7 +34,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.2.0-0.0.0',
-			'typo3' => '4.3.0-0.0.0',
+			'typo3' => '4.3.0-4.6.99',
 		),
 		'conflicts' => array(
 		),
