@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Xavier Perseguers <typo3@perseguers.ch>
+*  (c) 2010-2011 Xavier Perseguers <xavier@typo3.org>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,7 @@
  * Interface for classes which hook into TCEmain and do additional processing
  * after the upload of a file.
  *
- * @author	Xavier Perseguers <typo3@perseguers.ch>
+ * @author	Xavier Perseguers <xavier@typo3.org>
  * @package TYPO3
  * @subpackage t3lib
  */

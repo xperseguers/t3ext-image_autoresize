@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Xavier Perseguers (typo3@perseguers.ch)
+*  (c) 2010-2011 Xavier Perseguers <xavier@typo3.org>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@
  * @category    XClass
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
- * @author      Xavier Perseguers <typo3@perseguers.ch>
+ * @author      Xavier Perseguers <xavier@typo3.org>
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
@@ -118,6 +118,7 @@ class ux_t3lib_extFileFunctions extends t3lib_extFileFunctions {
 									throw new UnexpectedValueException('$hookObject must implement interface t3lib_extFileFunctions_processDataHook', 1279719168);
 								}
 
+								/** @var $hookObject t3lib_extFileFunctions_processDataHook */
 								$hookObject->processData_postProcessAction($action, $cmdArr, $result[$action], $this);
 							}
 						}

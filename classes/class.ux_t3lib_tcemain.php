@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Xavier Perseguers (typo3@perseguers.ch)
+*  (c) 2010-2011 Xavier Perseguers <xavier@typo3.org>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,11 +33,16 @@
  * @category    XClass
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
- * @author      Xavier Perseguers <typo3@perseguers.ch>
+ * @author      Xavier Perseguers <xavier@typo3.org>
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
 class ux_t3lib_TCEmain extends t3lib_TCEmain {
+
+	/**
+	 * @var t3lib_basicFileFunctions
+	 */
+	public $fileFunc;
 
 	/**
 	 * Handling files for group/select function
@@ -53,7 +58,7 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 	 * @return	array		Modified value array
 	 * @see checkValue_group_select()
 	 */
-	function checkValue_group_select_file($valueArray,$tcaFieldConf,$curValue,$uploadedFileArray,$status,$table,$id,$recFID)	{
+	public function checkValue_group_select_file($valueArray, $tcaFieldConf, $curValue, $uploadedFileArray, $status, $table, $id, $recFID) {
 
 		if (!$this->bypassFileHandling)	{	// If filehandling should NOT be bypassed, do processing:
 
@@ -66,12 +71,12 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 			}
 
 				// Creating fileFunc object.
-			if (!$this->fileFunc)	{
+			if (!$this->fileFunc) {
 				$this->fileFunc = t3lib_div::makeInstance('t3lib_basicFileFunctions');
-				$this->include_filefunctions=1;
+				$this->include_filefunctions = 1;
 			}
 				// Setting permitted extensions.
-			$all_files = Array();
+			$all_files = array();
 			$all_files['webspace']['allow'] = $tcaFieldConf['allowed'];
 			$all_files['webspace']['deny'] = $tcaFieldConf['disallowed'] ? $tcaFieldConf['disallowed'] : '*';
 			$all_files['ftpspace'] = $all_files['webspace'];
@@ -80,7 +85,7 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 
 			// If there is an upload folder defined:
 		if ($tcaFieldConf['uploadfolder'] && $tcaFieldConf['internal_type'] == 'file') {
-			if (!$this->bypassFileHandling)	{	// If filehandling should NOT be bypassed, do processing:
+			if (!$this->bypassFileHandling) {	// If filehandling should NOT be bypassed, do processing:
 					// For logging..
 				$propArr = $this->getRecordProperties($table,$id);
 
@@ -88,7 +93,7 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 				$dest = $this->destPathFromUploadFolder($tcaFieldConf['uploadfolder']);
 
 					// If we are updating:
-				if ($status=='update')	{
+				if ($status=='update') {
 
 						// Traverse the input values and convert to absolute filenames in case the update happens to an autoVersionized record.
 						// Background: This is a horrible workaround! The problem is that when a record is auto-versionized the files of the record get copied and therefore get new names which is overridden with the names from the original record in the incoming data meaning both lost files and double-references!
@@ -99,71 +104,70 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 						// The versions uid is 456 and the file is copied to "logo_01.gif". But the form data that we sent was based on uid 123 and hence contains the filename "logo.gif" from the original.
 						// The file management code below will do two things: First it will blindly accept "logo.gif" as a file attached to the record (thus creating a double reference) and secondly it will find that "logo_01.gif" was not in the incoming filelist and therefore should be deleted.
 						// If we prefix the incoming file "logo.gif" with its absolute path it will be seen as a new file added. Thus it will be copied to "logo_02.gif". "logo_01.gif" will still be deleted but since the files are the same the difference is zero - only more processing and file copying for no reason. But it will work.
-					if ($this->autoVersioningUpdate===TRUE)	{
-						foreach($valueArray as $key => $theFile)	{
-							if ($theFile===basename($theFile))	{	// If it is an already attached file...
-								$valueArray[$key] = PATH_site.$tcaFieldConf['uploadfolder'].'/'.$theFile;
+					if ($this->autoVersioningUpdate === TRUE) {
+						foreach($valueArray as $key => $theFile) {
+							if ($theFile === basename($theFile)) {	// If it is an already attached file...
+								$valueArray[$key] = PATH_site . $tcaFieldConf['uploadfolder'] . '/' . $theFile;
 							}
 						}
 					}
 
 						// Finding the CURRENT files listed, either from MM or from the current record.
-					$theFileValues=array();
-					if ($tcaFieldConf['MM'])	{	// If MM relations for the files also!
-						$dbAnalysis = t3lib_div::makeInstance('t3lib_loadDBGroup');
+					$theFileValues = array();
+					if ($tcaFieldConf['MM']) {	// If MM relations for the files also!
 						/* @var $dbAnalysis t3lib_loadDBGroup */
-						$dbAnalysis->start('','files',$tcaFieldConf['MM'],$id);
+						$dbAnalysis = t3lib_div::makeInstance('t3lib_loadDBGroup');
+						$dbAnalysis->start('', 'files', $tcaFieldConf['MM'], $id);
 						foreach ($dbAnalysis->itemArray as $item) {
 							if ($item['id']) {
 								$theFileValues[] = $item['id'];
 							}
 						}
 					} else {
-						$theFileValues=t3lib_div::trimExplode(',',$curValue,1);
+						$theFileValues = t3lib_div::trimExplode(',',$curValue,1);
 					}
 					$currentFilesForHistory = implode(',', $theFileValues);
 
 						// DELETE files: If existing files were found, traverse those and register files for deletion which has been removed:
 					if (count($theFileValues))	{
 							// Traverse the input values and for all input values which match an EXISTING value, remove the existing from $theFileValues array (this will result in an array of all the existing files which should be deleted!)
-						foreach($valueArray as $key => $theFile)	{
-							if ($theFile && !strstr(t3lib_div::fixWindowsFilePath($theFile),'/'))	{
-								$theFileValues = t3lib_div::removeArrayEntryByValue($theFileValues,$theFile);
+						foreach ($valueArray as $key => $theFile) {
+							if ($theFile && !strstr(t3lib_div::fixWindowsFilePath($theFile), '/')) {
+								$theFileValues = t3lib_div::removeArrayEntryByValue($theFileValues, $theFile);
 							}
 						}
 
 							// This array contains the filenames in the uploadfolder that should be deleted:
-						foreach($theFileValues as $key => $theFile)	{
+						foreach ($theFileValues as $key => $theFile) {
 							$theFile = trim($theFile);
-							if (@is_file($dest.'/'.$theFile))	{
-								$this->removeFilesStore[]=$dest.'/'.$theFile;
+							if (@is_file($dest . '/' . $theFile)) {
+								$this->removeFilesStore[] = $dest . '/' . $theFile;
 							} elseif ($theFile) {
-								$this->log($table,$id,5,0,1,"Could not delete file '%s' (does not exist). (%s)",10,array($dest.'/'.$theFile, $recFID),$propArr['event_pid']);
+								$this->log($table, $id, 5, 0, 1, 'Could not delete file \'%s\' (does not exist). (%s)', 10, array($dest . '/' . $theFile, $recFID), $propArr['event_pid']);
 							}
 						}
 					}
 				}
 
 					// Traverse the submitted values:
-				foreach($valueArray as $key => $theFile)	{
+				foreach ($valueArray as $key => $theFile) {
 						// NEW FILES? If the value contains '/' it indicates, that the file is new and should be added to the uploadsdir (whether its absolute or relative does not matter here)
-					if (strstr(t3lib_div::fixWindowsFilePath($theFile),'/'))	{
+					if (strstr(t3lib_div::fixWindowsFilePath($theFile), '/')) {
 							// Init:
 						$maxSize = intval($tcaFieldConf['max_size']);
-						$cmd='';
-						$theDestFile='';		// Must be cleared. Else a faulty fileref may be inserted if the below code returns an error!
+						$theDestFile = '';		// Must be cleared. Else a faulty fileref may be inserted if the below code returns an error!
 
 							// Check various things before copying file:
-						if (@is_dir($dest) && (@is_file($theFile) || @is_uploaded_file($theFile)))	{		// File and destination must exist
+						if (@is_dir($dest) && (@is_file($theFile) || @is_uploaded_file($theFile))) {		// File and destination must exist
 
 								// Finding size. For safe_mode we have to rely on the size in the upload array if the file is uploaded.
-							if (is_uploaded_file($theFile) && $theFile==$uploadedFileArray['tmp_name'])	{
+							if (is_uploaded_file($theFile) && $theFile == $uploadedFileArray['tmp_name']) {
 								$fileSize = $uploadedFileArray['size'];
 							} else {
 								$fileSize = filesize($theFile);
 							}
 
-							if (!$maxSize || $fileSize<=($maxSize*1024))	{	// Check file size:
+							if (!$maxSize || $fileSize <= ($maxSize * 1024)) {	// Check file size:
 									// Prepare filename:
 								$theEndFileName = isset($this->alternativeFileName[$theFile]) ? $this->alternativeFileName[$theFile] : $theFile;
 								$fI = t3lib_div::split_fileref($theEndFileName);
@@ -173,8 +177,8 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 									$theDestFile = $this->fileFunc->getUniqueName($this->fileFunc->cleanFileName($fI['file']), $dest);
 
 										// If we have a unique destination filename, then write the file:
-									if ($theDestFile)	{
-										t3lib_div::upload_copy_move($theFile,$theDestFile);
+									if ($theDestFile) {
+										t3lib_div::upload_copy_move($theFile, $theDestFile);
 
 											// Hook for post-processing the upload action
 										if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processUpload'])) {
@@ -185,22 +189,23 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 													throw new UnexpectedValueException('$hookObject must implement interface t3lib_TCEmain_processUploadHook', 1279962349);
 												}
 
+												/** @var $hookObject t3lib_TCEmain_processUploadHook */
 												$hookObject->processUpload_postProcessAction($theDestFile, $this);
 											}
 										}
 
 										$this->copiedFileMap[$theFile] = $theDestFile;
 										clearstatcache();
-										if (!@is_file($theDestFile))	$this->log($table,$id,5,0,1,"Copying file '%s' failed!: The destination path (%s) may be write protected. Please make it write enabled!. (%s)",16,array($theFile, dirname($theDestFile), $recFID),$propArr['event_pid']);
-									} else $this->log($table,$id,5,0,1,"Copying file '%s' failed!: No destination file (%s) possible!. (%s)",11,array($theFile, $theDestFile, $recFID),$propArr['event_pid']);
-								} else $this->log($table,$id,5,0,1,"File extension '%s' not allowed. (%s)",12,array($fI['fileext'], $recFID),$propArr['event_pid']);
-							} else $this->log($table,$id,5,0,1,"Filesize (%s) of file '%s' exceeds limit (%s). (%s)",13,array(t3lib_div::formatSize($fileSize),$theFile,t3lib_div::formatSize($maxSize*1024),$recFID),$propArr['event_pid']);
-						} else $this->log($table,$id,5,0,1,'The destination (%s) or the source file (%s) does not exist. (%s)',14,array($dest, $theFile, $recFID),$propArr['event_pid']);
+										if (!@is_file($theDestFile)) $this->log($table,$id,5,0,1, 'Copying file \'%s\' failed!: The destination path (%s) may be write protected. Please make it write enabled!. (%s)', 16, array($theFile, dirname($theDestFile), $recFID), $propArr['event_pid']);
+									} else $this->log($table, $id, 5, 0, 1, 'Copying file \'%s\' failed!: No destination file (%s) possible!. (%s)', 11, array($theFile, $theDestFile, $recFID), $propArr['event_pid']);
+								} else $this->log($table, $id, 5, 0, 1, 'File extension \'%s\' not allowed. (%s)', 12, array($fI['fileext'], $recFID), $propArr['event_pid']);
+							} else $this->log($table, $id, 5, 0, 1, 'Filesize (%s) of file \'%s\' exceeds limit (%s). (%s)', 13, array(t3lib_div::formatSize($fileSize), $theFile, t3lib_div::formatSize($maxSize * 1024), $recFID), $propArr['event_pid']);
+						} else $this->log($table, $id, 5, 0, 1, 'The destination (%s) or the source file (%s) does not exist. (%s)', 14, array($dest, $theFile, $recFID), $propArr['event_pid']);
 
 							// If the destination file was created, we will set the new filename in the value array, otherwise unset the entry in the value array!
 						if (@is_file($theDestFile))	{
 							$info = t3lib_div::split_fileref($theDestFile);
-							$valueArray[$key]=$info['file']; // The value is set to the new filename
+							$valueArray[$key] = $info['file']; // The value is set to the new filename
 						} else {
 							unset($valueArray[$key]);	// The value is set to the new filename
 						}
@@ -209,17 +214,17 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 			}
 
 				// If MM relations for the files, we will set the relations as MM records and change the valuearray to contain a single entry with a count of the number of files!
-			if ($tcaFieldConf['MM'])	{
-				$dbAnalysis = t3lib_div::makeInstance('t3lib_loadDBGroup');
+			if ($tcaFieldConf['MM']) {
 				/* @var $dbAnalysis t3lib_loadDBGroup */
-				$dbAnalysis->tableArray['files']=array();	// dummy
+				$dbAnalysis = t3lib_div::makeInstance('t3lib_loadDBGroup');
+				$dbAnalysis->tableArray['files'] = array();	// dummy
 
 				foreach ($valueArray as $key => $theFile) {
 						// explode files
-						$dbAnalysis->itemArray[]['id']=$theFile;
+					$dbAnalysis->itemArray[]['id']=$theFile;
 				}
-				if ($status=='update')	{
-					$dbAnalysis->writeMM($tcaFieldConf['MM'],$id,0);
+				if ($status === 'update') {
+					$dbAnalysis->writeMM($tcaFieldConf['MM'], $id, 0);
 					$newFiles = implode(',', $dbAnalysis->getValueArray());
 					list(,,$recFieldName) = explode(':', $recFID);
 					if ($currentFilesForHistory != $newFiles) {
@@ -236,20 +241,20 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 			}
 			//store path relative to site root (if uploadfolder is not set or internal_type is file_reference)
 		} else {
-			if (count($valueArray)){
+			if (count($valueArray)) {
 				if (!$this->bypassFileHandling) {	// If filehandling should NOT be bypassed, do processing:
 					$propArr = $this->getRecordProperties($table, $id); // For logging..
-					foreach($valueArray as &$theFile){
+					foreach ($valueArray as &$theFile) {
 
 							// if alernative File Path is set for the file, then it was an import
-						if ($this->alternativeFilePath[$theFile]){
+						if ($this->alternativeFilePath[$theFile]) {
 
 								// don't import the file if it already exists
 							if (@is_file(PATH_site . $this->alternativeFilePath[$theFile])) {
 								$theFile = PATH_site . $this->alternativeFilePath[$theFile];
 
 								// import the file
-							} elseif (@is_file($theFile)){
+							} elseif (@is_file($theFile)) {
 								$dest = dirname(PATH_site . $this->alternativeFilePath[$theFile]);
 								if (!@is_dir($dest)) {
 									t3lib_div::mkdir_deep(PATH_site, dirname($this->alternativeFilePath[$theFile]) . '/');
@@ -257,11 +262,10 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 
 									// Init:
 								$maxSize = intval($tcaFieldConf['max_size']);
-								$cmd = '';
 								$theDestFile = '';		// Must be cleared. Else a faulty fileref may be inserted if the below code returns an error!
 								$fileSize = filesize($theFile);
 
-								if (!$maxSize || $fileSize <= ($maxSize * 1024))	{	// Check file size:
+								if (!$maxSize || $fileSize <= ($maxSize * 1024)) {	// Check file size:
 										// Prepare filename:
 									$theEndFileName = isset($this->alternativeFileName[$theFile]) ? $this->alternativeFileName[$theFile] : $theFile;
 									$fI = t3lib_div::split_fileref($theEndFileName);
@@ -271,14 +275,14 @@ class ux_t3lib_TCEmain extends t3lib_TCEmain {
 										$theDestFile = PATH_site . $this->alternativeFilePath[$theFile];
 
 											// Write the file:
-										if ($theDestFile)	{
+										if ($theDestFile) {
 											t3lib_div::upload_copy_move($theFile, $theDestFile);
 											$this->copiedFileMap[$theFile] = $theDestFile;
 											clearstatcache();
-											if (!@is_file($theDestFile)) $this->log($table, $id, 5, 0, 1, "Copying file '%s' failed!: The destination path (%s) may be write protected. Please make it write enabled!. (%s)", 16, array($theFile, dirname($theDestFile), $recFID), $propArr['event_pid']);
-										} else $this->log($table, $id, 5, 0, 1, "Copying file '%s' failed!: No destination file (%s) possible!. (%s)", 11, array($theFile, $theDestFile, $recFID), $propArr['event_pid']);
-									} else $this->log($table, $id, 5, 0, 1, "File extension '%s' not allowed. (%s)", 12, array($fI['fileext'], $recFID), $propArr['event_pid']);
-								} else $this->log($table, $id, 5, 0, 1, "Filesize (%s) of file '%s' exceeds limit (%s). (%s)", 13, array(t3lib_div::formatSize($fileSize), $theFile,t3lib_div::formatSize($maxSize * 1024),$recFID), $propArr['event_pid']);
+											if (!@is_file($theDestFile)) $this->log($table, $id, 5, 0, 1, 'Copying file \'%s\' failed!: The destination path (%s) may be write protected. Please make it write enabled!. (%s)', 16, array($theFile, dirname($theDestFile), $recFID), $propArr['event_pid']);
+										} else $this->log($table, $id, 5, 0, 1, 'Copying file \'%s\' failed!: No destination file (%s) possible!. (%s)', 11, array($theFile, $theDestFile, $recFID), $propArr['event_pid']);
+									} else $this->log($table, $id, 5, 0, 1, 'File extension \'%s\' not allowed. (%s)', 12, array($fI['fileext'], $recFID), $propArr['event_pid']);
+								} else $this->log($table, $id, 5, 0, 1, 'Filesize (%s) of file \'%s\' exceeds limit (%s). (%s)', 13, array(t3lib_div::formatSize($fileSize), $theFile,t3lib_div::formatSize($maxSize * 1024),$recFID), $propArr['event_pid']);
 
 									// If the destination file was created, we will set the new filename in the value array, otherwise unset the entry in the value array!
 								if (@is_file($theDestFile))	{
