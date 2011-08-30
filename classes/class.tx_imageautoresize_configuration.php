@@ -117,7 +117,7 @@ class tx_imageautoresize_configuration {
 			'threshold'   => '400K',
 			'max_width'   => '1024',
 			'max_height'  => '768',
-			'auto_orient' => '1',
+			'auto_orient' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm' ? '0' : '1',
 			'conversion_mapping' => implode(',', array(
 				'ai => jpg',
 				'bmp => jpg',
@@ -186,8 +186,8 @@ class tx_imageautoresize_configuration {
 		if ($ffValue) {
 			$actionCMDs = t3lib_div::_GP('_ACTION_FLEX_FORMdata');
 			if (is_array($actionCMDs[$table][$id][$field]['data']))	{
-				$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 				/* @var $tce t3lib_TCEmain */
+				$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 				// Officially internal but not declared as such...
 				$tce->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
 			}
