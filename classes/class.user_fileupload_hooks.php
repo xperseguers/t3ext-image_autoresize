@@ -129,6 +129,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		}
 
 			// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
+		/** @var $gifCreator tslib_gifbuilder */
 		$gifCreator = t3lib_div::makeInstance('tslib_gifbuilder');
 		$gifCreator->init();
 		$gifCreator->absPrefix = PATH_site;
@@ -156,7 +157,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			);
 		}
 
-		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options);
+		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options, TRUE);
 		if ($tempFileInfo) {
 				// Replace original file
 			@unlink($filename);
