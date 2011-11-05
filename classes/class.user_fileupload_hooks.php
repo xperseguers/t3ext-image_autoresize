@@ -251,6 +251,10 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 
 			// Try to find a matching ruleset
 		foreach ($this->rulesets as $ruleset) {
+			if (!is_array($ruleset['file_types'])) {
+					// Default general settings do not include any watched image types
+				continue;
+			}
 			if (count($ruleset['usergroup']) > 0 && count(array_intersect($ruleset['usergroup'], $beGroups)) == 0) {
 					// Backend user is not member of a group configured for the current rule set
 				continue;
