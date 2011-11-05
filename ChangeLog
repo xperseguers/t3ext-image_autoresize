@@ -1,5 +1,6 @@
 2011-11-05  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK][DOC] Update documentation as the configuration wizard moved to a dedicated Backend module
 	* [BUGFIX] #30193: PHP Catchable Fatal Error with no watched image types
 	* [BUGFIX] #13470: Cannot configure rules with ExtJS-based Extension Manager
 
