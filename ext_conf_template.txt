@@ -1,2 +1,0 @@
-	#cat=basic; type=user[EXT:image_autoresize/classes/class.tx_imageautoresize_configuration.php:&tx_imageautoresize_configuration->display]; label=
-rules =

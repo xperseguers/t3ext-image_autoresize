@@ -1,31 +1,35 @@
-2011-08-30  Xavier Perseguers  <xavier@typo3.org>
+2011-11-05  Xavier Perseguers  <xavier@causal.ch>
+
+	* [BUGFIX] #13470: Cannot configure rules with ExtJS-based Extension Manager
+
+2011-08-30  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK][DOC] #9399: DAM is currently not compatible
 	* [BUGFIX] #12892: Does not work with GraphicsMagick
 	* [BUGFIX] #28912: New file won't get created if dimensions equal (thanks to Thomas Deinhamer)
 	* [TASK] CGL cleanup
 
-2010-10-14  Xavier Perseguers  <xavier@typo3.org>
+2010-10-14  Xavier Perseguers  <xavier@causal.ch>
 
 	* [FEATURE] #10252: Allow resizing to be deactivated with a rule
 
-2010-09-30  Xavier Perseguers  <xavier@typo3.org>
+2010-09-30  Xavier Perseguers  <xavier@causal.ch>
 
 	* [BUGFIX] #9980: No resizing if option 'automatic orientation' is activated and TYPO3 is using GraphicsMagick
 
-2010-09-17  Xavier Perseguers  <xavier@typo3.org>
+2010-09-17  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Add information about incompatibility with kb_filequota in TYPO3 < 4.5.0 (thanks to Katja Lampela)
 
-2010-08-21  Xavier Perseguers  <xavier@typo3.org>
+2010-08-21  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Raise version to 1.0.0: Extension is now considered stable
 
-2010-07-28  Xavier Perseguers  <xavier@typo3.org>
+2010-07-28  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK][DOC] Fix inconsistencies when rendered as HTML on TER
 
-2010-07-27  Xavier Perseguers  <xavier@typo3.org>
+2010-07-27  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Release to TER
 	* [TASK] Raise version to 0.5.1
@@ -33,27 +37,27 @@
 	* [TASK] Release to TER
 	* [TASK] Boost up version to 0.5.0
 
-2010-07-25  Xavier Perseguers  <xavier@typo3.org>
+2010-07-25  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK][DOC] Add documentation
 
-2010-07-24  Xavier Perseguers  <xavier@typo3.org>
+2010-07-24  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Raise version to 0.2.0
 	* [TASK] Add support for converting the file format
 	* [TASK] Add support for wildcard in directory name
 	* [TASK] Add multi-select for the image types
 
-2010-07-23  Xavier Persegeurs  <xavier@typo3.org>
+2010-07-23  Xavier Persegeurs  <xavier@causal.ch>
 
 	* [TASK] Raise version to 0.1.0 (beta)
 	* [TASK] Implement check against a list of rule sets
 	* [TASK] Add context sensitive help to all fields
 
-2010-07-22  Xavier Perseguers  <xavier@typo3.org>
+2010-07-22  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Add option to keep metadata information
 
-2010-07-21  Xavier Perseguers  <xavier@typo3.org>
+2010-07-21  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] Initial upload

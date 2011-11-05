@@ -67,7 +67,7 @@
 									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.file_types</label>
 									<config type="array">
 										<type>select</type>
-										<itemsProcFunc>tx_imageautoresize_configuration->getImageFileExtensions</itemsProcFunc>
+										<itemsProcFunc>tx_imageautoresize_module1->getImageFileExtensions</itemsProcFunc>
 										<minitems>0</minitems>
 										<maxitems>20</maxitems>
 										<size>6</size>

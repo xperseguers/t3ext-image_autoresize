@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2011 Xavier Perseguers <xavier@typo3.org>
+*  (c) 2010-2011 Xavier Perseguers <xavier@causal.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@
 /**
  * Interface for classes which hook into extFileFunctions and do additional processData processing.
  *
- * @author      Xavier Perseguers <xavier@typo3.org>
+ * @author      Xavier Perseguers <xavier@causal.ch>
  * @package     TYPO3
  * @subpackage  t3lib
  */

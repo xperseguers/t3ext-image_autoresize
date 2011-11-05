@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2011 Xavier Perseguers <xavier@typo3.org>
+*  (c) 2010-2011 Xavier Perseguers <xavier@causal.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,20 +25,20 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-//include(t3lib_extMgm::extPath('install') . 'mod/class.tx_install.php');
+$GLOBALS['LANG']->includeLLFile('EXT:image_autoresize/mod1/locallang.xml');
+$GLOBALS['BE_USER']->modAccess($MCONF, 1);
 
 /**
- * This class provides a wizard used in EM to prepare a configuration
- * based on FlexForms for this extension.
+ * Configuration module based on FlexForms.
  *
- * @category    Wizard
+ * @category    Module
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
- * @author      Xavier Perseguers <xavier@typo3.org>
+ * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
  */
-class tx_imageautoresize_configuration {
+class tx_imageautoresize_module1 extends t3lib_SCbase {
 
 	const virtualTable    = 'tx_imageautoresize';
 	const virtualRecordId = 1;
@@ -64,16 +64,9 @@ class tx_imageautoresize_configuration {
 	protected $config;
 
 	/**
-	 * @var string
-	 */
-	protected $content;
-
-	/**
 	 * Default constructor
 	 */
 	public function __construct() {
-		$this->initTCEForms();
-
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
 		$this->config = $config ? unserialize($config) : $this->getDefaultConfiguration();
 		$this->config['conversion_mapping'] = implode("\n", explode(',', $this->config['conversion_mapping']));
@@ -82,27 +75,54 @@ class tx_imageautoresize_configuration {
 	/**
 	 * Renders a FlexForm configuration form.
 	 *
-	 * @param array	Parameter array. Contains fieldName and fieldValue.
-	 * @param t3lib_tsStyleConfig $pObj Parent object
 	 * @return string HTML wizard
 	 */
-	public function display(array $params, t3lib_tsStyleConfig $pObj) {
+	public function main() {
 		if (t3lib_div::_GP('form_submitted')) {
 			$this->processData();
 		}
 
+		$this->initTCEForms();
+		$this->doc = t3lib_div::makeInstance('noDoc');
+		$this->doc->backPath = $GLOBALS['BACK_PATH'];
+		$this->doc->form = '<form action="" method="post" name="' . $this->tceforms->formName . '">';
+
 		$row = $this->config;
 		if ($row['rulesets']) {
+			/** @var $flexObj t3lib_flexformtools */
 			$flexObj = t3lib_div::makeInstance('t3lib_flexformtools');
-			/* @var $flexObj t3lib_flexformtools */
 			$row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);
 		}
 
-		$this->content .= $this->tceforms->printNeededJSFunctions_top();
-		$this->content .= $this->buildForm($row);
-		$this->content .= $this->tceforms->printNeededJSFunctions();
+			// TCE forms methods *must* be invoked before $this->doc->startPage()
+		$wizard = $this->tceforms->printNeededJSFunctions_top();
+		$wizard .= $this->buildForm($row);
+		$wizard .= $this->tceforms->printNeededJSFunctions();
 
-		return $this->content;
+		$this->content .= $this->doc->startPage($GLOBALS['LANG']->getLL('title'));
+		$this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
+		$this->content .= $this->doc->spacer(5);
+
+		$this->content .= $wizard;
+		$this->content .= $this->doc->spacer(5);
+		$this->content .= '<input type="submit" value="Save Configuration" />';
+
+			// Shortcut
+		if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
+			$this->content .= $this->doc->spacer(20) . $this->doc->section('', $this->doc->makeShortcutIcon('id', implode(',', array_keys($this->MOD_MENU)), $this->MCONF['name']));
+		}
+
+		$this->content .= $this->doc->spacer(10);
+	}
+
+	/**
+	 * Prints out the module HTML.
+	 *
+	 * @return string HTML output
+	 */
+	public function printContent() {
+		$this->content .= $this->doc->endPage();
+		echo $this->content;
 	}
 
 	/**
@@ -326,8 +346,19 @@ class tx_imageautoresize_configuration {
 
 }
 
-
-if (defined('TYPO3_MODE') && isset($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.tx_imageautoresize_configuration.php'])) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.tx_imageautoresize_configuration.php']);
+if (defined('TYPO3_MODE') && isset($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/mod1/index.php'])) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/mod1/index.php']);
 }
+
+// Compute BACK_PATH
+$relPathParts = explode('/', substr(t3lib_extMgm::extPath('image_autoresize'), strlen(PATH_site)));
+$GLOBALS['BACK_PATH'] = str_repeat('../', count($relPathParts)) . 'typo3/';
+
+// Make instance:
+/** @var $SOBE tx_imageautoresize_module1 */
+$SOBE = t3lib_div::makeInstance('tx_imageautoresize_module1');
+$SOBE->init();
+$SOBE->main();
+$SOBE->printContent();
+
 ?>
