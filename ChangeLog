@@ -1,5 +1,6 @@
 2012-03-18  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK] Raise version to 1.1.1
 	* [BUGFIX] #31697: No style is applied on the Backend module in TYPO3 4.5.x
 
 2011-11-07  Xavier Perseguers  <xavier@causal.ch>
