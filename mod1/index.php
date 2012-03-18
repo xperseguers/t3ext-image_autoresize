@@ -1,29 +1,29 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2011 Xavier Perseguers <xavier@causal.ch>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*  A copy is found in the textfile GPL.txt and important notices to the license
-*  from the author is found in LICENSE.txt distributed with these scripts.
-*
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2012 Xavier Perseguers <xavier@causal.ch>
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
+ *
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 $GLOBALS['LANG']->includeLLFile('EXT:image_autoresize/mod1/locallang.xml');
 $GLOBALS['BE_USER']->modAccess($MCONF, 1);
@@ -69,7 +69,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	public function __construct() {
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
 		$this->config = $config ? unserialize($config) : $this->getDefaultConfiguration();
-		$this->config['conversion_mapping'] = implode("\n", explode(',', $this->config['conversion_mapping']));
+		$this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
 	}
 
 	/**
@@ -82,6 +82,10 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$this->processData();
 		}
 
+		if (!version_compare(TYPO3_version, '4.5.99', '>')) {
+				# See bug http://forge.typo3.org/issues/31697
+			$GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] = 1;
+		}
 		$this->initTCEForms();
 		$this->doc = t3lib_div::makeInstance('noDoc');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -253,7 +257,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		//$instObj = null;
 
 		$localconfFile = PATH_site . 'typo3conf/localconf.php';
-		$lines = explode("\n", file_get_contents($localconfFile));
+		$lines = explode(LF, file_get_contents($localconfFile));
 		$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
 		$format = "%s = %s;\t// Modified or inserted by TYPO3 Extension Manager.";
 
