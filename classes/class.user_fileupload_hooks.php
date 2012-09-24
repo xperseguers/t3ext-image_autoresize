@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2011 Xavier Perseguers <xavier@causal.ch>
+*  (c) 2010-2012 Xavier Perseguers <xavier@causal.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,8 +32,8 @@ if (!version_compare(TYPO3_version, '4.4.99', '>')) {
 }
 
 /**
- * This class extends t3lib_extFileFunctions to automatically resize
- * huge pictures upon upload.
+ * This class extends t3lib_extFileFunctions and hooks into DAM to
+ * automatically resize huge pictures upon upload.
  *
  * @category    Hook
  * @package     TYPO3
@@ -91,6 +91,22 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 				// Get the latest uploaded file name
 			$filename = array_pop($result);
 			$this->processFile($filename);
+		}
+	}
+
+	/**
+	 * Post-processes a file operation that has already been handled by DAM.
+	 *
+	 * @param string $action
+	 * @param array|NULL $data
+	 * @return void
+	 */
+	public function filePostTrigger($action, $data) {
+		if ($action === 'upload' && is_array($data)) {
+			$filename = $data['target_file'];
+			if (is_file($filename)) {
+				$this->processFile($filename);
+			}
 		}
 	}
 
