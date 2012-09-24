@@ -1,5 +1,6 @@
 2012-09-24  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK] Raise version to 1.2.0
 	* [BUGFIX] #9399: Does not work with DAM (thanks to Eventex Nord for sponsoring)
 
 2012-03-18  Xavier Perseguers  <xavier@causal.ch>
