@@ -1,4 +1,6 @@
 <?php
+namespace Causal\ImageAutoresize\Hook;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -35,9 +37,10 @@
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
  * @version     SVN: $Id$
- * @deprecated  This class is kept for compatibility with TYPO3 4.5, 4.6 and 4.7
  */
-class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t3lib_TCEmain_processUploadHook {
+class FileUploadHook implements
+	\TYPO3\CMS\Core\Utility\File\ExtendedFileUtilityProcessDataHookInterface,
+	\TYPO3\CMS\Core\DataHandling\DataHandlerProcessUploadHookInterface {
 
 	/**
 	 * @var array
@@ -52,7 +55,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		if (!$config) {
 			$this->notify(
 				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.emptyConfiguration'),
-				t3lib_FlashMessage::ERROR
+				\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
 			);
 		}
 		$config = unserialize($config);
@@ -65,10 +68,10 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * Post processes upload of a picture and makes sure it is not too big.
 	 *
 	 * @param string $filename The uploaded file
-	 * @param t3lib_TCEmain $parentObject
+	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject The parent object
 	 * @return void
 	 */
-	public function processUpload_postProcessAction(&$filename, t3lib_TCEmain $parentObject) {
+	public function processUpload_postProcessAction(&$filename, \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject) {
 		$filename = $this->processFile($filename);
 	}
 
@@ -77,11 +80,11 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 *
 	 * @param string $action The action
 	 * @param array $cmdArr The parameter sent to the action handler
-	 * @param array $results The results of all calls to the action handler
-	 * @param t3lib_extFileFunctions $pObj The parent object
+	 * @param array $result The results of all calls to the action handler
+	 * @param \TYPO3\CMS\Core\Utility\File\ExtendedFileUtility $pObj The parent object
 	 * @return void
 	 */
-	public function processData_postProcessAction($action, array $cmdArr, array $result, t3lib_extFileFunctions $pObj) {
+	public function processData_postProcessAction($action, array $cmdArr, array $result, \TYPO3\CMS\Core\Utility\File\ExtendedFileUtility $pObj) {
 		if ($action === 'upload') {
 			// Get the latest uploaded file name
 			$filename = array_pop($result);
@@ -95,6 +98,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * @param string $action
 	 * @param array|NULL $data
 	 * @return void
+	 * @todo Test this hook with TYPO3 6.x
 	 */
 	public function filePostTrigger($action, $data) {
 		if ($action === 'upload' && is_array($data)) {
@@ -130,8 +134,9 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			$destFilename = basename(substr($filename, 0, strlen($filename) - strlen($fileExtension)) . $destExtension);
 
 			// Ensures $destFilename does not yet exist, otherwise make it unique!
-			$fileFunc = t3lib_div::makeInstance('t3lib_basicFileFunctions');
-			/* @var t3lib_basicFileFunctions $fileFunc */
+			/* @var \TYPO3\CMS\Core\Utility\File\BasicFileUtility $fileFunc */
+			$fileFunc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\\TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
+
 			$destFilename = $fileFunc->getUniqueName($destFilename, $destDirectory);
 		} else {
 			// File format stays the same
@@ -140,8 +145,8 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		}
 
 		// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-		/** @var $gifCreator tslib_gifbuilder */
-		$gifCreator = t3lib_div::makeInstance('tslib_gifbuilder');
+		/** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
+		$gifCreator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\\TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
 		$gifCreator->init();
 		$gifCreator->absPrefix = PATH_site;
 
@@ -204,7 +209,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		$ret = FALSE;
 		$extension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 
-		if (t3lib_div::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
+		if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
 			if ($exif) {
 				switch ($exif['Orientation']) {
@@ -229,15 +234,15 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 *                          t3lib_FlashMessage::WARNING or t3lib_FlashMessage::ERROR. Default is t3lib_FlashMessage::OK.
 	 * @return void
 	 */
-	protected function notify($message, $severity = t3lib_FlashMessage::OK) {
-		$flashMessage = t3lib_div::makeInstance(
-			't3lib_FlashMessage',
+	protected function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
+		$flashMessage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+			'\\TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
 			'',
 			$severity,
 			TRUE
 		);
-		t3lib_FlashMessageQueue::addMessage($flashMessage);
+		\TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
 	}
 
 	/**
@@ -274,7 +279,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			foreach ($ruleset['directories'] as $directoryPattern) {
 				$processFile |= preg_match($directoryPattern, $relFilename);
 			}
-			$processFile &= t3lib_div::inArray($ruleset['file_types'], $fileExtension);
+			$processFile &= \TYPO3\CMS\Core\Utility\GeneralUtility::inArray($ruleset['file_types'], $fileExtension);
 			$processFile &= (filesize($filename) > $ruleset['threshold']);
 			if ($processFile) {
 				$ret = $ruleset;
@@ -337,7 +342,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * @return array
 	 */
 	protected function compileRulesets(array $rulesets) {
-		$sheets = t3lib_div::resolveAllSheetsInDS($rulesets);
+		$sheets = \TYPO3\CMS\Core\Utility\GeneralUtility::resolveAllSheetsInDS($rulesets);
 		$rulesets = array();
 
 		foreach ($sheets['sheets'] as $sheet) {
@@ -370,22 +375,22 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		foreach ($ruleset as $key => $value) {
 			switch ($key) {
 				case 'usergroup':
-					$value = t3lib_div::trimExplode(',', $value, TRUE);
+					$value = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
 					break;
 				case 'directories':
-					$value = t3lib_div::trimExplode(',', $value, TRUE);
+					$value = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
 					// Sanitize name of the directories
 					foreach ($value as &$directory) {
 						$directory = rtrim($directory, '/') . '/';
 						$directory = $this->getDirectoryPattern($directory);
 					}
 					if (count($value) == 0) {
-						// Inherit configuration
+							// Inherit configuration
 						$value = '';
 					}
 					break;
 				case 'file_types':
-					$value = t3lib_div::trimExplode(',', $value, TRUE);
+					$value = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
 					if (count($value) == 0) {
 						// Inherit configuration
 						$value = '';
@@ -406,7 +411,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 					}
 					break;
 				case 'conversion_mapping':
-					$mapping = t3lib_div::trimExplode(',', $value, TRUE);
+					$mapping = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
 					if (count($mapping) > 0) {
 						$value = $this->expandConversionMapping($mapping);
 					} else {
