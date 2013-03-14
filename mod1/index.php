@@ -286,13 +286,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$lines[] = '?>';
 		}
 
-		$status = t3lib_div::writeFile($localconfFile, implode("\n", $lines));
-
-		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
-			//\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::removeCacheFiles();
-		}
-
-		return $status;
+		return t3lib_div::writeFile($localconfFile, implode("\n", $lines));
 	}
 
 	/**
