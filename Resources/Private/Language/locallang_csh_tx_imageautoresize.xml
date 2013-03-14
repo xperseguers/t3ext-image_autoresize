@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-    <meta type="array">
-        <description>Context Sensitive Help (CSH) for virtual table tx_imageautoresize</description>
-        <type>CSH</type>
-        <csh_table>tx_imageautoresize</csh_table>
-    </meta>
-    <data type="array">
-        <languageKey index="default" type="array">
-        	<label index="directories.description">Comma-separated list of directories to be monitored.
-        		Example: fileadmin/
+	<meta type="array">
+		<description>Context Sensitive Help (CSH) for virtual table tx_imageautoresize</description>
+		<type>CSH</type>
+		<csh_table>tx_imageautoresize</csh_table>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="directories.description">Comma-separated list of directories to be monitored.
+				Example: fileadmin/
 
-        		Wildcard is supported:
-        		fileadmin/*/images/
-        		fileadmin/**/images/
-        	</label>
+				Wildcard is supported:
+				fileadmin/*/images/
+				fileadmin/**/images/
+			</label>
 			<label index="file_types.description">Comma-separated list of file types to be handled.
 				Example: jpg,jpeg,png,tif,tiff
 			</label>
@@ -30,6 +30,6 @@
 				They will be evaluated one after the other in order to possibly override general settings.
 				The evalutation stops as soon as a matching rule set has been found.
 			</label>
-        </languageKey>
-    </data>
+		</languageKey>
+	</data>
 </T3locallang>

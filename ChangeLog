@@ -1,5 +1,6 @@
 2013-03-14  Xavier Perseguers  <xavier@causal.ch>
 
+	* [!!!][TASK] #46284: Remove compatibility code for TYPO3 < 4.5 LTS
 	* [!!!][TASK] #46283: Drop support for PHP 5.2
 	* [BUGFIX] #46275: Configuration is written to localconf.php
 

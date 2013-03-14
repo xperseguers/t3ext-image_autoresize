@@ -4,7 +4,7 @@
 	</meta>
 	<ROOT>
 		<TCEforms>
-			<cshFile>LLL:EXT:image_autoresize/locallang_csh_flexform.xml</cshFile>
+			<cshFile>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_csh_flexform.xml</cshFile>
 		</TCEforms>
 		<type>array</type>
 		<el>
@@ -18,7 +18,7 @@
 					<container type="array">
 						<type>array</type>
 						<tx_templavoila type="array">
-							<title>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.usergroup_ruleset</title>
+							<title>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.usergroup_ruleset</title>
 						</tx_templavoila>
 						<TCEforms type="array">
 							<label></label>
@@ -28,7 +28,7 @@
 						<el type="array">
 							<title type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.title</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.title</label>
 									<config type="array">
 										<type>input</type>
 										<size>30</size>
@@ -53,7 +53,7 @@
 							</usergroup>
 							<directories type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.directories</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.directories</label>
 									<config type="array">
 										<type>input</type>
 										<size>50</size>
@@ -64,7 +64,7 @@
 							</directories>
 							<file_types type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.file_types</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.file_types</label>
 									<config type="array">
 										<type>select</type>
 										<itemsProcFunc>tx_imageautoresize_module1->getImageFileExtensions</itemsProcFunc>
@@ -77,7 +77,7 @@
 							</file_types>
 							<threshold type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.threshold</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.threshold</label>
 									<config type="array">
 										<type>input</type>
 										<size>10</size>
@@ -89,7 +89,7 @@
 							</threshold>
 							<max_width type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_width</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.max_width</label>
 									<config type="array">
 										<type>input</type>
 										<size>5</size>
@@ -106,7 +106,7 @@
 							</max_width>
 							<max_height type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.max_height</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.max_height</label>
 									<config type="array">
 										<type>input</type>
 										<size>5</size>
@@ -123,29 +123,29 @@
 							</max_height>
 							<keep_metadata type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.keep_metadata</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.keep_metadata</label>
 									<config>
-				                        <type>select</type>
-				                        <items>
-				                            <numIndex index="0">
-				                                <numIndex index="0">LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.keep_metadata.inherit</numIndex>
-				                                <numIndex index="1"></numIndex>
-				                            </numIndex>
-				                            <numIndex index="1">
-				                                <numIndex index="0">LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.keep_metadata.yes</numIndex>
-				                                <numIndex index="1">1</numIndex>
-				                            </numIndex>
-				                            <numIndex index="2">
-				                                <numIndex index="0">LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.keep_metadata.no</numIndex>
-				                                <numIndex index="1">0</numIndex>
-				                            </numIndex>
-				                        </items>
-				                    </config>
+										<type>select</type>
+										<items>
+											<numIndex index="0">
+												<numIndex index="0">LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.keep_metadata.inherit</numIndex>
+												<numIndex index="1"></numIndex>
+											</numIndex>
+											<numIndex index="1">
+												<numIndex index="0">LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.keep_metadata.yes</numIndex>
+												<numIndex index="1">1</numIndex>
+											</numIndex>
+											<numIndex index="2">
+												<numIndex index="0">LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.keep_metadata.no</numIndex>
+												<numIndex index="1">0</numIndex>
+											</numIndex>
+										</items>
+									</config>
 								</TCEforms>
 							</keep_metadata>
 							<conversion_mapping>
 								<TCEforms type="array">
-									<label>LLL:EXT:image_autoresize/locallang_tca.xml:tx_imageautoresize.conversion_mapping</label>
+									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.conversion_mapping</label>
 									<config>
 										<type>input</type>
 										<size>50</size>

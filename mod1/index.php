@@ -162,31 +162,31 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	protected function buildForm(array $row) {
 		$content = '';
 
-			// Load the configuration of virtual table 'tx_imageautoresize'
+		// Load the configuration of virtual table 'tx_imageautoresize'
 		global $TCA;
-		include(t3lib_extMgm::extPath($this->extKey) . 'tca.php');
-		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/locallang_csh_' . self::virtualTable . '.xml');
+		include(t3lib_extMgm::extPath($this->extKey) . 'Configuration/TCA/Options.php');
+		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . self::virtualTable . '.xml');
 
 		$rec['uid'] = self::virtualRecordId;
 		$rec['pid'] = 0;
 		$rec = array_merge($rec, $row);
 
-			// Setting variables in TCEforms object
+		// Setting variables in TCEforms object
 		$this->tceforms->hiddenFieldList = '';
 
-			// Create form
+		// Create form
 		$form = '';
 		$form .= $this->tceforms->getMainFields(self::virtualTable, $rec);
 		$form .= '<input type="hidden" name="form_submitted" value="1" />';
 		$form = $this->tceforms->wrapTotal($form, $rec, self::virtualTable);
 
-			// Remove header and footer
+		// Remove header and footer
 		$form = preg_replace('/<h2>.*<\/h2>/', '', $form);
 		$startFooter = strrpos($form, '<tr class="typo3-TCEforms-recHeaderRow">');
 		$endFooter = strpos($form, '</tr>', $startFooter);
 		$form = substr($form, 0, $startFooter) . substr($form, $endFooter + 5);
 
-			// Combine it all:
+		// Combine it all:
 		$content .= $form;
 		return $content;
 	}
@@ -205,7 +205,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$data = $inputData_tmp[$table][$id];
 		$newConfig = t3lib_div::array_merge_recursive_overrule($this->config, $data);
 
-			// Action commands (sorting order and removals of FlexForm elements)
+		// Action commands (sorting order and removals of FlexForm elements)
 		$ffValue =& $data[$field];
 		if ($ffValue) {
 			$actionCMDs = t3lib_div::_GP('_ACTION_FLEX_FORMdata');
@@ -215,14 +215,14 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 				// Officially internal but not declared as such...
 				$tce->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
 			}
-				// Renumber all FlexForm temporary ids
+			// Renumber all FlexForm temporary ids
 			$this->persistFlexForm($ffValue['data']);
 
-				// Keep order of FlexForm elements
+			// Keep order of FlexForm elements
 			$newConfig[$field] = $ffValue;
 		}
 
-			// Write back configuration to localconf.php
+		// Write back configuration to localconf.php
 		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $this->expertKey . '\']';
 		$localconfConfig = $newConfig;
 		$localconfConfig['conversion_mapping'] = implode(',', t3lib_div::trimExplode("\n", $localconfConfig['conversion_mapping'], TRUE));
@@ -339,7 +339,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 */
 	public function getImageFileExtensions(array $settings) {
 		$extensions = t3lib_div::trimExplode(',', strtolower($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']), TRUE);
-			// We don't consider PDF being an image
+		// We don't consider PDF being an image
 		if ($key = array_search('pdf', $extensions)) {
 			unset($extensions[$key]);
 		}
@@ -347,7 +347,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 
 		$elements = array();
 		foreach ($extensions as $extension) {
-			$label = $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:extension.' . $extension);
+			$label = $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:extension.' . $extension);
 			$label = $label ? $label : '.' . $extension;
 			$elements[] = array($label, $extension);
 		}
@@ -355,10 +355,6 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$settings['items'] = array_merge($settings['items'], $elements);
 	}
 
-}
-
-if (defined('TYPO3_MODE') && isset($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/mod1/index.php'])) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/mod1/index.php']);
 }
 
 // Compute BACK_PATH

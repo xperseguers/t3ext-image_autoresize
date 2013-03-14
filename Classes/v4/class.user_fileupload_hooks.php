@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2012 Xavier Perseguers <xavier@causal.ch>
+*  (c) 2010-2013 Xavier Perseguers <xavier@causal.ch>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,12 +24,6 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-if (!version_compare(TYPO3_version, '4.4.99', '>')) {
-	// Include interfaces backported from TYPO3 4.5
-	include_once(t3lib_extMgm::extPath('image_autoresize') . 'interfaces/interface.t3lib_extfilefunctions_processdatahook.php');
-	include_once(t3lib_extMgm::extPath('image_autoresize') . 'interfaces/interface.t3lib_tcemain_processuploadhook.php');
-}
 
 /**
  * This class extends t3lib_extFileFunctions and hooks into DAM to
@@ -56,7 +50,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
 		if (!$config) {
 			$this->notify(
-				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.emptyConfiguration'),
+				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.emptyConfiguration'),
 				t3lib_FlashMessage::ERROR
 			);
 		}
@@ -181,12 +175,12 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 
 			if ($filename === $destFilename) {
 				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResized'),
+					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResized'),
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1]
 				);
 			} else {
 				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/locallang.xml:message.imageResizedAndRenamed'),
+					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResizedAndRenamed'),
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1], basename($destFilename)
 				);
 			}
@@ -293,6 +287,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * Initializes the hook configuration as a meaningful ordered list
 	 * of rule sets.
 	 *
+	 * @param array $config
 	 * @return void
 	 */
 	protected function initializeRulesets(array $config) {
@@ -449,16 +444,12 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 * @return string
 	 */
 	protected function getDirectoryPattern($directory) {
-        $pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
-        $pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
-        $pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
+		$pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
+		$pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
+		$pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
 
-        return $pattern;
+		return $pattern;
 	}
 }
 
-
-if (defined('TYPO3_MODE') && isset($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.user_fileupload_hooks.php'])) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/image_autoresize/classes/class.user_fileupload_hooks.php']);
-}
 ?>
