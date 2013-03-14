@@ -235,7 +235,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	}
 
 	/**
-	 * Writes a configuration line to localconf.php.
+	 * Writes a configuration line to localconf.php (TYPO3 4.x) or AdditionalConfiguration.php (TYPO3 6.x).
 	 * We don't use the <code>tx_install</code> methods as they add unneeded
 	 * comments at the end of the file.
 	 *
@@ -256,11 +256,18 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		//}
 		//$instObj = null;
 
-		$localconfFile = PATH_site . 'typo3conf/localconf.php';
-		$lines = explode(LF, file_get_contents($localconfFile));
-		$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
-		$format = "%s = %s;\t// Modified or inserted by TYPO3 Extension Manager.";
+		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
+			$localconfFile = PATH_site . 'typo3conf/AdditionalConfiguration.php';
+			$key = preg_replace('/^\$TYPO3_CONF_VARS\[/', '$GLOBALS[\'TYPO3_CONF_VARS\'][', $key);
+			$marker = '';
+			$format = "%s = %s;\t// Modified or inserted by EXT:image_autoresize";
+		} else {
+			$localconfFile = PATH_site . 'typo3conf/localconf.php';
+			$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
+			$format = "%s = %s;\t// Modified or inserted by TYPO3 Extension Manager.";
+		}
 
+		$lines = explode(LF, file_get_contents($localconfFile));
 		$insertPos = count($lines);
 		$pos = 0;
 		for ($i = count($lines) - 1; $i > 0 && !t3lib_div::isFirstPartOfStr($lines[$i], $marker); $i--) {
@@ -279,7 +286,13 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$lines[] = '?>';
 		}
 
-		return t3lib_div::writeFile($localconfFile, implode("\n", $lines));
+		$status = t3lib_div::writeFile($localconfFile, implode("\n", $lines));
+
+		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
+			//\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::removeCacheFiles();
+		}
+
+		return $status;
 	}
 
 	/**
