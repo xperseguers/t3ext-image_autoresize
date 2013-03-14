@@ -1,5 +1,6 @@
 2013-03-14  Xavier Perseguers  <xavier@causal.ch>
 
+	* [!!!][TASK] #46283: Drop support for PHP 5.2
 	* [BUGFIX] #46275: Configuration is written to localconf.php
 
 2012-09-24  Xavier Perseguers  <xavier@causal.ch>
