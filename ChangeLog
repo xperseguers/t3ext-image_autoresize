@@ -1,5 +1,6 @@
 2013-03-15  Xavier Perseguers  <xavier@causal.ch>
 
+	* [BUGFIX] Incorrect hook registration in TYPO3 < 6.0
 	* [BUGFIX] #46280: Hook processData_postProcessAction receives file resources
 
 2013-03-14  Xavier Perseguers  <xavier@causal.ch>
