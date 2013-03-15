@@ -86,9 +86,16 @@ class FileUploadHook implements
 	 */
 	public function processData_postProcessAction($action, array $cmdArr, array $result, \TYPO3\CMS\Core\Utility\File\ExtendedFileUtility $pObj) {
 		if ($action === 'upload') {
-			// Get the latest uploaded file name
-			$filename = array_pop($result);
-			$this->processFile($filename);
+			// Get the latest uploaded file
+			/** @var $file \TYPO3\CMS\Core\Resource\File */
+			$file = array_pop(array_pop($result));
+			$storageConfiguration = $file->getStorage()->getConfiguration();
+			$storageRecord = $file->getStorage()->getStorageRecord();
+			if ($storageRecord['driver'] === 'Local') {
+				$filename = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+				$filename .= rtrim($storageConfiguration['basePath'], '/') . $file->getIdentifier();
+				$this->processFile($filename);
+			}
 		}
 	}
 
@@ -134,8 +141,8 @@ class FileUploadHook implements
 			$destFilename = basename(substr($filename, 0, strlen($filename) - strlen($fileExtension)) . $destExtension);
 
 			// Ensures $destFilename does not yet exist, otherwise make it unique!
-			/* @var \TYPO3\CMS\Core\Utility\File\BasicFileUtility $fileFunc */
-			$fileFunc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\\TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
+			/* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
+			$fileFunc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
 
 			$destFilename = $fileFunc->getUniqueName($destFilename, $destDirectory);
 		} else {
@@ -145,8 +152,8 @@ class FileUploadHook implements
 		}
 
 		// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-		/** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
-		$gifCreator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('\\TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
+		/** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
+		$gifCreator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
 		$gifCreator->init();
 		$gifCreator->absPrefix = PATH_site;
 
@@ -190,7 +197,7 @@ class FileUploadHook implements
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1], basename($destFilename)
 				);
 			}
-			$this->notify($message, t3lib_FlashMessage::INFO);
+			$this->notify($message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
 		} else {
 			// Destination file was not written
 			$destFilename = $filename;
@@ -236,7 +243,7 @@ class FileUploadHook implements
 	 */
 	protected function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
 		$flashMessage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-			'\\TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
 			'',
 			$severity,

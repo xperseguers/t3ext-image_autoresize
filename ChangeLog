@@ -1,3 +1,7 @@
+2013-03-15  Xavier Perseguers  <xavier@causal.ch>
+
+	* [BUGFIX] #46280: Hook processData_postProcessAction receives file resources
+
 2013-03-14  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK] #46287: Use namespaces
