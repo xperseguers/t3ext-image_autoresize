@@ -173,10 +173,13 @@ class FileUploadHook implements
 		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
 		$isRotated = FALSE;
 
-		// Auto orientation is not available when using GraphicsMagick
-		if ($ruleset['auto_orient'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] !== 'gm') {
-			$imParams .= ' -auto-orient';
-			$isRotated = $this->isRotated($filename);
+		if ($ruleset['auto_orient'] === '1') {
+			$orientation = $this->getOrientation($filename);
+			$isRotated = $this->isRotated($orientation);
+			$transformation = $this->getTransformation($orientation);
+			if ($transformation !== '') {
+				$imParams .= ' ' . $transformation;
+			}
 		}
 
 		if ($isRotated) {
@@ -210,6 +213,11 @@ class FileUploadHook implements
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1], basename($destFilename)
 				);
 			}
+
+			if ($isRotated && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
+				$this->resetOrientation($destFilename);
+			}
+
 			$this->notify($message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
 		} else {
 			// Destination file was not written
@@ -219,34 +227,97 @@ class FileUploadHook implements
 	}
 
 	/**
-	 * Returns TRUE if the given picture is rotated.
+	 * Returns the EXIF orientation of a given picture.
 	 *
 	 * @param string $filename
-	 * @return boolean
-	 * @see http://www.impulseadventure.com/photo/exif-orientation.html
+	 * @return integer
 	 */
-	protected function isRotated($filename) {
-		$ret = FALSE;
+	protected function getOrientation($filename) {
 		$extension = strtolower(substr($filename, strrpos($filename, '.') + 1));
-
+		$orientation = 1; // Fallback to "straight"
 		if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
 			$exif = exif_read_data($filename);
 			if ($exif) {
-				switch ($exif['Orientation']) {
-					case 2: // horizontal flip
-					case 3: // 180°
-					case 4: // vertical flip
-					case 5: // vertical flip + 90 rotate right
-					case 6: // 90° rotate right
-					case 7: // horizontal flip + 90 rotate right
-					case 8: // 90° rotate left
-						$ret = TRUE;
-						break;
-				}
+				$orientation = $exif['Orientation'];
 			}
 		}
+		return $orientation;
+	}
 
+	/**
+	 * Returns TRUE if the given picture is rotated.
+	 *
+	 * @param integer $orientation EXIF orientation
+	 * @return integer
+	 * @see http://www.impulseadventure.com/photo/exif-orientation.html
+	 */
+	protected function isRotated($orientation) {
+		$ret = FALSE;
+		switch ($orientation) {
+			case 2: // horizontal flip
+			case 3: // 180°
+			case 4: // vertical flip
+			case 5: // vertical flip + 90 rotate right
+			case 6: // 90° rotate right
+			case 7: // horizontal flip + 90 rotate right
+			case 8: // 90° rotate left
+				$ret = TRUE;
+				break;
+		}
 		return $ret;
+	}
+
+	/**
+	 * Returns a command line parameter to fix the orientation of a rotated picture.
+	 *
+	 * @param integer $orientation
+	 * @return string
+	 */
+	protected function getTransformation($orientation) {
+		$transformation = '';
+		if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] !== 'gm') {
+			// ImageMagick
+			if ($orientation >= 2 && $orientation <= 8) {
+				$transformation = '-auto-orient';
+			}
+		} else {
+			// GraphicsMagick
+			switch ($orientation) {
+				case 2: // horizontal flip
+					$transformation = '-flip horizontal';
+					break;
+				case 3: // 180°
+					$transformation = '-rotate 180';
+					break;
+				case 4: // vertical flip
+					$transformation = '-flip vertical';
+					break;
+				case 5: // vertical flip + 90 rotate right
+					$transformation = '-transpose';
+					break;
+				case 6: // 90° rotate right
+					$transformation = '-rotate 90';
+					break;
+				case 7: // horizontal flip + 90 rotate right
+					$transformation = '-transverse';
+					break;
+				case 8: // 90° rotate left
+					$transformation = '-rotate 270';
+					break;
+			}
+		}
+		return $transformation;
+	}
+
+	/**
+	 * Resets the EXIF orientation flag of a picture.
+	 *
+	 * @param string $filename
+	 * @return void
+	 * @see http://sylvana.net/jpegcrop/exif_orientation.html
+	 */
+	protected function resetOrientation($filename) {
+		// TODO: Adapt code from http://sylvana.net/jpegcrop/jpegexiforient.c
 	}
 
 	/**

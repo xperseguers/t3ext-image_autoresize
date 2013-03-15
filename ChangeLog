@@ -1,5 +1,6 @@
 2013-03-15  Xavier Perseguers  <xavier@causal.ch>
 
+	* [BUGFIX] #12892: EXIF rotation does not work with GraphicsMagick
 	* [BUGFIX] #46341: A few uncommon EXIF rotations are not handled
 	* [BUGFIX] #13065: PNG with alpha-channel fails
 	* [BUGFIX] #32603: Can't access configuration
