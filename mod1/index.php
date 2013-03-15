@@ -357,10 +357,6 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 
 }
 
-// Compute BACK_PATH
-$relPathParts = explode('/', substr(t3lib_extMgm::extPath('image_autoresize'), strlen(PATH_site)));
-$GLOBALS['BACK_PATH'] = str_repeat('../', count($relPathParts)) . 'typo3/';
-
 // Make instance:
 /** @var $SOBE tx_imageautoresize_module1 */
 $SOBE = t3lib_div::makeInstance('tx_imageautoresize_module1');
