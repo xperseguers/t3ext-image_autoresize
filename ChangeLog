@@ -1,5 +1,6 @@
 2013-03-15  Xavier Perseguers  <xavier@causal.ch>
 
+	* [BUGFIX] #13065: PNG with alpha-channel fails
 	* [BUGFIX] #32603: Can't access configuration
 	* [BUGFIX] #46326: Only one file is processed
 	* [BUGFIX] Incorrect hook registration in TYPO3 < 6.0

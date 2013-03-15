@@ -16,6 +16,7 @@
 			<label index="tx_imageautoresize.keep_metadata.inherit">Use general setting</label>
 			<label index="tx_imageautoresize.keep_metadata.yes">Yes</label>
 			<label index="tx_imageautoresize.keep_metadata.no">No</label>
+			<label index="tx_imageautoresize.resize_png_with_alpha">Resize PNG files with alpha-channel</label>
 			<label index="tx_imageautoresize.conversion_mapping">Image type conversion mapping</label>
 			<label index="tx_imageautoresize.rulesets">Rule sets</label>
 			<label index="tx_imageautoresize.title">Title:</label>

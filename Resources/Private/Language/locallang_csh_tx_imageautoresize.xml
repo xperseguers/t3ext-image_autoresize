@@ -21,7 +21,8 @@
 			<label index="max_width.description">Images will be resized up to this maximum width.</label>
 			<label index="max_height.description">Images will be resized up to this maximum height.</label>
 			<label index="auto_orient.description">Will try to auto-magically orient image (useful with photos). Beware: this option is not available when using GraphicsMagick and will automatically be deactivated if needed to prevent errors.</label>
-			<label index="keep_metadata.description">If active, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</label>
+			<label index="keep_metadata.description">If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</label>
+			<label index="resize_png_with_alpha.description">If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost</label>
 			<label index="conversion_mapping.description">Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
 				Example:
 				bmp => jpg

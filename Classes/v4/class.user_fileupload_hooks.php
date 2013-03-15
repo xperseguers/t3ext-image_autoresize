@@ -123,6 +123,17 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		$relFilename = substr($filename, strlen(PATH_site));
 		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 
+		if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
+			if ($this->isTransparentPng($filename)) {
+				$message = sprintf(
+					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageTransparent'),
+					$relFilename
+				);
+				$this->notify($message, t3lib_FlashMessage::WARNING);
+				return $filename;
+			}
+		}
+
 		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
 			// File format will be converted
 			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
@@ -219,6 +230,24 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Returns TRUE if the given PNG file contains transparency information.
+	 *
+	 * @param string $filename
+	 * @return boolean
+	 */
+	protected function isTransparentPng($filename) {
+		$bytes = file_get_contents($filename, FALSE, NULL, 24, 2);	// read 24th and 25th bytes
+		$byte24 = ord($bytes{0});
+		$byte25 = ord($bytes{1});
+		if ($byte24 === 16 || $byte25 === 6 || $byte25 === 4) {
+			return TRUE;
+		} else {
+			$content = file_get_contents($filename);
+			return strpos($content, 'tRNS') !== FALSE;
+		}
 	}
 
 	/**
