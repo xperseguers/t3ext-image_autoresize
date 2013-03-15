@@ -1,5 +1,6 @@
 2013-03-15  Xavier Perseguers  <xavier@causal.ch>
 
+	* [BUGFIX] #46326: Only one file is processed
 	* [BUGFIX] Incorrect hook registration in TYPO3 < 6.0
 	* [BUGFIX] #46280: Hook processData_postProcessAction receives file resources
 

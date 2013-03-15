@@ -86,15 +86,17 @@ class FileUploadHook implements
 	 */
 	public function processData_postProcessAction($action, array $cmdArr, array $result, \TYPO3\CMS\Core\Utility\File\ExtendedFileUtility $pObj) {
 		if ($action === 'upload') {
-			// Get the latest uploaded file
-			/** @var $file \TYPO3\CMS\Core\Resource\File */
-			$file = array_pop(array_pop($result));
-			$storageConfiguration = $file->getStorage()->getConfiguration();
-			$storageRecord = $file->getStorage()->getStorageRecord();
-			if ($storageRecord['driver'] === 'Local') {
-				$filename = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
-				$filename .= rtrim($storageConfiguration['basePath'], '/') . $file->getIdentifier();
-				$this->processFile($filename);
+			// Extract references to the uploaded files
+			$files = array_pop($result);
+			foreach ($files as $file) {
+				/** @var $file \TYPO3\CMS\Core\Resource\File */
+				$storageConfiguration = $file->getStorage()->getConfiguration();
+				$storageRecord = $file->getStorage()->getStorageRecord();
+				if ($storageRecord['driver'] === 'Local') {
+					$filename = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+					$filename .= rtrim($storageConfiguration['basePath'], '/') . $file->getIdentifier();
+					$this->processFile($filename);
+				}
 			}
 		}
 	}
