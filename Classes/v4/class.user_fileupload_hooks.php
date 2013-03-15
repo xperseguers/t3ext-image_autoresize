@@ -219,10 +219,13 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			$exif = exif_read_data($filename);
 			if ($exif) {
 				switch ($exif['Orientation']) {
+					case 2: // horizontal flip
+					case 3: // 180°
+					case 4: // vertical flip
 					case 5: // vertical flip + 90 rotate right
-					case 6: // 90 rotate right
+					case 6: // 90° rotate right
 					case 7: // horizontal flip + 90 rotate right
-					case 8: // 90 rotate left
+					case 8: // 90° rotate left
 						$ret = TRUE;
 						break;
 				}
