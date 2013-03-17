@@ -214,7 +214,7 @@ class FileUploadHook implements
 				);
 			}
 
-			if ($isRotated && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
+			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
 				$this->resetOrientation($destFilename);
 			}
 
@@ -317,7 +317,7 @@ class FileUploadHook implements
 	 * @see http://sylvana.net/jpegcrop/exif_orientation.html
 	 */
 	protected function resetOrientation($filename) {
-		// TODO: Adapt code from http://sylvana.net/jpegcrop/jpegexiforient.c
+		\Causal\ImageAutoresize\Utility\JpegExifOrient::setOrientation($filename, 1);
 	}
 
 	/**
