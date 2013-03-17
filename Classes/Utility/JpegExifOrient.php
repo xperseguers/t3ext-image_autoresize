@@ -5,7 +5,7 @@ namespace Causal\ImageAutoresize\Utility;
  *  Copyright notice
  *
  *  (c) 2013 Xavier Perseguers <xavier@causal.ch>
- *  based on work http://sylvana.net/jpegcrop/exif_orientation.html
+ *  based on work http://sylvana.net/jpegcrop/jpegexiforient.c
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
