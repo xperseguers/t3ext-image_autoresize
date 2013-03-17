@@ -1,14 +1,14 @@
 <?php
 
-########################################################################
-# Extension Manager/Repository config file for ext "image_autoresize".
-#
-# Auto generated 24-09-2012 14:04
-#
-# Manual updates:
-# Only the data in the array - everything else is removed by next
-# writing. "version" and "dependencies" must not be touched!
-########################################################################
+/***************************************************************
+ * Extension Manager/Repository config file for ext "image_autoresize".
+ *
+ * Auto generated 17-03-2013 18:47
+ *
+ * Manual updates:
+ * Only the data in the array - everything else is removed by next
+ * writing. "version" and "dependencies" must not be touched!
+ ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Resize images automatically',
@@ -41,7 +41,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:20:{s:9:"ChangeLog";s:4:"524b";s:12:"ext_icon.gif";s:4:"5cae";s:17:"ext_localconf.php";s:4:"3afb";s:14:"ext_tables.php";s:4:"685f";s:12:"flexform.xml";s:4:"f9e9";s:13:"locallang.xml";s:4:"8333";s:26:"locallang_csh_flexform.xml";s:4:"f16f";s:36:"locallang_csh_tx_imageautoresize.xml";s:4:"197d";s:17:"locallang_tca.xml";s:4:"2ab2";s:7:"tca.php";s:4:"ef6b";s:39:"classes/class.user_fileupload_hooks.php";s:4:"0801";s:43:"classes/class.ux_t3lib_extfilefunctions.php";s:4:"fe40";s:34:"classes/class.ux_t3lib_tcemain.php";s:4:"d7be";s:14:"doc/manual.sxw";s:4:"1262";s:63:"interfaces/interface.t3lib_extfilefunctions_processdatahook.php";s:4:"eb05";s:56:"interfaces/interface.t3lib_tcemain_processuploadhook.php";s:4:"3ae1";s:13:"mod1/conf.php";s:4:"198a";s:14:"mod1/index.php";s:4:"2009";s:18:"mod1/locallang.xml";s:4:"26e3";s:22:"mod1/locallang_mod.xml";s:4:"705f";}',
+	'_md5_values_when_last_written' => 'a:18:{s:9:"ChangeLog";s:4:"1aba";s:12:"ext_icon.gif";s:4:"5cae";s:17:"ext_localconf.php";s:4:"903e";s:14:"ext_tables.php";s:4:"685f";s:31:"Classes/Hook/FileUploadHook.php";s:4:"c3aa";s:34:"Classes/Utility/JpegExifOrient.php";s:4:"0bac";s:42:"Classes/v4/class.user_fileupload_hooks.php";s:4:"5619";s:36:"Configuration/FlexForms/Rulesets.xml";s:4:"c52d";s:29:"Configuration/TCA/Options.php";s:4:"34a6";s:40:"Resources/Private/Language/locallang.xml";s:4:"3940";s:53:"Resources/Private/Language/locallang_csh_flexform.xml";s:4:"ab6b";s:63:"Resources/Private/Language/locallang_csh_tx_imageautoresize.xml";s:4:"59aa";s:44:"Resources/Private/Language/locallang_tca.xml";s:4:"b9ff";s:14:"doc/manual.sxw";s:4:"6881";s:13:"mod1/conf.php";s:4:"198a";s:14:"mod1/index.php";s:4:"c499";s:18:"mod1/locallang.xml";s:4:"26e3";s:22:"mod1/locallang_mod.xml";s:4:"705f";}',
 	'suggests' => array(
 	),
 );
