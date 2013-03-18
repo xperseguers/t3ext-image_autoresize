@@ -98,7 +98,7 @@ class JpegExifOrient {
 			$length = self::read_2_bytes($fh);
 			$offsetJfif = $length + 2;	// "+ 2" to skip the 2 bytes introducing this additional segment
 			// Length includes itself, so must be at least 2
-			// Following Exif data length must be at least 6
+			// Following JFIF data length must be at least 6
 			if ($length < 8) {
 				return;
 			}
