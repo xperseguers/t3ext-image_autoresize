@@ -25,7 +25,7 @@ Example: jpg,jpeg,png,tif,tiff</source>
 				<source>Images will be resized up to this maximum height.</source>
 			</trans-unit>
 			<trans-unit id="auto_orient.description" xml:space="preserve">
-				<source>Will try to auto-magically orient image (useful with photos). Beware: this option is not available when using GraphicsMagick and will automatically be deactivated if needed to prevent errors.</source>
+				<source>Will try to auto-magically orient image (useful with photos).</source>
 			</trans-unit>
 			<trans-unit id="keep_metadata.description" xml:space="preserve">
 				<source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>

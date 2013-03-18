@@ -8,7 +8,7 @@
 			</trans-unit>
 			<trans-unit id="usergroup.description" xml:space="preserve">
 				<source>Set of backend user groups to which the rule set should be applied.
-				May be left empty.</source>
+May be left empty.</source>
 			</trans-unit>
 			<trans-unit id="directories.description" xml:space="preserve">
 				<source>Comma-separated list of directories to be monitored.
