@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize">
+		<header/>
+		<body>
+			<trans-unit id="extension.ai" xml:space="preserve">
+				<source>.ai - Adobe Illustrator</source>
+			</trans-unit>
+			<trans-unit id="extension.bmp" xml:space="preserve">
+				<source>.bmp - Windows OS/2 Bitmap Graphics</source>
+			</trans-unit>
+			<trans-unit id="extension.gif" xml:space="preserve">
+				<source>.gif - Graphic Interchange Format</source>
+			</trans-unit>
+			<trans-unit id="extension.jpg" xml:space="preserve">
+				<source>.jpg - JPEG/JIFF Image</source>
+			</trans-unit>
+			<trans-unit id="extension.jpeg" xml:space="preserve">
+				<source>.jpeg - JPEG/JIFF Image</source>
+			</trans-unit>
+			<trans-unit id="extension.pcx" xml:space="preserve">
+				<source>.pcx - Paintbrush Bitmap Graphic</source>
+			</trans-unit>
+			<trans-unit id="extension.png" xml:space="preserve">
+				<source>.png - Portable Network Graphic</source>
+			</trans-unit>
+			<trans-unit id="extension.tga" xml:space="preserve">
+				<source>.tga - Truevision Targa Graphic</source>
+			</trans-unit>
+			<trans-unit id="extension.tif" xml:space="preserve">
+				<source>.tif - Tagged Image Format</source>
+			</trans-unit>
+			<trans-unit id="extension.tiff" xml:space="preserve">
+				<source>.tiff - Tagged Image Format</source>
+			</trans-unit>
+			<trans-unit id="message.emptyConfiguration" xml:space="preserve">
+				<source>Extension image_autoresize is not properly configured!</source>
+			</trans-unit>
+			<trans-unit id="message.imageTransparent" xml:space="preserve">
+				<source>Image %s has not been resized because transparency has been detected.</source>
+			</trans-unit>
+			<trans-unit id="message.imageResized" xml:space="preserve">
+				<source>Image %s has been automatically resized to %sx%s pixels.</source>
+			</trans-unit>
+			<trans-unit id="message.imageResizedAndRenamed" xml:space="preserve">
+				<source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

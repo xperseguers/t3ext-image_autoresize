@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:13:51Z" product-name="image_autoresize">
+		<header/>
+		<body>
+			<trans-unit id="title" xml:space="preserve">
+				<source>Image Auto-Resize Configuration</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

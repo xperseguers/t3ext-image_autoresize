@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize">
+		<header/>
+		<body>
+			<trans-unit id="tx_imageautoresize.directories" xml:space="preserve">
+				<source>Directories:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.file_types" xml:space="preserve">
+				<source>Image types:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.threshold" xml:space="preserve">
+				<source>Size threshold:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.max_width" xml:space="preserve">
+				<source>Maximum width:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.max_height" xml:space="preserve">
+				<source>Maximum height:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.auto_orient" xml:space="preserve">
+				<source>Automatic orientation</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.keep_metadata" xml:space="preserve">
+				<source>Keep profile and metadata</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.keep_metadata.inherit" xml:space="preserve">
+				<source>Use general setting</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.keep_metadata.yes" xml:space="preserve">
+				<source>Yes</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.keep_metadata.no" xml:space="preserve">
+				<source>No</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.resize_png_with_alpha" xml:space="preserve">
+				<source>Resize PNG files with alpha-channel</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.conversion_mapping" xml:space="preserve">
+				<source>Image type conversion mapping</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.rulesets" xml:space="preserve">
+				<source>Rule sets</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.title" xml:space="preserve">
+				<source>Title:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.usergroup_ruleset" xml:space="preserve">
+				<source>User group rule set</source>
+			</trans-unit>
+			<trans-unit id="tabs.options" xml:space="preserve">
+				<source>Options</source>
+			</trans-unit>
+			<trans-unit id="tabs.rulesets" xml:space="preserve">
+				<source>Rule Sets</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
