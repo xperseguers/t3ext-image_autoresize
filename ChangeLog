@@ -1,5 +1,6 @@
 2013-04-02  Xavier Perseguers  <xavier@causal.ch>
 
+	* [TASK] Raise version to 1.3.1
 	* [BUGFIX] #46752: TYPO3 6.0 doesn't save configs (thanks to Sascha Heilmeier)
 
 2013-03-18  Xavier Perseguers  <xavier@causal.ch>
