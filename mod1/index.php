@@ -104,6 +104,25 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$wizard .= $this->tceforms->printNeededJSFunctions();
 
 		$this->content .= $this->doc->startPage($GLOBALS['LANG']->getLL('title'));
+
+		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
+			// Compatibility code for people upgrading from version 1.3.0
+			$backupConfig = $GLOBALS['TYPO3_CONF_VARS'];
+			$GLOBALS['TYPO3_CONF_VARS'] = array();
+			include(PATH_site . 'typo3conf/AdditionalConfiguration.php');
+			if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey])) {
+				$this->content .= '
+					<div id="typo3-messages">
+						<div class="typo3-message message-error">
+							<div class="message-body">
+								Please remove configuration line $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXT\'][\'extConf\'][\'image_autoresize_ff\'] from typo3conf/AdditionalConfiguration.php
+							</div>
+						</div>
+					</div>';
+			}
+			$GLOBALS['TYPO3_CONF_VARS'] = $backupConfig;
+		}
+
 		$this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
 		$this->content .= $this->doc->spacer(5);
 
@@ -223,14 +242,11 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		}
 
 		// Write back configuration to localconf.php
-		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $this->expertKey . '\']';
 		$localconfConfig = $newConfig;
 		$localconfConfig['conversion_mapping'] = implode(',', t3lib_div::trimExplode("\n", $localconfConfig['conversion_mapping'], TRUE));
-		$value = '\'' . serialize($localconfConfig) . '\'';
 
-		if ($this->writeToLocalconf($key, $value)) {
+		if ($this->writeToLocalconf($this->expertKey, $localconfConfig)) {
 			$this->config = $newConfig;
-			t3lib_extMgm::removeCacheFiles();
 		}
 	}
 
@@ -240,10 +256,10 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 * comments at the end of the file.
 	 *
 	 * @param string $key
-	 * @param string $value
+	 * @param array $config
 	 * @return boolean
 	 */
-	protected function writeToLocalconf($key, $value) {
+	protected function writeToLocalconf($key, array $config) {
 		//$instObj = t3lib_div::makeInstance('tx_install');
 		//$instObj->allowUpdateLocalConf = 1;
 		//$instObj->updateIdentity = 'TYPO3 Core Update Manager';
@@ -257,15 +273,22 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		//$instObj = null;
 
 		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
-			$localconfFile = PATH_site . 'typo3conf/AdditionalConfiguration.php';
-			$key = preg_replace('/^\$TYPO3_CONF_VARS\[/', '$GLOBALS[\'TYPO3_CONF_VARS\'][', $key);
-			$marker = '';
-			$format = "%s = %s;\t// Modified or inserted by EXT:image_autoresize";
-		} else {
-			$localconfFile = PATH_site . 'typo3conf/localconf.php';
-			$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
-			$format = "%s = %s;\t// Modified or inserted by TYPO3 Extension Manager.";
+			/** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+			$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+			/** @var $configurationManager \TYPO3\CMS\Core\Configuration\ConfigurationManager */
+			$configurationManager = $objectManager->get('TYPO3\\CMS\\Core\\Configuration\\ConfigurationManager');
+			return $configurationManager->setLocalConfigurationValueByPath('EXT/extConf/' . $key, serialize($config));
 		}
+
+		// ---------------------------------
+		// PRE-TYPO3 6.0 code
+		// ---------------------------------
+
+		$key = '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\'' . $key . '\']';
+		$value = '\'' . serialize($config) . '\'';
+		$localconfFile = PATH_site . 'typo3conf/localconf.php';
+		$marker = '## INSTALL SCRIPT EDIT POINT TOKEN';
+		$format = "%s = %s;\t// Modified or inserted by TYPO3 Extension Manager.";
 
 		$lines = explode(LF, file_get_contents($localconfFile));
 		$insertPos = count($lines);
@@ -286,7 +309,11 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$lines[] = '?>';
 		}
 
-		return t3lib_div::writeFile($localconfFile, implode("\n", $lines));
+		$result = t3lib_div::writeFile($localconfFile, implode("\n", $lines));
+		if ($result) {
+			t3lib_extMgm::removeCacheFiles();
+		}
+		return $result;
 	}
 
 	/**
