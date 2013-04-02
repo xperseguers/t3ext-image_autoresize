@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "image_autoresize".
  *
- * Auto generated 17-03-2013 18:47
+ * Auto generated 02-04-2013 17:59
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -41,7 +41,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:18:{s:9:"ChangeLog";s:4:"1aba";s:12:"ext_icon.gif";s:4:"5cae";s:17:"ext_localconf.php";s:4:"903e";s:14:"ext_tables.php";s:4:"685f";s:31:"Classes/Hook/FileUploadHook.php";s:4:"c3aa";s:34:"Classes/Utility/JpegExifOrient.php";s:4:"0bac";s:42:"Classes/v4/class.user_fileupload_hooks.php";s:4:"5619";s:36:"Configuration/FlexForms/Rulesets.xml";s:4:"c52d";s:29:"Configuration/TCA/Options.php";s:4:"34a6";s:40:"Resources/Private/Language/locallang.xml";s:4:"3940";s:53:"Resources/Private/Language/locallang_csh_flexform.xml";s:4:"ab6b";s:63:"Resources/Private/Language/locallang_csh_tx_imageautoresize.xml";s:4:"59aa";s:44:"Resources/Private/Language/locallang_tca.xml";s:4:"b9ff";s:14:"doc/manual.sxw";s:4:"6881";s:13:"mod1/conf.php";s:4:"198a";s:14:"mod1/index.php";s:4:"c499";s:18:"mod1/locallang.xml";s:4:"26e3";s:22:"mod1/locallang_mod.xml";s:4:"705f";}',
+	'_md5_values_when_last_written' => 'a:24:{s:9:"ChangeLog";s:4:"0b22";s:12:"ext_icon.gif";s:4:"5cae";s:17:"ext_localconf.php";s:4:"903e";s:14:"ext_tables.php";s:4:"685f";s:31:"Classes/Hook/FileUploadHook.php";s:4:"c3aa";s:34:"Classes/Utility/JpegExifOrient.php";s:4:"fa8e";s:42:"Classes/v4/class.user_fileupload_hooks.php";s:4:"5619";s:36:"Configuration/FlexForms/Rulesets.xml";s:4:"c52d";s:29:"Configuration/TCA/Options.php";s:4:"34a6";s:40:"Resources/Private/Language/locallang.xlf";s:4:"b58a";s:40:"Resources/Private/Language/locallang.xml";s:4:"3940";s:53:"Resources/Private/Language/locallang_csh_flexform.xlf";s:4:"852f";s:53:"Resources/Private/Language/locallang_csh_flexform.xml";s:4:"ab6b";s:63:"Resources/Private/Language/locallang_csh_tx_imageautoresize.xlf";s:4:"a0e9";s:63:"Resources/Private/Language/locallang_csh_tx_imageautoresize.xml";s:4:"edb3";s:44:"Resources/Private/Language/locallang_tca.xlf";s:4:"d976";s:44:"Resources/Private/Language/locallang_tca.xml";s:4:"b9ff";s:14:"doc/manual.sxw";s:4:"6d65";s:13:"mod1/conf.php";s:4:"198a";s:14:"mod1/index.php";s:4:"45d7";s:18:"mod1/locallang.xlf";s:4:"e3e3";s:18:"mod1/locallang.xml";s:4:"26e3";s:22:"mod1/locallang_mod.xlf";s:4:"5f47";s:22:"mod1/locallang_mod.xml";s:4:"705f";}',
 	'suggests' => array(
 	),
 );
