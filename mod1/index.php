@@ -123,6 +123,9 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$GLOBALS['TYPO3_CONF_VARS'] = $backupConfig;
 		}
 
+		if (version_compare(TYPO3_version, '6.1.0', '>=')) {
+			$this->content .= '<div class="typo3-noDoc">';
+		}
 		$this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
 		$this->content .= $this->doc->spacer(5);
 
@@ -136,6 +139,10 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		}
 
 		$this->content .= $this->doc->spacer(10);
+
+		if (version_compare(TYPO3_version, '6.1.0', '>=')) {
+			$this->content .= '</div>';
+		}
 	}
 
 	/**
