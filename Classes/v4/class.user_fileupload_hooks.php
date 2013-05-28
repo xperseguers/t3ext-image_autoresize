@@ -77,7 +77,7 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	 *
 	 * @param string $action The action
 	 * @param array $cmdArr The parameter sent to the action handler
-	 * @param array $results The results of all calls to the action handler
+	 * @param array $result The results of all calls to the action handler
 	 * @param t3lib_extFileFunctions $pObj The parent object
 	 * @return void
 	 */
