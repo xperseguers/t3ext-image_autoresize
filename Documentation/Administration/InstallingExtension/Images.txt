@@ -1,0 +1,2 @@
+.. |backend_module| image:: ../../Images/backend_module.png
+	:alt: The Backend module to configure general settings

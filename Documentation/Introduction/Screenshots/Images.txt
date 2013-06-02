@@ -1,0 +1,7 @@
+.. |general_configuration| image:: ../../Images/general_configuration.png
+	:alt: Overview of the general configuration panel
+	:width: 500
+
+.. |general_options| image:: ../../Images/general_options.png
+	:alt: Overview of the general options panel
+	:width: 500

@@ -1,3 +1,7 @@
+2013-06-02  Xavier Perseguers  <xavier@causal.ch>
+
+	* [TASK][DOC] Convert documentation to ReST
+
 2013-05-14  Xavier Perseguers  <xavier@causal.ch>
 
 	* [TASK][DOC] Remove material for TYPO3 < 4.5 LTS

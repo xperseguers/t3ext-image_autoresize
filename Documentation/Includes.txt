@@ -1,0 +1,37 @@
+﻿.. ==================================================
+.. FOR YOUR INFORMATION
+.. --------------------------------------------------
+.. -*- coding: utf-8 -*- with BOM.
+
+.. This is 'Includes.txt'. It is included at the very top of each and
+   every ReST source file in this documentation project (= manual).
+
+
+.. ==================================================
+.. DEFINE SOME TEXT ROLES
+.. --------------------------------------------------
+
+.. role::   typoscript(code)
+
+.. role::   ts(typoscript)
+   :class:  typoscript
+
+.. role::   php(code)
+
+.. highlight:: guess
+
+.. ==================================================
+.. EXTERNAL LINKS
+.. --------------------------------------------------
+
+.. _`5 min tutorial video`: http://www.youtube.com/watch?v=YeGqHMDT7R8
+
+.. _`git repository of the TYPO3 ReST tools`: https://git.typo3.org/Documentation/RestTools.git/
+
+.. _`reST Documentation Viewer (restdoc)`: http://typo3.org/extensions/repository/view/restdoc
+
+.. _Sphinx: http://sphinx-doc.org/
+
+.. _`the TYPO3 wiki`: http://wiki.typo3.org/Rendering_reST
+
+.. _`Tips and Tricks`: http://wiki.typo3.org/Tips_and_Tricks_%28reST%29
