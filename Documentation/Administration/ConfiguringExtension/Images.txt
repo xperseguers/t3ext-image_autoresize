@@ -1,19 +1,15 @@
 .. |general_configuration| image:: ../../Images/general_configuration.png
 	:alt: Overview of the general configuration panel
-	:width: 500
 
 .. |general_options| image:: ../../Images/general_options.png
 	:alt: Overview of the general options panel
-	:width: 500
 
 .. |metadata| image:: ../../Images/metadata.png
 	:alt: Metadata of a picture
-	:width: 500
+	:width: 711
 
 .. |rulesets| image:: ../../Images/rulesets.png
 	:alt: General rule sets
-	:width: 500
 
 .. |ruleset_usergroup| image:: ../../Images/ruleset_usergroup.png
 	:alt: Rules for a user groups
-	:width: 500
