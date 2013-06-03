@@ -38,7 +38,7 @@ Image types
 
 This is the list of image formats that should be processed, if both the directory and the size threshold match. The actual list of available types is read from ``$TYPO3_CONF_VARS['GFX']['imagefile_ext']``.
 
-.. hint::
+.. important::
 	PDF type is always removed from this list, whenever it is available, as it usually is not considered being an image even if it can be processed by TYPO3 as such (to extract preview of the cover page for instance).
 
 Maximum width / height
