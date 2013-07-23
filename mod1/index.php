@@ -205,10 +205,20 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$form = $this->tceforms->wrapTotal($form, $rec, self::virtualTable);
 
 		// Remove header and footer
-		$form = preg_replace('/<h2>.*<\/h2>/', '', $form);
-		$startFooter = strrpos($form, '<tr class="typo3-TCEforms-recHeaderRow">');
-		$endFooter = strpos($form, '</tr>', $startFooter);
-		$form = substr($form, 0, $startFooter) . substr($form, $endFooter + 5);
+		$form = preg_replace('/<h[12]>.*<\/h[12]>/', '', $form);
+
+		if (version_compare(TYPO3_version, '6.1.99', '>')) {
+			$startFooter = strrpos($form, '<div class="typo3-TCEforms-recHeaderRow">');
+			$endTag = '</div>';
+		} else {
+			$startFooter = strrpos($form, '<tr class="typo3-TCEforms-recHeaderRow">');
+			$endTag = '</tr>';
+		}
+
+		if ($startFooter !== FALSE) {
+			$endFooter = strpos($form, $endTag, $startFooter);
+			$form = substr($form, 0, $startFooter) . substr($form, $endFooter + strlen($endTag));
+		}
 
 		// Combine it all:
 		$content .= $form;
