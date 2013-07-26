@@ -12,9 +12,9 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Resize images automatically',
-	'description' => 'This extension allows you to automatically resize down huge pictures uploaded by your editors.',
+	'description' => 'Simplify the way your editors may upload their pictures: no complex local procedure needed, let TYPO3 resize down their huge pictures on-the-fly during upload and according to your own business rules (directory/groups).',
 	'category' => 'be',
-	'author' => 'Xavier Perseguers',
+	'author' => 'Xavier Perseguers (Causal)',
 	'author_email' => 'xavier@causal.ch',
 	'shy' => '',
 	'dependencies' => '',
