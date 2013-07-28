@@ -78,7 +78,7 @@ class JpegExifOrient {
 	 * @return void
 	 * @throws \RuntimeException
 	 */
-	public static function setOrientation($filename, $orientation) {
+	static public function setOrientation($filename, $orientation) {
 		$exif_data = array();	// Buffer
 		$offsetJfif = 0;
 

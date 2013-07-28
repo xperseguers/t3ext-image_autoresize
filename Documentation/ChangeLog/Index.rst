@@ -11,7 +11,7 @@
 ChangeLog
 ---------
 
-The following is a very high level overview of the changes in this extension. For more details, see the ChangeLog file included with the extension or `read it online <https://forge.typo3.org/projects/extension-image-autoresize/repository/entry/trunk/ChangeLog>`_.
+The following is a very high level overview of the changes in this extension. For more details, `read the online log <https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git/log>`_.
 
 
 .. tabularcolumns:: |r|p{13.7cm}|
