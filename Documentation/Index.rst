@@ -12,40 +12,43 @@
 Resize Images Automatically
 ===========================
 
-:Classification:
-	image_autoresize
+.. only:: html
 
-:Version:
-	|release|
+	:Classification:
+		image_autoresize
 
-:Language:
-	en
+	:Version:
+		|release|
 
-:Description:
-	This extension allows you to automatically resize down huge pictures uploaded by your editors.
+	:Language:
+		en
 
-:Keywords:
-	image, resize, upload
+	:Description:
+		This extension allows you to automatically resize down huge pictures uploaded by your editors.
 
-:Copyright:
-	2010-2013
+	:Keywords:
+		image, resize, upload
 
-:Author:
-	Xavier Perseguers
+	:Copyright:
+		2010-2013
 
-:Email:
-	xavier@causal.ch
+	:Author:
+		Xavier Perseguers
 
-:License:
-	This document is published under the Open Content License
-	available from http://www.opencontent.org/opl.shtml
+	:Email:
+		xavier@causal.ch
 
-:Rendered:
-	|today|
+	:License:
+		This document is published under the Open Content License
+		available from http://www.opencontent.org/opl.shtml
 
-The content of this document is related to TYPO3
+	:Rendered:
+		|today|
 
-\- a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_
+	The content of this document is related to TYPO3
+
+	\- a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_
+
 
 .. toctree::
 	:maxdepth: 5
