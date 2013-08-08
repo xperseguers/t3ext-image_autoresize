@@ -8,4 +8,14 @@ conf.py:
   project: Resize Images Automatically
   version: 1.3
   release: 1.3.3
+  latex_documents:
+  - - Index
+    - image_autoresize.tex
+    - Resize Images Automatically
+    - Xavier Perseguers
+    - manual
+  latex_elements:
+    papersize: a4paper
+    pointsize: 10pt
+    preamble: \usepackage{typo3}
 ...
