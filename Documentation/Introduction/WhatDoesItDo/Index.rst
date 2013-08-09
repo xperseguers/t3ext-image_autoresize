@@ -7,7 +7,7 @@
 
 
 What does it do?
-^^^^^^^^^^^^^^^^
+----------------
 
 This extension automatically resizes images to a given maximum height/width right after they have been uploaded to the TYPO3 website. The aspect ratio is of course kept.
 

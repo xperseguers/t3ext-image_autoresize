@@ -8,7 +8,7 @@
 
 
 Workflow
-^^^^^^^^
+--------
 
 Simply upload your unmodified pictures either from the File > Filelist module (fileadmin) or from the edit form of a content element (text with image, image, ...) and enjoy the automatic resizing and orientation in portrait of your pictures (here with an original picture in 4080 × 2720, 3.6 MB with EXIF orientation set to "portrait"):
 

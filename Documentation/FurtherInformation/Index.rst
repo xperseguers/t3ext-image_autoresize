@@ -9,7 +9,7 @@
 .. _further-information:
 
 Further information
--------------------
+===================
 
 Do not hesitate to visit the extension's website on Forge:
 
@@ -17,7 +17,7 @@ http://forge.typo3.org/projects/show/extension-image_autoresize
 
 
 Translating the extension
-"""""""""""""""""""""""""
+-------------------------
 
 Please help translating this extension by contributing on
 

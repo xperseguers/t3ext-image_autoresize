@@ -7,7 +7,7 @@
 
 
 Supported image types
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 This extension performs the resize with the standard image library API from TYPO3 meaning that on a well-configured system, following formats are supported:
 

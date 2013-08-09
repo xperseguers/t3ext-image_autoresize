@@ -9,7 +9,7 @@
 .. _changelog:
 
 ChangeLog
----------
+=========
 
 The following is a very high level overview of the changes in this extension. For more details, `read the online log <https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git/log>`_.
 

@@ -8,15 +8,15 @@
 
 
 Screenshots
-^^^^^^^^^^^
+-----------
 
 General configuration settings
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 |general_configuration|
 
 
 General options
-"""""""""""""""
+^^^^^^^^^^^^^^^
 
 |general_options|

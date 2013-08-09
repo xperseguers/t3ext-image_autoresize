@@ -9,7 +9,7 @@
 .. _introduction:
 
 Introduction
-------------
+============
 
 .. toctree::
 	:maxdepth: 5

@@ -8,7 +8,7 @@
 
 
 Rule sets
-^^^^^^^^^
+---------
 
 Rule sets are managed with the third tab of the configuration panel:
 
