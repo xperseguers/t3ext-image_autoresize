@@ -6,10 +6,10 @@
 .. include:: ../Includes.txt
 
 
-.. _administration:
+.. _admin-manual:
 
-Administration
-==============
+Administrator Manual
+====================
 
 This chapter describes how to manage the extension from a superuser point of view.
 

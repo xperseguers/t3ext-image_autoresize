@@ -6,10 +6,10 @@
 .. include:: ../Includes.txt
 
 
-.. _user-manual:
+.. _users-manual:
 
-User Manual
-===========
+Users Manual
+============
 
 This chapter describes how to use the extension from a user point of view.
 
