@@ -19,7 +19,7 @@ Here is another example, from a content element "text w/image" where a BMP (``sc
 
 |example_converted|
 
-The uploaded file screenshot.bmp has automatically been both resized and converted to a new file ``screenshot.jpg`` (according to the image type conversion mapping option described in chapter :ref:`Administration`).
+The uploaded file screenshot.bmp has automatically been both resized and converted to a new file ``screenshot.jpg`` (according to the image type conversion mapping option described in chapter :ref:`admin-manual`).
 
 Details of this image show that its footprint is now quite small (151 KB):
 
