@@ -292,5 +292,3 @@ class JpegExifOrient {
 	}
 
 }
-
-?>

@@ -556,5 +556,3 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 		return $pattern;
 	}
 }
-
-?>

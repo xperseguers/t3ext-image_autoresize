@@ -309,6 +309,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$insertPos = count($lines);
 		$pos = 0;
 		for ($i = count($lines) - 1; $i > 0 && !t3lib_div::isFirstPartOfStr($lines[$i], $marker); $i--) {
+			// TODO: Compatibility check as closing PHP tag is no more part of the TYPO3 CGL
 			if (t3lib_div::isFirstPartOfStr($lines[$i], '?>')) {
 				$insertPos = $i;
 			}
@@ -321,6 +322,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$lines[$pos] = sprintf($format, $key, $value);
 		} else {
 			$lines[$insertPos] = sprintf($format, $key, $value);
+			// TODO: Compatibility check as closing PHP tag is no more part of the TYPO3 CGL
 			$lines[] = '?>';
 		}
 
@@ -405,5 +407,3 @@ $SOBE = t3lib_div::makeInstance('tx_imageautoresize_module1');
 $SOBE->init();
 $SOBE->main();
 $SOBE->printContent();
-
-?>

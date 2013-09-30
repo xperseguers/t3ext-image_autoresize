@@ -120,5 +120,3 @@ $TCA['tx_imageautoresize'] = array(
 		'1' => array('showitem' => 'max_width,max_height'),
 	),
 );
-
-?>

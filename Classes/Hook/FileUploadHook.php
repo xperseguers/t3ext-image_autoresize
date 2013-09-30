@@ -569,5 +569,3 @@ class FileUploadHook implements
 		return $pattern;
 	}
 }
-
-?>

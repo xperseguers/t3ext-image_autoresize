@@ -18,5 +18,3 @@ if (version_compare(TYPO3_version, '6.0.0', '>=')) {
 	// Uploads when using DAM
 	$TYPO3_CONF_VARS['EXTCONF']['dam']['fileTriggerClasses'][] = 'EXT:' . $_EXTKEY . '/Classes/v4/class.user_fileupload_hooks.php:user_fileUpload_hooks';
 }
-
-?>
