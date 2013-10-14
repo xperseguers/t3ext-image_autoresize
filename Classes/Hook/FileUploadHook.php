@@ -88,6 +88,9 @@ class FileUploadHook implements
 		if ($action === 'upload') {
 			// Extract references to the uploaded files
 			$files = array_pop($result);
+			if (!is_array($files)) {
+				return;
+			}
 			foreach ($files as $file) {
 				/** @var $file \TYPO3\CMS\Core\Resource\File */
 				$storageConfiguration = $file->getStorage()->getConfiguration();
