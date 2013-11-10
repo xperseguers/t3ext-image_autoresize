@@ -4,15 +4,20 @@
 .. -*- coding: utf-8 -*- with BOM.
 
 .. include:: ../../Includes.txt
-.. include:: Images.txt
 
+
+.. _install:
 
 Installing the extension
 ------------------------
 
-Install this extension as usual with Extension Manager. The whole configuration is made from the Admin Tools Backend module "Image Auto-Resize":
+Install this extension as usual with Extension Manager. The whole configuration is made from the Admin Tools Backend
+module "Image Auto-Resize":
 
-|backend_module|
+.. figure:: ../../Images/backend_module.png
+	:alt: The Backend module to configure general settings
 
-.. note:
-	Unlike many other extensions, it is based on a FlexForm to increase the user experience and allow creation of complex rule sets.
+
+.. note::
+	Unlike many other extensions, it is based on a FlexForm to increase the user experience and allow creation of
+	complex rule sets.

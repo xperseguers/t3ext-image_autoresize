@@ -54,7 +54,7 @@ Resize Images Automatically
 	**Other version of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.3.3/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.4.0/_pdf/
 
 
 	**Table of Contents**
@@ -71,3 +71,4 @@ Resize Images Automatically
 	ToDoList/Index
 	FurtherInformation/Index
 	ChangeLog/Index
+	Targets

@@ -1,8 +1,0 @@
-.. |example_autoresize| image:: ../../Images/example_autoresize.png
-	:alt: Example of an image that has been automatically resized
-
-.. |example_converted| image:: ../../Images/example_converted.png
-	:alt: Example of an image that has been automatically converted from one format to another
-
-.. |footprint| image:: ../../Images/footprint.png
-	:alt: Details of an image with a smaller footprint that original file

@@ -22,3 +22,4 @@ This chapter describes how to manage the extension from a superuser point of vie
 	ConfiguringExtension/GeneralSettings
 	ConfiguringExtension/Options
 	ConfiguringExtension/RuleSets
+	BatchProcessing/Index

@@ -105,8 +105,14 @@ class ImageResizer {
 	public function processFile($filename, \TYPO3\CMS\Core\Resource\File $file = NULL, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL, $callbackNotification = NULL) {
 		$ruleset = $this->getRuleset($filename, $backendUser);
 
-		if (count($ruleset) == 0) {
+		if (count($ruleset) == 0)  {
 			// File does not match any rule set
+			return $filename;
+		}
+
+		if ($backendUser === NULL && count($ruleset['usergroup']) > 0) {
+			// Rule set is targeting some user group but we have no backend user (scheduler task)
+			// so we should skip this file altogether
 			return $filename;
 		}
 
@@ -195,9 +201,8 @@ class ImageResizer {
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($destFilename)
 				);
 			}
-			if ($file !== NULL) {
-				$this->updateIndexEntry($file, $destFilename, $tempFileInfo[0], $tempFileInfo[1]);
-			}
+
+			$this->reindex($file, $filename, $destFilename, $tempFileInfo[0], $tempFileInfo[1]);
 
 			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
 				ImageUtility::resetOrientation($destFilename);
@@ -229,17 +234,23 @@ class ImageResizer {
 	 * Updates the index entry for a given file.
 	 *
 	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $absoluteFilename
+	 * @param string $origFilename
+	 * @param string $newFilename
 	 * @param integer $width
 	 * @param integer $height
 	 * @return void
 	 */
-	protected function updateIndexEntry(\TYPO3\CMS\Core\Resource\File $file, $absoluteFilename, $width, $height) {
+	protected function reindex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
+		if ($file === NULL) {
+			// TODO: check if existing entry exists for $origFilename
+			return;
+		}
+
 		/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
 		$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
 
 		// TODO: Update (does not yet support a converted file type)
-		//$filename = PathUtility::basename($absoluteFilename);
+		//$filename = PathUtility::basename($newFilename);
 		//$newProperties['identifier'] = preg_replace('/' . preg_quote($file->getProperty('name')) . '$/', $filename, $file->getProperty('identifier'));
 
 		$newProperties = $localDriver = $file->getStorage()->getFileInfo($file);
@@ -298,6 +309,21 @@ class ImageResizer {
 			}
 		}
 		return $ret;
+	}
+
+	/**
+	 * Returns all file types found in the various rulesets.
+	 *
+	 * @return array
+	 */
+	public function getAllFileTypes() {
+		$fileTypes = array();
+		foreach ($this->rulesets as $ruleset) {
+			if (is_array($ruleset['file_types'])) {
+				$fileTypes = array_merge($fileTypes, $ruleset['file_types']);
+			}
+		}
+		return array_unique($fileTypes);
 	}
 
 	/**
