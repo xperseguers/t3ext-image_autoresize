@@ -34,7 +34,6 @@
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
  * @deprecated  This class is kept for compatibility with TYPO3 4.5, 4.6 and 4.7
  */
 class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t3lib_TCEmain_processUploadHook {
@@ -121,7 +120,11 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 
 		// Make filename relative and extract the extension
 		$relFilename = substr($filename, strlen(PATH_site));
-		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
+		if (($dotPosition = strrpos($filename, '.')) === FALSE) {
+			// File has no extension
+			return $filename;
+		}
+		$fileExtension = strtolower(substr($filename, $dotPosition + 1));
 
 		if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
 			if ($this->isTransparentPng($filename)) {

@@ -2,30 +2,33 @@
 namespace Causal\ImageAutoresize\Hook;
 
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2013 Xavier Perseguers <xavier@causal.ch>
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*  A copy is found in the textfile GPL.txt and important notices to the license
-*  from the author is found in LICENSE.txt distributed with these scripts.
-*
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2013 Xavier Perseguers <xavier@causal.ch>
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *  A copy is found in the textfile GPL.txt and important notices to the license
+ *  from the author is found in LICENSE.txt distributed with these scripts.
+ *
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use \Causal\ImageAutoresize\Service\ImageResizer;
 
 /**
  * This class extends t3lib_extFileFunctions and hooks into DAM to
@@ -36,31 +39,32 @@ namespace Causal\ImageAutoresize\Hook;
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
  */
 class FileUploadHook implements
 	\TYPO3\CMS\Core\Utility\File\ExtendedFileUtilityProcessDataHookInterface,
 	\TYPO3\CMS\Core\DataHandling\DataHandlerProcessUploadHookInterface {
 
 	/**
-	 * @var array
+	 * @var ImageResizer
 	 */
-	protected $rulesets = array();
+	protected $imageResizer;
 
 	/**
 	 * Default constructor.
 	 */
 	public function __construct() {
-		$config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
-		if (!$config) {
+		$this->imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
+
+		$configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
+		if (!$configuration) {
 			$this->notify(
 				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.emptyConfiguration'),
 				\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
 			);
 		}
-		$config = unserialize($config);
-		if (is_array($config)) {
-			$this->initializeRulesets($config);
+		$configuration = unserialize($configuration);
+		if (is_array($configuration)) {
+			$this->imageResizer->initializeRulesets($configuration);
 		}
 	}
 
@@ -72,7 +76,12 @@ class FileUploadHook implements
 	 * @return void
 	 */
 	public function processUpload_postProcessAction(&$filename, \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject) {
-		$filename = $this->processFile($filename);
+		$filename = $this->imageResizer->processFile(
+			$filename,
+			NULL,
+			$GLOBALS['BE_USER'],
+			array($this, 'notify')
+		);
 	}
 
 	/**
@@ -98,7 +107,12 @@ class FileUploadHook implements
 				if ($storageRecord['driver'] === 'Local') {
 					$filename = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
 					$filename .= rtrim($storageConfiguration['basePath'], '/') . $file->getIdentifier();
-					$this->processFile($filename);
+					$this->imageResizer->processFile(
+						$filename,
+						$file,
+						$GLOBALS['BE_USER'],
+						array($this, 'notify')
+					);
 				}
 			}
 		}
@@ -116,228 +130,13 @@ class FileUploadHook implements
 		if ($action === 'upload' && is_array($data)) {
 			$filename = $data['target_file'];
 			if (is_file($filename)) {
-				$this->processFile($filename);
-			}
-		}
-	}
-
-	/**
-	 * Processes upload of a file.
-	 *
-	 * @param string $filename
-	 * @return string Filename that was finally written
-	 */
-	protected function processFile($filename) {
-		$ruleset = $this->getRuleset($filename);
-
-		if (count($ruleset) == 0) {
-			// File does not match any rule set
-			return $filename;
-		}
-
-		// Make filename relative and extract the extension
-		$relFilename = substr($filename, strlen(PATH_site));
-		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
-
-		if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
-			if ($this->isTransparentPng($filename)) {
-				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageTransparent'),
-					$relFilename
-				);
-				$this->notify($message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
-				return $filename;
-			}
-		}
-
-		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
-			// File format will be converted
-			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
-			$destDirectory = dirname($filename);
-			$destFilename = basename(substr($filename, 0, strlen($filename) - strlen($fileExtension)) . $destExtension);
-
-			// Ensures $destFilename does not yet exist, otherwise make it unique!
-			/* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
-			$fileFunc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
-
-			$destFilename = $fileFunc->getUniqueName($destFilename, $destDirectory);
-		} else {
-			// File format stays the same
-			$destExtension = $fileExtension;
-			$destFilename = $filename;
-		}
-
-		// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-		/** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
-		$gifCreator = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
-		$gifCreator->init();
-		$gifCreator->absPrefix = PATH_site;
-
-		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
-		$isRotated = FALSE;
-
-		if ($ruleset['auto_orient'] === '1') {
-			$orientation = $this->getOrientation($filename);
-			$isRotated = $this->isRotated($orientation);
-			$transformation = $this->getTransformation($orientation);
-			if ($transformation !== '') {
-				$imParams .= ' ' . $transformation;
-			}
-		}
-
-		if ($isRotated) {
-			// Invert max_width and max_height as the picture
-			// will be automatically rotated
-			$options = array(
-				'maxW' => $ruleset['max_height'],
-				'maxH' => $ruleset['max_width'],
-			);
-		} else {
-			$options = array(
-				'maxW' => $ruleset['max_width'],
-				'maxH' => $ruleset['max_height'],
-			);
-		}
-
-		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options, TRUE);
-		if ($tempFileInfo) {
-			// Replace original file
-			@unlink($filename);
-			@rename($tempFileInfo[3], $destFilename);
-
-			if ($filename === $destFilename) {
-				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResized'),
-					$relFilename, $tempFileInfo[0], $tempFileInfo[1]
-				);
-			} else {
-				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResizedAndRenamed'),
-					$relFilename, $tempFileInfo[0], $tempFileInfo[1], basename($destFilename)
+				$this->imageResizer->processFile(
+					$filename,
+					NULL,
+					$GLOBALS['BE_USER'],
+					array($this, 'notify')
 				);
 			}
-
-			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
-				$this->resetOrientation($destFilename);
-			}
-
-			$this->notify($message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
-		} else {
-			// Destination file was not written
-			$destFilename = $filename;
-		}
-		return $destFilename;
-	}
-
-	/**
-	 * Returns the EXIF orientation of a given picture.
-	 *
-	 * @param string $filename
-	 * @return integer
-	 */
-	protected function getOrientation($filename) {
-		$extension = strtolower(substr($filename, strrpos($filename, '.') + 1));
-		$orientation = 1; // Fallback to "straight"
-		if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
-			$exif = exif_read_data($filename);
-			if ($exif) {
-				$orientation = $exif['Orientation'];
-			}
-		}
-		return $orientation;
-	}
-
-	/**
-	 * Returns TRUE if the given picture is rotated.
-	 *
-	 * @param integer $orientation EXIF orientation
-	 * @return integer
-	 * @see http://www.impulseadventure.com/photo/exif-orientation.html
-	 */
-	protected function isRotated($orientation) {
-		$ret = FALSE;
-		switch ($orientation) {
-			case 2: // horizontal flip
-			case 3: // 180°
-			case 4: // vertical flip
-			case 5: // vertical flip + 90 rotate right
-			case 6: // 90° rotate right
-			case 7: // horizontal flip + 90 rotate right
-			case 8: // 90° rotate left
-				$ret = TRUE;
-				break;
-		}
-		return $ret;
-	}
-
-	/**
-	 * Returns a command line parameter to fix the orientation of a rotated picture.
-	 *
-	 * @param integer $orientation
-	 * @return string
-	 */
-	protected function getTransformation($orientation) {
-		$transformation = '';
-		if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] !== 'gm') {
-			// ImageMagick
-			if ($orientation >= 2 && $orientation <= 8) {
-				$transformation = '-auto-orient';
-			}
-		} else {
-			// GraphicsMagick
-			switch ($orientation) {
-				case 2: // horizontal flip
-					$transformation = '-flip horizontal';
-					break;
-				case 3: // 180°
-					$transformation = '-rotate 180';
-					break;
-				case 4: // vertical flip
-					$transformation = '-flip vertical';
-					break;
-				case 5: // vertical flip + 90 rotate right
-					$transformation = '-transpose';
-					break;
-				case 6: // 90° rotate right
-					$transformation = '-rotate 90';
-					break;
-				case 7: // horizontal flip + 90 rotate right
-					$transformation = '-transverse';
-					break;
-				case 8: // 90° rotate left
-					$transformation = '-rotate 270';
-					break;
-			}
-		}
-		return $transformation;
-	}
-
-	/**
-	 * Resets the EXIF orientation flag of a picture.
-	 *
-	 * @param string $filename
-	 * @return void
-	 * @see http://sylvana.net/jpegcrop/exif_orientation.html
-	 */
-	protected function resetOrientation($filename) {
-		\Causal\ImageAutoresize\Utility\JpegExifOrient::setOrientation($filename, 1);
-	}
-
-	/**
-	 * Returns TRUE if the given PNG file contains transparency information.
-	 *
-	 * @param string $filename
-	 * @return boolean
-	 */
-	protected function isTransparentPng($filename) {
-		$bytes = file_get_contents($filename, FALSE, NULL, 24, 2);	// read 24th and 25th bytes
-		$byte24 = ord($bytes{0});
-		$byte25 = ord($bytes{1});
-		if ($byte24 === 16 || $byte25 === 6 || $byte25 === 4) {
-			return TRUE;
-		} else {
-			$content = file_get_contents($filename);
-			return strpos($content, 'tRNS') !== FALSE;
 		}
 	}
 
@@ -345,11 +144,14 @@ class FileUploadHook implements
 	 * Notifies the user using a Flash message.
 	 *
 	 * @param string $message The message
-	 * @param integer $severity Optional severity, must be either of t3lib_FlashMessage::INFO, t3lib_FlashMessage::OK,
-	 *                          t3lib_FlashMessage::WARNING or t3lib_FlashMessage::ERROR. Default is t3lib_FlashMessage::OK.
+	 * @param integer $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
+	 *                          \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
+	 *                          or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
+	 *                          Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
 	 * @return void
+	 * @internal This method is public only to be callable from a callback
 	 */
-	protected function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
+	public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
 		$flashMessage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
@@ -360,215 +162,4 @@ class FileUploadHook implements
 		\TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
 	}
 
-	/**
-	 * Returns the rule set that applies to a given file for
-	 * current logged-in backend user.
-	 *
-	 * @param string $filename
-	 * @return array
-	 */
-	protected function getRuleset($filename) {
-		$ret = array();
-		if (!is_file($filename)) {
-			// Early return
-			return $ret;
-		}
-
-		// Make filename relative and extract the extension
-		$relFilename = substr($filename, strlen(PATH_site));
-		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
-
-		$beGroups = array_keys($GLOBALS['BE_USER']->userGroups);
-
-		// Try to find a matching ruleset
-		foreach ($this->rulesets as $ruleset) {
-			if (!is_array($ruleset['file_types'])) {
-				// Default general settings do not include any watched image types
-				continue;
-			}
-			if (count($ruleset['usergroup']) > 0 && count(array_intersect($ruleset['usergroup'], $beGroups)) == 0) {
-				// Backend user is not member of a group configured for the current rule set
-				continue;
-			}
-			$processFile = FALSE;
-			foreach ($ruleset['directories'] as $directoryPattern) {
-				$processFile |= preg_match($directoryPattern, $relFilename);
-			}
-			$processFile &= \TYPO3\CMS\Core\Utility\GeneralUtility::inArray($ruleset['file_types'], $fileExtension);
-			$processFile &= (filesize($filename) > $ruleset['threshold']);
-			if ($processFile) {
-				$ret = $ruleset;
-				break;
-			}
-		}
-		return $ret;
-	}
-
-	/**
-	 * Initializes the hook configuration as a meaningful ordered list
-	 * of rule sets.
-	 *
-	 * @param array $config
-	 * @return void
-	 */
-	protected function initializeRulesets(array $config) {
-		$general = $config;
-		$general['usergroup'] = '';
-		unset($general['rulesets']);
-		$general = $this->expandValuesInRuleset($general);
-		if ($general['conversion_mapping'] === '') {
-			$general['conversion_mapping'] = array();
-		}
-
-		if (isset($config['rulesets'])) {
-			$rulesets = $this->compileRuleSets($config['rulesets']);
-		} else {
-			$rulesets = array();
-		}
-
-		// Inherit values from general configuration in rule sets if needed
-		foreach ($rulesets as $k => &$ruleset) {
-			foreach ($general as $key => $value) {
-				if (!isset($ruleset[$key])) {
-					$ruleset[$key] = $value;
-				} elseif ($ruleset[$key] === '') {
-					$ruleset[$key] = $value;
-				}
-			}
-			if (count($ruleset['usergroup']) == 0) {
-				// Make sure not to try to override general configuration
-				// => only keep directories not present in general configuration
-				$ruleset['directories'] = array_diff($ruleset['directories'], $general['directories']);
-				if (count($ruleset['directories']) == 0) {
-					unset($rulesets[$k]);
-				}
-			}
-		}
-
-		// Use general configuration as very last rule set
-		$rulesets[] = $general;
-		$this->rulesets = $rulesets;
-	}
-
-	/**
-	 * Compiles all FlexForm rule sets.
-	 *
-	 * @param array $rulesets
-	 * @return array
-	 */
-	protected function compileRulesets(array $rulesets) {
-		$sheets = \TYPO3\CMS\Core\Utility\GeneralUtility::resolveAllSheetsInDS($rulesets);
-		$rulesets = array();
-
-		foreach ($sheets['sheets'] as $sheet) {
-			$elements = $sheet['data']['sDEF']['lDEF']['ruleset']['el'];
-			foreach ($elements as $container) {
-				if (isset($container['container']['el'])) {
-					$values = array();
-					foreach ($container['container']['el'] as $key => $value) {
-						if ($key === 'title') {
-							continue;
-						}
-						$values[$key] = $value['vDEF'];
-					}
-					$rulesets[] = $this->expandValuesInRuleset($values);
-				}
-			}
-		}
-
-		return $rulesets;
-	}
-
-	/**
-	 * Expands values of a rule set.
-	 *
-	 * @param array $ruleset
-	 * @return array
-	 */
-	protected function expandValuesInRuleset(array $ruleset) {
-		$values = array();
-		foreach ($ruleset as $key => $value) {
-			switch ($key) {
-				case 'usergroup':
-					$value = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
-					break;
-				case 'directories':
-					$value = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
-					// Sanitize name of the directories
-					foreach ($value as &$directory) {
-						$directory = rtrim($directory, '/') . '/';
-						$directory = $this->getDirectoryPattern($directory);
-					}
-					if (count($value) == 0) {
-							// Inherit configuration
-						$value = '';
-					}
-					break;
-				case 'file_types':
-					$value = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
-					if (count($value) == 0) {
-						// Inherit configuration
-						$value = '';
-					}
-					break;
-				case 'threshold':
-					if (!is_numeric($value)) {
-						$unit = strtoupper(substr($value, -1));
-						$factor = 1 * ($unit === 'K' ? 1024 : ($unit === 'M' ? 1024 * 1024 : 0));
-						$value = intval(trim(substr($value, 0, strlen($value) - 1))) * $factor;
-					}
-				// Beware: fall-back to next value processing
-				case 'max_width':
-				case 'max_height':
-					if ($value <= 0) {
-						// Inherit configuration
-						$value = '';
-					}
-					break;
-				case 'conversion_mapping':
-					$mapping = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $value, TRUE);
-					if (count($mapping) > 0) {
-						$value = $this->expandConversionMapping($mapping);
-					} else {
-						// Inherit configuration
-						$value = '';
-					}
-					break;
-			}
-			$values[$key] = $value;
-		}
-
-		return $values;
-	}
-
-	/**
-	 * Expands the image type conversion mapping.
-	 *
-	 * @param array $mapping Array of lines similar to "bmp => jpg", "tif => jpg"
-	 * @return array Key/Value pairs of mapping: array('bmp' => 'jpg', 'tif' => 'jpg')
-	 */
-	protected function expandConversionMapping(array $mapping) {
-		$ret = array();
-		$matches = array();
-		foreach ($mapping as $m) {
-			if (preg_match('/^(.*)\s*=>\s*(.*)/', $m, $matches)) {
-				$ret[trim($matches[1])] = trim($matches[2]);
-			}
-		}
-		return $ret;
-	}
-
-	/**
-	 * Returns a regular expression pattern to match directories.
-	 *
-	 * @param string $directory
-	 * @return string
-	 */
-	protected function getDirectoryPattern($directory) {
-		$pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
-		$pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
-		$pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
-
-		return $pattern;
-	}
 }

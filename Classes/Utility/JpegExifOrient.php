@@ -66,7 +66,6 @@ namespace Causal\ImageAutoresize\Utility;
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
  */
 class JpegExifOrient {
 
