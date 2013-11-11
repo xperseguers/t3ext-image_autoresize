@@ -202,7 +202,7 @@ class ImageResizer {
 				);
 			}
 
-			$this->reindex($file, $filename, $destFilename, $tempFileInfo[0], $tempFileInfo[1]);
+			\Causal\ImageAutoresize\Utility\FAL::indexFile($file, $filename, $destFilename, $tempFileInfo[0], $tempFileInfo[1]);
 
 			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
 				ImageUtility::resetOrientation($destFilename);
@@ -228,41 +228,6 @@ class ImageResizer {
 		if (is_callable($callbackNotification, FALSE, $callableName)) {
 			call_user_func($callbackNotification, $message, $severity);
 		}
-	}
-
-	/**
-	 * Updates the index entry for a given file.
-	 *
-	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $origFilename
-	 * @param string $newFilename
-	 * @param integer $width
-	 * @param integer $height
-	 * @return void
-	 */
-	protected function reindex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
-		if ($file === NULL) {
-			// TODO: check if existing entry exists for $origFilename
-			return;
-		}
-
-		return;
-
-		/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
-		$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
-
-		// TODO: Update (does not yet support a converted file type)
-		//$filename = PathUtility::basename($newFilename);
-		//$newProperties['identifier'] = preg_replace('/' . preg_quote($file->getProperty('name')) . '$/', $filename, $file->getProperty('identifier'));
-
-		$newProperties = $localDriver = $file->getStorage()->getFileInfo($file);
-		$newProperties['sha1'] = $file->getSha1();
-		$file->updateProperties($newProperties);
-		$fileIndexRepository->update($file);
-
-		/** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metaDataRepository */
-		//$metaDataRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\MetaDataRepository');
-		//$metaDataRepository->findByFile($file);
 	}
 
 	/**

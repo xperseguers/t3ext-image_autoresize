@@ -32,7 +32,7 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * This is a generic image utility.
  *
- * @category    Service
+ * @category    Utility
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
