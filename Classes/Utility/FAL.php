@@ -159,7 +159,8 @@ class FAL {
 		$basePath = GeneralUtility::getFileAbsFileName($basePath);
 		$identifier = substr($newFilename, strlen($basePath) - 1);
 
-		// TODO: check if $driver call below be replaced by $file->getStorage()->getFileInfo($file)
+		// $driver call below cannot be replaced by $file->getStorage()->getFileInfo($file)
+		// when the file has been renamed (converted from one format to the other)
 		/** @var \TYPO3\CMS\Core\Resource\Driver\AbstractDriver $driver */
 		$driver = static::accessProtectedProperty($file->getStorage(), 'driver');
 
