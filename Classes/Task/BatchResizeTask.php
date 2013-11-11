@@ -130,7 +130,8 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			// Skip exclude directories
 			foreach ($excludeDirectories as $excludeDirectory) {
 				$excludeDirectory = GeneralUtility::getFileAbsFileName($excludeDirectory);
-				if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory)) {
+				if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
+					rtrim($excludeDirectory, '/') === $filePath) {
 					$skip = TRUE;
 					continue;
 				}
