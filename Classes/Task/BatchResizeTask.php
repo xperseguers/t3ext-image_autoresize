@@ -42,6 +42,11 @@ use \Causal\ImageAutoresize\Service\ImageResizer;
 class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 
 	/**
+	 * @var string
+	 */
+	public $excludeDirectories = '';
+
+	/**
 	 * @var ImageResizer
 	 */
 	protected $imageResizer;
@@ -71,12 +76,8 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			$skip = FALSE;
 			foreach ($processedDirectories as $processedDirectory) {
 				if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
-					$skip = TRUE;
-					break;
+					continue 2;
 				}
-			}
-			if ($skip) {
-				continue;
 			}
 
 			// Execute bach resize
@@ -96,7 +97,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	 * @throws \RuntimeException
 	 */
 	protected function batchResizePictures($directory) {
-		$directory = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($directory);
+		$directory = GeneralUtility::getFileAbsFileName($directory);
 		// Check if given directory exists
 		if (!@is_dir($directory)) {
 			throw new \RuntimeException('Given directory "' . $directory . '" does not exist', 1384102984);
@@ -117,12 +118,25 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			$callbackNotification = NULL;
 		}
 
+		$excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, TRUE);
+
 		$directoryContent = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
 		foreach ($directoryContent as $fileName => $file) {
-			// Skip files in recycler directory or whose type should not be processed
 			$filePath = $file->getPath();
 			$name = substr($fileName, strlen($filePath) + 1);
-			if (!($name{0} === '.' || substr($filePath, -9) === '_recycler')) {
+
+			// Skip files in recycler directory or whose type should not be processed
+			$skip = $name{0} === '.' || substr($filePath, -10) === '_recycler_';
+			// Skip exclude directories
+			foreach ($excludeDirectories as $excludeDirectory) {
+				$excludeDirectory = GeneralUtility::getFileAbsFileName($excludeDirectory);
+				if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory)) {
+					$skip = TRUE;
+					continue;
+				}
+			}
+
+			if (!$skip) {
 				if (($dotPosition = strrpos($name, '.')) !== FALSE) {
 					$fileExtension = strtolower(substr($name, $dotPosition + 1));
 					if (in_array($fileExtension, $allFileTypes)) {

@@ -16,6 +16,7 @@ if (version_compare(TYPO3_version, '6.0.0', '>=')) {
 		'extension' => $_EXTKEY,
 		'title' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_mod.xlf:batchResizeTask.name',
 		'description' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_mod.xlf:batchResizeTask.description',
+		'additionalFields' => 'Causal\\ImageAutoresize\\Task\\BatchResizeAdditionalFieldProvider',
 	);
 
 } else {
