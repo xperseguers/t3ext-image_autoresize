@@ -28,7 +28,7 @@ above shows two rules:
 
 The following picture shows how a rule set is configured:
 
-.. figure:: ../../Images/ruleset_usergroup.png
+.. figure:: ../../Images/ruleset-usergroup.png
 	:alt: Rules for a user groups
 
 The parameters are identical to those for the general settings. The mechanism is easy to understand:

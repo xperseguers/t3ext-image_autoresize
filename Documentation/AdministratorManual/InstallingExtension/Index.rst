@@ -14,7 +14,7 @@ Installing the extension
 Install this extension as usual with Extension Manager. The whole configuration is made from the Admin Tools Backend
 module "Image Auto-Resize":
 
-.. figure:: ../../Images/backend_module.png
+.. figure:: ../../Images/backend-module.png
 	:alt: The Backend module to configure general settings
 
 

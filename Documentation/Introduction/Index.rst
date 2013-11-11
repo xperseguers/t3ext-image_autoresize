@@ -43,12 +43,12 @@ Screenshots
 General configuration settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure:: ../Images/general_configuration.png
+.. figure:: ../Images/general-configuration.png
 	:alt: Overview of the general configuration panel
 
 
 General options
 ^^^^^^^^^^^^^^^
 
-.. figure:: ../Images/general_options.png
+.. figure:: ../Images/general-options.png
 	:alt: Overview of the general options panel

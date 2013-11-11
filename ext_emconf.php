@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Resize images automatically',
-	'description' => 'Simplify the way your editors may upload their pictures: no complex local procedure needed, let TYPO3 resize down their huge pictures on-the-fly during upload and according to your own business rules (directory/groups).',
+	'description' => 'Simplify the way your editors may upload their pictures: no complex local procedure needed, let TYPO3 resize down their huge pictures on-the-fly during upload (or using a scheduler task for batch processing) and according to your own business rules (directory/groups).',
 	'category' => 'be',
 	'author' => 'Xavier Perseguers (Causal)',
 	'author_email' => 'xavier@causal.ch',
@@ -33,7 +33,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'version' => '1.4.0-dev',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '5.3.3-0.0.0',
+			'php' => '5.3.3-5.4.99',
 			'typo3' => '4.5.0-6.2.99',
 		),
 		'conflicts' => array(

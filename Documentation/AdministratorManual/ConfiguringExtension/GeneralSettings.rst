@@ -13,7 +13,7 @@ General settings
 
 General settings are configured with the first tab of the configuration panel:
 
-.. figure:: ../../Images/general_configuration.png
+.. figure:: ../../Images/general-configuration.png
 	:alt: Overview of the general configuration panel
 
 

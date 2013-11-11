@@ -12,10 +12,15 @@ Batch processing images
 -----------------------
 
 When installed in TYPO3 6.0 or above, this extension provides a scheduler task to batch process uploaded images in
-directory :file:`fileadmin/`.
+the directories you normally watch for image upload (see :ref:`general-settings`).
 
 It is particularly useful if you let users upload images outside of TYPO3 (e.g., using FTP), thus bypassing upload
-post-processing to automatically resize them according to your rule sets.
+post-processing to automatically resize them according to your rule sets:
 
-.. note::
-	The scheduler task will process each directory found in your rule sets.
+.. figure:: ../../Images/scheduler-task.png
+	:alt: Scheduler task to batch resize images
+
+.. important::
+	As the scheduler task will process each directory found in your rule sets, make sure to exclude directories you
+	normally do not show to your editors (e.g., :file:`fileadmin/templates`) which may contain large image assets that
+	should never be processed by this extension.

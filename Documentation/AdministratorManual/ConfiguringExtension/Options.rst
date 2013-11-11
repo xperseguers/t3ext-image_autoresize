@@ -13,7 +13,7 @@ Options
 
 General options are configured with the first tab of the configuration panel:
 
-.. figure:: ../../Images/general_options.png
+.. figure:: ../../Images/general-options.png
 	:alt: Overview of the general options panel
 
 
@@ -29,7 +29,7 @@ reflect the positioning of the camera with respect to the ground. Canon calls th
 sensor. It is presumably a 2-axis tilt sensor, allowing 4 possible orientations to be detected (shown in the diagram
 below):
 
-.. figure:: ../../Images/exif_orientation.png
+.. figure:: ../../Images/exif-orientation.png
 	:alt: Orientations as stored in EXIF
 
 	Description and diagram adapted from http://www.impulseadventure.com/photo/exif-orientation.html

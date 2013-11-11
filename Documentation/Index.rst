@@ -9,7 +9,7 @@
 .. _start:
 
 ===========================
-Resize Images Automatically
+Resize images automatically
 ===========================
 
 .. only:: html
@@ -24,9 +24,9 @@ Resize Images Automatically
 		en
 
 	:Description:
-		Simplify the way your editors may upload their pictures: no complex local procedure needed,
-		let TYPO3 resize down their huge pictures on-the-fly during upload and according to your own
-		business rules (directory/groups).
+		Simplify the way your editors may upload their pictures: no complex local procedure needed, let TYPO3 resize
+		down their huge pictures on-the-fly during upload (or using a scheduler task for batch processing) and according
+		to your own business rules (directory/groups).
 
 	:Keywords:
 		image, resize, upload
