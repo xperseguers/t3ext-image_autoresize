@@ -115,7 +115,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			// the task is most probably run manually from the Scheduler module, so just show notifications
 			$callbackNotification = array($this, 'notify');
 		} else {
-			$callbackNotification = NULL;
+			$callbackNotification = array($this, 'syslog');
 		}
 
 		$excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, TRUE);
@@ -174,6 +174,35 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			TRUE
 		);
 		\TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
+	}
+
+	/**
+	 * Creates an entry in syslog.
+	 *
+	 * @param string $message
+	 * @param integer $severity
+	 * @return void
+	 */
+	public function syslog($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
+		switch ($severity) {
+			case \TYPO3\CMS\Core\Messaging\FlashMessage::NOTICE:
+				$severity = GeneralUtility::SYSLOG_SEVERITY_NOTICE;
+			break;
+			case \TYPO3\CMS\Core\Messaging\FlashMessage::INFO:
+				$severity = GeneralUtility::SYSLOG_SEVERITY_INFO;
+			break;
+			case \TYPO3\CMS\Core\Messaging\FlashMessage::OK:
+				$severity = GeneralUtility::SYSLOG_SEVERITY_OK;
+			break;
+			case \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING:
+				$severity = GeneralUtility::SYSLOG_SEVERITY_WARNING;
+			break;
+			case \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR:
+				$severity = GeneralUtility::SYSLOG_SEVERITY_ERROR;
+			break;
+		}
+
+		GeneralUtility::sysLog($message, 'image_autoresize', $severity);
 	}
 
 }
