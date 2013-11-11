@@ -55,6 +55,9 @@ class FAL {
 	 * @return void
 	 */
 	static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
+		if ($file === NULL) {
+			$file = static::findExistingFile($origFilename);
+		}
 		if ($file !== NULL) {
 			if (version_compare(TYPO3_version, '6.1.99', '<=')) {
 				// TYPO3 6.0 and 6.1: No new indexer
@@ -65,6 +68,42 @@ class FAL {
 		} else {
 			static::createIndex($newFilename, $width, $height);
 		}
+	}
+
+	/**
+	 * Finds an existing file.
+	 *
+	 * @param string $filename
+	 * @return \TYPO3\CMS\Core\Resource\AbstractFile|NULL
+	 */
+	static protected function findExistingFile($filename) {
+		$file = NULL;
+		$relativePath = substr(PathUtility::dirname($filename), strlen(PATH_site));
+		$resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+		$targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
+
+		$storageConfiguration = $targetFolder->getStorage()->getConfiguration();
+		if (isset($storageConfiguration['basePath'])) {
+			$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
+			$basePath = GeneralUtility::getFileAbsFileName($basePath);
+			$identifier = substr($filename, strlen($basePath) - 1);
+
+			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
+				'uid',
+				'sys_file',
+				'storage=' . intval($targetFolder->getStorage()->getUid()) .
+					' AND identifier=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($identifier, 'sys_file') .
+					\TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('sys_file')
+			);
+
+			if (!empty($row['uid'])) {
+				/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
+				$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+				$file = $fileRepository->findByUid($row['uid']);
+			}
+		}
+
+		return $file;
 	}
 
 	/**
