@@ -138,7 +138,7 @@ class ImageResizer {
 		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
 			// File format will be converted
 			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
-			$destDirectory = dirname($filename);
+			$destDirectory = PathUtility::dirname($filename);
 			$destFilename = PathUtility::basename(substr($filename, 0, strlen($filename) - strlen($fileExtension)) . $destExtension);
 
 			// Ensures $destFilename does not yet exist, otherwise make it unique!

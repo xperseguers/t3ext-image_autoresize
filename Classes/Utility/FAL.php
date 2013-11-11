@@ -55,36 +55,53 @@ class FAL {
 	 * @return void
 	 */
 	static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
-		if (version_compare(TYPO3_version, '6.1.99', '<=')) {
-			// TYPO3 6.0 and 6.1: No new indexer
-			if ($file !== NULL) {
+		if ($file !== NULL) {
+			if (version_compare(TYPO3_version, '6.1.99', '<=')) {
+				// TYPO3 6.0 and 6.1: No new indexer
 				static::manuallyUpdateIndex($file, $origFilename, $newFilename, $width, $height);
 			} else {
-				static::manuallyCreateIndex($newFilename, $width, $height);
+				static::updateIndex($file, $origFilename, $newFilename, $width, $height);
 			}
-			return;
+		} else {
+			static::createIndex($newFilename, $width, $height);
 		}
+	}
 
-		if ($file === NULL) {
-			// TODO: check if existing entry exists for $origFilename
-			return;
+	/**
+	 * Updates the index entry for a given file in TYPO3 >= 6.2.
+	 *
+	 * @param \TYPO3\CMS\Core\Resource\File $file
+	 * @param string $origFilename
+	 * @param string $newFilename
+	 * @param integer $width
+	 * @param integer $height
+	 * @return void
+	 */
+	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
+		$storageConfiguration = $file->getStorage()->getConfiguration();
+		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
+		$basePath = GeneralUtility::getFileAbsFileName($basePath);
+		$identifier = substr($newFilename, strlen($basePath) - 1);
+
+		$file->setIdentifier($identifier);
+
+		/** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
+		$indexerService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
+		$indexerService->indexFile($file);
+
+		// Extension and name may not be correct if the file has been converted from one format to another
+		if ($origFilename !== $newFilename) {
+			$name = PathUtility::basename($newFilename);
+			$newProperties = array(
+				'name' => $name,
+				'extension' => strtolower(substr($name, strrpos($name, '.') + 1)),
+			);
+			$file->updateProperties($newProperties);
+
+			/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
+			$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
+			$fileIndexRepository->update($file);
 		}
-
-		/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
-		$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
-
-		// TODO: Update (does not yet support a converted file type)
-		//$filename = PathUtility::basename($newFilename);
-		//$newProperties['identifier'] = preg_replace('/' . preg_quote($file->getProperty('name')) . '$/', $filename, $file->getProperty('identifier'));
-
-		$newProperties = $localDriver = $file->getStorage()->getFileInfo($file);
-		$newProperties['sha1'] = $file->getSha1();
-		$file->updateProperties($newProperties);
-		$fileIndexRepository->update($file);
-
-		/** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metaDataRepository */
-		//$metaDataRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\MetaDataRepository');
-		//$metaDataRepository->findByFile($file);
 	}
 
 	/**
@@ -103,6 +120,7 @@ class FAL {
 		$basePath = GeneralUtility::getFileAbsFileName($basePath);
 		$identifier = substr($newFilename, strlen($basePath) - 1);
 
+		// TODO: check if $driver call below be replaced by $file->getStorage()->getFileInfo($file)
 		/** @var \TYPO3\CMS\Core\Resource\Driver\AbstractDriver $driver */
 		$driver = static::accessProtectedProperty($file->getStorage(), 'driver');
 
@@ -121,19 +139,22 @@ class FAL {
 			'height' => $height,
 		);
 		$file->updateProperties($newProperties);
-		static::getFileRepository()->update($file);
+
+		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
+		$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+		$fileRepository->update($file);
 
 		// CANNOT BE DONE above if file format changed
 		$newProperties = array(
 			'extension' => $file->getExtension(),
-			'sha1' => $driver->hash($file, 'sha1'),
+			'sha1' => $file->getSha1(),
 		);
 		$file->updateProperties($newProperties);
-		static::getFileRepository()->update($file);
+		$fileRepository->update($file);
 	}
 
 	/**
-	 * Creates the index entry for a given file in TYPO3 6.0 and 6.1.
+	 * Creates the index entry for a given file.
 	 *
 	 * @param \TYPO3\CMS\Core\Resource\File $file
 	 * @param string $origFilename
@@ -142,8 +163,7 @@ class FAL {
 	 * @param integer $height
 	 * @return void
 	 */
-	static protected function manuallyCreateIndex($filename, $width, $height) {
-		// Create a fresh file object
+	static protected function createIndex($filename, $width, $height) {
 		$relativePath = substr(PathUtility::dirname($filename), strlen(PATH_site));
 		$resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
 		$targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
@@ -158,13 +178,16 @@ class FAL {
 		$basePath = GeneralUtility::getFileAbsFileName($basePath);
 		$identifier = substr($filename, strlen($basePath) - 1);
 
+		// TODO: possibly create file with nearly no info and populate them with
+		// a call to $file->getStorage()->getFileInfo($file) instead of using $driver
 		/** @var \TYPO3\CMS\Core\Resource\Driver\AbstractDriver $driver */
 		$driver = static::accessProtectedProperty($targetFolder->getStorage(), 'driver');
-
-		/** @var $fileObject \TYPO3\CMS\Core\Resource\File */
 		$fileInfo = $driver->getFileInfoByIdentifier($identifier);
 		$file = $resourceFactory->createFileObject($fileInfo);
-		static::getFileRepository()->addToIndex($file);
+
+		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
+		$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+		$fileRepository->addToIndex($file);
 	}
 
 	/**
@@ -184,28 +207,6 @@ class FAL {
 		$property->setAccessible(TRUE);
 
 		return $property->getValue($object);
-	}
-
-	/**
-	 * Returns a file repository.
-	 *
-	 * @return \TYPO3\CMS\Core\Resource\FileRepository
-	 */
-	static protected function getFileRepository() {
-		static $fileRepository;
-		if ($fileRepository === NULL) {
-			$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-		}
-		return $fileRepository;
-	}
-
-	/**
-	 * Returns the database connection.
-	 *
-	 * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	static protected function getDatabaseConnection() {
-		return $GLOBALS['TYPO3_DB'];
 	}
 
 }
