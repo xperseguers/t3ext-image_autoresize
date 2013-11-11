@@ -52,12 +52,6 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	 * @return boolean TRUE if task run was successful
 	 */
 	public function execute() {
-		// Get fileadmin directory
-		$directory = PATH_site . 'fileadmin/';
-		if (!empty($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir'])) {
-			$directory = PATH_site . trim($GLOBALS['TYPO3_CONF_VARS']['BE']['fileadminDir']);
-		}
-
 		$configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
 		if (!empty($configuration)) {
 			$configuration = unserialize($configuration);
@@ -69,8 +63,28 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 		$this->imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
 		$this->imageResizer->initializeRulesets($configuration);
 
-		// Execute bach resize
-		return $this->batchResizePictures($directory);
+		$directories = $this->imageResizer->getAllDirectories();
+		$processedDirectories = array();
+
+		$success = TRUE;
+		foreach ($directories as $directory) {
+			$skip = FALSE;
+			foreach ($processedDirectories as $processedDirectory) {
+				if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
+					$skip = TRUE;
+					break;
+				}
+			}
+			if ($skip) {
+				continue;
+			}
+
+			// Execute bach resize
+			$success |= $this->batchResizePictures($directory);
+			$processedDirectories[] = $directory;
+		}
+
+		return $success;
 	}
 
 	/**

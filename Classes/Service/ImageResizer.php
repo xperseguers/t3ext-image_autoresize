@@ -246,6 +246,8 @@ class ImageResizer {
 			return;
 		}
 
+		return;
+
 		/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
 		$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
 
@@ -312,6 +314,22 @@ class ImageResizer {
 	}
 
 	/**
+	 * Returns all directories found in the various rulesets.
+	 *
+	 * @return array
+	 */
+	public function getAllDirectories() {
+		$directories = array();
+		foreach ($this->rulesets as $ruleset) {
+			$dirs = GeneralUtility::trimExplode(',', $ruleset['directories_config'], TRUE);
+			$directories = array_merge($directories, $dirs);
+		}
+		$directories = array_unique($directories);
+		asort($directories);
+		return $directories;
+	}
+
+	/**
 	 * Returns all file types found in the various rulesets.
 	 *
 	 * @return array
@@ -323,7 +341,8 @@ class ImageResizer {
 				$fileTypes = array_merge($fileTypes, $ruleset['file_types']);
 			}
 		}
-		return array_unique($fileTypes);
+		$fileTypes = array_unique($fileTypes);
+		return $fileTypes;
 	}
 
 	/**
@@ -369,10 +388,15 @@ class ImageResizer {
 					$value = GeneralUtility::trimExplode(',', $value, TRUE);
 					break;
 				case 'directories':
+					$values['directories_config'] = '';
 					$value = GeneralUtility::trimExplode(',', $value, TRUE);
 					// Sanitize name of the directories
 					foreach ($value as &$directory) {
 						$directory = rtrim($directory, '/') . '/';
+						if (!empty($values['directories_config'])) {
+							$values['directories_config'] .= ',';
+						}
+						$values['directories_config'] .= $directory;
 						$directory = $this->getDirectoryPattern($directory);
 					}
 					if (count($value) == 0) {

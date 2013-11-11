@@ -16,3 +16,6 @@ directory :file:`fileadmin/`.
 
 It is particularly useful if you let users upload images outside of TYPO3 (e.g., using FTP), thus bypassing upload
 post-processing to automatically resize them according to your rule sets.
+
+.. note::
+	The scheduler task will process each directory found in your rule sets.

@@ -50,7 +50,7 @@ class ImageUtility {
 		$extension = strtolower(substr($filename, strrpos($filename, '.') + 1));
 		$orientation = 1; // Fallback to "straight"
 		if (GeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
-			$exif = exif_read_data($filename);
+			$exif = @exif_read_data($filename);
 			if ($exif) {
 				$orientation = $exif['Orientation'];
 			}
