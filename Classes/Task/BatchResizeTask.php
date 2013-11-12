@@ -43,6 +43,13 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 
 	/**
 	 * @var string
+	 * @additionalField
+	 */
+	public $directories = '';
+
+	/**
+	 * @var string
+	 * @additionalField
 	 */
 	public $excludeDirectories = '';
 
@@ -68,7 +75,12 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 		$this->imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
 		$this->imageResizer->initializeRulesets($configuration);
 
-		$directories = $this->imageResizer->getAllDirectories();
+		if (empty($this->directories)) {
+			// Process watched directories
+			$directories = $this->imageResizer->getAllDirectories();
+		} else {
+			$directories = GeneralUtility::trimExplode(LF, $this->directories, TRUE);
+		}
 		$processedDirectories = array();
 
 		$success = TRUE;

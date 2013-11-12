@@ -43,6 +43,13 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface {
 
 	/**
+	 * Default directories (to be processed)
+	 *
+	 * @var string
+	 */
+	protected $defaultDirectories = '';
+
+	/**
 	 * Default exclude directories
 	 *
 	 * @var string
@@ -50,7 +57,7 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 	protected $defaultExcludeDirectories = '';
 
 	/**
-	 * Add a text area input field for excluding directories.
+	 * Adds text area input fields for choosing directories to be processed and excluding directories.
 	 *
 	 * @param array $taskInfo Reference to the array containing the info used in the add/edit form
 	 * @param object $task When editing, reference to the current task object. Null when adding.
@@ -59,6 +66,13 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 	 */
 	public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject) {
 		// Initialize selected fields
+		if (!isset($taskInfo['scheduler_batchResize_directories'])) {
+			$taskInfo['scheduler_batchResize_directories'] = $this->defaultDirectories;
+			if ($parentObject->CMD === 'edit') {
+				/** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
+				$taskInfo['scheduler_batchResize_directories'] = $task->directories;
+			}
+		}
 		if (!isset($taskInfo['scheduler_batchResize_excludeDirectories'])) {
 			$taskInfo['scheduler_batchResize_excludeDirectories'] = $this->defaultExcludeDirectories;
 			if ($parentObject->CMD === 'edit') {
@@ -66,14 +80,30 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 				$taskInfo['scheduler_batchResize_excludeDirectories'] = $task->excludeDirectories;
 			}
 		}
+
+		// Create HTML form fields
+		$additionalFields = array();
+
+		// Directories to be processed
+		$fieldName = 'tx_scheduler[scheduler_batchResize_directories]';
+		$fieldId = 'scheduler_batchResize_directories';
+		$fieldValue = trim($taskInfo['scheduler_batchResize_directories']);
+		$fieldHtml = '<textarea rows="4" cols="30" name="' . $fieldName . '" id="' . $fieldId . '">' . htmlspecialchars($fieldValue) . '</textarea>';
+		$additionalFields[$fieldId] = array(
+			'code' => $fieldHtml,
+			'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:label.batchResize.directories',
+		);
+
+		// Directories to be excluded
 		$fieldName = 'tx_scheduler[scheduler_batchResize_excludeDirectories]';
 		$fieldId = 'scheduler_batchResize_excludeDirectories';
 		$fieldValue = trim($taskInfo['scheduler_batchResize_excludeDirectories']);
-		$fieldHtml = '<textarea rows="5" cols="30" name="' . $fieldName . '" id="' . $fieldId . '">' . htmlspecialchars($fieldValue) . '</textarea>';
+		$fieldHtml = '<textarea rows="4" cols="30" name="' . $fieldName . '" id="' . $fieldId . '">' . htmlspecialchars($fieldValue) . '</textarea>';
 		$additionalFields[$fieldId] = array(
 			'code' => $fieldHtml,
 			'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:label.batchResize.excludeDirectories',
 		);
+
 		return $additionalFields;
 	}
 
@@ -88,6 +118,15 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 		$result = TRUE;
 
 		// Check for valid directories
+		$directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_directories'], TRUE);
+		foreach ($directories as $directory) {
+			$absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
+			if (!@is_dir($absoluteDirectory)) {
+				$result = FALSE;
+				$parentObject->addMessage(sprintf($GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidDirectories'), $directory), \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+			}
+		}
+
 		$directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_excludeDirectories'], TRUE);
 		foreach ($directories as $directory) {
 			$absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
@@ -109,6 +148,7 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 	 */
 	public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task) {
 		/** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
+		$task->directories = trim($submittedData['scheduler_batchResize_directories']);
 		$task->excludeDirectories = trim($submittedData['scheduler_batchResize_excludeDirectories']);
 	}
 

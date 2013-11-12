@@ -40,15 +40,23 @@ that weights only a few KB, why should we bother?
 Screenshots
 -----------
 
-General configuration settings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configuration settings
+^^^^^^^^^^^^^^^^^^^^^^
+
+The following two figures :ref:`figure-general-configuration` and :ref:`figure-general-options` show how an administrator
+may easily configure rules to resize uploaded images.
+
+.. _figure-general-configuration:
 
 .. figure:: ../Images/general-configuration.png
 	:alt: Overview of the general configuration panel
 
+	General configuration options to resize uploaded images
 
-General options
-^^^^^^^^^^^^^^^
+
+.. _figure-general-options:
 
 .. figure:: ../Images/general-options.png
 	:alt: Overview of the general options panel
+
+	Additional options and conversion of image format
