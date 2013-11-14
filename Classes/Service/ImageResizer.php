@@ -193,6 +193,10 @@ class ImageResizer {
 		}
 
 		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options, TRUE);
+		if (filesize($tempFileInfo[3]) >= filesize($filename) - 10240 && $destExtension === $fileExtension) {
+			// Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
+			$tempFileInfo = NULL;
+		}
 		if ($tempFileInfo) {
 			// Replace original file
 			@unlink($filename);
