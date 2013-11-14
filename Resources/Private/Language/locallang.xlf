@@ -45,6 +45,9 @@
 			<trans-unit id="message.imageResizedAndRenamed" xml:space="preserve">
 				<source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
 			</trans-unit>
+			<trans-unit id="message.imageNotWritable" xml:space="preserve">
+				<source>Image %s cannot be resized because file is not writable.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

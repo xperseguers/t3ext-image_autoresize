@@ -20,6 +20,7 @@
 			<label index="message.imageTransparent">Image %s has not been resized because transparency has been detected.</label>
 			<label index="message.imageResized">Image %s has been automatically resized to %sx%s pixels.</label>
 			<label index="message.imageResizedAndRenamed">Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</label>
+			<label index="message.imageNotWritable">Image %s cannot be resized because file is not writable.</label>
 		</languageKey>
 	</data>
 </T3locallang>

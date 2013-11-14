@@ -134,6 +134,14 @@ class ImageResizer {
 				return $filename;
 			}
 		}
+		if (!is_writable($filename)) {
+			$message = sprintf(
+				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageNotWritable'),
+				$relFilename
+			);
+			$this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+			return $filename;
+		}
 
 		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
 			// File format will be converted

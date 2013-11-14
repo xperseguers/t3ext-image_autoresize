@@ -179,6 +179,16 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	 * @internal This method is public only to be callable from a callback
 	 */
 	public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
+		static $numberOfValidNotifications = 0;
+
+		if ($severity <= \TYPO3\CMS\Core\Messaging\FlashMessage::OK || \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
+			$numberOfValidNotifications++;
+			if ($numberOfValidNotifications > 20) {
+				// Do not show more "ok" messages
+				return;
+			}
+		}
+
 		$flashMessage = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
