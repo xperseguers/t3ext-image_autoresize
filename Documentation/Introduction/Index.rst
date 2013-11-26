@@ -60,3 +60,19 @@ may easily configure rules to resize uploaded images.
 	:alt: Overview of the general options panel
 
 	Additional options and conversion of image format
+
+
+.. _screencast:
+
+Screencast
+----------
+
+The team from `jweiland.net <http://jweiland.net/>`_ prepared a screencast showing how to install and configure this
+extension in your TYPO3 website:
+
+.. figure:: ../Images/screencast-jweiland.jpg
+	:alt: Bilder automatisch verkleinern
+
+	Screencast available on http://jweiland.net/typo3-hosting/service/video-anleitungen/typo3-extensions/image-autoresize.html
+
+Thanks a lot for providing this online resource to the community.
