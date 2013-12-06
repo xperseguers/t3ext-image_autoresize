@@ -52,9 +52,10 @@ class FAL {
 	 * @param string $newFilename
 	 * @param integer $width
 	 * @param integer $height
+	 * @param array $metadata EXIF metadata
 	 * @return void
 	 */
-	static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
+	static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height, array $metadata = array()) {
 		if ($file === NULL) {
 			$file = static::findExistingFile($origFilename);
 		}
@@ -63,7 +64,7 @@ class FAL {
 				// TYPO3 6.0 and 6.1: No new indexer
 				static::manuallyUpdateIndex($file, $origFilename, $newFilename, $width, $height);
 			} else {
-				static::updateIndex($file, $origFilename, $newFilename, $width, $height);
+				static::updateIndex($file, $origFilename, $newFilename, $width, $height, $metadata);
 			}
 		} else {
 			static::createIndex($newFilename, $width, $height);
@@ -114,9 +115,10 @@ class FAL {
 	 * @param string $newFilename
 	 * @param integer $width
 	 * @param integer $height
+	 * @param array $metadata EXIF metadata
 	 * @return void
 	 */
-	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
+	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height, array $metadata = array()) {
 		$storageConfiguration = $file->getStorage()->getConfiguration();
 		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
 		$basePath = GeneralUtility::getFileAbsFileName($basePath);
@@ -140,6 +142,65 @@ class FAL {
 			/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
 			$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
 			$fileIndexRepository->update($file);
+		}
+
+		if (count($metadata) > 0) {
+			/** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
+			$metadataRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\MetaDataRepository');
+			// Will take care of creating the record if it does not exist yet
+			$currentMetadata = $metadataRepository->findByFile($file);
+			$newMetadata = array(
+				'unit' => 'px',
+			);
+			$mapping = array(
+				//'caption' => '',
+				'color_space' => 'ColorSpace',
+				'content_creation_date' => 'DateTimeOriginal',
+				//'content_modification_time' => '',
+				'creator' => 'IPTCCreator',
+				'creator_tool' => 'Model|Make|Software',
+				'description' => 'ImageDescription',
+				'keywords' => 'IPTCKeywords',
+				'latitude' => 'GPSLatitudeDecimal',
+				'longitude' => 'GPSLongitudeDecimal',
+				'location_city' => 'IPTCCity',
+				'location_country' => 'IPTCCountry',
+				'location_region' => 'IPTCRegion',
+				'note' => 'IPTCLocation',
+				'publisher' => 'IPTCCredit',
+				//'ranking' => '',
+				'source' => 'IPTCSource',
+				//'status' => '',
+				'title' => 'IPTCTitle',
+			);
+			foreach ($mapping as $falKey => $metadataKeyMapping) {
+				$metatadaKeys = explode('|', $metadataKeyMapping);
+				foreach ($metatadaKeys as $metadataKey) {
+					$value = NULL;
+					if (isset($metadata[$metadataKey])) {
+						$value = trim($metadata[$metadataKey]);
+						if (ord($value) === 1) $value = NULL;
+						switch ($metadataKey) {
+							case 'ColorSpace':
+								if ($value == 1) {
+									$value = 'RGB';
+								} else {
+									// Unknown
+									$value = NULL;
+								}
+							break;
+							case 'DateTimeOriginal':
+								$value = strtotime($value);
+							break;
+						}
+					}
+					if (!empty($value)) {
+						$newMetadata[$falKey] = $value;
+						break;
+					}
+				}
+			}
+			$metadataRepository->update($file->getUid(), $newMetadata);
 		}
 	}
 

@@ -167,6 +167,7 @@ class ImageResizer {
 		$gifCreator->absPrefix = PATH_site;
 
 		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
+		$metadata = ImageUtility::getMetadata($filename);
 		$isRotated = FALSE;
 
 		if ($ruleset['auto_orient'] === '1') {
@@ -214,7 +215,7 @@ class ImageResizer {
 				);
 			}
 
-			\Causal\ImageAutoresize\Utility\FAL::indexFile($file, $filename, $destFilename, $tempFileInfo[0], $tempFileInfo[1]);
+			\Causal\ImageAutoresize\Utility\FAL::indexFile($file, $filename, $destFilename, $tempFileInfo[0], $tempFileInfo[1], $metadata);
 
 			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
 				ImageUtility::resetOrientation($destFilename);
