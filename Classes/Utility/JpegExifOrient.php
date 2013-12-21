@@ -86,9 +86,12 @@ class JpegExifOrient {
 		}
 
 		// Read file head, check for JPEG SOI + JFIF/Exif APP1
-		for ($i = 0; $i < 4; $i++) $exif_data[$i] = self::read_1_byte($fh);
+		for ($i = 0; $i < 4; $i++) {
+			$exif_data[$i] = self::read_1_byte($fh);
+		}
 		if ($exif_data[0] !== 0xFF ||
 			$exif_data[1] !== 0xD8) {
+			// Do nothing?
 		}
 
 		// JFIF segment: http://en.wikipedia.org/wiki/JPEG_File_Interchange_Format#JFIF_segment_format
@@ -103,7 +106,9 @@ class JpegExifOrient {
 			}
 			$length -= 8;
 			// Read JFIF head, check for "JFIF"
-			for ($i = 0; $i < 5; $i++) $exif_data[$i] = self::read_1_byte($fh);
+			for ($i = 0; $i < 5; $i++) {
+				$exif_data[$i] = self::read_1_byte($fh);
+			}
 			if ($exif_data[0] !== 0x4A ||
 				$exif_data[1] !== 0x46 ||
 				$exif_data[2] !== 0x49 ||
@@ -112,7 +117,9 @@ class JpegExifOrient {
 				return;
 			}
 			// Read JFIF body
-			for ($i = 0; $i < $length; $i++) $exif_data[$i] = self::read_1_byte($fh);
+			for ($i = 0; $i < $length; $i++) {
+				$exif_data[$i] = self::read_1_byte($fh);
+			}
 
 			if (self::read_1_byte($fh) !== 0) {
 				// Seems there is a 0 byte to separate segments...
@@ -138,7 +145,9 @@ class JpegExifOrient {
 		}
 		$length -= 8;
 		// Read Exif head, check for "Exif"
-		for ($i = 0; $i < 6; $i++) $exif_data[$i] = self::read_1_byte($fh);
+		for ($i = 0; $i < 6; $i++) {
+			$exif_data[$i] = self::read_1_byte($fh);
+		}
 		if ($exif_data[0] !== 0x45 ||
 			$exif_data[1] !== 0x78 ||
 			$exif_data[2] !== 0x69 ||
@@ -148,7 +157,9 @@ class JpegExifOrient {
 			return;
 		}
 		// Read Exif body
-		for ($i = 0; $i < $length; $i++) $exif_data[$i] = self::read_1_byte($fh);
+		for ($i = 0; $i < $length; $i++) {
+			$exif_data[$i] = self::read_1_byte($fh);
+		}
 
 		if ($length < 12) {	// Length of an IFD entry
 			return;

@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010-2012 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2010-2013 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,7 +36,6 @@ $GLOBALS['BE_USER']->modAccess($MCONF, 1);
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
- * @version     SVN: $Id$
  */
 class tx_imageautoresize_module1 extends t3lib_SCbase {
 
@@ -83,7 +82,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		}
 
 		if (!version_compare(TYPO3_version, '4.5.99', '>')) {
-				# See bug http://forge.typo3.org/issues/31697
+			// See bug http://forge.typo3.org/issues/31697
 			$GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] = 1;
 		}
 		$this->initTCEForms();
@@ -103,7 +102,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 			$row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);
 		}
 
-			// TCE forms methods *must* be invoked before $this->doc->startPage()
+		// TCE forms methods *must* be invoked before $this->doc->startPage()
 		$wizard = $this->tceforms->printNeededJSFunctions_top();
 		$wizard .= $this->buildForm($row);
 		$wizard .= $this->tceforms->printNeededJSFunctions();
@@ -135,7 +134,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$this->content .= $this->doc->spacer(5);
 		$this->content .= '<input type="submit" value="Save Configuration" />';
 
-			// Shortcut
+		// Shortcut
 		if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
 			$this->content .= $this->doc->spacer(20) . $this->doc->section('', $this->doc->makeShortcutIcon('id', implode(',', array_keys($this->MOD_MENU)), $this->MCONF['name']));
 		}
@@ -275,18 +274,6 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 * @return boolean
 	 */
 	protected function writeToLocalconf($key, array $config) {
-		//$instObj = t3lib_div::makeInstance('tx_install');
-		//$instObj->allowUpdateLocalConf = 1;
-		//$instObj->updateIdentity = 'TYPO3 Core Update Manager';
-		//$lines = $instObj->writeToLocalconf_control();
-		//$instObj->setValueInLocalconfFile($lines, $key, $value, FALSE);
-		//$result = $instObj->writeToLocalconf_control($lines);
-		//if ($result !== 'nochange') {
-		//	$this->config = $newConfig;
-		//	t3lib_extMgm::removeCacheFiles();
-		//}
-		//$instObj = null;
-
 		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
 			/** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
 			$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
