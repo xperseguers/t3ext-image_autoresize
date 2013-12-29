@@ -77,6 +77,11 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 * @return string HTML wizard
 	 */
 	public function main() {
+		// Access check!
+		// The page will show only if there is a valid page and if this page may be viewed by the user
+		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id, $this->perms_clause);
+		$access = is_array($this->pageinfo) ? TRUE : FALSE;
+
 		if (t3lib_div::_GP('form_submitted')) {
 			$this->processData();
 		}
@@ -88,13 +93,42 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$this->initTCEForms();
 		if (version_compare(TYPO3_version, '6.1.0', '>=')) {
 			$this->doc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
-			$this->doc->divClass = 'typo3-noDoc';
 		} else {
-			$this->doc = t3lib_div::makeInstance('noDoc');
+			$this->doc = t3lib_div::makeInstance('template');
 		}
+		$this->doc->setModuleTemplate(t3lib_extMgm::extPath($this->extKey) . 'mod1/mod_template.html');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
-		$this->doc->form = '<form action="" method="post" name="' . $this->tceforms->formName . '">';
+		$docHeaderButtons = $this->getButtons();
 
+		if (($this->id && $access) || ($GLOBALS['BE_USER']->user['admin'] && !$this->id)) {
+			$this->doc->form = '<form action="" method="post" name="' . $this->tceforms->formName . '">';
+
+			// Render content:
+			$this->moduleContent();
+		} else {
+			// If no access or if ID == zero
+			$docHeaderButtons['save'] = '';
+			$this->content .= $this->doc->spacer(10);
+		}
+
+		// Compile document
+		$markers['FUNC_MENU'] = '';
+		$markers['CONTENT'] = $this->content;
+		$this->content = '';
+
+		// Build the <body> for the module
+		$this->content .= $this->doc->startPage($GLOBALS['LANG']->getLL('title'));
+		$this->content .= $this->doc->moduleBody($this->pageinfo, $docHeaderButtons, $markers);
+		$this->content .= $this->doc->endPage();
+		$this->content = $this->doc->insertStylesAndJS($this->content);
+	}
+
+	/**
+	 * Generates the module content.
+	 *
+	 * @return void
+	 */
+	protected function moduleContent() {
 		$row = $this->config;
 		if ($row['rulesets']) {
 			/** @var $flexObj t3lib_flexformtools */
@@ -106,8 +140,6 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$wizard = $this->tceforms->printNeededJSFunctions_top();
 		$wizard .= $this->buildForm($row);
 		$wizard .= $this->tceforms->printNeededJSFunctions();
-
-		$this->content .= $this->doc->startPage($GLOBALS['LANG']->getLL('title'));
 
 		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
 			// Compatibility code for people upgrading from version 1.3.0
@@ -129,17 +161,34 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 
 		$this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
 		$this->content .= $this->doc->spacer(5);
-
 		$this->content .= $wizard;
 		$this->content .= $this->doc->spacer(5);
-		$this->content .= '<input type="submit" value="Save Configuration" />';
+	}
+
+	/**
+	 * Creates the panel of buttons for submitting the form or otherwise perform operations.
+	 *
+	 * @return array All available buttons as an assoc.
+	 */
+	protected function getButtons() {
+		$buttons = array(
+			'csh' => '',
+			'shortcut' => '',
+			'save' => ''
+		);
+
+		// CSH
+		$buttons['csh'] = t3lib_BEfunc::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
+
+		// SAVE button
+		$buttons['save'] = '<input type="image" class="c-inputButton" name="submit" value="Update"' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/savedok.gif', '') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />';
 
 		// Shortcut
 		if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
-			$this->content .= $this->doc->spacer(20) . $this->doc->section('', $this->doc->makeShortcutIcon('id', implode(',', array_keys($this->MOD_MENU)), $this->MCONF['name']));
+			$buttons['shortcut'] = $this->doc->makeShortcutIcon('', 'function', $this->MCONF['name']);
 		}
 
-		$this->content .= $this->doc->spacer(10);
+		return $buttons;
 	}
 
 	/**
@@ -148,7 +197,6 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 * @return string HTML output
 	 */
 	public function printContent() {
-		$this->content .= $this->doc->endPage();
 		echo $this->content;
 	}
 

@@ -3,6 +3,9 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize">
 		<header/>
 		<body>
+			<trans-unit id="saveConfiguration" xml:space="preserve">
+				<source>Save Configuration</source>
+			</trans-unit>
 			<trans-unit id="extension.ai" xml:space="preserve">
 				<source>.ai - Adobe Illustrator</source>
 			</trans-unit>
