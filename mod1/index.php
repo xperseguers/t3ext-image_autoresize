@@ -141,11 +141,12 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$wizard .= $this->buildForm($row);
 		$wizard .= $this->tceforms->printNeededJSFunctions();
 
-		if (version_compare(TYPO3_version, '6.0.0', '>=')) {
+		$additionalConfigurationFilename = PATH_site . 'typo3conf/AdditionalConfiguration.php';
+		if (version_compare(TYPO3_version, '6.0.0', '>=') && file_exists($additionalConfigurationFilename)) {
 			// Compatibility code for people upgrading from version 1.3.0
 			$backupConfig = $GLOBALS['TYPO3_CONF_VARS'];
 			$GLOBALS['TYPO3_CONF_VARS'] = array();
-			include(PATH_site . 'typo3conf/AdditionalConfiguration.php');
+			include($additionalConfigurationFilename);
 			if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey])) {
 				$this->content .= '
 					<div id="typo3-messages">
