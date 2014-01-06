@@ -4,7 +4,7 @@ namespace Causal\ImageAutoresize\Task;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2013-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -123,7 +123,13 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 			$absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
 			if (!@is_dir($absoluteDirectory)) {
 				$result = FALSE;
-				$parentObject->addMessage(sprintf($GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidDirectories'), $directory), \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+				$parentObject->addMessage(
+					sprintf(
+						$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidDirectories'),
+						$directory
+					),
+					\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+				);
 			}
 		}
 
@@ -132,7 +138,12 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 			$absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
 			if (!@is_dir($absoluteDirectory)) {
 				$result = FALSE;
-				$parentObject->addMessage(sprintf($GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidExcludeDirectories'), $directory), \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+				$parentObject->addMessage(
+					sprintf(
+						$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidExcludeDirectories'),
+						$directory
+					),
+					\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
 			}
 		}
 
