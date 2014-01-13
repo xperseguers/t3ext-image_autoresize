@@ -27,8 +27,8 @@ namespace Causal\ImageAutoresize\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * This is a FAL-manipulation utility.
@@ -86,7 +86,7 @@ class FAL {
 		$storageConfiguration = $targetFolder->getStorage()->getConfiguration();
 		if (isset($storageConfiguration['basePath'])) {
 			$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-			$basePath = GeneralUtility::getFileAbsFileName($basePath);
+			$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
 			$identifier = substr($filename, strlen($basePath) - 1);
 
 			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
@@ -99,7 +99,7 @@ class FAL {
 
 			if (!empty($row['uid'])) {
 				/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-				$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+				$fileRepository = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 				$file = $fileRepository->findByUid($row['uid']);
 			}
 		}
@@ -121,13 +121,13 @@ class FAL {
 	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height, array $metadata = array()) {
 		$storageConfiguration = $file->getStorage()->getConfiguration();
 		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-		$basePath = GeneralUtility::getFileAbsFileName($basePath);
+		$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
 		$identifier = substr($newFilename, strlen($basePath) - 1);
 
 		$file->setIdentifier($identifier);
 
 		/** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
-		$indexerService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
+		$indexerService = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
 		$indexerService->indexFile($file);
 
 		// Extension and name may not be correct if the file has been converted from one format to another
@@ -140,13 +140,13 @@ class FAL {
 			$file->updateProperties($newProperties);
 
 			/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
-			$fileIndexRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
+			$fileIndexRepository = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
 			$fileIndexRepository->update($file);
 		}
 
 		if (count($metadata) > 0) {
 			/** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
-			$metadataRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\MetaDataRepository');
+			$metadataRepository = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\MetaDataRepository');
 			// Will take care of creating the record if it does not exist yet
 			$currentMetadata = $metadataRepository->findByFile($file);
 			$newMetadata = array(
@@ -157,7 +157,7 @@ class FAL {
 				'color_space' => 'ColorSpace',
 				'content_creation_date' => 'DateTimeOriginal',
 				//'content_modification_time' => '',
-				'creator' => 'IPTCCreator',
+				'creator' => 'IPTCCreator|Company',
 				'creator_tool' => 'Model|Make|Software',
 				'description' => 'ImageDescription',
 				'keywords' => 'IPTCKeywords',
@@ -181,7 +181,7 @@ class FAL {
 						$value = trim($metadata[$metadataKey]);
 						if (ord($value) === 1) $value = NULL;
 						switch ($metadataKey) {
-							case 'ColorSpace':
+							case 'ColorSpace':xdebug_break();
 								if ($value == 1) {
 									$value = 'RGB';
 								} else {
@@ -217,7 +217,7 @@ class FAL {
 	static protected function manuallyUpdateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
 		$storageConfiguration = $file->getStorage()->getConfiguration();
 		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-		$basePath = GeneralUtility::getFileAbsFileName($basePath);
+		$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
 		$identifier = substr($newFilename, strlen($basePath) - 1);
 
 		// $driver call below cannot be replaced by $file->getStorage()->getFileInfo($file)
@@ -242,7 +242,7 @@ class FAL {
 		$file->updateProperties($newProperties);
 
 		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-		$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+		$fileRepository = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 		$fileRepository->update($file);
 
 		// CANNOT BE DONE above if file format changed
@@ -276,7 +276,7 @@ class FAL {
 			return;
 		}
 		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-		$basePath = GeneralUtility::getFileAbsFileName($basePath);
+		$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
 		$identifier = substr($filename, strlen($basePath) - 1);
 
 		// TODO: possibly create file with nearly no info and populate them with
@@ -287,7 +287,7 @@ class FAL {
 		$file = $resourceFactory->createFileObject($fileInfo);
 
 		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-		$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+		$fileRepository = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 		$fileRepository->addToIndex($file);
 	}
 

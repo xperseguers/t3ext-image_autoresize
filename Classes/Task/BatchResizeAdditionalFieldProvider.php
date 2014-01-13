@@ -27,7 +27,7 @@ namespace Causal\ImageAutoresize\Task;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
 
 /**
  * Additional BE fields for batch resize task.
@@ -118,9 +118,9 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 		$result = TRUE;
 
 		// Check for valid directories
-		$directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_directories'], TRUE);
+		$directories = CoreGeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_directories'], TRUE);
 		foreach ($directories as $directory) {
-			$absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
+			$absoluteDirectory = CoreGeneralUtility::getFileAbsFileName($directory);
 			if (!@is_dir($absoluteDirectory)) {
 				$result = FALSE;
 				$parentObject->addMessage(
@@ -133,9 +133,9 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 			}
 		}
 
-		$directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_excludeDirectories'], TRUE);
+		$directories = CoreGeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_excludeDirectories'], TRUE);
 		foreach ($directories as $directory) {
-			$absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
+			$absoluteDirectory = CoreGeneralUtility::getFileAbsFileName($directory);
 			if (!@is_dir($absoluteDirectory)) {
 				$result = FALSE;
 				$parentObject->addMessage(
