@@ -181,7 +181,7 @@ class FAL {
 						$value = trim($metadata[$metadataKey]);
 						if (ord($value) === 1) $value = NULL;
 						switch ($metadataKey) {
-							case 'ColorSpace':xdebug_break();
+							case 'ColorSpace':
 								if ($value == 1) {
 									$value = 'RGB';
 								} else {
