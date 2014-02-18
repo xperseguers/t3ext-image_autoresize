@@ -193,6 +193,7 @@ class ImageResizer {
 			);
 		}
 
+		$tempFileInfo = NULL;
 		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options, TRUE);
 		if (filesize($tempFileInfo[3]) >= filesize($filename) - 10240 && $destExtension === $fileExtension) {
 			// Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
@@ -205,12 +206,12 @@ class ImageResizer {
 
 			if ($filename === $destFilename) {
 				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResized'),
+					$this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResized'),
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1]
 				);
 			} else {
 				$message = sprintf(
-					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResizedAndRenamed'),
+					$this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResizedAndRenamed'),
 					$relFilename, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($destFilename)
 				);
 			}
@@ -227,6 +228,21 @@ class ImageResizer {
 			$destFilename = $filename;
 		}
 		return $destFilename;
+	}
+
+	/**
+	 * Localizes a label.
+	 *
+	 * @param string $input
+	 * @return stirng
+	 */
+	protected function localize($input) {
+		if (TYPO3_MODE === 'FE') {
+			$output = is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->sL($input) : $input;
+		} else {
+			$output = $GLOBALS['LANG']->sL($input);
+		}
+		return $output;
 	}
 
 	/**
