@@ -48,6 +48,18 @@ class ImageResizer {
 	protected $rulesets = array();
 
 	/**
+	 * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+	 */
+	protected $signalSlotDispatcher;
+
+	/**
+	 * Default constructor
+	 */
+	public function __construct() {
+		$this->signalSlotDispatcher = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+	}
+
+	/**
 	 * Initializes the hook configuration as a meaningful ordered list
 	 * of rule sets.
 	 *
@@ -200,6 +212,19 @@ class ImageResizer {
 			$tempFileInfo = NULL;
 		}
 		if ($tempFileInfo) {
+			// Signal to post-process the image
+			$this->signalSlotDispatcher->dispatch(
+				__CLASS__,
+				'afterImageResize',
+				array(
+					'operation' => ($filename === $destFilename) ? 'RESIZE' : 'RESIZE_CONVERT',
+					'source' => $filename,
+					'destination' => $tempFileInfo[3],
+					'newWidth' => &$tempFileInfo[0],
+					'newHeight' => &$tempFileInfo[1],
+				)
+			);
+
 			// Replace original file
 			@unlink($filename);
 			@rename($tempFileInfo[3], $destFilename);

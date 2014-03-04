@@ -68,6 +68,7 @@ Resize images automatically
 	Introduction/Index
 	UsersManual/Index
 	AdministratorManual/Index
+	DeveloperManual/Index
 	KnownProblems/Index
 	ToDoList/Index
 	FurtherInformation/Index

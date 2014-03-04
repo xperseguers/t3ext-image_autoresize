@@ -8,7 +8,7 @@
 
 .. _further-information:
 
-Further information
+Further Information
 ===================
 
 Do not hesitate to visit the extension's website on Forge:
