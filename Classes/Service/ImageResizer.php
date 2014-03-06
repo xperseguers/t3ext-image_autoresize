@@ -53,6 +53,11 @@ class ImageResizer {
 	protected $signalSlotDispatcher;
 
 	/**
+	 * @var array|NULL
+	 */
+	protected $lastMetadata = NULL;
+
+	/**
 	 * Default constructor
 	 */
 	public function __construct() {
@@ -108,68 +113,86 @@ class ImageResizer {
 	/**
 	 * Processes upload of a file.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
+	 * @param string $targetFileName Expected target file name, if not converted
+	 * @param string $targetDirectory
 	 * @param \TYPO3\CMS\Core\Resource\File $file
 	 * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
 	 * @param callback $callbackNotification Callback to send notification
-	 * @return string Filename that was finally written
+	 * @return string File name that was finally written
 	 */
-	public function processFile($filename, \TYPO3\CMS\Core\Resource\File $file = NULL, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL, $callbackNotification = NULL) {
-		$ruleset = $this->getRuleset($filename, $backendUser);
+	public function processFile($fileName, $targetFileName = '', $targetDirectory = '', \TYPO3\CMS\Core\Resource\File $file = NULL, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL, $callbackNotification = NULL) {
+		$this->lastMetadata = NULL;
+
+		if (!(empty($targetFileName) && empty($targetDirectory))) {
+			$targetDirectory = rtrim($targetDirectory, '/') . '/';
+			$ruleset = $this->getRuleset($fileName, $targetDirectory . $targetFileName, $backendUser);
+		} else {
+			$ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
+		}
 
 		if (count($ruleset) == 0)  {
 			// File does not match any rule set
-			return $filename;
+			return $fileName;
 		}
 
 		if ($backendUser === NULL && count($ruleset['usergroup']) > 0) {
 			// Rule set is targeting some user group but we have no backend user (scheduler task)
 			// so we should skip this file altogether
-			return $filename;
+			return $fileName;
 		}
 
-		// Make filename relative and extract the extension
-		$relFilename = substr($filename, strlen(PATH_site));
-		if (($dotPosition = strrpos($filename, '.')) === FALSE) {
-			// File has no extension
-			return $filename;
+		// Make file name relative, store as $targetFileName
+		if (empty($targetFileName)) {
+			$targetFileName = substr($fileName, strlen(PATH_site));
 		}
-		$fileExtension = strtolower(substr($filename, $dotPosition + 1));
+
+		// Extract the extension
+		if (($dotPosition = strrpos($fileName, '.')) === FALSE) {
+			// File has no extension
+			return $fileName;
+		}
+		$fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
 		if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
-			if (ImageUtility::isTransparentPng($filename)) {
+			if (ImageUtility::isTransparentPng($fileName)) {
 				$message = sprintf(
 					$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageTransparent'),
-					$relFilename
+					$targetFileName
 				);
 				$this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
-				return $filename;
+				return $fileName;
 			}
 		}
-		if (!is_writable($filename)) {
+		if (!is_writable($fileName)) {
 			$message = sprintf(
 				$GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageNotWritable'),
-				$relFilename
+				$targetFileName
 			);
 			$this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
-			return $filename;
+			return $fileName;
 		}
 
 		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
 			// File format will be converted
 			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
-			$destDirectory = PathUtility::dirname($filename);
-			$destFilename = PathUtility::basename(substr($filename, 0, strlen($filename) - strlen($fileExtension)) . $destExtension);
+			$destDirectory = PathUtility::dirname($fileName);
+			$destFileName = PathUtility::basename(substr($fileName, 0, strlen($fileName) - strlen($fileExtension)) . $destExtension);
 
-			// Ensures $destFilename does not yet exist, otherwise make it unique!
-			/* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
-			$fileFunc = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
-
-			$destFilename = $fileFunc->getUniqueName($destFilename, $destDirectory);
+			if (empty($targetDirectory)) {
+				// Ensures $destFileName does not yet exist, otherwise make it unique!
+				/* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
+				$fileFunc = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
+				$destFileName = $fileFunc->getUniqueName($destFileName, $destDirectory);
+				$targetDestFileName = $destFileName;
+			} else {
+				$destFileName = $destDirectory . '/' . $destFileName;
+				$targetDestFileName = $targetDirectory . PathUtility::basename(substr($targetFileName, 0, strlen($targetFileName) - strlen($fileExtension)) . $destExtension);
+			}
 		} else {
 			// File format stays the same
 			$destExtension = $fileExtension;
-			$destFilename = $filename;
+			$destFileName = $fileName;
 		}
 
 		// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
@@ -179,11 +202,12 @@ class ImageResizer {
 		$gifCreator->absPrefix = PATH_site;
 
 		$imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
-		$metadata = ImageUtility::getMetadata($filename);
+		$metadata = ImageUtility::getMetadata($fileName);
+		$this->lastMetadata = $metadata;
 		$isRotated = FALSE;
 
 		if ($ruleset['auto_orient'] === '1') {
-			$orientation = ImageUtility::getOrientation($filename);
+			$orientation = ImageUtility::getOrientation($fileName);
 			$isRotated = ImageUtility::isRotated($orientation);
 			$transformation = ImageUtility::getTransformation($orientation);
 			if ($transformation !== '') {
@@ -206,8 +230,8 @@ class ImageResizer {
 		}
 
 		$tempFileInfo = NULL;
-		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options, TRUE);
-		if (filesize($tempFileInfo[3]) >= filesize($filename) - 10240 && $destExtension === $fileExtension) {
+		$tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, TRUE);
+		if (filesize($tempFileInfo[3]) >= filesize($fileName) - 10240 && $destExtension === $fileExtension) {
 			// Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
 			$tempFileInfo = NULL;
 		}
@@ -217,8 +241,8 @@ class ImageResizer {
 				__CLASS__,
 				'afterImageResize',
 				array(
-					'operation' => ($filename === $destFilename) ? 'RESIZE' : 'RESIZE_CONVERT',
-					'source' => $filename,
+					'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
+					'source' => $fileName,
 					'destination' => $tempFileInfo[3],
 					'newWidth' => &$tempFileInfo[0],
 					'newHeight' => &$tempFileInfo[1],
@@ -226,33 +250,49 @@ class ImageResizer {
 			);
 
 			// Replace original file
-			@unlink($filename);
-			@rename($tempFileInfo[3], $destFilename);
+			@unlink($fileName);
+			@rename($tempFileInfo[3], $destFileName);
 
-			if ($filename === $destFilename) {
+			if ($fileName === $destFileName) {
 				$message = sprintf(
 					$this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResized'),
-					$relFilename, $tempFileInfo[0], $tempFileInfo[1]
+					$targetFileName, $tempFileInfo[0], $tempFileInfo[1]
 				);
 			} else {
 				$message = sprintf(
 					$this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResizedAndRenamed'),
-					$relFilename, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($destFilename)
+					$targetFileName, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($targetDestFileName)
 				);
 			}
 
-			\Causal\ImageAutoresize\Utility\FAL::indexFile($file, $filename, $destFilename, $tempFileInfo[0], $tempFileInfo[1], $metadata);
+			// Indexation in TYPO3 6.2 is using another signal, after the file
+			// has been actually uploaded
+			if (version_compare(TYPO3_version, '6.1.99', '<=')) {
+				\Causal\ImageAutoresize\Utility\FAL::indexFile($file, $fileName, $destFileName, $tempFileInfo[0], $tempFileInfo[1], $metadata);
+			} else {
+				$this->lastMetadata['COMPUTED']['Width'] = $tempFileInfo[0];
+				$this->lastMetadata['COMPUTED']['Height'] = $tempFileInfo[1];
+			}
 
 			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
-				ImageUtility::resetOrientation($destFilename);
+				ImageUtility::resetOrientation($destFileName);
 			}
 
 			$this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
 		} else {
 			// Destination file was not written
-			$destFilename = $filename;
+			$destFileName = $fileName;
 		}
-		return $destFilename;
+		return $destFileName;
+	}
+
+	/**
+	 * Returns the last extracted metadata.
+	 *
+	 * @return array|NULL
+	 */
+	public function getLastMetadata() {
+		return $this->lastMetadata;
 	}
 
 	/**
@@ -288,20 +328,21 @@ class ImageResizer {
 	 * Returns the rule set that applies to a given file for a given backend user (or NULL
 	 * if using scheduler task).
 	 *
-	 * @param string $filename
+	 * @param string $sourceFileName
+	 * @param string $targetFileName
 	 * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
 	 * @return array
 	 */
-	protected function getRuleset($filename, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL) {
+	protected function getRuleset($sourceFileName, $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL) {
 		$ret = array();
-		if (!is_file($filename)) {
+		if (!is_file($sourceFileName)) {
 			// Early return
 			return $ret;
 		}
 
-		// Make filename relative and extract the extension
-		$relFilename = substr($filename, strlen(PATH_site));
-		$fileExtension = strtolower(substr($filename, strrpos($filename, '.') + 1));
+		// Make file name relative and extract the extension
+		$relTargetFileName = substr($targetFileName, strlen(PATH_site));
+		$fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
 		$beGroups = $backendUser !== NULL ? array_keys($GLOBALS['BE_USER']->userGroups) : array();
 
@@ -320,10 +361,10 @@ class ImageResizer {
 			}
 			$processFile = FALSE;
 			foreach ($ruleset['directories'] as $directoryPattern) {
-				$processFile |= preg_match($directoryPattern, $relFilename);
+				$processFile |= preg_match($directoryPattern, $relTargetFileName);
 			}
 			$processFile &= CoreGeneralUtility::inArray($ruleset['file_types'], $fileExtension);
-			$processFile &= (filesize($filename) > $ruleset['threshold']);
+			$processFile &= (filesize($sourceFileName) > $ruleset['threshold']);
 			if ($processFile) {
 				$ret = $ruleset;
 				break;

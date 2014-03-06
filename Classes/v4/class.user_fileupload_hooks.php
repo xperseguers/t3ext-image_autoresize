@@ -63,12 +63,12 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 	/**
 	 * Post processes upload of a picture and makes sure it is not too big.
 	 *
-	 * @param string $filename The uploaded file
+	 * @param string $fileName The uploaded file
 	 * @param t3lib_TCEmain $parentObject
 	 * @return void
 	 */
-	public function processUpload_postProcessAction(&$filename, t3lib_TCEmain $parentObject) {
-		$filename = $this->processFile($filename);
+	public function processUpload_postProcessAction(&$fileName, t3lib_TCEmain $parentObject) {
+		$fileName = $this->processFile($fileName);
 	}
 
 	/**

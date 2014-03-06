@@ -31,8 +31,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
 /**
- * This class extends t3lib_extFileFunctions and hooks into DAM to
- * automatically resize huge pictures upon upload.
+ * This class extends t3lib_extFileFunctions and hooks into DAM to automatically
+ * resize huge pictures upon upload.
+ * It is used by TYPO3 6.0 and TYPO 6.1, TYPO3 6.2 is using a signal instead.
  *
  * @category    Hook
  * @package     TYPO3
@@ -71,13 +72,15 @@ class FileUploadHook implements
 	/**
 	 * Post processes upload of a picture and makes sure it is not too big.
 	 *
-	 * @param string $filename The uploaded file
+	 * @param string $fileName The uploaded file
 	 * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject The parent object
 	 * @return void
 	 */
-	public function processUpload_postProcessAction(&$filename, \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject) {
-		$filename = $this->imageResizer->processFile(
-			$filename,
+	public function processUpload_postProcessAction(&$fileName, \TYPO3\CMS\Core\DataHandling\DataHandler $parentObject) {
+		$fileName = $this->imageResizer->processFile(
+			$fileName,
+			'',	// target file name
+			'',	// target directory
 			NULL,
 			$GLOBALS['BE_USER'],
 			array($this, 'notify')
@@ -105,10 +108,12 @@ class FileUploadHook implements
 				$storageConfiguration = $file->getStorage()->getConfiguration();
 				$storageRecord = $file->getStorage()->getStorageRecord();
 				if ($storageRecord['driver'] === 'Local') {
-					$filename = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
-					$filename .= rtrim($storageConfiguration['basePath'], '/') . $file->getIdentifier();
+					$fileName = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+					$fileName .= rtrim($storageConfiguration['basePath'], '/') . $file->getIdentifier();
 					$this->imageResizer->processFile(
-						$filename,
+						$fileName,
+						'',	// target file name
+						'',	// target directory
 						$file,
 						$GLOBALS['BE_USER'],
 						array($this, 'notify')
@@ -128,10 +133,12 @@ class FileUploadHook implements
 	 */
 	public function filePostTrigger($action, $data) {
 		if ($action === 'upload' && is_array($data)) {
-			$filename = $data['target_file'];
-			if (is_file($filename)) {
+			$fileName = $data['target_file'];
+			if (is_file($fileName)) {
 				$this->imageResizer->processFile(
-					$filename,
+					$fileName,
+					'',	// target file name
+					'',	// target directory
 					NULL,
 					$GLOBALS['BE_USER'],
 					array($this, 'notify')

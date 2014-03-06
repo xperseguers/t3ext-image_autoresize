@@ -155,6 +155,8 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 					if (in_array($fileExtension, $allFileTypes)) {
 						$this->imageResizer->processFile(
 							$fileName,
+							'',	// target file name
+							'',	// target directory
 							NULL,
 							$backendUser,
 							$callbackNotification

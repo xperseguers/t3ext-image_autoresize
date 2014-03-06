@@ -48,38 +48,38 @@ class FAL {
 	 * Creates/updates the index entry for a given file.
 	 *
 	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $origFilename
-	 * @param string $newFilename
+	 * @param string $origFileName
+	 * @param string $newFileName
 	 * @param integer $width
 	 * @param integer $height
 	 * @param array $metadata EXIF metadata
 	 * @return void
 	 */
-	static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height, array $metadata = array()) {
+	static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFileName, $newFileName, $width, $height, array $metadata = array()) {
 		if ($file === NULL) {
-			$file = static::findExistingFile($origFilename);
+			$file = static::findExistingFile($origFileName);
 		}
 		if ($file !== NULL) {
 			if (version_compare(TYPO3_version, '6.1.99', '<=')) {
 				// TYPO3 6.0 and 6.1: No new indexer
-				static::manuallyUpdateIndex($file, $origFilename, $newFilename, $width, $height);
+				static::manuallyUpdateIndex($file, $origFileName, $newFileName, $width, $height);
 			} else {
-				static::updateIndex($file, $origFilename, $newFilename, $width, $height, $metadata);
+				static::updateIndex($file, $width, $height, $metadata);
 			}
 		} else {
-			static::createIndex($newFilename, $width, $height);
+			static::createIndex($newFileName, $width, $height);
 		}
 	}
 
 	/**
 	 * Finds an existing file.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
 	 * @return \TYPO3\CMS\Core\Resource\AbstractFile|NULL
 	 */
-	static protected function findExistingFile($filename) {
+	static protected function findExistingFile($fileName) {
 		$file = NULL;
-		$relativePath = substr(PathUtility::dirname($filename), strlen(PATH_site));
+		$relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
 		$resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
 		$targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
 
@@ -87,7 +87,7 @@ class FAL {
 		if (isset($storageConfiguration['basePath'])) {
 			$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
 			$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
-			$identifier = substr($filename, strlen($basePath) - 1);
+			$identifier = substr($fileName, strlen($basePath) - 1);
 
 			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
 				'uid',
@@ -111,38 +111,15 @@ class FAL {
 	 * Updates the index entry for a given file in TYPO3 >= 6.2.
 	 *
 	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $origFilename
-	 * @param string $newFilename
 	 * @param integer $width
 	 * @param integer $height
 	 * @param array $metadata EXIF metadata
 	 * @return void
 	 */
-	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height, array $metadata = array()) {
-		$storageConfiguration = $file->getStorage()->getConfiguration();
-		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-		$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
-		$identifier = substr($newFilename, strlen($basePath) - 1);
-
-		$file->setIdentifier($identifier);
-
+	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $width, $height, array $metadata = array()) {
 		/** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
 		$indexerService = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
 		$indexerService->indexFile($file);
-
-		// Extension and name may not be correct if the file has been converted from one format to another
-		if ($origFilename !== $newFilename) {
-			$name = PathUtility::basename($newFilename);
-			$newProperties = array(
-				'name' => $name,
-				'extension' => strtolower(substr($name, strrpos($name, '.') + 1)),
-			);
-			$file->updateProperties($newProperties);
-
-			/** @var \TYPO3\CMS\Core\Resource\Index\FileIndexRepository $fileIndexRepository */
-			$fileIndexRepository = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\FileIndexRepository');
-			$fileIndexRepository->update($file);
-		}
 
 		if (count($metadata) > 0) {
 			/** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
@@ -208,17 +185,17 @@ class FAL {
 	 * Updates the index entry for a given file in TYPO3 6.0 and 6.1.
 	 *
 	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $origFilename
-	 * @param string $newFilename
+	 * @param string $origFileName
+	 * @param string $newFileName
 	 * @param integer $width
 	 * @param integer $height
 	 * @return void
 	 */
-	static protected function manuallyUpdateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFilename, $newFilename, $width, $height) {
+	static protected function manuallyUpdateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFileName, $newFileName, $width, $height) {
 		$storageConfiguration = $file->getStorage()->getConfiguration();
 		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
 		$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
-		$identifier = substr($newFilename, strlen($basePath) - 1);
+		$identifier = substr($newFileName, strlen($basePath) - 1);
 
 		// $driver call below cannot be replaced by $file->getStorage()->getFileInfo($file)
 		// when the file has been renamed (converted from one format to the other)
@@ -257,18 +234,16 @@ class FAL {
 	/**
 	 * Creates the index entry for a given file.
 	 *
-	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $origFilename
-	 * @param string $newFilename
+	 * @param string $fileName
 	 * @param integer $width
 	 * @param integer $height
 	 * @return void
 	 */
-	static protected function createIndex($filename, $width, $height) {
-		$relativePath = substr(PathUtility::dirname($filename), strlen(PATH_site));
+	static protected function createIndex($fileName, $width, $height) {
+		$relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
 		$resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
 		$targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
-		$targetFilename = PathUtility::basename($filename);
+		$targetFilename = PathUtility::basename($fileName);
 
 		$storageConfiguration = $targetFolder->getStorage()->getConfiguration();
 		if (!isset($storageConfiguration['basePath'])) {
@@ -277,7 +252,7 @@ class FAL {
 		}
 		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
 		$basePath = CoreGeneralUtility::getFileAbsFileName($basePath);
-		$identifier = substr($filename, strlen($basePath) - 1);
+		$identifier = substr($fileName, strlen($basePath) - 1);
 
 		// TODO: possibly create file with nearly no info and populate them with
 		// a call to $file->getStorage()->getFileInfo($file) instead of using $driver

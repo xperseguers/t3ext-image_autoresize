@@ -4,7 +4,7 @@ namespace Causal\ImageAutoresize\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2013-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -43,12 +43,12 @@ class ImageUtility {
 	/**
 	 * Returns the EXIF orientation of a given picture.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
 	 * @return integer
 	 */
-	static public function getOrientation($filename) {
+	static public function getOrientation($fileName) {
 		$orientation = 1; // Fallback to "straight"
-		$metadata = static::getMetadata($filename);
+		$metadata = static::getMetadata($fileName);
 		if (isset($metadata['Orientation'])) {
 			$orientation = $metadata['Orientation'];
 		}
@@ -58,14 +58,14 @@ class ImageUtility {
 	/**
 	 * Returns metadata from a given file.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
 	 * @return array
 	 */
-	static public function getMetadata($filename) {
-		$extension = strtolower(substr($filename, strrpos($filename, '.') + 1));
+	static public function getMetadata($fileName) {
+		$extension = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
 		$metadata = array();
 		if (CoreGeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
-			$exif = @exif_read_data($filename);
+			$exif = @exif_read_data($fileName);
 			if ($exif) {
 				$metadata = $exif;
 
@@ -89,7 +89,7 @@ class ImageUtility {
 			}
 			// Try to extract IPTC data
 			$imageinfo = array();
-			if (function_exists('iptcparse') && getimagesize($filename, $imageinfo)) {
+			if (function_exists('iptcparse') && getimagesize($fileName, $imageinfo)) {
 				if (isset($imageinfo['APP13'])) {
 					$data = iptcparse($imageinfo['APP13']);
 					$mapping = array(
@@ -206,28 +206,28 @@ class ImageUtility {
 	/**
 	 * Resets the EXIF orientation flag of a picture.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
 	 * @return void
 	 * @see http://sylvana.net/jpegcrop/exif_orientation.html
 	 */
-	static public function resetOrientation($filename) {
-		\Causal\ImageAutoresize\Utility\JpegExifOrient::setOrientation($filename, 1);
+	static public function resetOrientation($fileName) {
+		\Causal\ImageAutoresize\Utility\JpegExifOrient::setOrientation($fileName, 1);
 	}
 
 	/**
 	 * Returns TRUE if the given PNG file contains transparency information.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
 	 * @return boolean
 	 */
-	static public function isTransparentPng($filename) {
-		$bytes = file_get_contents($filename, FALSE, NULL, 24, 2);	// read 24th and 25th bytes
+	static public function isTransparentPng($fileName) {
+		$bytes = file_get_contents($fileName, FALSE, NULL, 24, 2);	// read 24th and 25th bytes
 		$byte24 = ord($bytes{0});
 		$byte25 = ord($bytes{1});
 		if ($byte24 === 16 || $byte25 === 6 || $byte25 === 4) {
 			return TRUE;
 		} else {
-			$content = file_get_contents($filename);
+			$content = file_get_contents($fileName);
 			return strpos($content, 'tRNS') !== FALSE;
 		}
 	}

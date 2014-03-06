@@ -72,17 +72,17 @@ class JpegExifOrient {
 	/**
 	 * Sets the Exif Orientation for a given JPG file.
 	 *
-	 * @param string $filename
+	 * @param string $fileName
 	 * @param integer $orientation
 	 * @return void
 	 * @throws \RuntimeException
 	 */
-	static public function setOrientation($filename, $orientation) {
+	static public function setOrientation($fileName, $orientation) {
 		$exif_data = array();	// Buffer
 		$offsetJfif = 0;
 
-		if (($fh = fopen($filename, 'rb+')) === FALSE) {
-			throw new \RuntimeException('Can\'t open ' . $filename, 1363533724);
+		if (($fh = fopen($fileName, 'rb+')) === FALSE) {
+			throw new \RuntimeException('Can\'t open ' . $fileName, 1363533724);
 		}
 
 		// Read file head, check for JPEG SOI + JFIF/Exif APP1
