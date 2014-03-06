@@ -124,30 +124,6 @@ class FileUploadHook implements
 	}
 
 	/**
-	 * Post-processes a file operation that has already been handled by DAM.
-	 *
-	 * @param string $action
-	 * @param array|NULL $data
-	 * @return void
-	 * @todo Test this hook with TYPO3 6.x
-	 */
-	public function filePostTrigger($action, $data) {
-		if ($action === 'upload' && is_array($data)) {
-			$fileName = $data['target_file'];
-			if (is_file($fileName)) {
-				$this->imageResizer->processFile(
-					$fileName,
-					'',	// target file name
-					'',	// target directory
-					NULL,
-					$GLOBALS['BE_USER'],
-					array($this, 'notify')
-				);
-			}
-		}
-	}
-
-	/**
 	 * Notifies the user using a Flash message.
 	 *
 	 * @param string $message The message

@@ -4,10 +4,6 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 if (version_compare(TYPO3_version, '6.0.0', '>=')) {
-
-	// Uploads when using DAM (not sure it still works, but just in case...)
-	$TYPO3_CONF_VARS['EXTCONF']['dam']['fileTriggerClasses'][] = 'Causal\\ImageAutoresize\\Hook\\FileUploadHook';
-
 	if (version_compare(TYPO3_branch, '6.2', '>=')) {
 
 		/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
