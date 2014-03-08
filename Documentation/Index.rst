@@ -24,16 +24,18 @@ Resize images automatically
 		en
 
 	:Description:
-		Simplify the way your editors may upload their pictures: no complex local procedure needed, let TYPO3 resize
-		down their huge pictures on-the-fly during upload (or using a scheduler task for batch processing) and according
-		to your own business rules (directory/groups). Features an EXIF/IPTC extractor to ensure metadata may be used by
-		the FAL indexer even if not preserved upon resizing.
+		Simplify the way your editors may upload their images: no complex local procedure needed, let TYPO3
+		automatically resize down their huge images/pictures on-the-fly during upload (or using a scheduler task for
+		batch processing) and according to your own business rules (directory/groups). This will highly reduce the
+		footprint on your server and speed-up response time if lots of images are rendered (e.g., in a gallery).
+		Features an EXIF/IPTC extractor to ensure metadata may be used by the FAL indexer even if not preserved upon
+		resizing.
 
 	:Keywords:
-		image, resize, upload
+		image, picture, resize, autoresize, auto-resize, upload, batch, exif, iptc, fal, footprint, performance
 
 	:Copyright:
-		2010-2013
+		2010-2014
 
 	:Author:
 		Xavier Perseguers
@@ -55,7 +57,7 @@ Resize images automatically
 	**Other version of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.4.0/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.5.0/_pdf/
 
 
 	**Table of Contents**
