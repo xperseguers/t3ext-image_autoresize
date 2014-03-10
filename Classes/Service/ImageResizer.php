@@ -229,9 +229,10 @@ class ImageResizer {
 			);
 		}
 
+		$originalFileSize = filesize($fileName);
 		$tempFileInfo = NULL;
 		$tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, TRUE);
-		if (filesize($tempFileInfo[3]) >= filesize($fileName) - 10240 && $destExtension === $fileExtension) {
+		if (filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
 			// Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
 			$tempFileInfo = NULL;
 		}
@@ -248,6 +249,9 @@ class ImageResizer {
 					'newHeight' => &$tempFileInfo[1],
 				)
 			);
+
+			$newFileSize = filesize($tempFileInfo[3]);
+			$this->reportAdditionalStorageClaimed($originalFileSize - $newFileSize);
 
 			// Replace original file
 			@unlink($fileName);
@@ -530,6 +534,18 @@ class ImageResizer {
 		$pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
 
 		return $pattern;
+	}
+
+	/**
+	 * Stores how many extra bytes have been freed.
+	 *
+	 * @param integer $bytes
+	 * @return void
+	 */
+	protected function reportAdditionalStorageClaimed($bytes) {
+		$fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+		$bytes += file_exists($fileName) ? (int)file_get_contents($fileName) : 0;
+		file_put_contents($fileName, $bytes);
 	}
 
 }

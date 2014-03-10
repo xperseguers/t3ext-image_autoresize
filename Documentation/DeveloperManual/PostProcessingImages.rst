@@ -22,7 +22,8 @@ Your slot should implement a method of the form:
 
 .. code-block:: php
 
-	public function postProcessImageResize($operation, $source, $destination, &$newWidth, &$newHeight) {
+	public function postProcessImageResize($operation, $source, $destination,
+	                                       &$newWidth, &$newHeight) {
 	    // Custom code
 	}
 

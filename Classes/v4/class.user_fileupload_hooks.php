@@ -185,8 +185,12 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 			);
 		}
 
+		$originalFileSize = filesize($filename);
 		$tempFileInfo = $gifCreator->imageMagickConvert($filename, $destExtension, '', '', $imParams, '', $options, TRUE);
 		if ($tempFileInfo) {
+			$newFileSize = filesize($tempFileInfo[3]);
+			$this->reportAdditionalStorageClaimed($originalFileSize - $newFileSize);
+
 			// Replace original file
 			@unlink($filename);
 			@rename($tempFileInfo[3], $destFilename);
@@ -558,4 +562,17 @@ class user_fileUpload_hooks implements t3lib_extFileFunctions_processDataHook, t
 
 		return $pattern;
 	}
+
+	/**
+	 * Stores how many extra bytes have been freed.
+	 *
+	 * @param integer $bytes
+	 * @return void
+	 */
+	protected function reportAdditionalStorageClaimed($bytes) {
+		$fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+		$bytes += file_exists($fileName) ? (int)file_get_contents($fileName) : 0;
+		file_put_contents($fileName, $bytes);
+	}
+
 }

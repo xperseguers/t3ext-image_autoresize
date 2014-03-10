@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-    <meta type="array">
-        <description>Image Autoresize</description>
-        <type>module</type>
-    </meta>
-    <data type="array">
-        <languageKey index="default" type="array">
-            <label index="title">Image Auto-Resize Configuration</label>
-        </languageKey>
-    </data>
+	<meta type="array">
+		<description>Image Autoresize</description>
+		<type>module</type>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">Image Auto-Resize Configuration</label>
+			<label index="storage.claimed">Total storage claimed:</label>
+		</languageKey>
+	</data>
 </T3locallang>

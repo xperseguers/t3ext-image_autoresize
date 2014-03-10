@@ -163,7 +163,23 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
 		$this->content .= $this->doc->spacer(5);
 		$this->content .= $wizard;
-		$this->content .= $this->doc->spacer(5);
+
+		$fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+		if (is_file($fileName)) {
+			$message = $GLOBALS['LANG']->getLL('storage.claimed');
+			$message .= ' ' . t3lib_div::formatSize((int)file_get_contents($fileName));
+
+			$this->content .= $this->doc->spacer(20);
+			$this->content .= '
+				<div id="typo3-messages">
+					<div class="typo3-message message-information">
+						<div class="message-body">
+							' . htmlspecialchars($message) . '
+						</div>
+					</div>
+				</div>
+			';
+		}
 	}
 
 	/**
