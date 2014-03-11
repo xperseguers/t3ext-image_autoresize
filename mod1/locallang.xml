@@ -7,7 +7,9 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Image Auto-Resize Configuration</label>
-			<label index="storage.claimed">Total storage claimed:</label>
+			<label index="storage.claimed">Total storage claimed: %s (with %s images)</label>
+			<label index="social.share">Share result!</label>
+			<label index="social.twitter">#image_autoresize already saved %s of free space on my #TYPO3 website</label>
 		</languageKey>
 	</data>
 </T3locallang>

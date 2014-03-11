@@ -7,7 +7,13 @@
 				<source>Image Auto-Resize Configuration</source>
 			</trans-unit>
 			<trans-unit id="storage.claimed">
-				<source>Total storage claimed:</source>
+				<source>Total storage claimed: %s (with %s images)</source>
+			</trans-unit>
+			<trans-unit id="social.share">
+				<source>Share result!</source>
+			</trans-unit>
+			<trans-unit id="social.twitter">
+				<source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
 			</trans-unit>
 		</body>
 	</file>

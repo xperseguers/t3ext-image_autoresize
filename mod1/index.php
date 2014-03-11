@@ -161,25 +161,9 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		}
 
 		$this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
+		$this->addStatisticsAndSocialLink();
 		$this->content .= $this->doc->spacer(5);
 		$this->content .= $wizard;
-
-		$fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
-		if (is_file($fileName)) {
-			$message = $GLOBALS['LANG']->getLL('storage.claimed');
-			$message .= ' ' . t3lib_div::formatSize((int)file_get_contents($fileName));
-
-			$this->content .= $this->doc->spacer(20);
-			$this->content .= '
-				<div id="typo3-messages">
-					<div class="typo3-message message-information">
-						<div class="message-body">
-							' . htmlspecialchars($message) . '
-						</div>
-					</div>
-				</div>
-			';
-		}
 	}
 
 	/**
@@ -449,6 +433,61 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		}
 
 		$settings['items'] = array_merge($settings['items'], $elements);
+	}
+
+	/**
+	 * Returns some statistics and a social link to Twitter.
+	 *
+	 * @return void
+	 */
+	protected function addStatisticsAndSocialLink() {
+		$fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+
+		if (!is_file($fileName)) {
+			return;
+		}
+
+		$data = json_decode(file_get_contents($fileName), TRUE);
+		if (!is_array($data) || !(isset($data['images']) && isset($data['bytes']))) {
+			return;
+		}
+
+		if (version_compare(TYPO3_version, '6.0.0', '<')) {
+			$this->content .= $this->doc->spacer(20);
+		}
+
+		$resourcesPath = t3lib_extMgm::extRelPath($this->extKey) . 'Resources/Public/';
+		$this->doc->getPageRenderer()->addCssFile($resourcesPath . 'Css/twitter.css');
+		$this->doc->getPageRenderer()->addJsFile($resourcesPath . 'JavaScript/popup.js');
+
+		$totalSpaceClaimed = t3lib_div::formatSize((int)$data['bytes']);
+		$messagePattern = $GLOBALS['LANG']->getLL('storage.claimed');
+		$message = sprintf($messagePattern, $totalSpaceClaimed, (int)$data['images']);
+
+		$flashMessage = htmlspecialchars($message);
+
+		$twitterMessagePattern = $GLOBALS['LANG']->getLL('social.twitter');
+		$message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
+		$url = 'http://typo3.org/extensions/repository/view/image_autoresize';
+
+		$twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
+		$twitterLink = t3lib_div::quoteJSvalue($twitterLink);
+		$flashMessage .= '
+			<div class="custom-tweet-button">
+				<a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . $GLOBALS['LANG']->getLL('social.share', TRUE) . '">
+					<i class="btn-icon"></i>
+					<span class="btn-text">Tweet</span>
+				</a>
+			</div>';
+
+		$this->content .= '
+			<div id="typo3-messages">
+				<div class="typo3-message message-information">
+					<div class="message-body">
+						' . $flashMessage . '
+					</div>
+				</div>
+			</div>';
 	}
 
 }

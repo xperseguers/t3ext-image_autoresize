@@ -544,8 +544,19 @@ class ImageResizer {
 	 */
 	protected function reportAdditionalStorageClaimed($bytes) {
 		$fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
-		$bytes += file_exists($fileName) ? (int)file_get_contents($fileName) : 0;
-		file_put_contents($fileName, $bytes);
+
+		$data = array();
+		if (file_exists($fileName)) {
+			$data = json_decode(file_get_contents($fileName), TRUE);
+			if (!is_array($data)) {
+				$data = array();
+			}
+		}
+
+		$data['bytes'] = $bytes + (isset($data['bytes']) ? (int)$data['bytes'] : 0);
+		$data['images'] = 1 + (isset($data['images']) ? (int)$data['images'] : 0);
+
+		file_put_contents($fileName, json_encode($data));
 	}
 
 }
