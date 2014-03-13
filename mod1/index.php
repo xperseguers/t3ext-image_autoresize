@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010-2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2010-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -96,7 +96,11 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		} else {
 			$this->doc = t3lib_div::makeInstance('template');
 		}
-		$this->doc->setModuleTemplate(t3lib_extMgm::extPath($this->extKey) . 'mod1/mod_template.html');
+		if (version_compare(TYPO3_branch, '6.2', '>=')) {
+			$this->doc->setModuleTemplate(t3lib_extMgm::extPath($this->extKey) . 'mod1/mod_template.html');
+		} else {
+			$this->doc->setModuleTemplate(t3lib_extMgm::extPath($this->extKey) . 'mod1/mod_template_v45-61.html');
+		}
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
 		$docHeaderButtons = $this->getButtons();
 
@@ -182,7 +186,11 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$buttons['csh'] = t3lib_BEfunc::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
 
 		// SAVE button
-		$buttons['save'] = '<input type="image" class="c-inputButton" name="submit" value="Update"' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/savedok.gif', '') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />';
+		if (version_compare(TYPO3_branch, '6.2', '>=')) {
+			$buttons['save'] = '<span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-save"><input type="image" name="submit" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '"></span>';
+		} else {
+			$buttons['save'] = '<input type="image" class="c-inputButton" name="submit" value="Update"' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/savedok.gif', '') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />';
+		}
 
 		// Shortcut
 		if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
