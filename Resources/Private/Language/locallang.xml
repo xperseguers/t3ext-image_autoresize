@@ -6,7 +6,9 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="saveConfiguration">Save Configuration</label>
+			<label index="saveConfiguration">Save configuration</label>
+			<label index="saveCloseConfiguration">Save and close configuration</label>
+			<label index="closeConfiguration">Close configuration</label>
 			<label index="extension.ai">.ai - Adobe Illustrator</label>
 			<label index="extension.bmp">.bmp - Windows OS/2 Bitmap Graphics</label>
 			<label index="extension.gif">.gif - Graphic Interchange Format</label>

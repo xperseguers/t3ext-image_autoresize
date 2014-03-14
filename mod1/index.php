@@ -26,7 +26,13 @@
  ***************************************************************/
 
 $GLOBALS['LANG']->includeLLFile('EXT:image_autoresize/mod1/locallang.xml');
-$GLOBALS['BE_USER']->modAccess($MCONF, 1);
+if (version_compare(TYPO3_branch, '6.2', '>=')) {
+	if (!$GLOBALS['BE_USER']->isAdmin()) {
+		throw new \RuntimeException('Access Error: You don\'t have access to this module.', 1294586448);
+	}
+} else {
+	$GLOBALS['BE_USER']->modAccess($MCONF, 1);
+}
 
 /**
  * Configuration module based on FlexForms.
@@ -77,11 +83,6 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 * @return string HTML wizard
 	 */
 	public function main() {
-		// Access check!
-		// The page will show only if there is a valid page and if this page may be viewed by the user
-		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id, $this->perms_clause);
-		$access = is_array($this->pageinfo) ? TRUE : FALSE;
-
 		if (t3lib_div::_GP('form_submitted')) {
 			$this->processData();
 		}
@@ -179,17 +180,30 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 		$buttons = array(
 			'csh' => '',
 			'shortcut' => '',
-			'save' => ''
+			'close' => '',
+			'save' => '',
+			'save_close' => '',
 		);
 
 		// CSH
 		$buttons['csh'] = t3lib_BEfunc::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
 
-		// SAVE button
 		if (version_compare(TYPO3_branch, '6.2', '>=')) {
-			$buttons['save'] = '<span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-save"><input type="image" name="submit" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '"></span>';
-		} else {
-			$buttons['save'] = '<input type="image" class="c-inputButton" name="submit" value="Update"' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/savedok.gif', '') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />';
+
+			// CLOSE button
+			$buttons['close'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', TRUE) . '" />'));
+
+			// SAVE button
+			$buttons['save'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />'));
+
+			// SAVE_CLOSE button
+			$buttons['save_close'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveCloseConfiguration', TRUE) . '" />'));
+
+		} else {	// TYPO3 4.5 - 6.1
+
+			// SAVE button
+			$buttons['save'] = '<input type="image" class="c-inputButton" name="_savedok"' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/savedok.gif', '') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />';
+
 		}
 
 		// Shortcut
@@ -287,6 +301,15 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	 * @return void
 	 */
 	protected function processData() {
+		$closeUrl = t3lib_BEfunc::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
+
+		$close = t3lib_div::_GP('_close_x');
+		$saveCloseDok = t3lib_div::_GP('_saveandclosedok_x');
+
+		if ($close) {
+			\TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
+		}
+
 		$table = self::virtualTable;
 		$id    = self::virtualRecordId;
 		$field = 'rulesets';
@@ -318,6 +341,10 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 
 		if ($this->writeToLocalconf($this->expertKey, $localconfConfig)) {
 			$this->config = $newConfig;
+		}
+
+		if ($saveCloseDok) {
+			\TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
 		}
 	}
 

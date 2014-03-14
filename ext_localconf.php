@@ -22,6 +22,12 @@ if (version_compare(TYPO3_version, '6.0.0', '>=')) {
 			'Causal\\ImageAutoresize\\Slots\\FileUpload',
 			'populateMetadata'
 		);
+		$signalSlotDispatcher->connect(
+			'TYPO3\\CMS\\Extensionmanager\\ViewHelpers\\ProcessAvailableActionsViewHelper',
+			'processActions',
+			'Causal\\ImageAutoresize\\Slots\\ExtensionManager',
+			'processActions'
+		);
 
 	} else { // TYPO3 6.0 and TYPO3 6.1
 

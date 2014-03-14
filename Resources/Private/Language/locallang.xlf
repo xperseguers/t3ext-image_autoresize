@@ -4,7 +4,13 @@
 		<header/>
 		<body>
 			<trans-unit id="saveConfiguration" xml:space="preserve">
-				<source>Save Configuration</source>
+				<source>Save configuration</source>
+			</trans-unit>
+			<trans-unit id="saveCloseConfiguration" xml:space="preserve">
+				<source>Save and close configuration</source>
+			</trans-unit>
+			<trans-unit id="closeConfiguration" xml:space="preserve">
+				<source>Close configuration</source>
 			</trans-unit>
 			<trans-unit id="extension.ai" xml:space="preserve">
 				<source>.ai - Adobe Illustrator</source>
