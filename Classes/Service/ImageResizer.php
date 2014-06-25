@@ -27,7 +27,7 @@ namespace Causal\ImageAutoresize\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use Causal\ImageAutoresize\Utility\ImageUtility;
 
@@ -61,7 +61,7 @@ class ImageResizer {
 	 * Default constructor
 	 */
 	public function __construct() {
-		$this->signalSlotDispatcher = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+		$this->signalSlotDispatcher = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
 	}
 
 	/**
@@ -182,7 +182,7 @@ class ImageResizer {
 			if (empty($targetDirectory)) {
 				// Ensures $destFileName does not yet exist, otherwise make it unique!
 				/* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
-				$fileFunc = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
+				$fileFunc = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
 				$destFileName = $fileFunc->getUniqueName($destFileName, $destDirectory);
 				$targetDestFileName = $destFileName;
 			} else {
@@ -197,7 +197,7 @@ class ImageResizer {
 
 		// Image is bigger than allowed, will now resize it to (hopefully) make it lighter
 		/** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
-		$gifCreator = CoreGeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
+		$gifCreator = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
 		$gifCreator->init();
 		$gifCreator->absPrefix = PATH_site;
 
@@ -367,7 +367,7 @@ class ImageResizer {
 			foreach ($ruleset['directories'] as $directoryPattern) {
 				$processFile |= preg_match($directoryPattern, $relTargetFileName);
 			}
-			$processFile &= CoreGeneralUtility::inArray($ruleset['file_types'], $fileExtension);
+			$processFile &= GeneralUtility::inArray($ruleset['file_types'], $fileExtension);
 			$processFile &= (filesize($sourceFileName) > $ruleset['threshold']);
 			if ($processFile) {
 				$ret = $ruleset;
@@ -385,7 +385,7 @@ class ImageResizer {
 	public function getAllDirectories() {
 		$directories = array();
 		foreach ($this->rulesets as $ruleset) {
-			$dirs = CoreGeneralUtility::trimExplode(',', $ruleset['directories_config'], TRUE);
+			$dirs = GeneralUtility::trimExplode(',', $ruleset['directories_config'], TRUE);
 			$directories = array_merge($directories, $dirs);
 		}
 		$directories = array_unique($directories);
@@ -416,7 +416,7 @@ class ImageResizer {
 	 * @return array
 	 */
 	protected function compileRulesets(array $rulesets) {
-		$sheets = CoreGeneralUtility::resolveAllSheetsInDS($rulesets);
+		$sheets = GeneralUtility::resolveAllSheetsInDS($rulesets);
 		$rulesets = array();
 
 		foreach ($sheets['sheets'] as $sheet) {
@@ -449,11 +449,11 @@ class ImageResizer {
 		foreach ($ruleset as $key => $value) {
 			switch ($key) {
 				case 'usergroup':
-					$value = CoreGeneralUtility::trimExplode(',', $value, TRUE);
+					$value = GeneralUtility::trimExplode(',', $value, TRUE);
 					break;
 				case 'directories':
 					$values['directories_config'] = '';
-					$value = CoreGeneralUtility::trimExplode(',', $value, TRUE);
+					$value = GeneralUtility::trimExplode(',', $value, TRUE);
 					// Sanitize name of the directories
 					foreach ($value as &$directory) {
 						$directory = rtrim($directory, '/') . '/';
@@ -469,7 +469,7 @@ class ImageResizer {
 					}
 					break;
 				case 'file_types':
-					$value = CoreGeneralUtility::trimExplode(',', $value, TRUE);
+					$value = GeneralUtility::trimExplode(',', $value, TRUE);
 					if (count($value) == 0) {
 						// Inherit configuration
 						$value = '';
@@ -490,7 +490,7 @@ class ImageResizer {
 					}
 					break;
 				case 'conversion_mapping':
-					$mapping = CoreGeneralUtility::trimExplode(',', $value, TRUE);
+					$mapping = GeneralUtility::trimExplode(',', $value, TRUE);
 					if (count($mapping) > 0) {
 						$value = $this->expandConversionMapping($mapping);
 					} else {

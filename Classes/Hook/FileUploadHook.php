@@ -27,7 +27,7 @@ namespace Causal\ImageAutoresize\Hook;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
 /**
@@ -54,7 +54,7 @@ class FileUploadHook implements
 	 * Default constructor.
 	 */
 	public function __construct() {
-		$this->imageResizer = CoreGeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
+		$this->imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
 
 		$configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
 		if (!$configuration) {
@@ -135,7 +135,7 @@ class FileUploadHook implements
 	 * @internal This method is public only to be callable from a callback
 	 */
 	public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
-		$flashMessage = CoreGeneralUtility::makeInstance(
+		$flashMessage = GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
 			'',

@@ -27,7 +27,7 @@ namespace Causal\ImageAutoresize\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This is a generic image utility.
@@ -64,7 +64,7 @@ class ImageUtility {
 	static public function getMetadata($fileName) {
 		$extension = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
 		$metadata = array();
-		if (CoreGeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
+		if (GeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
 			$exif = @exif_read_data($fileName);
 			if ($exif) {
 				$metadata = $exif;

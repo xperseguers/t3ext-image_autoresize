@@ -80,7 +80,7 @@ class tx_imageautoresize_module1 extends t3lib_SCbase {
 	/**
 	 * Renders a FlexForm configuration form.
 	 *
-	 * @return string HTML wizard
+	 * @return void
 	 */
 	public function main() {
 		if (t3lib_div::_GP('form_submitted')) {

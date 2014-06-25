@@ -27,7 +27,7 @@ namespace Causal\ImageAutoresize\Task;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Utility\GeneralUtility as CoreGeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
 /**
@@ -72,14 +72,14 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			throw new \RuntimeException('No configuration found', 1384103174);
 		}
 
-		$this->imageResizer = CoreGeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
+		$this->imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
 		$this->imageResizer->initializeRulesets($configuration);
 
 		if (empty($this->directories)) {
 			// Process watched directories
 			$directories = $this->imageResizer->getAllDirectories();
 		} else {
-			$directories = CoreGeneralUtility::trimExplode(LF, $this->directories, TRUE);
+			$directories = GeneralUtility::trimExplode(LF, $this->directories, TRUE);
 		}
 		$processedDirectories = array();
 
@@ -87,7 +87,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 		foreach ($directories as $directory) {
 			$skip = FALSE;
 			foreach ($processedDirectories as $processedDirectory) {
-				if (CoreGeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
+				if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
 					continue 2;
 				}
 			}
@@ -109,7 +109,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	 * @throws \RuntimeException
 	 */
 	protected function batchResizePictures($directory) {
-		$directory = CoreGeneralUtility::getFileAbsFileName($directory);
+		$directory = GeneralUtility::getFileAbsFileName($directory);
 		// Check if given directory exists
 		if (!@is_dir($directory)) {
 			throw new \RuntimeException('Given directory "' . $directory . '" does not exist', 1384102984);
@@ -130,7 +130,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			$callbackNotification = array($this, 'syslog');
 		}
 
-		$excludeDirectories = CoreGeneralUtility::trimExplode(LF, $this->excludeDirectories, TRUE);
+		$excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, TRUE);
 
 		$directoryContent = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
 		foreach ($directoryContent as $fileName => $file) {
@@ -141,8 +141,8 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			$skip = $name{0} === '.' || substr($filePath, -10) === '_recycler_';
 			// Skip exclude directories
 			foreach ($excludeDirectories as $excludeDirectory) {
-				$excludeDirectory = CoreGeneralUtility::getFileAbsFileName($excludeDirectory);
-				if (CoreGeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
+				$excludeDirectory = GeneralUtility::getFileAbsFileName($excludeDirectory);
+				if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
 					rtrim($excludeDirectory, '/') === $filePath) {
 					$skip = TRUE;
 					continue;
@@ -191,7 +191,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 			}
 		}
 
-		$flashMessage = CoreGeneralUtility::makeInstance(
+		$flashMessage = GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
 			'',
@@ -211,23 +211,23 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 	public function syslog($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
 		switch ($severity) {
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::NOTICE:
-				$severity = CoreGeneralUtility::SYSLOG_SEVERITY_NOTICE;
+				$severity = GeneralUtility::SYSLOG_SEVERITY_NOTICE;
 			break;
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::INFO:
-				$severity = CoreGeneralUtility::SYSLOG_SEVERITY_INFO;
+				$severity = GeneralUtility::SYSLOG_SEVERITY_INFO;
 			break;
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::OK:
-				$severity = CoreGeneralUtility::SYSLOG_SEVERITY_OK;
+				$severity = GeneralUtility::SYSLOG_SEVERITY_OK;
 			break;
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING:
-				$severity = CoreGeneralUtility::SYSLOG_SEVERITY_WARNING;
+				$severity = GeneralUtility::SYSLOG_SEVERITY_WARNING;
 			break;
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR:
-				$severity = CoreGeneralUtility::SYSLOG_SEVERITY_ERROR;
+				$severity = GeneralUtility::SYSLOG_SEVERITY_ERROR;
 			break;
 		}
 
-		CoreGeneralUtility::sysLog($message, 'image_autoresize', $severity);
+		GeneralUtility::sysLog($message, 'image_autoresize', $severity);
 	}
 
 }
