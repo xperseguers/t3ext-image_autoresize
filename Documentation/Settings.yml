@@ -6,8 +6,8 @@
 conf.py:
   copyright: 2010-2014
   project: Resize Images Automatically
-  version: 1.5
-  release: 1.5.0
+  version: 1.6
+  release: 1.6.0-dev
   latex_documents:
   - - Index
     - image_autoresize.tex
