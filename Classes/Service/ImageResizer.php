@@ -4,7 +4,7 @@ namespace Causal\ImageAutoresize\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2013-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -271,12 +271,8 @@ class ImageResizer {
 
 			// Indexation in TYPO3 6.2 is using another signal, after the file
 			// has been actually uploaded
-			if (version_compare(TYPO3_version, '6.1.99', '<=')) {
-				\Causal\ImageAutoresize\Utility\FAL::indexFile($file, $fileName, $destFileName, $tempFileInfo[0], $tempFileInfo[1], $metadata);
-			} else {
-				$this->lastMetadata['COMPUTED']['Width'] = $tempFileInfo[0];
-				$this->lastMetadata['COMPUTED']['Height'] = $tempFileInfo[1];
-			}
+			$this->lastMetadata['COMPUTED']['Width'] = $tempFileInfo[0];
+			$this->lastMetadata['COMPUTED']['Height'] = $tempFileInfo[1];
 
 			if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
 				ImageUtility::resetOrientation($destFileName);
@@ -303,7 +299,7 @@ class ImageResizer {
 	 * Localizes a label.
 	 *
 	 * @param string $input
-	 * @return stirng
+	 * @return string
 	 */
 	protected function localize($input) {
 		if (TYPO3_MODE === 'FE') {

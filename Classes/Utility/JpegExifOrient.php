@@ -4,7 +4,7 @@ namespace Causal\ImageAutoresize\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2013-2014 Xavier Perseguers <xavier@causal.ch>
  *  based on work http://sylvana.net/jpegcrop/jpegexiforient.c
  *  All rights reserved
  *

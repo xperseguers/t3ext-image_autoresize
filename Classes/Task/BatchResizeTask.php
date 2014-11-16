@@ -217,7 +217,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 				$severity = GeneralUtility::SYSLOG_SEVERITY_INFO;
 			break;
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::OK:
-				$severity = GeneralUtility::SYSLOG_SEVERITY_OK;
+				$severity = GeneralUtility::SYSLOG_SEVERITY_INFO;
 			break;
 			case \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING:
 				$severity = GeneralUtility::SYSLOG_SEVERITY_WARNING;

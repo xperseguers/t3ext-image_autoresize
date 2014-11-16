@@ -4,7 +4,7 @@ namespace Causal\ImageAutoresize\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Xavier Perseguers <xavier@causal.ch>
+ *  (c) 2013-2014 Xavier Perseguers <xavier@causal.ch>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -60,12 +60,7 @@ class FAL {
 			$file = static::findExistingFile($origFileName);
 		}
 		if ($file !== NULL) {
-			if (version_compare(TYPO3_version, '6.1.99', '<=')) {
-				// TYPO3 6.0 and 6.1: No new indexer
-				static::manuallyUpdateIndex($file, $origFileName, $newFileName, $width, $height);
-			} else {
-				static::updateIndex($file, $width, $height, $metadata);
-			}
+			static::updateIndex($file, $width, $height, $metadata);
 		} else {
 			static::createIndex($newFileName, $width, $height);
 		}
@@ -108,7 +103,7 @@ class FAL {
 	}
 
 	/**
-	 * Updates the index entry for a given file in TYPO3 >= 6.2.
+	 * Updates the index entry for a given file.
 	 *
 	 * @param \TYPO3\CMS\Core\Resource\File $file
 	 * @param integer $width
@@ -179,56 +174,6 @@ class FAL {
 			}
 			$metadataRepository->update($file->getUid(), $newMetadata);
 		}
-	}
-
-	/**
-	 * Updates the index entry for a given file in TYPO3 6.0 and 6.1.
-	 *
-	 * @param \TYPO3\CMS\Core\Resource\File $file
-	 * @param string $origFileName
-	 * @param string $newFileName
-	 * @param integer $width
-	 * @param integer $height
-	 * @return void
-	 */
-	static protected function manuallyUpdateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFileName, $newFileName, $width, $height) {
-		$storageConfiguration = $file->getStorage()->getConfiguration();
-		$basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-		$basePath = GeneralUtility::getFileAbsFileName($basePath);
-		$identifier = substr($newFileName, strlen($basePath) - 1);
-
-		// $driver call below cannot be replaced by $file->getStorage()->getFileInfo($file)
-		// when the file has been renamed (converted from one format to the other)
-		/** @var \TYPO3\CMS\Core\Resource\Driver\AbstractDriver $driver */
-		$driver = static::accessProtectedProperty($file->getStorage(), 'driver');
-
-		// Business logic borrowed and adapted from \TYPO3\CMS\Core\Resource\ResourceStorage::updateFile()
-		$fileInfo = $driver->getFileInfoByIdentifier($identifier);
-		$newProperties = array(
-			'storage' => $fileInfo['storage'],
-			'identifier' => $fileInfo['identifier'],
-			'tstamp' => $fileInfo['mtime'],
-			'crdate' => $fileInfo['ctime'],
-			'mime_type' => $fileInfo['mimetype'],
-			'size' => $fileInfo['size'],
-			'name' => $fileInfo['name'],
-			// Not in original method
-			'width' => $width,
-			'height' => $height,
-		);
-		$file->updateProperties($newProperties);
-
-		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-		$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-		$fileRepository->update($file);
-
-		// CANNOT BE DONE above if file format changed
-		$newProperties = array(
-			'extension' => $file->getExtension(),
-			'sha1' => $file->getSha1(),
-		);
-		$file->updateProperties($newProperties);
-		$fileRepository->update($file);
 	}
 
 	/**

@@ -1,9 +1,7 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+defined('TYPO3_MODE') or die();
 
-$TCA['tx_imageautoresize'] = array(
+$GLOBALS['TCA']['tx_imageautoresize'] = array(
 	'ctrl' => array(
 		'label' => 'title',
 		'dividers2tabs' => TRUE,
