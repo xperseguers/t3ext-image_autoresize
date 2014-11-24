@@ -213,7 +213,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 
 		// Load the configuration of virtual table 'tx_imageautoresize'
 		global $TCA;
-		include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Options.php');
+		include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
 		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . self::virtualTable . '.xml');
 
 		$rec['uid'] = self::virtualRecordId;
