@@ -60,6 +60,13 @@ class ExtensionManager {
 			} else {
 				$actions[0] = sprintf('<span class="btn">%s</span>', $configureAction);
 			}
+
+			$title = htmlspecialchars($extension['title']);
+			$titleAction = htmlspecialchars($moduleUrl);
+			$actions[] = "<script type=\"text/javascript\">
+				var titleCell = document.getElementById('image_autoresize').getElementsByTagName('td')[2];
+				titleCell.innerHTML = titleCell.innerHTML.replace(/$title\\s*$/, '<a href=\"$titleAction\">$title</a>');
+			</script>";
 		}
 	}
 
