@@ -112,9 +112,11 @@ class FAL {
 	 * @return void
 	 */
 	static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $width, $height, array $metadata = array()) {
-		/** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
-		$indexerService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
-		$indexerService->indexFile($file);
+		if (version_compare(TYPO3_version, '6.99.99', '<=')) {
+			/** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
+			$indexerService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
+			$indexerService->indexFile($file);
+		}
 
 		if (count($metadata) > 0) {
 			/** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
