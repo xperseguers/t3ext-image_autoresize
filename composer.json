@@ -5,7 +5,7 @@
   "keywords": ["TYPO3 CMS", "image", "picture", "autoresize", "auto-resize", "upload", "batch", "exif", "iptc", "fal", "footprint", "performance"],
   "homepage": "https://forge.typo3.org/projects/extension-image_autoresize",
   "license": "GPL-2.0+",
-  "version": "1.6.0-dev",
+  "version": "1.6.0",
   "support": {
 	"issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
   }

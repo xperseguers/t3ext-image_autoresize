@@ -57,7 +57,7 @@ Resize images automatically
 	**Other version of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.5.0/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.6.0/_pdf/
 
 
 	**Table of Contents**

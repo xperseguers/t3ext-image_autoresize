@@ -19,6 +19,7 @@ The following is a very high level overview of the changes in this extension. Fo
 =======  ======================================================
 Version  Changes
 =======  ======================================================
+1.6.x    Compatibility with TYPO3 6.2 - 7.x
 1.5.x    Automatic handling of Frontend-based uploads, if `properly done <https://gist.github.com/xperseguers/9076406>`_.
 1.4.x    Batch processing of images
 1.3.x    * Compatibility with TYPO3 6.0. Support for auto-rotate when using GraphicsMagick.
