@@ -11,7 +11,7 @@
 Known Problems
 ==============
 
-- Only FAL LocalStoragehas been implemented and tested, meaning code will need to be adapted in order to deal with other
+- Only FAL LocalStorage has been implemented and tested, meaning code will need to be adapted in order to deal with other
   types of remote storage.
 
 .. note::
