@@ -137,6 +137,9 @@ class FileUpload {
 	 * @internal This method is public only to be callable from a callback
 	 */
 	public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
+		if (TYPO3_MODE !== 'BE') {
+			return;
+		}
 		$flashMessage = GeneralUtility::makeInstance(
 			'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
