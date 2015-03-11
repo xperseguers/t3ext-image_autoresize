@@ -140,7 +140,15 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 		$buttons['csh'] = BackendUtility::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
 
 		// CLOSE button
-		$buttons['close'] = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', TRUE) . '" />'));
+		if (version_compare(TYPO3_version, '6.99.99', '<=')) {
+			$closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', TRUE) . '" />'));
+		} else {
+			$closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
+			$closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', TRUE) . '">' .
+					IconUtility::getSpriteIcon('actions-document-close') .
+				'</a>';
+		}
+		$buttons['close'] = $closeLink;
 
 		// SAVE button
 		$buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />'));
@@ -201,7 +209,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 		// Load the configuration of virtual table 'tx_imageautoresize'
 		global $TCA;
 		include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
-		t3lib_extMgm::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . self::virtualTable . '.xml');
+		ExtensionManagementUtility::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . self::virtualTable . '.xml');
 
 		$rec['uid'] = self::virtualRecordId;
 		$rec['pid'] = 0;
