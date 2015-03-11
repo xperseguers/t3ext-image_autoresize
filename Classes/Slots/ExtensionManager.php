@@ -44,11 +44,11 @@ class ExtensionManager {
 			$icon = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon($icon, array('title' => $title));
 
 			// Configure action comes as first icon
-			$configureAction = sprintf('<a href="%s">%s</a>', htmlspecialchars($moduleUrl), $icon);
+			$configureAction = sprintf('<a class="btn btn-default" title="%s" href="%s">%s</a>', htmlspecialchars($title), htmlspecialchars($moduleUrl), $icon);
 			if (version_compare(TYPO3_version, '6.99.99', '<=')) {
 				array_unshift($actions, $configureAction);
 			} else {
-				$actions[0] = sprintf('<span class="btn">%s</span>', $configureAction);
+				$actions[0] = $configureAction;
 			}
 
 			$title = htmlspecialchars($extension['title']);
