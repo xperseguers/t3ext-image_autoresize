@@ -317,14 +317,12 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 	protected function initTCEForms() {
 		$this->tceforms = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormEngine');
 		$this->tceforms->initDefaultBEMode();
-		$this->tceforms->formName = 'tsStyleConfigForm';
-		$this->tceforms->backPath = $GLOBALS['BACK_PATH'];
 		$this->tceforms->doSaveFieldName = 'doSave';
 		$this->tceforms->localizationMode = '';
 		$this->tceforms->palettesCollapsed = 0;
-		$this->tceforms->disableRTE = 0;
-		$this->tceforms->enableClickMenu = TRUE;
-		$this->tceforms->enableTabMenu = TRUE;
+		if (version_compare(TYPO3_version, '6.99.99', '<=')) {
+			$this->tceforms->enableTabMenu = TRUE;
+		}
 	}
 
 	/**
