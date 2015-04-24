@@ -539,7 +539,7 @@ class ImageResizer {
 		$data['bytes'] = $bytes + (isset($data['bytes']) ? (int)$data['bytes'] : 0);
 		$data['images'] = 1 + (isset($data['images']) ? (int)$data['images'] : 0);
 
-		file_put_contents($fileName, json_encode($data));
+		GeneralUtility::writeFile($fileName, json_encode($data));
 	}
 
 }
