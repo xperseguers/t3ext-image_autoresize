@@ -35,7 +35,7 @@ Resize images automatically
 		image, picture, resize, autoresize, auto-resize, upload, batch, exif, iptc, fal, footprint, performance
 
 	:Copyright:
-		2010-2014
+		2010-2015
 
 	:Author:
 		Xavier Perseguers
@@ -57,7 +57,7 @@ Resize images automatically
 	**Other version of this document**
 
 	:PDF:
-		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.6.0/_pdf/
+		http://docs.typo3.org/typo3cms/extensions/image_autoresize/1.6.1/_pdf/
 
 
 	**Table of Contents**
