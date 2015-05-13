@@ -81,7 +81,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
 		$docHeaderButtons = $this->getButtons();
 
-		$this->doc->form = '<form action="" method="post" name="' . $this->tceforms->formName . '">';
+		$this->doc->form = '<form action="" method="post" name="editform">';
 
 		// Render content:
 		$this->moduleContent();
@@ -316,7 +316,9 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 	 */
 	protected function initTCEForms() {
 		$this->tceforms = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormEngine');
-		$this->tceforms->initDefaultBEMode();
+		if (version_compare(TYPO3_version, '7.2.99', '<=')) {
+			$this->tceforms->initDefaultBEMode();
+		}
 		$this->tceforms->doSaveFieldName = 'doSave';
 		$this->tceforms->localizationMode = '';
 		$this->tceforms->palettesCollapsed = 0;
