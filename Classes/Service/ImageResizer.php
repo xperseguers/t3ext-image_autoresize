@@ -98,6 +98,55 @@ class ImageResizer {
 	}
 
 	/**
+	 * Returns the resized/converted file name (no actual processing).
+	 *
+	 * @param string $fileName
+	 * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|NULL $backendUser
+	 * @param array $ruleset The optional ruleset to use
+	 * @return string|NULL Eiter NULL if no resize/conversion should take place or the resized/converted file name
+	 */
+	public function getProcessedFileName($fileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL, array $ruleset = NULL) {
+		if ($ruleset === NULL) {
+			$ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
+		}
+
+		if (count($ruleset) === 0)  {
+			// File does not match any rule set
+			return NULL;
+		}
+
+		if ($backendUser === NULL && count($ruleset['usergroup']) > 0) {
+			// Rule set is targeting some user group but we have no backend user (scheduler task)
+			// so we should skip this file altogether
+			return NULL;
+		}
+
+		// Extract the extension
+		if (($dotPosition = strrpos($fileName, '.')) === FALSE) {
+			// File has no extension
+			return NULL;
+		}
+		$fileExtension = strtolower(substr($fileName, $dotPosition + 1));
+
+		if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
+			if (ImageUtility::isTransparentPng($fileName)) {
+				return NULL;
+			}
+		}
+
+		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
+			// File format will be converted
+			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
+			$destDirectory = PathUtility::dirname($fileName);
+			$destFileName = PathUtility::basename(substr($fileName, 0, strlen($fileName) - strlen($fileExtension)) . $destExtension);
+
+			$fileName = $destDirectory . '/' . $destFileName;
+		}
+
+		return $fileName;
+	}
+
+	/**
 	 * Processes upload of a file.
 	 *
 	 * @param string $fileName
@@ -118,16 +167,7 @@ class ImageResizer {
 			$ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
 		}
 
-		if (count($ruleset) == 0)  {
-			// File does not match any rule set
-			return $fileName;
-		}
-
-		if ($backendUser === NULL && count($ruleset['usergroup']) > 0) {
-			// Rule set is targeting some user group but we have no backend user (scheduler task)
-			// so we should skip this file altogether
-			return $fileName;
-		}
+		$processedFileName = $this->getProcessedFileName($fileName, $backendUser, $ruleset);
 
 		// Make file name relative, store as $targetFileName
 		if (empty($targetFileName)) {
@@ -159,7 +199,12 @@ class ImageResizer {
 			$this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
 			return $fileName;
 		}
+		if ($processedFileName === NULL) {
+			// No processing to do
+			return $fileName;
+		}
 
+		$targetDestFileName = $fileName;
 		if (isset($ruleset['conversion_mapping'][$fileExtension])) {
 			// File format will be converted
 			$destExtension = $ruleset['conversion_mapping'][$fileExtension];
@@ -322,16 +367,15 @@ class ImageResizer {
 	 */
 	protected function getRuleset($sourceFileName, $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL) {
 		$ret = array();
-		if (!is_file($sourceFileName)) {
-			// Early return
-			return $ret;
-		}
 
 		// Make file name relative and extract the extension
 		$relTargetFileName = substr($targetFileName, strlen(PATH_site));
 		$fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
 		$beGroups = $backendUser !== NULL ? array_keys($GLOBALS['BE_USER']->userGroups) : array();
+		$fileSize = is_file($sourceFileName)
+			? filesize($sourceFileName)
+			: -1;	// -1 is a special value so that file size is not taken into account (yet)
 
 		// Try to find a matching ruleset
 		foreach ($this->rulesets as $ruleset) {
@@ -351,7 +395,7 @@ class ImageResizer {
 				$processFile |= preg_match($directoryPattern, $relTargetFileName);
 			}
 			$processFile &= GeneralUtility::inArray($ruleset['file_types'], $fileExtension);
-			$processFile &= (filesize($sourceFileName) > $ruleset['threshold']);
+			$processFile &= $fileSize === -1 || ($fileSize > $ruleset['threshold']);
 			if ($processFile) {
 				$ret = $ruleset;
 				break;

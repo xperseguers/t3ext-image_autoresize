@@ -15,6 +15,7 @@ namespace Causal\ImageAutoresize\Slots;
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
 /**
@@ -72,36 +73,50 @@ class FileUpload {
 	public function autoResize(&$targetFileName, \TYPO3\CMS\Core\Resource\Folder $folder, $sourceFile) {
 		$storageConfiguration = $folder->getStorage()->getConfiguration();
 		$storageRecord = $folder->getStorage()->getStorageRecord();
-		if ($storageRecord['driver'] === 'Local') {
-			$targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
-			$targetDirectory .= rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier();
+		if ($storageRecord['driver'] !== 'Local') {
+			// Unfortunately unsupported yet
+			return;
+		}
 
-			$extension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
+		$targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+		$targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
 
-			// Various operation (including IM/GM) relies on a file WITH an extension
-			$originalSourceFile = $sourceFile;
-			$sourceFile .= '.' . $extension;
+		if (empty($sourceFile)) {
+			$processedFileName = static::$imageResizer->getProcessedFileName(
+				$targetDirectory . '/' . $targetFileName,
+				$GLOBALS['BE_USER']
+			);
+			if ($processedFileName !== NULL) {
+				$targetFileName = PathUtility::basename($processedFileName);
+			}
+			return;
+		}
 
-			if (rename($originalSourceFile, $sourceFile)) {
-				$newSourceFile = static::$imageResizer->processFile(
-					$sourceFile,
-					$targetFileName,
-					$targetDirectory,
-					NULL,
-					$GLOBALS['BE_USER'],
-					array($this, 'notify')
-				);
+		$extension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
-				static::$metadata = static::$imageResizer->getLastMetadata();
+		// Various operation (including IM/GM) relies on a file WITH an extension
+		$originalSourceFile = $sourceFile;
+		$sourceFile .= '.' . $extension;
 
-				$newExtension = strtolower(substr($newSourceFile, strrpos($newSourceFile, '.') + 1));
+		if (rename($originalSourceFile, $sourceFile)) {
+			$newSourceFile = static::$imageResizer->processFile(
+				$sourceFile,
+				$targetFileName,
+				$targetDirectory,
+				NULL,
+				$GLOBALS['BE_USER'],
+				array($this, 'notify')
+			);
 
-				// We must go back to original (temporary) file name
-				rename($newSourceFile, $originalSourceFile);
+			static::$metadata = static::$imageResizer->getLastMetadata();
 
-				if ($newExtension !== $extension) {
-					$targetFileName = substr($targetFileName, 0, -strlen($extension)) . $newExtension;
-				}
+			$newExtension = strtolower(substr($newSourceFile, strrpos($newSourceFile, '.') + 1));
+
+			// We must go back to original (temporary) file name
+			rename($newSourceFile, $originalSourceFile);
+
+			if ($newExtension !== $extension) {
+				$targetFileName = substr($targetFileName, 0, -strlen($extension)) . $newExtension;
 			}
 		}
 	}
