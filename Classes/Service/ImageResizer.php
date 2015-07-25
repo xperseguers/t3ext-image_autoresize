@@ -129,7 +129,7 @@ class ImageResizer {
 		$fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
 		if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
-			if (ImageUtility::isTransparentPng($fileName)) {
+			if (file_exists($fileName) && ImageUtility::isTransparentPng($fileName)) {
 				return NULL;
 			}
 		}
