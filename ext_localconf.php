@@ -7,6 +7,12 @@ $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TY
 // Hook into \TYPO3\CMS\Core\Resource\ResourceStorage
 $signalSlotDispatcher->connect(
 	'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
+	'sanitizeFileName',
+	'Causal\\ImageAutoresize\\Slots\\FileUpload',
+	'sanitizeFileName'
+);
+$signalSlotDispatcher->connect(
+	'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
 	'preFileAdd',
 	'Causal\\ImageAutoresize\\Slots\\FileUpload',
 	'autoResize'

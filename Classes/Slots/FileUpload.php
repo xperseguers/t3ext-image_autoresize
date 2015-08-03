@@ -42,6 +42,11 @@ class FileUpload {
 	static protected $metadata;
 
 	/**
+	 * @var string|NULL
+	 */
+	static protected $originalFileName;
+
+	/**
 	 * Default constructor.
 	 */
 	public function __construct() {
@@ -63,6 +68,40 @@ class FileUpload {
 	}
 
 	/**
+	 * Sanitizes the file name.
+	 *
+	 * @param string $fileName
+	 * @param \TYPO3\CMS\Core\Resource\Folder $folder
+	 * @return void|array
+	 */
+	public function sanitizeFileName($fileName, \TYPO3\CMS\Core\Resource\Folder $folder) {
+		$slotArguments = func_get_args();
+		// Last parameter is the signal name itself and is not actually part of the arguments
+		array_pop($slotArguments);
+
+		$storageConfiguration = $folder->getStorage()->getConfiguration();
+		$storageRecord = $folder->getStorage()->getStorageRecord();
+		if ($storageRecord['driver'] !== 'Local') {
+			// Unfortunately unsupported yet
+			return;
+		}
+
+		$targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+		$targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
+
+		$processedFileName = static::$imageResizer->getProcessedFileName(
+			$targetDirectory . '/' . $fileName,
+			$GLOBALS['BE_USER']
+		);
+		if ($processedFileName !== NULL) {
+			static::$originalFileName = $fileName;
+			$slotArguments[0] = PathUtility::basename($processedFileName);
+
+			return $slotArguments;
+		}
+	}
+
+	/**
 	 * Auto-resizes a given source file (possibly converting it as well).
 	 *
 	 * @param string $targetFileName
@@ -78,19 +117,15 @@ class FileUpload {
 			return;
 		}
 
+		if (static::$originalFileName) {
+			// Temporarily change back the file name to ensure original format is used
+			// when converting from one format to another with IM/GM
+			$targetFileName = static::$originalFileName;
+			static::$originalFileName = NULL;
+		}
+
 		$targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
 		$targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
-
-		if (empty($sourceFile)) {
-			$processedFileName = static::$imageResizer->getProcessedFileName(
-				$targetDirectory . '/' . $targetFileName,
-				$GLOBALS['BE_USER']
-			);
-			if ($processedFileName !== NULL) {
-				$targetFileName = PathUtility::basename($processedFileName);
-			}
-			return;
-		}
 
 		$extension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
