@@ -15,13 +15,16 @@ Links
 	https://typo3.org/extensions/repository/view/image_autoresize
 
 :Bug Tracker:
-	http://forge.typo3.org/projects/extension-image_autoresize/issues
+	https://forge.typo3.org/projects/extension-image_autoresize/issues
+
+:Release Notes:
+	https://forge.typo3.org/projects/extension-image_autoresize/wiki
 
 :Git Repository:
 	https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git
 
 :Translation:
-	http://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
+	https://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
 
 :Contact:
 	`@xperseguers <https://twitter.com/xperseguers>`_
