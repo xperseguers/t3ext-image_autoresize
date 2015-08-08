@@ -41,9 +41,9 @@ class ImageResizer
     protected $signalSlotDispatcher;
 
     /**
-     * @var array|NULL
+     * @var array|null
      */
-    protected $lastMetadata = NULL;
+    protected $lastMetadata = null;
 
     /**
      * Default constructor
@@ -104,37 +104,37 @@ class ImageResizer
      * Returns the resized/converted file name (no actual processing).
      *
      * @param string $fileName
-     * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|NULL $backendUser
+     * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|null $backendUser
      * @param array $ruleset The optional ruleset to use
-     * @return string|NULL Eiter NULL if no resize/conversion should take place or the resized/converted file name
+     * @return string|null Eiter null if no resize/conversion should take place or the resized/converted file name
      */
-    public function getProcessedFileName($fileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL, array $ruleset = NULL)
+    public function getProcessedFileName($fileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null, array $ruleset = null)
     {
-        if ($ruleset === NULL) {
+        if ($ruleset === null) {
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
         if (count($ruleset) === 0) {
             // File does not match any rule set
-            return NULL;
+            return null;
         }
 
-        if ($backendUser === NULL && count($ruleset['usergroup']) > 0) {
+        if ($backendUser === null && count($ruleset['usergroup']) > 0) {
             // Rule set is targeting some user group but we have no backend user (scheduler task)
             // so we should skip this file altogether
-            return NULL;
+            return null;
         }
 
         // Extract the extension
-        if (($dotPosition = strrpos($fileName, '.')) === FALSE) {
+        if (($dotPosition = strrpos($fileName, '.')) === false) {
             // File has no extension
-            return NULL;
+            return null;
         }
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
         if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
             if (file_exists($fileName) && ImageUtility::isTransparentPng($fileName)) {
-                return NULL;
+                return null;
             }
         }
 
@@ -161,9 +161,9 @@ class ImageResizer
      * @param callback $callbackNotification Callback to send notification
      * @return string File name that was finally written
      */
-    public function processFile($fileName, $targetFileName = '', $targetDirectory = '', \TYPO3\CMS\Core\Resource\File $file = NULL, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL, $callbackNotification = NULL)
+    public function processFile($fileName, $targetFileName = '', $targetDirectory = '', \TYPO3\CMS\Core\Resource\File $file = null, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null, $callbackNotification = null)
     {
-        $this->lastMetadata = NULL;
+        $this->lastMetadata = null;
 
         if (!(empty($targetFileName) && empty($targetDirectory))) {
             $targetDirectory = rtrim($targetDirectory, '/') . '/';
@@ -180,7 +180,7 @@ class ImageResizer
         }
 
         // Extract the extension
-        if (($dotPosition = strrpos($fileName, '.')) === FALSE) {
+        if (($dotPosition = strrpos($fileName, '.')) === false) {
             // File has no extension
             return $fileName;
         }
@@ -204,7 +204,7 @@ class ImageResizer
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
             return $fileName;
         }
-        if ($processedFileName === NULL) {
+        if ($processedFileName === null) {
             // No processing to do
             return $fileName;
         }
@@ -241,7 +241,7 @@ class ImageResizer
         $imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
         $metadata = ImageUtility::getMetadata($fileName);
         $this->lastMetadata = $metadata;
-        $isRotated = FALSE;
+        $isRotated = false;
 
         if ($ruleset['auto_orient'] === '1') {
             $orientation = ImageUtility::getOrientation($fileName);
@@ -267,11 +267,11 @@ class ImageResizer
         }
 
         $originalFileSize = filesize($fileName);
-        $tempFileInfo = NULL;
-        $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, TRUE);
+        $tempFileInfo = null;
+        $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         if (filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
-            $tempFileInfo = NULL;
+            $tempFileInfo = null;
         }
         if ($tempFileInfo) {
             // Signal to post-process the image
@@ -326,7 +326,7 @@ class ImageResizer
     /**
      * Returns the last extracted metadata.
      *
-     * @return array|NULL
+     * @return array|null
      */
     public function getLastMetadata()
     {
@@ -359,13 +359,13 @@ class ImageResizer
     protected function notify($callbackNotification, $message, $severity)
     {
         $callableName = '';
-        if (is_callable($callbackNotification, FALSE, $callableName)) {
+        if (is_callable($callbackNotification, false, $callableName)) {
             call_user_func($callbackNotification, $message, $severity);
         }
     }
 
     /**
-     * Returns the rule set that applies to a given file for a given backend user (or NULL
+     * Returns the rule set that applies to a given file for a given backend user (or null
      * if using scheduler task).
      *
      * @param string $sourceFileName
@@ -373,7 +373,7 @@ class ImageResizer
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
      * @return array
      */
-    protected function getRuleset($sourceFileName, $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = NULL)
+    protected function getRuleset($sourceFileName, $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null)
     {
         $ret = array();
 
@@ -381,7 +381,7 @@ class ImageResizer
         $relTargetFileName = substr($targetFileName, strlen(PATH_site));
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
-        $beGroups = $backendUser !== NULL ? array_keys($GLOBALS['BE_USER']->userGroups) : array();
+        $beGroups = $backendUser !== null ? array_keys($GLOBALS['BE_USER']->userGroups) : array();
         $fileSize = is_file($sourceFileName)
             ? filesize($sourceFileName)
             : -1;    // -1 is a special value so that file size is not taken into account (yet)
@@ -393,13 +393,13 @@ class ImageResizer
                 continue;
             }
             if (count($ruleset['usergroup']) > 0 && (
-                    $backendUser === NULL ||
+                    $backendUser === null ||
                     count(array_intersect($ruleset['usergroup'], $beGroups)) == 0)
             ) {
                 // Backend user is not member of a group configured for the current rule set
                 continue;
             }
-            $processFile = FALSE;
+            $processFile = false;
             foreach ($ruleset['directories'] as $directoryPattern) {
                 $processFile |= preg_match($directoryPattern, $relTargetFileName);
             }
@@ -422,7 +422,7 @@ class ImageResizer
     {
         $directories = array();
         foreach ($this->rulesets as $ruleset) {
-            $dirs = GeneralUtility::trimExplode(',', $ruleset['directories_config'], TRUE);
+            $dirs = GeneralUtility::trimExplode(',', $ruleset['directories_config'], true);
             $directories = array_merge($directories, $dirs);
         }
         $directories = array_unique($directories);
@@ -489,11 +489,11 @@ class ImageResizer
         foreach ($ruleset as $key => $value) {
             switch ($key) {
                 case 'usergroup':
-                    $value = GeneralUtility::trimExplode(',', $value, TRUE);
+                    $value = GeneralUtility::trimExplode(',', $value, true);
                     break;
                 case 'directories':
                     $values['directories_config'] = '';
-                    $value = GeneralUtility::trimExplode(',', $value, TRUE);
+                    $value = GeneralUtility::trimExplode(',', $value, true);
                     // Sanitize name of the directories
                     foreach ($value as &$directory) {
                         $directory = rtrim($directory, '/') . '/';
@@ -509,7 +509,7 @@ class ImageResizer
                     }
                     break;
                 case 'file_types':
-                    $value = GeneralUtility::trimExplode(',', $value, TRUE);
+                    $value = GeneralUtility::trimExplode(',', $value, true);
                     if (count($value) == 0) {
                         // Inherit configuration
                         $value = '';
@@ -530,7 +530,7 @@ class ImageResizer
                     }
                     break;
                 case 'conversion_mapping':
-                    $mapping = GeneralUtility::trimExplode(',', $value, TRUE);
+                    $mapping = GeneralUtility::trimExplode(',', $value, true);
                     if (count($mapping) > 0) {
                         $value = $this->expandConversionMapping($mapping);
                     } else {
@@ -590,7 +590,7 @@ class ImageResizer
 
         $data = array();
         if (file_exists($fileName)) {
-            $data = json_decode(file_get_contents($fileName), TRUE);
+            $data = json_decode(file_get_contents($fileName), true);
             if (!is_array($data)) {
                 $data = array();
             }

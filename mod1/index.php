@@ -112,7 +112,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         if ($row['rulesets']) {
             /** @var $flexObj \TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools */
             $flexObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools');
-            $row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], TRUE);
+            $row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], true);
         }
 
         // TCE forms methods *must* be invoked before $this->doc->startPage()
@@ -146,20 +146,20 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 
         // CLOSE button
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', TRUE) . '" />'));
+            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', true) . '" />'));
         } else {
             $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', TRUE) . '">' .
+            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', true) . '">' .
                 IconUtility::getSpriteIcon('actions-document-close') .
                 '</a>';
         }
         $buttons['close'] = $closeLink;
 
         // SAVE button
-        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', TRUE) . '" />'));
+        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', true) . '" />'));
 
         // SAVE_CLOSE button
-        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveCloseConfiguration', TRUE) . '" />'));
+        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveCloseConfiguration', true) . '" />'));
 
         // Shortcut
         if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
@@ -238,7 +238,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         $startFooter = strrpos($form, '<div class="typo3-TCEforms-recHeaderRow">');
         $endTag = '</div>';
 
-        if ($startFooter !== FALSE) {
+        if ($startFooter !== false) {
             $endFooter = strpos($form, $endTag, $startFooter);
             $form = substr($form, 0, $startFooter) . substr($form, $endFooter + strlen($endTag));
         }
@@ -290,7 +290,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 
         // Write back configuration to localconf.php
         $localconfConfig = $newConfig;
-        $localconfConfig['conversion_mapping'] = implode(',', GeneralUtility::trimExplode(LF, $localconfConfig['conversion_mapping'], TRUE));
+        $localconfConfig['conversion_mapping'] = implode(',', GeneralUtility::trimExplode(LF, $localconfConfig['conversion_mapping'], true));
 
         if ($this->writeToLocalconf($this->expertKey, $localconfConfig)) {
             $this->config = $newConfig;
@@ -334,7 +334,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         $this->tceforms->localizationMode = '';
         $this->tceforms->palettesCollapsed = 0;
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $this->tceforms->enableTabMenu = TRUE;
+            $this->tceforms->enableTabMenu = true;
         }
     }
 
@@ -371,7 +371,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
      */
     public function getImageFileExtensions(array $settings)
     {
-        $extensions = GeneralUtility::trimExplode(',', strtolower($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']), TRUE);
+        $extensions = GeneralUtility::trimExplode(',', strtolower($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']), true);
         // We don't consider PDF being an image
         if ($key = array_search('pdf', $extensions)) {
             unset($extensions[$key]);
@@ -401,7 +401,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
             return;
         }
 
-        $data = json_decode(file_get_contents($fileName), TRUE);
+        $data = json_decode(file_get_contents($fileName), true);
         if (!is_array($data) || !(isset($data['images']) && isset($data['bytes']))) {
             return;
         }
@@ -424,7 +424,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . $GLOBALS['LANG']->getLL('social.share', TRUE) . '">
+                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . $GLOBALS['LANG']->getLL('social.share', true) . '">
                     <i class="btn-icon"></i>
                     <span class="btn-text">Tweet</span>
                 </a>

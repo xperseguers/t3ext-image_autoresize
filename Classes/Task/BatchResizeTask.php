@@ -49,7 +49,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     /**
      * Batch resize pictures, called by scheduler.
      *
-     * @return boolean TRUE if task run was successful
+     * @return boolean true if task run was successful
      */
     public function execute()
     {
@@ -68,13 +68,13 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             // Process watched directories
             $directories = $this->imageResizer->getAllDirectories();
         } else {
-            $directories = GeneralUtility::trimExplode(LF, $this->directories, TRUE);
+            $directories = GeneralUtility::trimExplode(LF, $this->directories, true);
         }
         $processedDirectories = array();
 
-        $success = TRUE;
+        $success = true;
         foreach ($directories as $directory) {
-            $skip = FALSE;
+            $skip = false;
             foreach ($processedDirectories as $processedDirectory) {
                 if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
                     continue 2;
@@ -94,7 +94,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * recursively).
      *
      * @param string $directory
-     * @return boolean TRUE if run was successful
+     * @return boolean true if run was successful
      * @throws \RuntimeException
      */
     protected function batchResizePictures($directory)
@@ -110,7 +110,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         // We do not want to pass any backend user, even if manually running the task as administrator from
         // the Backend as images may be resized based on usergroup rule sets and this should only happen when
         // actually resizing the image while uploading, not during a batch processing (it's simply "too late").
-        $backendUser = NULL;
+        $backendUser = null;
 
         if ($GLOBALS['BE_USER']->isAdmin()) {
             // As the scheduler user should never be an administrator, if current user is an administrator
@@ -120,7 +120,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $callbackNotification = array($this, 'syslog');
         }
 
-        $excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, TRUE);
+        $excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, true);
 
         $directoryContent = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
         foreach ($directoryContent as $fileName => $file) {
@@ -135,20 +135,20 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                 if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
                     rtrim($excludeDirectory, '/') === $filePath
                 ) {
-                    $skip = TRUE;
+                    $skip = true;
                     continue;
                 }
             }
 
             if (!$skip) {
-                if (($dotPosition = strrpos($name, '.')) !== FALSE) {
+                if (($dotPosition = strrpos($name, '.')) !== false) {
                     $fileExtension = strtolower(substr($name, $dotPosition + 1));
                     if (in_array($fileExtension, $allFileTypes)) {
                         $this->imageResizer->processFile(
                             $fileName,
                             '',    // target file name
                             '',    // target directory
-                            NULL,
+                            null,
                             $backendUser,
                             $callbackNotification
                         );
@@ -157,7 +157,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             }
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -188,7 +188,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $message,
             '',
             $severity,
-            TRUE
+            true
         );
         \TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
     }

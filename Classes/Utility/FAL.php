@@ -43,12 +43,12 @@ class FAL
      * @param array $metadata EXIF metadata
      * @return void
      */
-    static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = NULL, $origFileName, $newFileName, $width, $height, array $metadata = array())
+    static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = array())
     {
-        if ($file === NULL) {
+        if ($file === null) {
             $file = static::findExistingFile($origFileName);
         }
-        if ($file !== NULL) {
+        if ($file !== null) {
             static::updateIndex($file, $width, $height, $metadata);
         } else {
             static::createIndex($newFileName, $width, $height);
@@ -59,11 +59,11 @@ class FAL
      * Finds an existing file.
      *
      * @param string $fileName
-     * @return \TYPO3\CMS\Core\Resource\AbstractFile|NULL
+     * @return \TYPO3\CMS\Core\Resource\AbstractFile|null
      */
     static protected function findExistingFile($fileName)
     {
-        $file = NULL;
+        $file = null;
         $relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
         $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
@@ -101,7 +101,7 @@ class FAL
      * @param array $metadata EXIF metadata
      * @return void
      */
-    static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = NULL, $width, $height, array $metadata = array())
+    static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = array())
     {
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
             /** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
@@ -141,17 +141,17 @@ class FAL
             foreach ($mapping as $falKey => $metadataKeyMapping) {
                 $metatadaKeys = explode('|', $metadataKeyMapping);
                 foreach ($metatadaKeys as $metadataKey) {
-                    $value = NULL;
+                    $value = null;
                     if (isset($metadata[$metadataKey])) {
                         $value = trim($metadata[$metadataKey]);
-                        if (ord($value) === 1) $value = NULL;
+                        if (ord($value) === 1) $value = null;
                         switch ($metadataKey) {
                             case 'ColorSpace':
                                 if ($value == 1) {
                                     $value = 'RGB';
                                 } else {
                                     // Unknown
-                                    $value = NULL;
+                                    $value = null;
                                 }
                                 break;
                             case 'DateTimeOriginal':
@@ -220,7 +220,7 @@ class FAL
         }
         $class = static::$reflectedClasses[$className];
         $property = $class->getProperty($propertyName);
-        $property->setAccessible(TRUE);
+        $property->setAccessible(true);
 
         return $property->getValue($object);
     }

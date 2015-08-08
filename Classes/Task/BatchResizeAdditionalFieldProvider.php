@@ -101,18 +101,18 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
      *
      * @param array $submittedData Reference to the array containing the data submitted by the user
      * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject Reference to the calling object (Scheduler's BE module)
-     * @return boolean TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
+     * @return boolean true if validation was ok (or selected class is not relevant), false otherwise
      */
     public function validateAdditionalFields(array &$submittedData, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject)
     {
-        $result = TRUE;
+        $result = true;
 
         // Check for valid directories
-        $directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_directories'], TRUE);
+        $directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_directories'], true);
         foreach ($directories as $directory) {
             $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
             if (!@is_dir($absoluteDirectory)) {
-                $result = FALSE;
+                $result = false;
                 $parentObject->addMessage(
                     sprintf(
                         $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidDirectories'),
@@ -123,11 +123,11 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
             }
         }
 
-        $directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_excludeDirectories'], TRUE);
+        $directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_excludeDirectories'], true);
         foreach ($directories as $directory) {
             $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
             if (!@is_dir($absoluteDirectory)) {
-                $result = FALSE;
+                $result = false;
                 $parentObject->addMessage(
                     sprintf(
                         $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidExcludeDirectories'),

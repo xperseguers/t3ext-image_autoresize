@@ -4,7 +4,7 @@ defined('TYPO3_MODE') or die();
 $GLOBALS['TCA']['tx_imageautoresize'] = array(
 	'ctrl' => array(
 		'label' => 'title',
-		'dividers2tabs' => TRUE,
+		'dividers2tabs' => true,
 	),
 	'columns' => array(
 		'directories' => array(

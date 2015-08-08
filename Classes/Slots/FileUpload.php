@@ -38,12 +38,12 @@ class FileUpload
     static protected $imageResizer;
 
     /**
-     * @var array|NULL
+     * @var array|null
      */
     static protected $metadata;
 
     /**
-     * @var string|NULL
+     * @var string|null
      */
     static protected $originalFileName;
 
@@ -52,7 +52,7 @@ class FileUpload
      */
     public function __construct()
     {
-        if (static::$imageResizer === NULL) {
+        if (static::$imageResizer === null) {
             static::$imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
 
             $configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
@@ -96,7 +96,7 @@ class FileUpload
             $targetDirectory . '/' . $fileName,
             $GLOBALS['BE_USER']
         );
-        if ($processedFileName !== NULL) {
+        if ($processedFileName !== null) {
             static::$originalFileName = $fileName;
             $slotArguments[0] = PathUtility::basename($processedFileName);
 
@@ -125,7 +125,7 @@ class FileUpload
             // Temporarily change back the file name to ensure original format is used
             // when converting from one format to another with IM/GM
             $targetFileName = static::$originalFileName;
-            static::$originalFileName = NULL;
+            static::$originalFileName = null;
         }
 
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
@@ -142,7 +142,7 @@ class FileUpload
                 $sourceFile,
                 $targetFileName,
                 $targetDirectory,
-                NULL,
+                null,
                 $GLOBALS['BE_USER'],
                 array($this, 'notify')
             );
@@ -201,7 +201,7 @@ class FileUpload
             $message,
             '',
             $severity,
-            TRUE
+            true
         );
         /** @var $flashMessageService \TYPO3\CMS\Core\Messaging\FlashMessageService */
         $flashMessageService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessageService');

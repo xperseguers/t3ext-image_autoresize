@@ -130,7 +130,7 @@ class ImageUtility
     }
 
     /**
-     * Returns TRUE if the given picture is rotated.
+     * Returns true if the given picture is rotated.
      *
      * @param integer $orientation EXIF orientation
      * @return integer
@@ -138,7 +138,7 @@ class ImageUtility
      */
     static public function isRotated($orientation)
     {
-        $ret = FALSE;
+        $ret = false;
         switch ($orientation) {
             case 2: // horizontal flip
             case 3: // 180°
@@ -147,7 +147,7 @@ class ImageUtility
             case 6: // 90° rotate right
             case 7: // horizontal flip + 90 rotate right
             case 8: // 90° rotate left
-                $ret = TRUE;
+                $ret = true;
                 break;
         }
         return $ret;
@@ -209,21 +209,21 @@ class ImageUtility
     }
 
     /**
-     * Returns TRUE if the given PNG file contains transparency information.
+     * Returns true if the given PNG file contains transparency information.
      *
      * @param string $fileName
      * @return boolean
      */
     static public function isTransparentPng($fileName)
     {
-        $bytes = file_get_contents($fileName, FALSE, NULL, 24, 2);    // read 24th and 25th bytes
+        $bytes = file_get_contents($fileName, false, null, 24, 2);    // read 24th and 25th bytes
         $byte24 = ord($bytes{0});
         $byte25 = ord($bytes{1});
         if ($byte24 === 16 || $byte25 === 6 || $byte25 === 4) {
-            return TRUE;
+            return true;
         } else {
             $content = file_get_contents($fileName);
-            return strpos($content, 'tRNS') !== FALSE;
+            return strpos($content, 'tRNS') !== false;
         }
     }
 
