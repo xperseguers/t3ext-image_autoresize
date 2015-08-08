@@ -3,7 +3,20 @@
   "description": "Simplify the way your editors may upload their images: no complex local procedure needed, let TYPO3 automatically resize down their huge images/pictures on-the-fly during upload (or using a scheduler task for batch processing) and according to your own business rules (directory/groups). This will highly reduce the footprint on your server and speed-up response time if lots of images are rendered (e.g., in a gallery). Features an EXIF/IPTC extractor to ensure metadata may be used by the FAL indexer even if not preserved upon resizing.",
   "version": "1.6.4-dev",
   "type": "typo3-cms-extension",
-  "keywords": ["TYPO3 CMS", "image", "picture", "autoresize", "auto-resize", "upload", "batch", "exif", "iptc", "fal", "footprint", "performance"],
+  "keywords": [
+    "TYPO3 CMS",
+    "image",
+    "picture",
+    "autoresize",
+    "auto-resize",
+    "upload",
+    "batch",
+    "exif",
+    "iptc",
+    "fal",
+    "footprint",
+    "performance"
+  ],
   "homepage": "https://forge.typo3.org/projects/extension-image_autoresize",
   "license": "GPL-2.0+",
   "authors": [
@@ -23,6 +36,6 @@
     "image_autoresize": "*"
   },
   "support": {
-	"issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
+    "issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
   }
 }
