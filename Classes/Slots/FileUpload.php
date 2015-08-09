@@ -35,17 +35,17 @@ class FileUpload
     /**
      * @var ImageResizer
      */
-    static protected $imageResizer;
+    protected static $imageResizer;
 
     /**
      * @var array|null
      */
-    static protected $metadata;
+    protected static $metadata;
 
     /**
      * @var string|null
      */
-    static protected $originalFileName;
+    protected static $originalFileName;
 
     /**
      * Default constructor.

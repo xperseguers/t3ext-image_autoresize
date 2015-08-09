@@ -34,7 +34,7 @@ class ImageUtility
      * @param string $fileName
      * @return integer
      */
-    static public function getOrientation($fileName)
+    public static function getOrientation($fileName)
     {
         $orientation = 1; // Fallback to "straight"
         $metadata = static::getMetadata($fileName);
@@ -50,7 +50,7 @@ class ImageUtility
      * @param string $fileName
      * @return array
      */
-    static public function getMetadata($fileName)
+    public static function getMetadata($fileName)
     {
         $extension = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
         $metadata = array();
@@ -118,7 +118,7 @@ class ImageUtility
      * @param array $components
      * @return float
      */
-    static protected function rationalToDecimal(array $components)
+    protected static function rationalToDecimal(array $components)
     {
         foreach ($components as $key => $value) {
             $rationalParts = explode('/', $value);
@@ -136,7 +136,7 @@ class ImageUtility
      * @return integer
      * @see http://www.impulseadventure.com/photo/exif-orientation.html
      */
-    static public function isRotated($orientation)
+    public static function isRotated($orientation)
     {
         $ret = false;
         switch ($orientation) {
@@ -159,7 +159,7 @@ class ImageUtility
      * @param integer $orientation
      * @return string
      */
-    static public function getTransformation($orientation)
+    public static function getTransformation($orientation)
     {
         $transformation = '';
         if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] !== 'gm') {
@@ -203,7 +203,7 @@ class ImageUtility
      * @return void
      * @see http://sylvana.net/jpegcrop/exif_orientation.html
      */
-    static public function resetOrientation($fileName)
+    public static function resetOrientation($fileName)
     {
         \Causal\ImageAutoresize\Utility\JpegExifOrient::setOrientation($fileName, 1);
     }
@@ -214,7 +214,7 @@ class ImageUtility
      * @param string $fileName
      * @return boolean
      */
-    static public function isTransparentPng($fileName)
+    public static function isTransparentPng($fileName)
     {
         $bytes = file_get_contents($fileName, false, null, 24, 2);    // read 24th and 25th bytes
         $byte24 = ord($bytes{0});

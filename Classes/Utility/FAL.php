@@ -30,7 +30,7 @@ class FAL
 {
 
     /** @var array */
-    static protected $reflectedClasses = array();
+    protected static $reflectedClasses = array();
 
     /**
      * Creates/updates the index entry for a given file.
@@ -43,7 +43,7 @@ class FAL
      * @param array $metadata EXIF metadata
      * @return void
      */
-    static public function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = array())
+    public static function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = array())
     {
         if ($file === null) {
             $file = static::findExistingFile($origFileName);
@@ -61,7 +61,7 @@ class FAL
      * @param string $fileName
      * @return \TYPO3\CMS\Core\Resource\AbstractFile|null
      */
-    static protected function findExistingFile($fileName)
+    protected static function findExistingFile($fileName)
     {
         $file = null;
         $relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
@@ -101,7 +101,7 @@ class FAL
      * @param array $metadata EXIF metadata
      * @return void
      */
-    static protected function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = array())
+    protected static function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = array())
     {
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
             /** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
@@ -177,7 +177,7 @@ class FAL
      * @param integer $height
      * @return void
      */
-    static protected function createIndex($fileName, $width, $height)
+    protected static function createIndex($fileName, $width, $height)
     {
         $relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
         $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
@@ -212,7 +212,7 @@ class FAL
      * @param string $propertyName
      * @return mixed
      */
-    static protected function accessProtectedProperty($object, $propertyName)
+    protected static function accessProtectedProperty($object, $propertyName)
     {
         $className = get_class($object);
         if (!isset(static::$reflectedClasses[$className])) {
