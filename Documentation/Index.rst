@@ -44,8 +44,8 @@ Resize images automatically
 		xavier@causal.ch
 
 	:License:
-		This document is published under the Open Content License
-		available from http://www.opencontent.org/opl.shtml
+		This document is published under the Open Publication License
+		available from http://www.opencontent.org/openpub/
 
 	:Rendered:
 		|today|
