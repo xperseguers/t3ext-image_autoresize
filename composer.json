@@ -35,6 +35,11 @@
   "replace": {
     "image_autoresize": "*"
   },
+  "autoload": {
+    "psr-4": {
+      "Causal\\ImageAutoresize\\": "Classes/"
+    }
+  },
   "support": {
     "issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
   }
