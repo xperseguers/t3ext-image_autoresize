@@ -1,8 +1,7 @@
 {
   "name": "causal/image_autoresize",
-  "description": "Simplify the way your editors may upload their images: no complex local procedure needed, let TYPO3 automatically resize down their huge images/pictures on-the-fly during upload (or using a scheduler task for batch processing) and according to your own business rules (directory/groups). This will highly reduce the footprint on your server and speed-up response time if lots of images are rendered (e.g., in a gallery). Features an EXIF/IPTC extractor to ensure metadata may be used by the FAL indexer even if not preserved upon resizing.",
-  "version": "1.6.4-dev",
   "type": "typo3-cms-extension",
+  "description": "Simplify the way your editors may upload their images: no complex local procedure needed, let TYPO3 automatically resize down their huge images/pictures on-the-fly during upload (or using a scheduler task for batch processing) and according to your own business rules (directory/groups). This will highly reduce the footprint on your server and speed-up response time if lots of images are rendered (e.g., in a gallery). Features an EXIF/IPTC extractor to ensure metadata may be used by the FAL indexer even if not preserved upon resizing.",
   "keywords": [
     "TYPO3 CMS",
     "image",
@@ -18,7 +17,9 @@
     "performance"
   ],
   "homepage": "https://forge.typo3.org/projects/extension-image_autoresize",
-  "license": "GPL-2.0+",
+  "support": {
+    "issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
+  },
   "authors": [
     {
       "name": "Xavier Perseguers",
@@ -28,19 +29,37 @@
       "role": "Developer"
     }
   ],
+  "license": "GPL-2.0+",
   "require": {
     "php": ">= 5.3.3, <= 5.6.99",
     "typo3/cms-core": ">= 6.2.0, <= 7.99.99"
-  },
-  "replace": {
-    "image_autoresize": "*"
   },
   "autoload": {
     "psr-4": {
       "Causal\\ImageAutoresize\\": "Classes/"
     }
   },
-  "support": {
-    "issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
+  "replace": {
+    "image_autoresize": "self.version",
+    "typo3-ter/image-autoresize": "self.version"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/Web/typo3conf/ext/",
+      "[ -L .Build/Web/typo3conf/ext/image_autoresize ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/image_autoresize"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.6.x-dev"
+    },
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
   }
 }
