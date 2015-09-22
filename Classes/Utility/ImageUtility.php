@@ -58,6 +58,8 @@ class ImageUtility
             $exif = @exif_read_data($fileName);
             if ($exif) {
                 $metadata = $exif;
+                // Fix description coming from EXIF
+                $metadata['ImageDescription'] = static::safeUtf8Encode($metadata['ImageDescription']);
 
                 // Process the longitude/latitude/altitude
                 if (isset($metadata['GPSLatitude']) && is_array($metadata['GPSLatitude'])) {
@@ -103,13 +105,36 @@ class ImageUtility
                     );
                     foreach ($mapping as $iptcKey => $metadataKey) {
                         if (isset($data[$iptcKey])) {
-                            $metadata['IPTC' . $metadataKey] = $data[$iptcKey][0];
+                            $metadata['IPTC' . $metadataKey] = static::safeUtf8Encode($data[$iptcKey][0]);
                         }
                     }
                 }
             }
         }
         return $metadata;
+    }
+
+    /**
+     * Safely converts some text to UTF-8.
+     *
+     * @param string $text
+     * @return string
+     */
+    protected static function safeUtf8Encode($text)
+    {
+        if (function_exists('mb_detect_encoding')) {
+            if (mb_detect_encoding($text, 'UTF-8', true) !== 'UTF-8') {
+                $text = utf8_encode($text);
+            }
+        } else {
+            // Fall back to hack
+            $encoding = mb_detect_encoding($text, 'UTF-8', true);
+            $encodedText = utf8_encode($text);
+            if (strpos($encodedText, 'Ã') === false) {
+                $text = $encodedText;
+            }
+        }
+        return $text;
     }
 
     /**
