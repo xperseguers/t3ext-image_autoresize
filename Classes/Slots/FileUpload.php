@@ -16,6 +16,10 @@ namespace Causal\ImageAutoresize\Slots;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Resource\Driver\AbstractDriver;
+use TYPO3\CMS\Core\Resource\ProcessedFile;
+use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\Service\FileProcessingService;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
 /**
@@ -31,6 +35,16 @@ use Causal\ImageAutoresize\Service\ImageResizer;
  */
 class FileUpload
 {
+
+    const SIGNAL_SanitizeFileName = 'sanitizeFileName';
+    const SIGNAL_PreFileProcess = 'preFileProcess';
+    const SIGNAL_AutoResize = 'autoResize';
+    const SIGNAL_PopulateMetadata = 'populateMetadata';
+
+    /**
+     * @var string
+     */
+    protected static $lastMethodCall = null;
 
     /**
      * @var ImageResizer
@@ -78,6 +92,8 @@ class FileUpload
      */
     public function sanitizeFileName($fileName, \TYPO3\CMS\Core\Resource\Folder $folder)
     {
+        static::$lastMethodCall = __FUNCTION__;
+
         $slotArguments = func_get_args();
         // Last parameter is the signal name itself and is not actually part of the arguments
         array_pop($slotArguments);
@@ -105,6 +121,43 @@ class FileUpload
     }
 
     /**
+     * Processes a file.
+     *
+     * @param FileProcessingService $fileProcessingService
+     * @param AbstractDriver $driver
+     * @param ProcessedFile $processedFile
+     * @param File $file
+     * @param string $taskType
+     * @param array $configuration
+     * @return
+     */
+    public function preFileProcess(FileProcessingService $fileProcessingService, AbstractDriver $driver, ProcessedFile $processedFile, File $file, $taskType, array $configuration)
+    {
+        if (static::$lastMethodCall !== null) {
+            // This signal is of no use since other signals are already triggered prior
+            // to this one or afterwards
+            return;
+        }
+
+        // A file is about to be added as a *replacement* of an
+        // existing one, this is the only way to process it to
+        // autoresize the image, if needed
+        $folder = $file->getParentFolder();
+        $storageConfiguration = $folder->getStorage()->getConfiguration();
+        $storageRecord = $folder->getStorage()->getStorageRecord();
+        if ($storageRecord['driver'] !== 'Local') {
+            // Unfortunately unsupported yet
+            return;
+        }
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
+        $uploadedFile = $targetDirectory . '/' . $file->getName();
+
+        $this->processFile($uploadedFile, $uploadedFile, $targetDirectory, $file);
+        $this->populateMetadata($file, $folder);
+    }
+
+    /**
      * Auto-resizes a given source file (possibly converting it as well).
      *
      * @param string $targetFileName
@@ -114,6 +167,8 @@ class FileUpload
      */
     public function autoResize(&$targetFileName, \TYPO3\CMS\Core\Resource\Folder $folder, $sourceFile)
     {
+        static::$lastMethodCall = __FUNCTION__;
+
         $storageConfiguration = $folder->getStorage()->getConfiguration();
         $storageRecord = $folder->getStorage()->getStorageRecord();
         if ($storageRecord['driver'] !== 'Local') {
@@ -138,17 +193,7 @@ class FileUpload
         $sourceFile .= '.' . $extension;
 
         if (rename($originalSourceFile, $sourceFile)) {
-            $newSourceFile = static::$imageResizer->processFile(
-                $sourceFile,
-                $targetFileName,
-                $targetDirectory,
-                null,
-                $GLOBALS['BE_USER'],
-                array($this, 'notify')
-            );
-
-            static::$metadata = static::$imageResizer->getLastMetadata();
-
+            $newSourceFile = $this->processFile($sourceFile, $targetFileName, $targetDirectory);
             $newExtension = strtolower(substr($newSourceFile, strrpos($newSourceFile, '.') + 1));
 
             // We must go back to original (temporary) file name
@@ -158,6 +203,29 @@ class FileUpload
                 $targetFileName = substr($targetFileName, 0, -strlen($extension)) . $newExtension;
             }
         }
+    }
+
+    /**
+     * @param string $fileName
+     * @param string $targetFileName
+     * @param string $targetDirectory
+     * @param File $file
+     * @return string
+     */
+    protected function processFile($fileName, &$targetFileName, $targetDirectory, File $file = null)
+    {
+        $newFileName = static::$imageResizer->processFile(
+            $fileName,
+            $targetFileName,
+            $targetDirectory,
+            $file,
+            $GLOBALS['BE_USER'],
+            array($this, 'notify')
+        );
+
+        static::$metadata = static::$imageResizer->getLastMetadata();
+
+        return $newFileName;
     }
 
     /**

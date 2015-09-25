@@ -26,6 +26,8 @@ namespace Causal\ImageAutoresize\Slots;
 class ExtensionManager
 {
 
+    const SIGNAL_ProcessActions = 'processActions';
+
     /**
      * Extends the list of actions for EXT:image_autoresize to link to
      * the configuration module.

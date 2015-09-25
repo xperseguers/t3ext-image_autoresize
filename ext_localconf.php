@@ -5,29 +5,37 @@ defined('TYPO3_MODE') or die();
 $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
 
 // Hook into \TYPO3\CMS\Core\Resource\ResourceStorage
+if (version_compare(TYPO3_version, '7.4.0', '>=')) {
+    $signalSlotDispatcher->connect(
+        'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
+        \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_SanitizeFileName,
+        'Causal\\ImageAutoresize\\Slots\\FileUpload',
+        \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_SanitizeFileName
+    );
+    $signalSlotDispatcher->connect(
+        'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
+        \TYPO3\CMS\Core\Resource\Service\FileProcessingService::SIGNAL_PreFileProcess,
+        'Causal\\ImageAutoresize\\Slots\\FileUpload',
+        \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PreFileProcess
+    );
+}
 $signalSlotDispatcher->connect(
     'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
-    'sanitizeFileName',
+    \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PreFileAdd,
     'Causal\\ImageAutoresize\\Slots\\FileUpload',
-    'sanitizeFileName'
+    \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_AutoResize
 );
 $signalSlotDispatcher->connect(
     'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
-    'preFileAdd',
+    \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PostFileAdd,
     'Causal\\ImageAutoresize\\Slots\\FileUpload',
-    'autoResize'
-);
-$signalSlotDispatcher->connect(
-    'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
-    'postFileAdd',
-    'Causal\\ImageAutoresize\\Slots\\FileUpload',
-    'populateMetadata'
+    \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PopulateMetadata
 );
 $signalSlotDispatcher->connect(
     'TYPO3\\CMS\\Extensionmanager\\ViewHelpers\\ProcessAvailableActionsViewHelper',
-    'processActions',
+    \TYPO3\CMS\Extensionmanager\ViewHelpers\ProcessAvailableActionsViewHelper::SIGNAL_ProcessActions,
     'Causal\\ImageAutoresize\\Slots\\ExtensionManager',
-    'processActions'
+    \Causal\ImageAutoresize\Slots\ExtensionManager::SIGNAL_ProcessActions
 );
 
 $extensionName = \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($_EXTKEY);
