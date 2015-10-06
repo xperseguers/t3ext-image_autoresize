@@ -1,6 +1,4 @@
 <?php
-namespace Causal\ImageAutoresize\Slots;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -13,6 +11,8 @@ namespace Causal\ImageAutoresize\Slots;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+namespace Causal\ImageAutoresize\Slots;
 
 /**
  * Slot implementation to extend the list of actions in Extension Manager.

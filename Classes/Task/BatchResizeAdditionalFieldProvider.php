@@ -1,6 +1,4 @@
 <?php
-namespace Causal\ImageAutoresize\Task;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -13,6 +11,8 @@ namespace Causal\ImageAutoresize\Task;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+namespace Causal\ImageAutoresize\Task;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
