@@ -147,9 +147,9 @@
 								<TCEforms type="array">
 									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xml:tx_imageautoresize.conversion_mapping</label>
 									<config>
-										<type>input</type>
-										<size>50</size>
-										<max>255</max>
+										<type>text</type>
+										<cols>20</cols>
+										<rows>5</rows>
 										<eval>trim</eval>
 									</config>
 								</TCEforms>
