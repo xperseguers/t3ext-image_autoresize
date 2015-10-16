@@ -612,7 +612,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         $twitterMessagePattern = $this->languageService->getLL('social.twitter');
         $message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
-        $url = 'http://typo3.org/extensions/repository/view/image_autoresize';
+        $url = 'https://typo3.org/extensions/repository/view/image_autoresize';
 
         $twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
         $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
