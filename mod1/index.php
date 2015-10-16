@@ -17,7 +17,7 @@ use TYPO3\CMS\Backend\Utility\IconUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-$GLOBALS['LANG']->includeLLFile('EXT:image_autoresize/mod1/locallang.xml');
+$GLOBALS['LANG']->includeLLFile('EXT:image_autoresize/mod1/locallang.xlf');
 if (!$GLOBALS['BE_USER']->isAdmin()) {
     throw new \RuntimeException('Access Error: You don\'t have access to this module.', 1294586448);
 }
@@ -146,20 +146,20 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 
         // CLOSE button
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', true) . '" />'));
+            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '" />'));
         } else {
             $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:closeConfiguration', true) . '">' .
+            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
                 IconUtility::getSpriteIcon('actions-document-close') .
                 '</a>';
         }
         $buttons['close'] = $closeLink;
 
         // SAVE button
-        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveConfiguration', true) . '" />'));
+        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />'));
 
         // SAVE_CLOSE button
-        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:saveCloseConfiguration', true) . '" />'));
+        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />'));
 
         // Shortcut
         if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
@@ -372,15 +372,19 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
     public function getImageFileExtensions(array $settings)
     {
         $extensions = GeneralUtility::trimExplode(',', strtolower($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']), true);
-        // We don't consider PDF being an image
+        // We don't consider PDF being an image...
         if ($key = array_search('pdf', $extensions)) {
+            unset($extensions[$key]);
+        }
+        // ... neither SVG since vectorial
+        if ($key = array_search('svg', $extensions)) {
             unset($extensions[$key]);
         }
         asort($extensions);
 
         $elements = array();
         foreach ($extensions as $extension) {
-            $label = $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:extension.' . $extension);
+            $label = $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:extension.' . $extension);
             $label = $label ? $label : '.' . $extension;
             $elements[] = array($label, $extension);
         }

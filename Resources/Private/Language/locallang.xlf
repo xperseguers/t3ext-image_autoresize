@@ -3,58 +3,58 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize">
 		<header/>
 		<body>
-			<trans-unit id="saveConfiguration" xml:space="preserve">
+			<trans-unit id="saveConfiguration">
 				<source>Save configuration</source>
 			</trans-unit>
-			<trans-unit id="saveCloseConfiguration" xml:space="preserve">
+			<trans-unit id="saveCloseConfiguration">
 				<source>Save and close configuration</source>
 			</trans-unit>
-			<trans-unit id="closeConfiguration" xml:space="preserve">
+			<trans-unit id="closeConfiguration">
 				<source>Close configuration</source>
 			</trans-unit>
-			<trans-unit id="extension.ai" xml:space="preserve">
+			<trans-unit id="extension.ai">
 				<source>.ai - Adobe Illustrator</source>
 			</trans-unit>
-			<trans-unit id="extension.bmp" xml:space="preserve">
+			<trans-unit id="extension.bmp">
 				<source>.bmp - Windows OS/2 Bitmap Graphics</source>
 			</trans-unit>
-			<trans-unit id="extension.gif" xml:space="preserve">
+			<trans-unit id="extension.gif">
 				<source>.gif - Graphic Interchange Format</source>
 			</trans-unit>
-			<trans-unit id="extension.jpg" xml:space="preserve">
+			<trans-unit id="extension.jpg">
 				<source>.jpg - JPEG/JIFF Image</source>
 			</trans-unit>
-			<trans-unit id="extension.jpeg" xml:space="preserve">
+			<trans-unit id="extension.jpeg">
 				<source>.jpeg - JPEG/JIFF Image</source>
 			</trans-unit>
-			<trans-unit id="extension.pcx" xml:space="preserve">
+			<trans-unit id="extension.pcx">
 				<source>.pcx - Paintbrush Bitmap Graphic</source>
 			</trans-unit>
-			<trans-unit id="extension.png" xml:space="preserve">
+			<trans-unit id="extension.png">
 				<source>.png - Portable Network Graphic</source>
 			</trans-unit>
-			<trans-unit id="extension.tga" xml:space="preserve">
+			<trans-unit id="extension.tga">
 				<source>.tga - Truevision Targa Graphic</source>
 			</trans-unit>
-			<trans-unit id="extension.tif" xml:space="preserve">
+			<trans-unit id="extension.tif">
 				<source>.tif - Tagged Image Format</source>
 			</trans-unit>
-			<trans-unit id="extension.tiff" xml:space="preserve">
+			<trans-unit id="extension.tiff">
 				<source>.tiff - Tagged Image Format</source>
 			</trans-unit>
-			<trans-unit id="message.emptyConfiguration" xml:space="preserve">
+			<trans-unit id="message.emptyConfiguration">
 				<source>Extension image_autoresize is not properly configured!</source>
 			</trans-unit>
-			<trans-unit id="message.imageTransparent" xml:space="preserve">
+			<trans-unit id="message.imageTransparent">
 				<source>Image %s has not been resized because transparency has been detected.</source>
 			</trans-unit>
-			<trans-unit id="message.imageResized" xml:space="preserve">
+			<trans-unit id="message.imageResized">
 				<source>Image %s has been automatically resized to %sx%s pixels.</source>
 			</trans-unit>
-			<trans-unit id="message.imageResizedAndRenamed" xml:space="preserve">
+			<trans-unit id="message.imageResizedAndRenamed">
 				<source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
 			</trans-unit>
-			<trans-unit id="message.imageNotWritable" xml:space="preserve">
+			<trans-unit id="message.imageNotWritable">
 				<source>Image %s cannot be resized because file is not writable.</source>
 			</trans-unit>
 		</body>

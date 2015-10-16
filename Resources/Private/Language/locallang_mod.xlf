@@ -3,22 +3,22 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-11-08T15:56:07Z" product-name="image_autoresize">
 		<header/>
 		<body>
-			<trans-unit id="batchResizeTask.name" xml:space="preserve">
+			<trans-unit id="batchResizeTask.name">
 				<source>Batch resize images</source>
 			</trans-unit>
-			<trans-unit id="batchResizeTask.description" xml:space="preserve">
+			<trans-unit id="batchResizeTask.description">
 				<source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
 			</trans-unit>
-			<trans-unit id="label.batchResize.directories" xml:space="preserve">
+			<trans-unit id="label.batchResize.directories">
 				<source>Directories to process (one by line, overrides watched directories):</source>
 			</trans-unit>
-			<trans-unit id="label.batchResize.excludeDirectories" xml:space="preserve">
+			<trans-unit id="label.batchResize.excludeDirectories">
 				<source>Exclude directories (one by line):</source>
 			</trans-unit>
-			<trans-unit id="msg.invalidDirectories" xml:space="preserve">
+			<trans-unit id="msg.invalidDirectories">
 				<source>Cannot process non-existing directory: %s</source>
 			</trans-unit>
-			<trans-unit id="msg.invalidExcludeDirectories" xml:space="preserve">
+			<trans-unit id="msg.invalidExcludeDirectories">
 				<source>Cannot exclude non-existing directory: %s</source>
 			</trans-unit>
 		</body>

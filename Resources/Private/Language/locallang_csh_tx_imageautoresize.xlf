@@ -15,22 +15,22 @@ fileadmin/**/images/</source>
 				<source>Comma-separated list of file types to be handled.
 Example: jpg,jpeg,png,tif,tiff</source>
 			</trans-unit>
-			<trans-unit id="threshold.description" xml:space="preserve">
+			<trans-unit id="threshold.description">
 				<source>Images larger than this value will be resized (allowed units: B|K|M).</source>
 			</trans-unit>
-			<trans-unit id="max_width.description" xml:space="preserve">
+			<trans-unit id="max_width.description">
 				<source>Images will be resized up to this maximum width.</source>
 			</trans-unit>
-			<trans-unit id="max_height.description" xml:space="preserve">
+			<trans-unit id="max_height.description">
 				<source>Images will be resized up to this maximum height.</source>
 			</trans-unit>
-			<trans-unit id="auto_orient.description" xml:space="preserve">
+			<trans-unit id="auto_orient.description">
 				<source>Will try to auto-magically orient image (useful with photos).</source>
 			</trans-unit>
-			<trans-unit id="keep_metadata.description" xml:space="preserve">
+			<trans-unit id="keep_metadata.description">
 				<source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
 			</trans-unit>
-			<trans-unit id="resize_png_with_alpha.description" xml:space="preserve">
+			<trans-unit id="resize_png_with_alpha.description">
 				<source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost</source>
 			</trans-unit>
 			<trans-unit id="conversion_mapping.description" xml:space="preserve">

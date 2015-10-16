@@ -3,7 +3,7 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:12Z" product-name="image_autoresize">
 		<header/>
 		<body>
-			<trans-unit id="title.description" xml:space="preserve">
+			<trans-unit id="title.description">
 				<source>Title of the rule set. This is only used in this form to help you keep your rule sets organized.</source>
 			</trans-unit>
 			<trans-unit id="usergroup.description" xml:space="preserve">
@@ -36,7 +36,7 @@ If empty, the maximum width configured in General tab will be taken into account
 				<source>Images will be resized up to this maximum height.
 If empty, the maximum height configured in General tab will be taken into account.</source>
 			</trans-unit>
-			<trans-unit id="keep_metadata.description" xml:space="preserve">
+			<trans-unit id="keep_metadata.description">
 				<source>Either inherit configuration from General settings or explicitly configure wether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</source>
 			</trans-unit>
 			<trans-unit id="conversion_mapping.description" xml:space="preserve">
