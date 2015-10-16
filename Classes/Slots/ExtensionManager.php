@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Slots;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Slot implementation to extend the list of actions in Extension Manager.
@@ -47,7 +48,13 @@ class ExtensionManager
             $title = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($titleKey, $extensionName);
 
             $icon = 'actions-system-extension-configure';
-            $icon = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon($icon, array('title' => $title));
+            if (version_compare(TYPO3_version, '7.5.0', '>=')) {
+                /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
+                $iconFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Imaging\\IconFactory');
+                $icon = (string)$iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
+            } else {
+                $icon = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon($icon, array('title' => $title));
+            }
 
             // Configure action comes as first icon
             $configureAction = sprintf('<a class="btn btn-default" title="%s" href="%s">%s</a>', htmlspecialchars($title), htmlspecialchars($moduleUrl), $icon);
@@ -55,6 +62,9 @@ class ExtensionManager
                 array_unshift($actions, $configureAction);
             } else {
                 $actions[0] = $configureAction;
+                if (version_compare(TYPO3_version, '7.5.0', '>=')) {
+                    unset($actions[1], $actions[2], $actions[3], $actions[4]);
+                }
             }
 
             $title = htmlspecialchars($extension['title']);

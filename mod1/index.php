@@ -14,7 +14,6 @@
 
 use TYPO3\CMS\Backend\Module\BaseScriptClass;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Backend\Utility\IconUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -393,20 +392,20 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         // CLOSE button
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '" />'));
+            $closeLink = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '" />'));
         } else {
             $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
             $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
-                IconUtility::getSpriteIcon('actions-document-close') .
+                \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close') .
                 '</a>';
         }
         $buttons['close'] = $closeLink;
 
         // SAVE button
-        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />'));
+        $buttons['save'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />'));
 
         // SAVE_CLOSE button
-        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />'));
+        $buttons['save_close'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />'));
 
         // Shortcut
         if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
