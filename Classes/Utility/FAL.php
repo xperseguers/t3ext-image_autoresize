@@ -29,7 +29,9 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 class FAL
 {
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected static $reflectedClasses = array();
 
     /**

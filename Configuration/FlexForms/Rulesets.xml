@@ -67,7 +67,7 @@
 									<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.file_types</label>
 									<config type="array">
 										<type>select</type>
-										<itemsProcFunc>tx_imageautoresize_module1->getImageFileExtensions</itemsProcFunc>
+										<itemsProcFunc>Causal\ImageAutoresize\Tca\Graphics->getImageFileExtensions</itemsProcFunc>
 										<renderType>selectMultipleSideBySide</renderType>
 										<minitems>0</minitems>
 										<maxitems>20</maxitems>

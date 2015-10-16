@@ -14,6 +14,8 @@
 
 namespace Causal\ImageAutoresize\Slots;
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+
 /**
  * Slot implementation to extend the list of actions in Extension Manager.
  *
@@ -38,7 +40,7 @@ class ExtensionManager
     public function processActions(array $extension, array &$actions)
     {
         if ($extension['key'] === 'image_autoresize') {
-            $moduleUrl = \TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('xMOD_tximageautoresize');
+            $moduleUrl = BackendUtility::getModuleUrl('xMOD_tximageautoresize');
 
             $extensionName = 'extensionmanager';
             $titleKey = 'extensionList.configure';

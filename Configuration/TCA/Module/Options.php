@@ -21,7 +21,7 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
-                'itemsProcFunc' => 'tx_imageautoresize_module1->getImageFileExtensions',
+                'itemsProcFunc' => 'Causal\\ImageAutoresize\\Tca\\Graphics->getImageFileExtensions',
                 'minitems' => '0',
                 'maxitems' => '20',
                 'size' => '6',
@@ -108,7 +108,7 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
     'types' => array(
         '0' => array('showitem' =>
             'directories,threshold,file_types,
-			--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:ALT.imgDimensions;1,
+			--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:ALT.imgDimensions;dimensions,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.options,
 				auto_orient,keep_metadata,resize_png_with_alpha,conversion_mapping,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.rulesets,
@@ -116,7 +116,7 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
 		'),
     ),
     'palettes' => array(
-        '1' => array('showitem' => 'max_width,max_height'),
+        'dimensions' => array('showitem' => 'max_width,max_height'),
     ),
 );
 

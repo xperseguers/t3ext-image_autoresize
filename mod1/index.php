@@ -12,12 +12,12 @@
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Module\BaseScriptClass;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Utility\IconUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-$GLOBALS['LANG']->includeLLFile('EXT:image_autoresize/mod1/locallang.xlf');
 if (!$GLOBALS['BE_USER']->isAdmin()) {
     throw new \RuntimeException('Access Error: You don\'t have access to this module.', 1294586448);
 }
@@ -31,7 +31,7 @@ if (!$GLOBALS['BE_USER']->isAdmin()) {
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     http://www.gnu.org/copyleft/gpl.html
  */
-class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass
+class tx_imageautoresize_module1 extends BaseScriptClass
 {
 
     const virtualTable = 'tx_imageautoresize';
@@ -48,6 +48,11 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
     protected $expertKey = 'image_autoresize_ff';
 
     /**
+     * @var \TYPO3\CMS\Lang\LanguageService
+     */
+    protected $languageService;
+
+    /**
      * @var \TYPO3\CMS\Backend\Form\FormEngine
      */
     protected $tceforms;
@@ -56,6 +61,11 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
      * @var \TYPO3\CMS\Backend\Form\FormResultCompiler $formResultCompiler
      */
     protected $formResultCompiler;
+
+    /**
+     * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
+     */
+    protected $moduleTemplate;
 
     /**
      * @var array
@@ -67,6 +77,11 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
      */
     public function __construct()
     {
+        if (version_compare(TYPO3_version, '7.5.99', '>')) {
+            $this->moduleTemplate = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\ModuleTemplate');
+        }
+        $this->languageService = $GLOBALS['LANG'];
+
         $config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
         $this->config = $config ? unserialize($config) : $this->getDefaultConfiguration();
         $this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
@@ -79,24 +94,30 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
      */
     public function main()
     {
-        if (GeneralUtility::_GP('form_submitted')) {
-            $this->processData();
+        $this->languageService->includeLLFile('EXT:image_autoresize/mod1/locallang.xlf');
+        $this->processData();
+
+        $formTag = '<form action="" method="post" name="editform">';
+
+        if (version_compare(TYPO3_version, '7.5.99', '>')) {
+            $this->moduleTemplate->setForm($formTag);
+
+            $this->content .= $this->moduleTemplate->sectionHeader($this->languageService->getLL('title'));
+            $this->addStatisticsAndSocialLink();
+            $this->content .= $this->moduleTemplate->spacer(5);
+        } else {
+            if (version_compare(TYPO3_version, '7.4.99', '<=')) {
+                $this->initTCEForms();
+            }
+            $this->doc = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
+            $this->doc->setModuleTemplate(ExtensionManagementUtility::extPath($this->extKey) . 'mod1/mod_template.html');
+            $this->doc->backPath = $GLOBALS['BACK_PATH'];
+            $this->doc->form = $formTag;
+
+            $this->content .= $this->doc->header($this->languageService->getLL('title'));
+            $this->addStatisticsAndSocialLink();
+            $this->content .= $this->doc->spacer(5);
         }
-
-        if (version_compare(TYPO3_version, '7.4.99', '<=')) {
-            $this->initTCEForms();
-        }
-        $this->doc = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
-        $this->doc->setModuleTemplate(ExtensionManagementUtility::extPath($this->extKey) . 'mod1/mod_template.html');
-        $this->doc->backPath = $GLOBALS['BACK_PATH'];
-        $docHeaderButtons = $this->getButtons();
-
-        $this->doc->form = '<form action="" method="post" name="editform">';
-
-        // Render content:
-        $this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
-        $this->addStatisticsAndSocialLink();
-        $this->content .= $this->doc->spacer(5);
 
         $row = $this->config;
         if (version_compare(TYPO3_version, '7.5.0', '>=')) {
@@ -118,15 +139,27 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         }
 
         // Compile document
-        $markers['FUNC_MENU'] = '';
-        $markers['CONTENT'] = $this->content;
-        $this->content = '';
+        if (version_compare(TYPO3_version, '7.5.99', '>')) {
+            $this->addToolbarButtons();
+            $this->moduleTemplate->setContent($this->content);
+            $content = $this->moduleTemplate->renderContent();
+        } else {
+            $markers = array(
+                'FUNC_MENU' => '',
+                'CONTENT' => $this->content,
+            );
 
-        // Build the <body> for the module
-        $this->content .= $this->doc->startPage($GLOBALS['LANG']->getLL('title'));
-        $this->content .= $this->doc->moduleBody($this->pageinfo, $docHeaderButtons, $markers);
-        $this->content .= $this->doc->endPage();
-        $this->content = $this->doc->insertStylesAndJS($this->content);
+            // Build the <body> for the module
+            $docHeaderButtons = $this->getButtons();
+            $content = $this->doc->startPage($this->languageService->getLL('title'));
+            $content .= $this->doc->moduleBody(array(), $docHeaderButtons, $markers);
+            $content .= $this->doc->endPage();
+            // Wrap result appropriately
+            $content = $this->doc->insertStylesAndJS($content);
+        }
+
+        // Replace module content with everything needed
+        $this->content = $content;
     }
 
     /**
@@ -217,8 +250,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 			<input type="hidden" name="closeDoc" value="0" />
 			<input type="hidden" name="doSave" value="0" />
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
-			<input type="hidden" name="_scrollPosition" value="" />
-			<input type="hidden" name="form_submitted" value="1" />';
+			<input type="hidden" name="_scrollPosition" value="" />';
 
         return $formContent;
     }
@@ -280,9 +312,71 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
     }
 
     /**
-     * Creates the panel of buttons for submitting the form or otherwise perform operations.
+     * Creates the toolbar buttons (TYPO3 7.6+).
      *
-     * @return array All available buttons as an assoc.
+     * @return void
+     */
+    protected function addToolbarButtons()
+    {
+        // Render SAVE type buttons:
+        // The action of each button is decided by its name attribute. (See doProcessData())
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $saveSplitButton = $buttonBar->makeSplitButton();
+
+        // SAVE button:
+        $saveButton = $buttonBar->makeInputButton()
+            ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveDoc', true))
+            ->setName('_savedok')
+            ->setValue('1')
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+                'actions-document-save',
+                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+            ));
+        $saveSplitButton->addItem($saveButton, true);
+
+        // SAVE / CLOSE
+        $saveAndCloseButton = $buttonBar->makeInputButton()
+            ->setName('_saveandclosedok')
+            ->setClasses('t3js-editform-submitButton')
+            ->setValue('1')
+            ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveCloseDoc', true))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+                'actions-document-save-close',
+                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+            ));
+        $saveSplitButton->addItem($saveAndCloseButton);
+
+        $buttonBar->addButton($saveSplitButton, \TYPO3\CMS\Backend\Template\Components\ButtonBar::BUTTON_POSITION_LEFT, 2);
+
+        // CLOSE button:
+        $closeButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3js-editform-close')
+            ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.closeDoc', true))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+                'actions-document-close',
+                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+            ));
+        $buttonBar->addButton($closeButton);
+
+        $shortCutButton = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->makeShortcutButton();
+        $shortCutButton->setModuleName($this->MCONF['name'])
+            ->setGetVariables([
+                'returnUrl',
+                'edit',
+                'defVals',
+                'overrideVals',
+                'columnsOnly',
+                'returnNewPageId',
+                'editRegularContentFromId',
+                'noView']);
+        $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->addButton($shortCutButton);
+    }
+
+    /**
+     * Retursn the panel of buttons for submitting the form or otherwise perform operations.
+     *
+     * @return array Returns all available buttons as an associative array (TYPO3 <= 7.5).
      */
     protected function getButtons()
     {
@@ -299,20 +393,20 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
 
         // CLOSE button
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '" />'));
+            $closeLink = IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '" />'));
         } else {
             $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
+            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
                 IconUtility::getSpriteIcon('actions-document-close') .
                 '</a>';
         }
         $buttons['close'] = $closeLink;
 
         // SAVE button
-        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />'));
+        $buttons['save'] = IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />'));
 
         // SAVE_CLOSE button
-        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />'));
+        $buttons['save_close'] = IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />'));
 
         // Shortcut
         if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
@@ -364,48 +458,52 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
      */
     protected function processData()
     {
-        $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-
-        $close = GeneralUtility::_GP('_close_x');
-        $saveCloseDok = GeneralUtility::_GP('_saveandclosedok_x');
-
-        if ($close) {
-            \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
+        if (version_compare(TYPO3_version, '7.5.99', '>')) {
+            $close = GeneralUtility::_GP('closeDoc');
+            $save = GeneralUtility::_GP('_savedok');
+            $saveAndClose = GeneralUtility::_GP('_saveandclosedok');
+        } else {
+            $close = GeneralUtility::_GP('_close_x');
+            $save = !$close && GeneralUtility::_GP('form_submitted');
+            $saveAndClose = GeneralUtility::_GP('_saveandclosedok_x');
         }
 
-        $table = static::virtualTable;
-        $id = static::virtualRecordId;
-        $field = 'rulesets';
+        if ($save || $saveAndClose) {
+            $table = static::virtualTable;
+            $id = static::virtualRecordId;
+            $field = 'rulesets';
 
-        $inputData_tmp = GeneralUtility::_GP('data');
-        $data = $inputData_tmp[$table][$id];
-        $newConfig = $this->config;
-        \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($newConfig, $data);
+            $inputData_tmp = GeneralUtility::_GP('data');
+            $data = $inputData_tmp[$table][$id];
+            $newConfig = $this->config;
+            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($newConfig, $data);
 
-        // Action commands (sorting order and removals of FlexForm elements)
-        $ffValue = &$data[$field];
-        if ($ffValue) {
-            $actionCMDs = GeneralUtility::_GP('_ACTION_FLEX_FORMdata');
-            if (is_array($actionCMDs[$table][$id][$field]['data'])) {
-                $dataHandler = new CustomDataHandler();
-                $dataHandler->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
+            // Action commands (sorting order and removals of FlexForm elements)
+            $ffValue = &$data[$field];
+            if ($ffValue) {
+                $actionCMDs = GeneralUtility::_GP('_ACTION_FLEX_FORMdata');
+                if (is_array($actionCMDs[$table][$id][$field]['data'])) {
+                    $dataHandler = new CustomDataHandler();
+                    $dataHandler->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
+                }
+                // Renumber all FlexForm temporary ids
+                $this->persistFlexForm($ffValue['data']);
+
+                // Keep order of FlexForm elements
+                $newConfig[$field] = $ffValue;
             }
-            // Renumber all FlexForm temporary ids
-            $this->persistFlexForm($ffValue['data']);
 
-            // Keep order of FlexForm elements
-            $newConfig[$field] = $ffValue;
+            // Write back configuration to localconf.php
+            $localconfConfig = $newConfig;
+            $localconfConfig['conversion_mapping'] = implode(',', GeneralUtility::trimExplode(LF, $localconfConfig['conversion_mapping'], true));
+
+            if ($this->writeToLocalconf($this->expertKey, $localconfConfig)) {
+                $this->config = $newConfig;
+            }
         }
 
-        // Write back configuration to localconf.php
-        $localconfConfig = $newConfig;
-        $localconfConfig['conversion_mapping'] = implode(',', GeneralUtility::trimExplode(LF, $localconfConfig['conversion_mapping'], true));
-
-        if ($this->writeToLocalconf($this->expertKey, $localconfConfig)) {
-            $this->config = $newConfig;
-        }
-
-        if ($saveCloseDok) {
+        if ($close || $saveAndClose) {
+            $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
             \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
         }
     }
@@ -483,37 +581,6 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
     }
 
     /**
-     * Prepares a list of image file extensions supported by the current
-     * TYPO3 install.
-     * Used in tca and FlexForm for the list of file types.
-     *
-     * @param array $settings content element configuration
-     * @return array content element configuration with dynamically added items
-     */
-    public function getImageFileExtensions(array $settings)
-    {
-        $extensions = GeneralUtility::trimExplode(',', strtolower($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']), true);
-        // We don't consider PDF being an image...
-        if ($key = array_search('pdf', $extensions)) {
-            unset($extensions[$key]);
-        }
-        // ... neither SVG since vectorial
-        if ($key = array_search('svg', $extensions)) {
-            unset($extensions[$key]);
-        }
-        asort($extensions);
-
-        $elements = array();
-        foreach ($extensions as $extension) {
-            $label = $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:extension.' . $extension);
-            $label = $label ? $label : '.' . $extension;
-            $elements[] = array($label, $extension);
-        }
-
-        $settings['items'] = array_merge($settings['items'], $elements);
-    }
-
-    /**
      * Returns some statistics and a social link to Twitter.
      *
      * @return void
@@ -532,16 +599,19 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         }
 
         $resourcesPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($this->extKey) . 'Resources/Public/';
-        $this->doc->getPageRenderer()->addCssFile($resourcesPath . 'Css/twitter.css');
-        $this->doc->getPageRenderer()->addJsFile($resourcesPath . 'JavaScript/popup.js');
+        $pageRenderer = version_compare(TYPO3_version, '7.5.99', '>')
+            ? $this->moduleTemplate->getPageRenderer()
+            : $this->doc->getPageRenderer();
+        $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
+        $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
         $totalSpaceClaimed = GeneralUtility::formatSize((int)$data['bytes']);
-        $messagePattern = $GLOBALS['LANG']->getLL('storage.claimed');
+        $messagePattern = $this->languageService->getLL('storage.claimed');
         $message = sprintf($messagePattern, $totalSpaceClaimed, (int)$data['images']);
 
         $flashMessage = htmlspecialchars($message);
 
-        $twitterMessagePattern = $GLOBALS['LANG']->getLL('social.twitter');
+        $twitterMessagePattern = $this->languageService->getLL('social.twitter');
         $message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
         $url = 'http://typo3.org/extensions/repository/view/image_autoresize';
 
@@ -549,7 +619,7 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . $GLOBALS['LANG']->getLL('social.share', true) . '">
+                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . $this->languageService->getLL('social.share', true) . '">
                     <i class="btn-icon"></i>
                     <span class="btn-text">Tweet</span>
                 </a>
