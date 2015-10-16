@@ -264,8 +264,8 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
             \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
         }
 
-        $table = self::virtualTable;
-        $id = self::virtualRecordId;
+        $table = static::virtualTable;
+        $id = static::virtualRecordId;
         $field = 'rulesets';
 
         $inputData_tmp = GeneralUtility::_GP('data');
