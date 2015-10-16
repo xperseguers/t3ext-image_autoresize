@@ -20,6 +20,7 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.file_types',
             'config' => array(
                 'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
                 'itemsProcFunc' => 'tx_imageautoresize_module1->getImageFileExtensions',
                 'minitems' => '0',
                 'maxitems' => '20',

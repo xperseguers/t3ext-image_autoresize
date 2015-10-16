@@ -53,6 +53,11 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
     protected $tceforms;
 
     /**
+     * @var \TYPO3\CMS\Backend\Form\FormResultCompiler $formResultCompiler
+     */
+    protected $formResultCompiler;
+
+    /**
      * @var array
      */
     protected $config;
@@ -78,7 +83,9 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
             $this->processData();
         }
 
-        $this->initTCEForms();
+        if (version_compare(TYPO3_version, '7.4.99', '<=')) {
+            $this->initTCEForms();
+        }
         $this->doc = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
         $this->doc->setModuleTemplate(ExtensionManagementUtility::extPath($this->extKey) . 'mod1/mod_template.html');
         $this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -87,7 +94,28 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         $this->doc->form = '<form action="" method="post" name="editform">';
 
         // Render content:
-        $this->moduleContent();
+        $this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
+        $this->addStatisticsAndSocialLink();
+        $this->content .= $this->doc->spacer(5);
+
+        $row = $this->config;
+        if (version_compare(TYPO3_version, '7.5.0', '>=')) {
+            // FormEngine now expects an array of data and not a comma-separated list of values
+            $row['file_types'] = GeneralUtility::trimExplode(',', $row['file_types'], true);
+            if (!empty($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'])) {
+                foreach ($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'] as &$el) {
+                    $el['container']['el']['file_types']['vDEF'] = GeneralUtility::trimExplode(',', $el['container']['el']['file_types']['vDEF'], true);
+                }
+            }
+            $this->moduleContent($row);
+        } else {
+            if ($row['rulesets']) {
+                /** @var $flexObj \TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools */
+                $flexObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools');
+                $row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], true);
+            }
+            $this->moduleContentLegacy($row);
+        }
 
         // Compile document
         $markers['FUNC_MENU'] = '';
@@ -102,28 +130,153 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
     }
 
     /**
-     * Generates the module content.
+     * Generates the module content (TYPO3 7+).
      *
+     * @param array $row
      * @return void
      */
-    protected function moduleContent()
+    protected function moduleContent(array $row)
     {
-        $row = $this->config;
-        if ($row['rulesets']) {
-            /** @var $flexObj \TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools */
-            $flexObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools');
-            $row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], true);
+        $this->formResultCompiler = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormResultCompiler');
+
+        $wizard = $this->formResultCompiler->JStop();
+        $wizard .= $this->buildForm($row);
+        $wizard .= $this->formResultCompiler->printNeededJSFunctions();
+
+        $this->content .= $wizard;
+    }
+
+    /**
+     * Builds the expert configuration form (TYPO3 7+).
+     *
+     * @param array $row
+     * @return string
+     */
+    protected function buildForm(array $row)
+    {
+        $record = array(
+            'uid' => static::virtualRecordId,
+            'pid' => 0,
+        );
+        $record = array_merge($record, $row);
+
+        // Trick to use a virtual record
+        $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
+        $originalProvider = 'TYPO3\\CMS\\Backend\\Form\\FormDataProvider\\DatabaseEditRow';
+        $databaseEditRowProvider = $dataProviders[$originalProvider];
+        unset($dataProviders[$originalProvider]);
+        \Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::initialize($record);
+        $dataProviders['Causal\\ImageAutoresize\\Backend\\Form\\FormDataProvider\\VirtualDatabaseEditRow'] = $databaseEditRowProvider;
+
+        /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
+        $formDataGroup = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormDataGroup\\TcaDatabaseRecord');
+        /** @var \TYPO3\CMS\Backend\Form\FormDataCompiler $formDataCompiler */
+        $formDataCompiler = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormDataCompiler', $formDataGroup);
+        /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
+        $nodeFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\NodeFactory');
+
+        $formDataCompilerInput = array(
+            'tableName' => static::virtualTable,
+            'vanillaUid' => $record['uid'],
+            'command' => 'edit',
+            'returnUrl' => '',
+        );
+
+        // Load the configuration of virtual table 'tx_imageautoresize'
+        $this->loadVirtualTca();
+
+        $formData = $formDataCompiler->compile($formDataCompilerInput);
+        $formData['renderType'] = 'outerWrapContainer';
+        $formResult = $nodeFactory->create($formData)->render();
+
+        // Remove header and footer
+        $html = preg_replace('/<h1>.*<\/h1>/', '', $formResult['html']);
+
+        $startFooter = strrpos($html, '<div class="help-block text-right">');
+        $endTag = '</div>';
+
+        if ($startFooter !== false) {
+            $endFooter = strpos($html, $endTag, $startFooter);
+            $html = substr($html, 0, $startFooter) . substr($html, $endFooter + strlen($endTag));
         }
 
+        $formResult['html'] = '';
+        $formResult['doSaveFieldName'] = 'doSave';
+
+        // @todo: Put all the stuff into FormEngine as final "compiler" class
+        // @todo: This is done here for now to not rewrite JStop()
+        // @todo: and printNeededJSFunctions() now
+        $this->formResultCompiler->mergeResult($formResult);
+
+        // Combine it all
+        $formContent = '
+			<!-- EDITING FORM -->
+			' . $html . '
+
+			<input type="hidden" name="returnUrl" value="' . htmlspecialchars($this->retUrl) . '" />
+			<input type="hidden" name="closeDoc" value="0" />
+			<input type="hidden" name="doSave" value="0" />
+			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
+			<input type="hidden" name="_scrollPosition" value="" />
+			<input type="hidden" name="form_submitted" value="1" />';
+
+        return $formContent;
+    }
+
+    /**
+     * Generates the module content (TYPO3 6.2).
+     *
+     * @param array $row
+     * @return void
+     */
+    protected function moduleContentLegacy(array $row)
+    {
         // TCE forms methods *must* be invoked before $this->doc->startPage()
         $wizard = $this->tceforms->printNeededJSFunctions_top();
-        $wizard .= $this->buildForm($row);
+        $wizard .= $this->buildFormLegacy($row);
         $wizard .= $this->tceforms->printNeededJSFunctions();
 
-        $this->content .= $this->doc->header($GLOBALS['LANG']->getLL('title'));
-        $this->addStatisticsAndSocialLink();
-        $this->content .= $this->doc->spacer(5);
         $this->content .= $wizard;
+    }
+
+    /**
+     * Builds the expert configuration form (TYPO3 6.2).
+     *
+     * @param array $row
+     * @return string
+     */
+    protected function buildFormLegacy(array $row)
+    {
+        // Load the configuration of virtual table 'tx_imageautoresize'
+        $this->loadVirtualTca();
+
+        $record = array(
+            'uid' => static::virtualRecordId,
+            'pid' => 0,
+        );
+        $record = array_merge($record, $row);
+
+        // Setting variables in TCEforms object
+        $this->tceforms->hiddenFieldList = '';
+
+        // Create form
+        $form = '';
+        $form .= $this->tceforms->getMainFields(static::virtualTable, $record);
+        $form .= '<input type="hidden" name="form_submitted" value="1" />';
+        $form = $this->tceforms->wrapTotal($form, $record, static::virtualTable);
+
+        // Remove header and footer
+        $form = preg_replace('/<h[12]>.*<\/h[12]>/', '', $form);
+
+        $startFooter = strrpos($form, '<div class="typo3-TCEforms-recHeaderRow">');
+        $endTag = '</div>';
+
+        if ($startFooter !== false) {
+            $endFooter = strpos($form, $endTag, $startFooter);
+            $form = substr($form, 0, $startFooter) . substr($form, $endFooter + strlen($endTag));
+        }
+
+        return $form;
     }
 
     /**
@@ -202,50 +355,6 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
                 'tiff => jpg',
             )),
         );
-    }
-
-    /**
-     * Builds the expert configuration form.
-     *
-     * @param array $row
-     * @return string
-     */
-    protected function buildForm(array $row)
-    {
-        $content = '';
-
-        // Load the configuration of virtual table 'tx_imageautoresize'
-        global $TCA;
-        include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
-        ExtensionManagementUtility::addLLrefForTCAdescr(self::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . self::virtualTable . '.xml');
-
-        $rec['uid'] = self::virtualRecordId;
-        $rec['pid'] = 0;
-        $rec = array_merge($rec, $row);
-
-        // Setting variables in TCEforms object
-        $this->tceforms->hiddenFieldList = '';
-
-        // Create form
-        $form = '';
-        $form .= $this->tceforms->getMainFields(self::virtualTable, $rec);
-        $form .= '<input type="hidden" name="form_submitted" value="1" />';
-        $form = $this->tceforms->wrapTotal($form, $rec, self::virtualTable);
-
-        // Remove header and footer
-        $form = preg_replace('/<h[12]>.*<\/h[12]>/', '', $form);
-
-        $startFooter = strrpos($form, '<div class="typo3-TCEforms-recHeaderRow">');
-        $endTag = '</div>';
-
-        if ($startFooter !== false) {
-            $endFooter = strpos($form, $endTag, $startFooter);
-            $form = substr($form, 0, $startFooter) . substr($form, $endFooter + strlen($endTag));
-        }
-
-        // Combine it all:
-        $content .= $form;
-        return $content;
     }
 
     /**
@@ -336,6 +445,18 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
             $this->tceforms->enableTabMenu = true;
         }
+    }
+
+    /**
+     * Loads the configuration of the virtual table 'tx_imageautoresize'.
+     *
+     * @return void
+     */
+    protected function loadVirtualTca()
+    {
+        global $TCA;
+        include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
+        ExtensionManagementUtility::addLLrefForTCAdescr(static::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . static::virtualTable . '.xlf');
     }
 
     /**
@@ -434,14 +555,33 @@ class tx_imageautoresize_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptCla
                 </a>
             </div>';
 
-        $this->content .= '
-            <div id="typo3-messages">
-                <div class="typo3-message message-information">
-                    <div class="message-body">
-                        ' . $flashMessage . '
+        if (version_compare(TYPO3_version, '7.0.0', '>=')) {
+            $this->content .= '
+                <div class="alert alert-info">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-info fa-stack-1x"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            ' . $flashMessage . '
+                        </div>
                     </div>
                 </div>
-            </div>';
+            ';
+        } else {
+            $this->content .= '
+                <div id="typo3-messages">
+                    <div class="typo3-message message-information">
+                        <div class="message-body">
+                            ' . $flashMessage . '
+                        </div>
+                    </div>
+                </div>
+            ';
+        }
     }
 
 }
