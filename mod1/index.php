@@ -331,9 +331,9 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 'actions-document-save',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
-        $saveSplitButton->addItem($saveButton, true);
+        $saveSplitButton->addItem($saveButton);
 
-        // SAVE / CLOSE
+        // SAVE & CLOSE button:
         $saveAndCloseButton = $buttonBar->makeInputButton()
             ->setName('_saveandclosedok')
             ->setClasses('t3js-editform-submitButton')
@@ -343,7 +343,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
-        $saveSplitButton->addItem($saveAndCloseButton);
+        $saveSplitButton->addItem($saveAndCloseButton, true);
 
         $buttonBar->addButton($saveSplitButton, \TYPO3\CMS\Backend\Template\Components\ButtonBar::BUTTON_POSITION_LEFT, 2);
 
@@ -358,8 +358,8 @@ class tx_imageautoresize_module1 extends BaseScriptClass
             ));
         $buttonBar->addButton($closeButton);
 
-        $shortCutButton = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->makeShortcutButton();
-        $shortCutButton->setModuleName($this->MCONF['name'])
+        $shortcutButton = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->makeShortcutButton();
+        $shortcutButton->setModuleName($this->MCONF['name'])
             ->setGetVariables([
                 'returnUrl',
                 'edit',
@@ -369,7 +369,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 'returnNewPageId',
                 'editRegularContentFromId',
                 'noView']);
-        $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->addButton($shortCutButton);
+        $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->addButton($shortcutButton);
     }
 
     /**
