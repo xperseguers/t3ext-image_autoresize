@@ -120,13 +120,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         $row = $this->config;
         if (version_compare(TYPO3_version, '7.5.0', '>=')) {
-            // FormEngine now expects an array of data and not a comma-separated list of values
-            $row['file_types'] = GeneralUtility::trimExplode(',', $row['file_types'], true);
-            if (!empty($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'])) {
-                foreach ($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'] as &$el) {
-                    $el['container']['el']['file_types']['vDEF'] = GeneralUtility::trimExplode(',', $el['container']['el']['file_types']['vDEF'], true);
-                }
-            }
+            $this->fixRecordForFormEngine($row, array('file_types', 'usergroup'));
             $this->moduleContent($row);
         } else {
             if ($row['rulesets']) {
@@ -159,6 +153,31 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         // Replace module content with everything needed
         $this->content = $content;
+    }
+
+    /**
+     * FormEngine now expects an array of data instead of a comma-separated list of
+     * values for select fields. This method ensures the corresponding fields in $row
+     * are of the expected type and "fix" them if needed.
+     *
+     * @param array &$row
+     * @param array $tcaSelectFields
+     * @return void
+     */
+    protected function fixRecordForFormEngine(array &$row, array $tcaSelectFields)
+    {
+        foreach ($tcaSelectFields as $tcaField) {
+            if (isset($row[$tcaField])) {
+                $row[$tcaField] = GeneralUtility::trimExplode(',', $row[$tcaField], true);
+            }
+        }
+        foreach ($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'] as &$el) {
+            foreach ($tcaSelectFields as $tcaField) {
+                if (isset($el['container']['el'][$tcaField]['vDEF'])) {
+                    $el['container']['el'][$tcaField]['vDEF'] = GeneralUtility::trimExplode(',', $el['container']['el'][$tcaField]['vDEF'], true);
+                }
+            }
+        }
     }
 
     /**
