@@ -171,10 +171,12 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 $row[$tcaField] = GeneralUtility::trimExplode(',', $row[$tcaField], true);
             }
         }
-        foreach ($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'] as &$el) {
-            foreach ($tcaSelectFields as $tcaField) {
-                if (isset($el['container']['el'][$tcaField]['vDEF'])) {
-                    $el['container']['el'][$tcaField]['vDEF'] = GeneralUtility::trimExplode(',', $el['container']['el'][$tcaField]['vDEF'], true);
+        if (isset($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'])) {
+            foreach ($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'] as &$el) {
+                foreach ($tcaSelectFields as $tcaField) {
+                    if (isset($el['container']['el'][$tcaField]['vDEF'])) {
+                        $el['container']['el'][$tcaField]['vDEF'] = GeneralUtility::trimExplode(',', $el['container']['el'][$tcaField]['vDEF'], true);
+                    }
                 }
             }
         }
