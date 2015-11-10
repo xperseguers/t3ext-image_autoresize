@@ -351,7 +351,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 'actions-document-save',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
-        $saveSplitButton->addItem($saveButton);
+        $saveSplitButton->addItem($saveButton, true);
 
         // SAVE & CLOSE button:
         $saveAndCloseButton = $buttonBar->makeInputButton()
@@ -363,7 +363,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
-        $saveSplitButton->addItem($saveAndCloseButton, true);
+        $saveSplitButton->addItem($saveAndCloseButton);
 
         $buttonBar->addButton($saveSplitButton, \TYPO3\CMS\Backend\Template\Components\ButtonBar::BUTTON_POSITION_LEFT, 2);
 
@@ -373,7 +373,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
             ->setClasses('t3js-editform-close')
             ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.closeDoc', true))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
-                'actions-document-close',
+                'actions-view-go-back',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
         $buttonBar->addButton($closeButton);
