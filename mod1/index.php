@@ -103,7 +103,6 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
             $this->content .= $this->moduleTemplate->sectionHeader($this->languageService->getLL('title'));
             $this->addStatisticsAndSocialLink();
-            $this->content .= $this->moduleTemplate->spacer(5);
         } else {
             if (version_compare(TYPO3_version, '7.4.99', '<=')) {
                 $this->initTCEForms();
