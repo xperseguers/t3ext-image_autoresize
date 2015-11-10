@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Utility;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
@@ -116,14 +117,28 @@ class FAL
             $metadataRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\Index\MetaDataRepository::class);
             // Will take care of creating the record if it does not exist yet
             $currentMetadata = $metadataRepository->findByFile($file);
-            $newMetadata = array(
-                'unit' => 'px',
-            );
-            $mapping = array(
-                //'caption' => '',
+
+            $newMetadata = [];
+            // Pre-populate with metadata coming from external extractors
+            foreach ($currentMetadata as $key => $value) {
+                if (!empty($metadata[$key])) {
+                    // Known issue with "creator_tool" having a software version sometimes
+                    if ($key === 'creator_tool' && MathUtility::canBeInterpretedAsFloat($metadata[$key])) {
+                        continue;
+                    }
+                    $newMetadata[$key] = $metadata[$key];
+                }
+            }
+            // Width and height are always wrong since we resized the image
+            unset($newMetadata['width']);
+            unset($newMetadata['height']);
+            // We deal with resized images so unit is always pixels
+            $newMetadata['unit'] = 'px';
+
+            // Mapping for the built-in PHP-based metadata extractor
+            $mapping = [
                 'color_space' => 'ColorSpace',
                 'content_creation_date' => 'DateTimeOriginal',
-                //'content_modification_time' => '',
                 'creator' => 'IPTCCreator|Company',
                 'creator_tool' => 'Model|Make|Software',
                 'description' => 'ImageDescription',
@@ -135,12 +150,14 @@ class FAL
                 'location_region' => 'IPTCRegion',
                 'note' => 'IPTCLocation',
                 'publisher' => 'IPTCCredit',
-                //'ranking' => '',
                 'source' => 'IPTCSource',
-                //'status' => '',
                 'title' => 'IPTCTitle',
-            );
+            ];
             foreach ($mapping as $falKey => $metadataKeyMapping) {
+                if (!empty($newMetadata[$falKey])) {
+                    // We already have a known-to-be-valid metadata for this FAL property
+                    continue;
+                }
                 $metatadaKeys = explode('|', $metadataKeyMapping);
                 foreach ($metatadaKeys as $metadataKey) {
                     $value = null;

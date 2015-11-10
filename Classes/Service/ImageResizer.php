@@ -244,7 +244,7 @@ class ImageResizer
         $gifCreator->absPrefix = PATH_site;
 
         $imParams = $ruleset['keep_metadata'] === '1' ? '###SkipStripProfile###' : '';
-        $metadata = ImageUtility::getMetadata($fileName);
+        $metadata = ImageUtility::getMetadata($fileName, true);
         $this->lastMetadata = $metadata;
         $isRotated = false;
 

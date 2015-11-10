@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Utility;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * This is a generic image utility.
@@ -48,9 +49,94 @@ class ImageUtility
      * Returns metadata from a given file.
      *
      * @param string $fileName
+     * @param bool $fullExtract
      * @return array
      */
-    public static function getMetadata($fileName)
+    public static function getMetadata($fileName, $fullExtract = false)
+    {
+        $metadata = static::getBasicMetadata($fileName);
+
+        if ($fullExtract) {
+            $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
+            $extractorRegistry = \TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
+            $extractionServices = $extractorRegistry->getExtractorsWithDriverSupport('Local');
+
+            $newMetadata = array(
+                0 => $metadata,
+            );
+            foreach ($extractionServices as $service) {
+                if ($service->canProcess($virtualFileObject)) {
+                    $newMetadata[$service->getPriority()] = $service->extractMetaData($virtualFileObject, $newMetadata);
+                }
+            }
+            ksort($newMetadata);
+            foreach ($newMetadata as $data) {
+                $metadata = array_merge($metadata, $data);
+            }
+        }
+
+        return $metadata;
+    }
+
+    /**
+     * Creates a virtual File object to be used transparently by external
+     * metadata extraction services as if it would come from standard FAL.
+     *
+     * @param string $fileName
+     * @param array $metadata
+     * @return \TYPO3\CMS\Core\Resource\File
+     */
+    protected static function getVirtualFileObject($fileName, array $metadata)
+    {
+        /** @var \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory */
+        $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+
+        $recordData = [
+            'uid' => 0,
+            'pid' => 0,
+            'name' => 'Temporary Upload Storage',
+            'description' => 'Internal storage, mounting the temporary PHP upload directory.',
+            'driver' => 'Local',
+            'processingfolder' => '',
+            // legacy code
+            'configuration' => '',
+            'is_online' => true,
+            'is_browsable' => false,
+            'is_public' => false,
+            'is_writable' => false,
+            'is_default' => false,
+        ];
+        $storageConfiguration = [
+            'basePath' => PathUtility::dirname($fileName),
+            'pathType' => 'absolute'
+        ];
+
+        $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
+        $name = PathUtility::basename($fileName);
+        $extension = strtolower(substr($name, strrpos($name, '.') + 1));
+
+        /** @var \TYPO3\CMS\Core\Resource\File $virtualFileObject */
+        $virtualFileObject = GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Resource\File::class,
+            [
+                'identifier' => '/' . $name,
+                'name' => $name,
+                'extension' => $extension,
+            ],
+            $virtualStorage,
+            $metadata
+        );
+
+        return $virtualFileObject;
+    }
+
+    /**
+     * Returns metadata from a given file using basic, built-in, PHP-based extractor.
+     *
+     * @param string $fileName
+     * @return array
+     */
+    protected static function getBasicMetadata($fileName)
     {
         $extension = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
         $metadata = array();
