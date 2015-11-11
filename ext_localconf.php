@@ -14,16 +14,16 @@ if (version_compare(TYPO3_version, '7.4.0', '>=')) {
     );
     $signalSlotDispatcher->connect(
         'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
-        \TYPO3\CMS\Core\Resource\Service\FileProcessingService::SIGNAL_PreFileProcess,
+        \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PostFileReplace,
         'Causal\\ImageAutoresize\\Slots\\FileUpload',
-        \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PreFileProcess
+        \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PostFileReplace
     );
 }
 $signalSlotDispatcher->connect(
     'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
     \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PreFileAdd,
     'Causal\\ImageAutoresize\\Slots\\FileUpload',
-    \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_AutoResize
+    \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PreFileAdd
 );
 $signalSlotDispatcher->connect(
     'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',

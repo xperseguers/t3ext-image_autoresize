@@ -37,14 +37,9 @@ class FileUpload
 {
 
     const SIGNAL_SanitizeFileName = 'sanitizeFileName';
-    const SIGNAL_PreFileProcess = 'preFileProcess';
-    const SIGNAL_AutoResize = 'autoResize';
+    const SIGNAL_PostFileReplace = 'postFileReplace';
+    const SIGNAL_PreFileAdd = 'preFileAdd';
     const SIGNAL_PopulateMetadata = 'populateMetadata';
-
-    /**
-     * @var string
-     */
-    protected static $lastMethodCall = null;
 
     /**
      * @var ImageResizer
@@ -92,8 +87,6 @@ class FileUpload
      */
     public function sanitizeFileName($fileName, \TYPO3\CMS\Core\Resource\Folder $folder)
     {
-        static::$lastMethodCall = __FUNCTION__;
-
         $slotArguments = func_get_args();
         // Last parameter is the signal name itself and is not actually part of the arguments
         array_pop($slotArguments);
@@ -121,27 +114,15 @@ class FileUpload
     }
 
     /**
-     * Processes a file.
+     * A file is about to be added as a *replacement* of an existing
+     * one.
      *
-     * @param FileProcessingService $fileProcessingService
-     * @param AbstractDriver $driver
-     * @param ProcessedFile $processedFile
      * @param File $file
-     * @param string $taskType
-     * @param array $configuration
-     * @return
+     * @param string $uploadedFileName
+     * @return void
      */
-    public function preFileProcess(FileProcessingService $fileProcessingService, AbstractDriver $driver, ProcessedFile $processedFile, File $file, $taskType, array $configuration)
+    public function postFileReplace(File $file, $uploadedFileName)
     {
-        if (static::$lastMethodCall !== null) {
-            // This signal is of no use since other signals are already triggered prior
-            // to this one or afterwards
-            return;
-        }
-
-        // A file is about to be added as a *replacement* of an
-        // existing one, this is the only way to process it to
-        // autoresize the image, if needed
         $folder = $file->getParentFolder();
         $storageConfiguration = $folder->getStorage()->getConfiguration();
         $storageRecord = $folder->getStorage()->getStorageRecord();
@@ -149,11 +130,12 @@ class FileUpload
             // Unfortunately unsupported yet
             return;
         }
+
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
-        $uploadedFile = $targetDirectory . '/' . $file->getName();
+        $targetFileName = $targetDirectory . '/' . $file->getName();
 
-        $this->processFile($uploadedFile, $uploadedFile, $targetDirectory, $file);
+        $this->processFile(PathUtility::basename($targetFileName), $targetFileName, $targetDirectory, $file);
         $this->populateMetadata($file, $folder);
     }
 
@@ -165,10 +147,8 @@ class FileUpload
      * @param string $sourceFile
      * @return void
      */
-    public function autoResize(&$targetFileName, \TYPO3\CMS\Core\Resource\Folder $folder, $sourceFile)
+    public function preFileAdd(&$targetFileName, \TYPO3\CMS\Core\Resource\Folder $folder, $sourceFile)
     {
-        static::$lastMethodCall = __FUNCTION__;
-
         $storageConfiguration = $folder->getStorage()->getConfiguration();
         $storageRecord = $folder->getStorage()->getStorageRecord();
         if ($storageRecord['driver'] !== 'Local') {
