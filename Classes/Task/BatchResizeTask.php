@@ -190,7 +190,11 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $severity,
             true
         );
-        \TYPO3\CMS\Core\Messaging\FlashMessageQueue::addMessage($flashMessage);
+        /** @var $flashMessageService \TYPO3\CMS\Core\Messaging\FlashMessageService */
+        $flashMessageService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessageService');
+        /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */
+        $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
+        $defaultFlashMessageQueue->enqueue($flashMessage);
     }
 
     /**
