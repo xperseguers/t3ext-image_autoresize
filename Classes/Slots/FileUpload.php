@@ -135,7 +135,7 @@ class FileUpload
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
         $targetFileName = $targetDirectory . '/' . $file->getName();
 
-        $this->processFile(PathUtility::basename($targetFileName), $targetFileName, $targetDirectory, $file);
+        $this->processFile($targetFileName, PathUtility::basename($targetFileName), $targetDirectory, $file);
         $this->populateMetadata($file, $folder);
     }
 
@@ -186,8 +186,8 @@ class FileUpload
     }
 
     /**
-     * @param string $fileName
-     * @param string $targetFileName
+     * @param string $fileName Full path to the file to be processed
+     * @param string $targetFileName Target file name if not converted, no path included
      * @param string $targetDirectory
      * @param File $file
      * @return string

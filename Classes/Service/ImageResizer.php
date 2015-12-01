@@ -153,8 +153,8 @@ class ImageResizer
     /**
      * Processes upload of a file.
      *
-     * @param string $fileName
-     * @param string $targetFileName Expected target file name, if not converted
+     * @param string $fileName Full path to the file to be processed
+     * @param string $targetFileName Expected target file name, if not converted (only file name, no path)
      * @param string $targetDirectory
      * @param \TYPO3\CMS\Core\Resource\File $file
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
@@ -172,11 +172,20 @@ class ImageResizer
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
+        if (count($ruleset) === 0) {
+            // File does not match any rule set
+            return $fileName;
+        }
+
         $processedFileName = $this->getProcessedFileName($fileName, $backendUser, $ruleset);
+        if ($processedFileName === null) {
+            // No processing to do
+            return $fileName;
+        }
 
         // Make file name relative, store as $targetFileName
         if (empty($targetFileName)) {
-            $targetFileName = substr($fileName, strlen(PATH_site));
+            $targetFileName = PathUtility::stripPathSitePrefix($fileName);
         }
 
         // Extract the extension
@@ -202,10 +211,6 @@ class ImageResizer
                 $targetFileName
             );
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
-            return $fileName;
-        }
-        if ($processedFileName === null) {
-            // No processing to do
             return $fileName;
         }
 
