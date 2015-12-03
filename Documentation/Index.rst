@@ -57,15 +57,14 @@ Resize images automatically
 	**Other version of this document**
 
 	:PDF:
-		https://docs.typo3.org/typo3cms/extensions/image_autoresize/1.6.6/_pdf/
+		https://docs.typo3.org/typo3cms/extensions/image_autoresize/1.6.7/_pdf/
 
 
 	**Table of Contents**
 
 .. toctree::
-	:maxdepth: 5
+	:maxdepth: 3
 	:titlesonly:
-	:glob:
 
 	Introduction/Index
 	UsersManual/Index
