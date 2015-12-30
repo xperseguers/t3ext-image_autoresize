@@ -4,7 +4,7 @@
 
 ---
 conf.py:
-  copyright: 2010-2015
+  copyright: 2010-2016
   project: Resize Images Automatically
   version: 1.7
   release: 1.7.0-dev
