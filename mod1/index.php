@@ -155,6 +155,16 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     }
 
     /**
+     * Returns the content.
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
      * FormEngine now expects an array of data instead of a comma-separated list of
      * values for select fields. This method ensures the corresponding fields in $row
      * are of the expected type and "fix" them if needed.
@@ -695,9 +705,15 @@ class CustomDataHandler extends \TYPO3\CMS\Core\DataHandling\DataHandler
 
 }
 
-// Make instance:
-/** @var $SOBE tx_imageautoresize_module1 */
-$SOBE = GeneralUtility::makeInstance('tx_imageautoresize_module1');
-$SOBE->init();
-$SOBE->main();
-$SOBE->printContent();
+/**
+ * Note: in TYPO3 7 LTS and above, this business logic is part of
+ * @see \Causal\ImageAutoresize\Controller\ConfigurationController::mainAction()
+ */
+if (version_compare(TYPO3_version, '7.6', '<')) {
+    // Make instance:
+    /** @var $SOBE tx_imageautoresize_module1 */
+    $SOBE = GeneralUtility::makeInstance('tx_imageautoresize_module1');
+    $SOBE->init();
+    $SOBE->main();
+    $SOBE->printContent();
+}
