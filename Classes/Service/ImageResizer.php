@@ -408,7 +408,7 @@ class ImageResizer
             foreach ($ruleset['directories'] as $directoryPattern) {
                 $processFile |= preg_match($directoryPattern, $relTargetFileName);
             }
-            $processFile &= GeneralUtility::inArray($ruleset['file_types'], $fileExtension);
+            $processFile &= in_array($fileExtension, $ruleset['file_types']);
             $processFile &= $fileSize === -1 || ($fileSize > $ruleset['threshold']);
             if ($processFile) {
                 $ret = $ruleset;
