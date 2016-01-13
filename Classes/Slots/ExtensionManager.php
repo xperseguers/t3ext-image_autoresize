@@ -48,7 +48,7 @@ class ExtensionManager
             $title = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($titleKey, $extensionName);
 
             $icon = 'actions-system-extension-configure';
-            if (version_compare(TYPO3_version, '7.5.0', '>=')) {
+            if (version_compare(TYPO3_version, '7.5', '>=')) {
                 /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
                 $iconFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Imaging\\IconFactory');
                 $icon = (string)$iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
@@ -69,9 +69,16 @@ class ExtensionManager
 
             $title = htmlspecialchars($extension['title']);
             $titleAction = htmlspecialchars($moduleUrl);
+            if (version_compare(TYPO3_version, '7.6', '>=')) {
+                $pattern = "/>$title</";
+                $replacement = "'><a href=\"$titleAction\">$title</a><'";
+            } else {
+                $pattern = "/$title\\s*$/";
+                $replacement = "'<a href=\"$titleAction\">$title</a>'";
+            }
             $actions[] = "<script type=\"text/javascript\">
                 var titleCell = document.getElementById('image_autoresize').getElementsByTagName('td')[2];
-                titleCell.innerHTML = titleCell.innerHTML.replace(/$title\\s*$/, '<a href=\"$titleAction\">$title</a>');
+                titleCell.innerHTML = titleCell.innerHTML.replace($pattern, $replacement);
             </script>";
         }
     }
