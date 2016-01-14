@@ -11,7 +11,8 @@
 ChangeLog
 =========
 
-The following is a very high level overview of the changes in this extension. For more details, `read the online log <https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git/log>`_.
+The following is a very high level overview of the changes in this extension. For more details,
+`read the online log <https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git/log>`_.
 
 
 .. tabularcolumns:: |r|p{13.7cm}|
@@ -19,6 +20,7 @@ The following is a very high level overview of the changes in this extension. Fo
 =======  ======================================================
 Version  Changes
 =======  ======================================================
+1.7.x    Support for 3rd-party metadata extraction services
 1.6.x    Compatibility with TYPO3 6.2 - 7.x
 1.5.x    Automatic handling of Frontend-based uploads, if `properly done <https://gist.github.com/xperseguers/9076406>`_.
 1.4.x    Batch processing of images
