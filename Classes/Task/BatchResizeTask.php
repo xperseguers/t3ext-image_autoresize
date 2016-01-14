@@ -61,7 +61,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             throw new \RuntimeException('No configuration found', 1384103174);
         }
 
-        $this->imageResizer = GeneralUtility::makeInstance('Causal\\ImageAutoresize\\Service\\ImageResizer');
+        $this->imageResizer = GeneralUtility::makeInstance(\Causal\ImageAutoresize\Service\ImageResizer::class);
         $this->imageResizer->initializeRulesets($configuration);
 
         if (empty($this->directories)) {
@@ -184,14 +184,14 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         }
 
         $flashMessage = GeneralUtility::makeInstance(
-            'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+            \TYPO3\CMS\Core\Messaging\FlashMessage::class,
             $message,
             '',
             $severity,
             true
         );
         /** @var $flashMessageService \TYPO3\CMS\Core\Messaging\FlashMessageService */
-        $flashMessageService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessageService');
+        $flashMessageService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
         /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */
         $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
         $defaultFlashMessageQueue->enqueue($flashMessage);

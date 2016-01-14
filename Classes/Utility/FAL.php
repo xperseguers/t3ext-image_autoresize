@@ -86,7 +86,7 @@ class FAL
 
             if (!empty($row['uid'])) {
                 /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-                $fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+                $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
                 $file = $fileRepository->findByUid($row['uid']);
             }
         }
@@ -113,7 +113,7 @@ class FAL
 
         if (count($metadata) > 0) {
             /** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
-            $metadataRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Index\\MetaDataRepository');
+            $metadataRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\Index\MetaDataRepository::class);
             // Will take care of creating the record if it does not exist yet
             $currentMetadata = $metadataRepository->findByFile($file);
             $newMetadata = array(
@@ -203,7 +203,7 @@ class FAL
         $file = $resourceFactory->createFileObject($fileInfo);
 
         /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-        $fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+        $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
         $fileRepository->addToIndex($file);
     }
 

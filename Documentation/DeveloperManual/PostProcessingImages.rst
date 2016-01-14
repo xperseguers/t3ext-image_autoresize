@@ -40,12 +40,12 @@ In your extension, open :file:`EXT:{extension-key}/ext_localconf.php` and add:
 
 	/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
 	$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-	    'TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher'
+	    \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
 	);
 
 	$signalSlotDispatcher->connect(
-	    'Causal\\ImageAutoresize\\Service\\ImageResizer',
+	    \Causal\ImageAutoresize\Service\ImageResizer::class,
 	    'afterImageResize',
-	    'Company\\MyExt\\Slots\\ImageResizer',
+	    \Company\MyExt\Slots\ImageResizer::class,
 	    'postProcessImageResize'
 	);

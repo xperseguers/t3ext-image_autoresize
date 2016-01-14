@@ -50,7 +50,7 @@ class ImageResizer
      */
     public function __construct()
     {
-        $this->signalSlotDispatcher = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+        $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
     }
 
     /**
@@ -224,7 +224,7 @@ class ImageResizer
             if (empty($targetDirectory)) {
                 // Ensures $destFileName does not yet exist, otherwise make it unique!
                 /* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
-                $fileFunc = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Utility\\File\\BasicFileUtility');
+                $fileFunc = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Utility\File\BasicFileUtility::class);
                 $destFileName = $fileFunc->getUniqueName($destFileName, $destDirectory);
                 $targetDestFileName = $destFileName;
             } else {
@@ -239,7 +239,7 @@ class ImageResizer
 
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
-        $gifCreator = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Imaging\\GifBuilder');
+        $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
         $gifCreator->init();
         $gifCreator->absPrefix = PATH_site;
 
