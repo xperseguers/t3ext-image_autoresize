@@ -535,7 +535,11 @@ class ImageResizer
                     }
                     break;
                 case 'conversion_mapping':
-                    $mapping = GeneralUtility::trimExplode(',', $value, true);
+                    if (strpos($value, CRLF) !== false) {
+                        $mapping = GeneralUtility::trimExplode(CRLF, $value, true);
+                    } else {
+                        $mapping = GeneralUtility::trimExplode(',', $value, true);
+                    }
                     if (count($mapping) > 0) {
                         $value = $this->expandConversionMapping($mapping);
                     } else {
