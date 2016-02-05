@@ -138,6 +138,10 @@ class ImageResizer
             }
         }
 
+        if ($fileExtension === 'gif' && file_exists($fileName) && ImageUtility::isAnimatedGif($fileName)) {
+            return null;
+        }
+
         if (isset($ruleset['conversion_mapping'][$fileExtension])) {
             // File format will be converted
             $destExtension = $ruleset['conversion_mapping'][$fileExtension];
@@ -177,12 +181,6 @@ class ImageResizer
             return $fileName;
         }
 
-        $processedFileName = $this->getProcessedFileName($fileName, $backendUser, $ruleset);
-        if ($processedFileName === null) {
-            // No processing to do
-            return $fileName;
-        }
-
         // Make file name relative, store as $targetFileName
         if (empty($targetFileName)) {
             $targetFileName = PathUtility::stripPathSitePrefix($fileName);
@@ -198,16 +196,31 @@ class ImageResizer
         if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(
-                    $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageTransparent'),
+                    $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageTransparent'),
                     $targetFileName
                 );
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
                 return $fileName;
             }
         }
+        if ($fileExtension === 'gif' && ImageUtility::isAnimatedGif($fileName)) {
+            $message = sprintf(
+                $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageAnimated'),
+                $targetFileName
+            );
+            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+            return $fileName;
+        }
+
+        $processedFileName = $this->getProcessedFileName($fileName, $backendUser, $ruleset);
+        if ($processedFileName === null) {
+            // No processing to do
+            return $fileName;
+        }
+
         if (!is_writable($fileName)) {
             $message = sprintf(
-                $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageNotWritable'),
+                $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageNotWritable'),
                 $targetFileName
             );
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
@@ -301,12 +314,12 @@ class ImageResizer
 
             if ($fileName === $destFileName) {
                 $message = sprintf(
-                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResized'),
+                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang..xlf:message.imageResized'),
                     $targetFileName, $tempFileInfo[0], $tempFileInfo[1]
                 );
             } else {
                 $message = sprintf(
-                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.imageResizedAndRenamed'),
+                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageResizedAndRenamed'),
                     $targetFileName, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($targetDestFileName)
                 );
             }

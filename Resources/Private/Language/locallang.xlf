@@ -48,6 +48,9 @@
 			<trans-unit id="message.imageTransparent">
 				<source>Image %s has not been resized because transparency has been detected.</source>
 			</trans-unit>
+			<trans-unit id="message.imageAnimated">
+				<source>Image %s has not been resized because it is an animated GIF.</source>
+			</trans-unit>
 			<trans-unit id="message.imageResized">
 				<source>Image %s has been automatically resized to %sx%s pixels.</source>
 			</trans-unit>
