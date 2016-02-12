@@ -314,7 +314,7 @@ class ImageResizer
 
             if ($fileName === $destFileName) {
                 $message = sprintf(
-                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang..xlf:message.imageResized'),
+                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageResized'),
                     $targetFileName, $tempFileInfo[0], $tempFileInfo[1]
                 );
             } else {
