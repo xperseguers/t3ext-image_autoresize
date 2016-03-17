@@ -56,7 +56,7 @@ class ImageUtility
     {
         $metadata = static::getBasicMetadata($fileName);
 
-        if ($fullExtract) {
+        if ($fullExtract && !empty($metadata)) {
             $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
             $extractorRegistry = \TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
             $extractionServices = $extractorRegistry->getExtractorsWithDriverSupport('Local');
