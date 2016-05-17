@@ -46,7 +46,6 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
                 'eval' => 'int,required',
                 'checkbox' => '0',
                 'range' => array(
-                    'upper' => '',
                     'lower' => '100',
                 ),
                 'default' => 0,
@@ -61,7 +60,6 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
                 'eval' => 'int,required',
                 'checkbox' => '0',
                 'range' => array(
-                    'upper' => '',
                     'lower' => '100',
                 ),
                 'default' => 0,
