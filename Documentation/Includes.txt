@@ -24,7 +24,7 @@
 .. EXTERNAL LINKS
 .. --------------------------------------------------
 
-.. _`5 min tutorial video`: http://www.youtube.com/watch?v=YeGqHMDT7R8
+.. _`5 min tutorial video`: https://www.youtube.com/watch?v=YeGqHMDT7R8
 
 .. _`git repository of the TYPO3 ReST tools`: https://git.typo3.org/Documentation/RestTools.git/
 
@@ -32,6 +32,6 @@
 
 .. _Sphinx: http://sphinx-doc.org/
 
-.. _`the TYPO3 wiki`: http://wiki.typo3.org/Rendering_reST
+.. _`the TYPO3 wiki`: https://wiki.typo3.org/Rendering_reST
 
-.. _`Tips and Tricks`: http://wiki.typo3.org/Tips_and_Tricks_%28reST%29
+.. _`Tips and Tricks`: https://wiki.typo3.org/Tips_and_Tricks_%28reST%29
