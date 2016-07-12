@@ -196,7 +196,7 @@ class ImageResizer
         if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(
-                    $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageTransparent'),
+                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageTransparent'),
                     $targetFileName
                 );
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
@@ -205,7 +205,7 @@ class ImageResizer
         }
         if ($fileExtension === 'gif' && ImageUtility::isAnimatedGif($fileName)) {
             $message = sprintf(
-                $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageAnimated'),
+                $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageAnimated'),
                 $targetFileName
             );
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
@@ -220,7 +220,7 @@ class ImageResizer
 
         if (!is_writable($fileName)) {
             $message = sprintf(
-                $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageNotWritable'),
+                $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageNotWritable'),
                 $targetFileName
             );
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
