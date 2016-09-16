@@ -232,7 +232,11 @@ class ImageUtility
     {
         foreach ($components as $key => $value) {
             $rationalParts = explode('/', $value);
-            $components[$key] = $rationalParts[0] / $rationalParts[1];
+            if (!empty($rationalParts[1])) {
+                $components[$key] = $rationalParts[0] / $rationalParts[1];
+            } else {
+                $components[$key] = 0;
+            }
         }
         list($hours, $minutes, $seconds) = $components;
 
