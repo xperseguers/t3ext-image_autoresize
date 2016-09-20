@@ -162,7 +162,11 @@ class ImageUtility
                 }
                 if (isset($metadata['GPSAltitude'])) {
                     $rationalParts = explode('/', $metadata['GPSAltitude']);
-                    $metadata['GPSAltitudeDecimal'] = $rationalParts[0] / $rationalParts[1];
+                    if (!empty($rationalParts[1])) {
+                        $metadata['GPSAltitudeDecimal'] = $rationalParts[0] / $rationalParts[1];
+                    } else {
+                        $metadata['GPSAltitudeDecimal'] = 0;
+                    }
                 }
             }
             // Try to extract IPTC data
