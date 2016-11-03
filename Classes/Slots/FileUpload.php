@@ -62,7 +62,7 @@ class FileUpload
     public function __construct()
     {
         if (static::$imageResizer === null) {
-            static::$imageResizer = GeneralUtility::makeInstance(\Causal\ImageAutoresize\Service\ImageResizer::class);
+            static::$imageResizer = GeneralUtility::makeInstance(ImageResizer::class);
 
             $configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
             if (!$configuration) {

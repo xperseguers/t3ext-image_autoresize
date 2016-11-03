@@ -39,6 +39,9 @@ $boot = function ($_EXTKEY) {
         \Causal\ImageAutoresize\Slots\ExtensionManager::SIGNAL_ProcessActions
     );
 
+    // Uploads in uploads/ of good old non-FAL files
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processUpload'][] = \Causal\ImageAutoresize\Hooks\FileUploadHook::class;
+
     $extensionName = \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($_EXTKEY);
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Causal\ImageAutoresize\Task\BatchResizeTask::class] = array(
         'extension' => $_EXTKEY,
