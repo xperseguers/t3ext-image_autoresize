@@ -15,7 +15,7 @@ May be left empty.</source>
 Example: fileadmin/
 If empty, the list of directories configured in General tab will be taken into account.
 
-Wildcard is supported:
+Wildcards are supported:
 fileadmin/*/images/
 fileadmin/**/images/</source>
 			</trans-unit>

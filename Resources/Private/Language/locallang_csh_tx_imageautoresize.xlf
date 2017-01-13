@@ -7,7 +7,7 @@
 				<source>Comma-separated list of directories to be monitored.
 Example: fileadmin/
 
-Wildcard is supported:
+Wildcards are supported:
 fileadmin/*/images/
 fileadmin/**/images/</source>
 			</trans-unit>
