@@ -37,7 +37,7 @@ If empty, the maximum width configured in General tab will be taken into account
 If empty, the maximum height configured in General tab will be taken into account.</source>
 			</trans-unit>
 			<trans-unit id="keep_metadata.description">
-				<source>Either inherit configuration from General settings or explicitly configure wether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</source>
+				<source>Either inherit configuration from General settings or explicitly configure whether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</source>
 			</trans-unit>
 			<trans-unit id="conversion_mapping.description" xml:space="preserve">
 				<source>Comma-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
