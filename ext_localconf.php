@@ -6,20 +6,18 @@ $boot = function ($_EXTKEY) {
     $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
 
     // Hook into \TYPO3\CMS\Core\Resource\ResourceStorage
-    if (version_compare(TYPO3_version, '7.4', '>=')) {
-        $signalSlotDispatcher->connect(
-            \TYPO3\CMS\Core\Resource\ResourceStorage::class,
-            \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_SanitizeFileName,
-            \Causal\ImageAutoresize\Slots\FileUpload::class,
-            \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_SanitizeFileName
-        );
-        $signalSlotDispatcher->connect(
-            \TYPO3\CMS\Core\Resource\ResourceStorage::class,
-            \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PostFileReplace,
-            \Causal\ImageAutoresize\Slots\FileUpload::class,
-            \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PostFileReplace
-        );
-    }
+    $signalSlotDispatcher->connect(
+        \TYPO3\CMS\Core\Resource\ResourceStorage::class,
+        \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_SanitizeFileName,
+        \Causal\ImageAutoresize\Slots\FileUpload::class,
+        \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_SanitizeFileName
+    );
+    $signalSlotDispatcher->connect(
+        \TYPO3\CMS\Core\Resource\ResourceStorage::class,
+        \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PostFileReplace,
+        \Causal\ImageAutoresize\Slots\FileUpload::class,
+        \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PostFileReplace
+    );
     $signalSlotDispatcher->connect(
         \TYPO3\CMS\Core\Resource\ResourceStorage::class,
         \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PreFileAdd,

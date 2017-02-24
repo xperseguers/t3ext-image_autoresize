@@ -76,9 +76,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     public function __construct()
     {
-        if (version_compare(TYPO3_version, '7.5.99', '>')) {
-            $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
-        }
+        $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         $this->languageService = $GLOBALS['LANG'];
 
         $config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
@@ -98,57 +96,19 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         $formTag = '<form action="" method="post" name="editform">';
 
-        if (version_compare(TYPO3_version, '7.5.99', '>')) {
-            $this->moduleTemplate->setForm($formTag);
+        $this->moduleTemplate->setForm($formTag);
 
-            $this->content .= sprintf('<h3>%s</h3>', $this->languageService->getLL('title', true));
-            $this->addStatisticsAndSocialLink();
-        } else {
-            if (version_compare(TYPO3_version, '7.4.99', '<=')) {
-                $this->initTCEForms();
-            }
-            $this->doc = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\DocumentTemplate::class);
-            $this->doc->setModuleTemplate(ExtensionManagementUtility::extPath($this->extKey) . 'mod1/mod_template.html');
-            $this->doc->backPath = $GLOBALS['BACK_PATH'];
-            $this->doc->form = $formTag;
-
-            $this->content .= $this->doc->header($this->languageService->getLL('title'));
-            $this->addStatisticsAndSocialLink();
-            $this->content .= $this->doc->spacer(5);
-        }
+        $this->content .= sprintf('<h3>%s</h3>', $this->languageService->getLL('title', true));
+        $this->addStatisticsAndSocialLink();
 
         $row = $this->config;
-        if (version_compare(TYPO3_version, '7.5.0', '>=')) {
-            $this->fixRecordForFormEngine($row, array('file_types', 'usergroup'));
-            $this->moduleContent($row);
-        } else {
-            if ($row['rulesets']) {
-                /** @var $flexObj \TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools */
-                $flexObj = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools::class);
-                $row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], true);
-            }
-            $this->moduleContentLegacy($row);
-        }
+        $this->fixRecordForFormEngine($row, array('file_types', 'usergroup'));
+        $this->moduleContent($row);
 
         // Compile document
-        if (version_compare(TYPO3_version, '7.5.99', '>')) {
-            $this->addToolbarButtons();
-            $this->moduleTemplate->setContent($this->content);
-            $content = $this->moduleTemplate->renderContent();
-        } else {
-            $markers = array(
-                'FUNC_MENU' => '',
-                'CONTENT' => $this->content,
-            );
-
-            // Build the <body> for the module
-            $docHeaderButtons = $this->getButtons();
-            $content = $this->doc->startPage($this->languageService->getLL('title'));
-            $content .= $this->doc->moduleBody(array(), $docHeaderButtons, $markers);
-            $content .= $this->doc->endPage();
-            // Wrap result appropriately
-            $content = $this->doc->insertStylesAndJS($content);
-        }
+        $this->addToolbarButtons();
+        $this->moduleTemplate->setContent($this->content);
+        $content = $this->moduleTemplate->renderContent();
 
         // Replace module content with everything needed
         $this->content = $content;
@@ -285,62 +245,6 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     }
 
     /**
-     * Generates the module content (TYPO3 6.2).
-     *
-     * @param array $row
-     * @return void
-     */
-    protected function moduleContentLegacy(array $row)
-    {
-        // TCE forms methods *must* be invoked before $this->doc->startPage()
-        $wizard = $this->tceforms->printNeededJSFunctions_top();
-        $wizard .= $this->buildFormLegacy($row);
-        $wizard .= $this->tceforms->printNeededJSFunctions();
-
-        $this->content .= $wizard;
-    }
-
-    /**
-     * Builds the expert configuration form (TYPO3 6.2).
-     *
-     * @param array $row
-     * @return string
-     */
-    protected function buildFormLegacy(array $row)
-    {
-        // Load the configuration of virtual table 'tx_imageautoresize'
-        $this->loadVirtualTca();
-
-        $record = array(
-            'uid' => static::virtualRecordId,
-            'pid' => 0,
-        );
-        $record = array_merge($record, $row);
-
-        // Setting variables in TCEforms object
-        $this->tceforms->hiddenFieldList = '';
-
-        // Create form
-        $form = '';
-        $form .= $this->tceforms->getMainFields(static::virtualTable, $record);
-        $form .= '<input type="hidden" name="form_submitted" value="1" />';
-        $form = $this->tceforms->wrapTotal($form, $record, static::virtualTable);
-
-        // Remove header and footer
-        $form = preg_replace('/<h[12]>.*<\/h[12]>/', '', $form);
-
-        $startFooter = strrpos($form, '<div class="typo3-TCEforms-recHeaderRow">');
-        $endTag = '</div>';
-
-        if ($startFooter !== false) {
-            $endFooter = strpos($form, $endTag, $startFooter);
-            $form = substr($form, 0, $startFooter) . substr($form, $endFooter + strlen($endTag));
-        }
-
-        return $form;
-    }
-
-    /**
      * Creates the toolbar buttons (TYPO3 7.6+).
      *
      * @return void
@@ -421,14 +325,10 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         $buttons['csh'] = BackendUtility::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
 
         // CLOSE button
-        if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $closeLink = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close', array('html' => '<input type="image" name="_close" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '" />'));
-        } else {
-            $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-            $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
-                \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close') .
-                '</a>';
-        }
+        $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
+        $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
+            \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close') .
+            '</a>';
         $buttons['close'] = $closeLink;
 
         // SAVE button
@@ -487,15 +387,9 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function processData()
     {
-        if (version_compare(TYPO3_version, '7.5.99', '>')) {
-            $close = GeneralUtility::_GP('closeDoc');
-            $save = GeneralUtility::_GP('_savedok');
-            $saveAndClose = GeneralUtility::_GP('_saveandclosedok');
-        } else {
-            $close = GeneralUtility::_GP('_close_x');
-            $save = !$close && GeneralUtility::_GP('form_submitted');
-            $saveAndClose = GeneralUtility::_GP('_saveandclosedok_x');
-        }
+        $close = GeneralUtility::_GP('closeDoc');
+        $save = GeneralUtility::_GP('_savedok');
+        $saveAndClose = GeneralUtility::_GP('_saveandclosedok');
 
         if ($save || $saveAndClose) {
             $table = static::virtualTable;
@@ -563,15 +457,9 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     protected function initTCEForms()
     {
         $this->tceforms = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormEngine::class);
-        if (version_compare(TYPO3_version, '7.2.99', '<=')) {
-            $this->tceforms->initDefaultBEMode();
-        }
         $this->tceforms->doSaveFieldName = 'doSave';
         $this->tceforms->localizationMode = '';
         $this->tceforms->palettesCollapsed = 0;
-        if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            $this->tceforms->enableTabMenu = true;
-        }
     }
 
     /**
@@ -628,9 +516,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         }
 
         $resourcesPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($this->extKey) . 'Resources/Public/';
-        $pageRenderer = version_compare(TYPO3_version, '7.5.99', '>')
-            ? $this->moduleTemplate->getPageRenderer()
-            : $this->doc->getPageRenderer();
+        $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
         $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
@@ -654,33 +540,21 @@ class tx_imageautoresize_module1 extends BaseScriptClass
                 </a>
             </div>';
 
-        if (version_compare(TYPO3_version, '7.0.0', '>=')) {
-            $this->content .= '
-                <div class="alert alert-info">
-                    <div class="media">
-                        <div class="media-left">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-info fa-stack-1x"></i>
-                            </span>
-                        </div>
-                        <div class="media-body">
-                            ' . $flashMessage . '
-                        </div>
+        $this->content .= '
+            <div class="alert alert-info">
+                <div class="media">
+                    <div class="media-left">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-info fa-stack-1x"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        ' . $flashMessage . '
                     </div>
                 </div>
-            ';
-        } else {
-            $this->content .= '
-                <div id="typo3-messages">
-                    <div class="typo3-message message-information">
-                        <div class="message-body">
-                            ' . $flashMessage . '
-                        </div>
-                    </div>
-                </div>
-            ';
-        }
+            </div>
+        ';
     }
 
 }
@@ -703,17 +577,4 @@ class CustomDataHandler extends \TYPO3\CMS\Core\DataHandling\DataHandler
         parent::_ACTION_FLEX_FORMdata($valueArray, $actionCMDs);
     }
 
-}
-
-/**
- * Note: in TYPO3 7 LTS and above, this business logic is part of
- * @see \Causal\ImageAutoresize\Controller\ConfigurationController::mainAction()
- */
-if (version_compare(TYPO3_version, '7.6', '<')) {
-    // Make instance:
-    /** @var $SOBE tx_imageautoresize_module1 */
-    $SOBE = GeneralUtility::makeInstance('tx_imageautoresize_module1');
-    $SOBE->init();
-    $SOBE->main();
-    $SOBE->printContent();
 }

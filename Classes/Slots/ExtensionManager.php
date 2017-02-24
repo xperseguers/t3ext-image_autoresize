@@ -48,34 +48,19 @@ class ExtensionManager
             $title = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($titleKey, $extensionName);
 
             $icon = 'actions-system-extension-configure';
-            if (version_compare(TYPO3_version, '7.5', '>=')) {
-                /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
-                $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-                $icon = (string)$iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
-            } else {
-                $icon = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon($icon, array('title' => $title));
-            }
+            /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
+            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            $icon = (string)$iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
 
             // Configure action comes as first icon
             $configureAction = sprintf('<a class="btn btn-default" title="%s" href="%s">%s</a>', htmlspecialchars($title), htmlspecialchars($moduleUrl), $icon);
-            if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-                array_unshift($actions, $configureAction);
-            } else {
-                $actions[0] = $configureAction;
-                if (version_compare(TYPO3_version, '7.5.0', '>=')) {
-                    unset($actions[1], $actions[2], $actions[3], $actions[4]);
-                }
-            }
+            $actions[0] = $configureAction;
+            unset($actions[1], $actions[2], $actions[3], $actions[4]);
 
             $title = htmlspecialchars($extension['title']);
             $titleAction = htmlspecialchars($moduleUrl);
-            if (version_compare(TYPO3_version, '7.6', '>=')) {
-                $pattern = "/>$title</";
-                $replacement = "'><a href=\"$titleAction\">$title</a><'";
-            } else {
-                $pattern = "/$title\\s*$/";
-                $replacement = "'<a href=\"$titleAction\">$title</a>'";
-            }
+            $pattern = "/>$title</";
+            $replacement = "'><a href=\"$titleAction\">$title</a><'";
             $actions[] = "<script type=\"text/javascript\">
                 var titleCell = document.getElementById('image_autoresize').getElementsByTagName('td')[2];
                 titleCell.innerHTML = titleCell.innerHTML.replace($pattern, $replacement);

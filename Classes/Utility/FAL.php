@@ -106,12 +106,6 @@ class FAL
      */
     protected static function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = array())
     {
-        if (version_compare(TYPO3_version, '6.99.99', '<=')) {
-            /** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
-            $indexerService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\Service\IndexerService::class);
-            $indexerService->indexFile($file);
-        }
-
         if (count($metadata) > 0) {
             /** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
             $metadataRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\Index\MetaDataRepository::class);

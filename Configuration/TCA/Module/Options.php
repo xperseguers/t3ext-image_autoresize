@@ -117,11 +117,3 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
         'dimensions' => array('showitem' => 'max_width,max_height'),
     ),
 );
-
-if (version_compare(TYPO3_version, '7.0.0', '<=')) {
-    $GLOBALS['TCA']['tx_imageautoresize']['types']['0']['showitem'] = str_replace(
-        '--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf',
-        '--palette--;LLL:EXT:cms/locallang_ttc.xlf',
-        $GLOBALS['TCA']['tx_imageautoresize']['types']['0']['showitem']
-    );
-}
