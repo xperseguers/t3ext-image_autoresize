@@ -70,7 +70,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         } else {
             $directories = GeneralUtility::trimExplode(LF, $this->directories, true);
         }
-        $processedDirectories = array();
+        $processedDirectories = [];
 
         $success = true;
         foreach ($directories as $directory) {
@@ -115,9 +115,9 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         if ($GLOBALS['BE_USER']->isAdmin()) {
             // As the scheduler user should never be an administrator, if current user is an administrator
             // the task is most probably run manually from the Scheduler module, so just show notifications
-            $callbackNotification = array($this, 'notify');
+            $callbackNotification = [$this, 'notify'];
         } else {
-            $callbackNotification = array($this, 'syslog');
+            $callbackNotification = [$this, 'syslog'];
         }
 
         $excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, true);

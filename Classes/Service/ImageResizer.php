@@ -33,7 +33,7 @@ class ImageResizer
     /**
      * @var array
      */
-    protected $rulesets = array();
+    protected $rulesets = [];
 
     /**
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
@@ -67,13 +67,13 @@ class ImageResizer
         unset($general['rulesets']);
         $general = $this->expandValuesInRuleset($general);
         if ($general['conversion_mapping'] === '') {
-            $general['conversion_mapping'] = array();
+            $general['conversion_mapping'] = [];
         }
 
         if (isset($configuration['rulesets'])) {
             $rulesets = $this->compileRuleSets($configuration['rulesets']);
         } else {
-            $rulesets = array();
+            $rulesets = [];
         }
 
         // Inherit values from general configuration in rule sets if needed
@@ -273,15 +273,15 @@ class ImageResizer
         if ($isRotated) {
             // Invert max_width and max_height as the picture
             // will be automatically rotated
-            $options = array(
+            $options = [
                 'maxW' => $ruleset['max_height'],
                 'maxH' => $ruleset['max_width'],
-            );
+            ];
         } else {
-            $options = array(
+            $options = [
                 'maxW' => $ruleset['max_width'],
                 'maxH' => $ruleset['max_height'],
-            );
+            ];
         }
 
         $originalFileSize = filesize($fileName);
@@ -296,13 +296,13 @@ class ImageResizer
             $this->signalSlotDispatcher->dispatch(
                 __CLASS__,
                 'afterImageResize',
-                array(
+                [
                     'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
                     'source' => $fileName,
                     'destination' => $tempFileInfo[3],
                     'newWidth' => &$tempFileInfo[0],
                     'newHeight' => &$tempFileInfo[1],
-                )
+                ]
             );
 
             $newFileSize = filesize($tempFileInfo[3]);
@@ -393,13 +393,13 @@ class ImageResizer
      */
     protected function getRuleset($sourceFileName, $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null)
     {
-        $ret = array();
+        $ret = [];
 
         // Make file name relative and extract the extension
         $relTargetFileName = substr($targetFileName, strlen(PATH_site));
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
-        $beGroups = $backendUser !== null ? array_keys($GLOBALS['BE_USER']->userGroups) : array();
+        $beGroups = $backendUser !== null ? array_keys($GLOBALS['BE_USER']->userGroups) : [];
         $fileSize = is_file($sourceFileName)
             ? filesize($sourceFileName)
             : -1;    // -1 is a special value so that file size is not taken into account (yet)
@@ -438,7 +438,7 @@ class ImageResizer
      */
     public function getAllDirectories()
     {
-        $directories = array();
+        $directories = [];
         foreach ($this->rulesets as $ruleset) {
             $dirs = GeneralUtility::trimExplode(',', $ruleset['directories_config'], true);
             $directories = array_merge($directories, $dirs);
@@ -455,7 +455,7 @@ class ImageResizer
      */
     public function getAllFileTypes()
     {
-        $fileTypes = array();
+        $fileTypes = [];
         foreach ($this->rulesets as $ruleset) {
             if (is_array($ruleset['file_types'])) {
                 $fileTypes = array_merge($fileTypes, $ruleset['file_types']);
@@ -474,13 +474,13 @@ class ImageResizer
     protected function compileRulesets(array $rulesets)
     {
         $sheets = GeneralUtility::resolveAllSheetsInDS($rulesets);
-        $rulesets = array();
+        $rulesets = [];
 
         foreach ($sheets['sheets'] as $sheet) {
             $elements = $sheet['data']['sDEF']['lDEF']['ruleset']['el'];
             foreach ($elements as $container) {
                 if (isset($container['container']['el'])) {
-                    $values = array();
+                    $values = [];
                     foreach ($container['container']['el'] as $key => $value) {
                         if ($key === 'title') {
                             continue;
@@ -503,7 +503,7 @@ class ImageResizer
      */
     protected function expandValuesInRuleset(array $ruleset)
     {
-        $values = array();
+        $values = [];
         foreach ($ruleset as $key => $value) {
             switch ($key) {
                 case 'usergroup':
@@ -575,8 +575,8 @@ class ImageResizer
      */
     protected function expandConversionMapping(array $mapping)
     {
-        $ret = array();
-        $matches = array();
+        $ret = [];
+        $matches = [];
         foreach ($mapping as $m) {
             if (preg_match('/^(.*)\s*=>\s*(.*)/', $m, $matches)) {
                 $ret[trim($matches[1])] = trim($matches[2]);
@@ -610,11 +610,11 @@ class ImageResizer
     {
         $fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
 
-        $data = array();
+        $data = [];
         if (file_exists($fileName)) {
             $data = json_decode(file_get_contents($fileName), true);
             if (!is_array($data)) {
-                $data = array();
+                $data = [];
             }
         }
 

@@ -68,7 +68,7 @@ class JpegExifOrient
      */
     public static function setOrientation($fileName, $orientation)
     {
-        $exif_data = array();    // Buffer
+        $exif_data = [];    // Buffer
         $offsetJfif = 0;
 
         if (($fh = fopen($fileName, 'rb+')) === false) {

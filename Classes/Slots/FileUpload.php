@@ -200,7 +200,7 @@ class FileUpload
             $targetDirectory,
             $file,
             $GLOBALS['BE_USER'],
-            array($this, 'notify')
+            [$this, 'notify']
         );
 
         static::$metadata = static::$imageResizer->getLastMetadata();

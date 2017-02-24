@@ -1,24 +1,24 @@
 <?php
 defined('TYPO3_MODE') || die();
 
-$GLOBALS['TCA']['tx_imageautoresize'] = array(
-    'ctrl' => array(
+$GLOBALS['TCA']['tx_imageautoresize'] = [
+    'ctrl' => [
         'label' => 'title',
         'dividers2tabs' => true,
-    ),
-    'columns' => array(
-        'directories' => array(
+    ],
+    'columns' => [
+        'directories' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '50',
                 'max' => '255',
                 'eval' => 'trim,required',
-            ),
-        ),
-        'file_types' => array(
+            ],
+        ],
+        'file_types' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.file_types',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'itemsProcFunc' => \Causal\ImageAutoresize\Tca\Graphics::class . '->getImageFileExtensions',
@@ -26,94 +26,94 @@ $GLOBALS['TCA']['tx_imageautoresize'] = array(
                 'maxitems' => '20',
                 'size' => '6',
                 'multiple' => '1',
-            ),
-        ),
-        'threshold' => array(
+            ],
+        ],
+        'threshold' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '10',
                 'max' => '10',
                 'eval' => 'trim,required',
-            ),
-        ),
-        'max_width' => array(
+            ],
+        ],
+        'max_width' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_width',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '5',
                 'max' => '5',
                 'eval' => 'int,required',
                 'checkbox' => '0',
-                'range' => array(
+                'range' => [
                     'lower' => '100',
-                ),
+                ],
                 'default' => 0,
-            ),
-        ),
-        'max_height' => array(
+            ],
+        ],
+        'max_height' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_height',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => '5',
                 'max' => '5',
                 'eval' => 'int,required',
                 'checkbox' => '0',
-                'range' => array(
+                'range' => [
                     'lower' => '100',
-                ),
+                ],
                 'default' => 0,
-            ),
-        ),
-        'auto_orient' => array(
+            ],
+        ],
+        'auto_orient' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.auto_orient',
-            'config' => array(
+            'config' => [
                 'type' => 'check',
-            ),
-        ),
-        'keep_metadata' => array(
+            ],
+        ],
+        'keep_metadata' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.keep_metadata',
-            'config' => array(
+            'config' => [
                 'type' => 'check',
-            ),
-        ),
-        'resize_png_with_alpha' => array(
+            ],
+        ],
+        'resize_png_with_alpha' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.resize_png_with_alpha',
-            'config' => array(
+            'config' => [
                 'type' => 'check',
-            ),
-        ),
-        'conversion_mapping' => array(
+            ],
+        ],
+        'conversion_mapping' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.conversion_mapping',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => '20',
                 'rows' => '5',
                 'eval' => 'trim',
-            ),
-        ),
-        'rulesets' => array(
+            ],
+        ],
+        'rulesets' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.rulesets',
-            'config' => array(
+            'config' => [
                 'type' => 'flex',
                 'ds_pointerField' => 'list_type',
-                'ds' => array(
+                'ds' => [
                     'default' => 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
-                ),
-            ),
-        ),
-    ),
-    'types' => array(
-        '0' => array('showitem' =>
+                ],
+            ],
+        ],
+    ],
+    'types' => [
+        '0' => ['showitem' =>
             'directories,threshold,file_types,
 			--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:ALT.imgDimensions;dimensions,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.options,
 				auto_orient,keep_metadata,resize_png_with_alpha,conversion_mapping,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.rulesets,
 				rulesets
-		'),
-    ),
-    'palettes' => array(
-        'dimensions' => array('showitem' => 'max_width,max_height'),
-    ),
-);
+		'],
+    ],
+    'palettes' => [
+        'dimensions' => ['showitem' => 'max_width,max_height'],
+    ],
+];

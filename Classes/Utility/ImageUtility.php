@@ -61,9 +61,9 @@ class ImageUtility
             $extractorRegistry = \TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
             $extractionServices = $extractorRegistry->getExtractorsWithDriverSupport('Local');
 
-            $newMetadata = array(
+            $newMetadata = [
                 0 => $metadata,
-            );
+            ];
             foreach ($extractionServices as $service) {
                 if ($service->canProcess($virtualFileObject)) {
                     $newMetadata[$service->getPriority()] = $service->extractMetaData($virtualFileObject, $newMetadata);
@@ -139,7 +139,7 @@ class ImageUtility
     protected static function getBasicMetadata($fileName)
     {
         $extension = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
-        $metadata = array();
+        $metadata = [];
         if (GeneralUtility::inList('jpg,jpeg,tif,tiff', $extension) && function_exists('exif_read_data')) {
             $exif = @exif_read_data($fileName);
             if ($exif) {
@@ -170,11 +170,11 @@ class ImageUtility
                 }
             }
             // Try to extract IPTC data
-            $imageinfo = array();
+            $imageinfo = [];
             if (function_exists('iptcparse') && getimagesize($fileName, $imageinfo)) {
                 if (isset($imageinfo['APP13'])) {
                     $data = iptcparse($imageinfo['APP13']);
-                    $mapping = array(
+                    $mapping = [
                         '2#005' => 'Title',
                         '2#025' => 'Keywords',
                         '2#040' => 'Instructions',
@@ -192,7 +192,7 @@ class ImageUtility
                         '2#116' => 'Copyright',
                         '2#120' => 'Description',
                         '2#122' => 'DescriptionAuthor',
-                    );
+                    ];
                     foreach ($mapping as $iptcKey => $metadataKey) {
                         if (isset($data[$iptcKey])) {
                             $metadata['IPTC' . $metadataKey] = static::safeUtf8Encode($data[$iptcKey][0]);

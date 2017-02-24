@@ -74,7 +74,7 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
             '', // Target directory
             null,
             $GLOBALS['BE_USER'],
-            array($this, 'notify')
+            [$this, 'notify']
         );
     }
 

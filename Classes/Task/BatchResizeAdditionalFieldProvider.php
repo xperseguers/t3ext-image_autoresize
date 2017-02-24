@@ -71,27 +71,27 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
         }
 
         // Create HTML form fields
-        $additionalFields = array();
+        $additionalFields = [];
 
         // Directories to be processed
         $fieldName = 'tx_scheduler[scheduler_batchResize_directories]';
         $fieldId = 'scheduler_batchResize_directories';
         $fieldValue = trim($taskInfo['scheduler_batchResize_directories']);
         $fieldHtml = '<textarea rows="4" cols="30" name="' . $fieldName . '" id="' . $fieldId . '">' . htmlspecialchars($fieldValue) . '</textarea>';
-        $additionalFields[$fieldId] = array(
+        $additionalFields[$fieldId] = [
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:label.batchResize.directories',
-        );
+        ];
 
         // Directories to be excluded
         $fieldName = 'tx_scheduler[scheduler_batchResize_excludeDirectories]';
         $fieldId = 'scheduler_batchResize_excludeDirectories';
         $fieldValue = trim($taskInfo['scheduler_batchResize_excludeDirectories']);
         $fieldHtml = '<textarea rows="4" cols="30" name="' . $fieldName . '" id="' . $fieldId . '">' . htmlspecialchars($fieldValue) . '</textarea>';
-        $additionalFields[$fieldId] = array(
+        $additionalFields[$fieldId] = [
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:label.batchResize.excludeDirectories',
-        );
+        ];
 
         return $additionalFields;
     }

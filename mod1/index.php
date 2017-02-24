@@ -102,7 +102,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         $this->addStatisticsAndSocialLink();
 
         $row = $this->config;
-        $this->fixRecordForFormEngine($row, array('file_types', 'usergroup'));
+        $this->fixRecordForFormEngine($row, ['file_types', 'usergroup']);
         $this->moduleContent($row);
 
         // Compile document
@@ -176,10 +176,10 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function buildForm(array $row)
     {
-        $record = array(
+        $record = [
             'uid' => static::virtualRecordId,
             'pid' => 0,
-        );
+        ];
         $record = array_merge($record, $row);
 
         // Trick to use a virtual record
@@ -197,12 +197,12 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
         $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
 
-        $formDataCompilerInput = array(
+        $formDataCompilerInput = [
             'tableName' => static::virtualTable,
             'vanillaUid' => $record['uid'],
             'command' => 'edit',
             'returnUrl' => '',
-        );
+        ];
 
         // Load the configuration of virtual table 'tx_imageautoresize'
         $this->loadVirtualTca();
@@ -313,13 +313,13 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function getButtons()
     {
-        $buttons = array(
+        $buttons = [
             'csh' => '',
             'shortcut' => '',
             'close' => '',
             'save' => '',
             'save_close' => '',
-        );
+        ];
 
         // CSH
         $buttons['csh'] = BackendUtility::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
@@ -332,10 +332,10 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         $buttons['close'] = $closeLink;
 
         // SAVE button
-        $buttons['save'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save', array('html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />'));
+        $buttons['save'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save', ['html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />']);
 
         // SAVE_CLOSE button
-        $buttons['save_close'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save-close', array('html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />'));
+        $buttons['save_close'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save-close', ['html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />']);
 
         // Shortcut
         if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
@@ -362,22 +362,22 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function getDefaultConfiguration()
     {
-        return array(
+        return [
             'directories' => 'fileadmin/,uploads/',
             'file_types' => 'jpg,jpeg,png',
             'threshold' => '400K',
             'max_width' => '1024',
             'max_height' => '768',
             'auto_orient' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm' ? '0' : '1',
-            'conversion_mapping' => implode(',', array(
+            'conversion_mapping' => implode(',', [
                 'ai => jpg',
                 'bmp => jpg',
                 'pcx => jpg',
                 'tga => jpg',
                 'tif => jpg',
                 'tiff => jpg',
-            )),
-        );
+            ]),
+        ];
     }
 
     /**

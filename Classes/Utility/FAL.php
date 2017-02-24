@@ -33,7 +33,7 @@ class FAL
     /**
      * @var array
      */
-    protected static $reflectedClasses = array();
+    protected static $reflectedClasses = [];
 
     /**
      * Creates/updates the index entry for a given file.
@@ -46,7 +46,7 @@ class FAL
      * @param array $metadata EXIF metadata
      * @return void
      */
-    public static function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = array())
+    public static function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = [])
     {
         if ($file === null) {
             $file = static::findExistingFile($origFileName);
@@ -104,7 +104,7 @@ class FAL
      * @param array $metadata EXIF metadata
      * @return void
      */
-    protected static function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = array())
+    protected static function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = [])
     {
         if (count($metadata) > 0) {
             /** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */

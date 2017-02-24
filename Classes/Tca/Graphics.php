@@ -50,11 +50,11 @@ class Graphics
         }
         asort($extensions);
 
-        $elements = array();
+        $elements = [];
         foreach ($extensions as $extension) {
             $label = $languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:extension.' . $extension);
             $label = $label ? $label : '.' . $extension;
-            $elements[] = array($label, $extension);
+            $elements[] = [$label, $extension];
         }
 
         $settings['items'] = array_merge($settings['items'], $elements);
