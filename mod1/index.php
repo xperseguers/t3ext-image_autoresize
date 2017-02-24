@@ -77,7 +77,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     public function __construct()
     {
         if (version_compare(TYPO3_version, '7.5.99', '>')) {
-            $this->moduleTemplate = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\ModuleTemplate');
+            $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         }
         $this->languageService = $GLOBALS['LANG'];
 
@@ -107,7 +107,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
             if (version_compare(TYPO3_version, '7.4.99', '<=')) {
                 $this->initTCEForms();
             }
-            $this->doc = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
+            $this->doc = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\DocumentTemplate::class);
             $this->doc->setModuleTemplate(ExtensionManagementUtility::extPath($this->extKey) . 'mod1/mod_template.html');
             $this->doc->backPath = $GLOBALS['BACK_PATH'];
             $this->doc->form = $formTag;
@@ -124,7 +124,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         } else {
             if ($row['rulesets']) {
                 /** @var $flexObj \TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools */
-                $flexObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools');
+                $flexObj = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools::class);
                 $row['rulesets'] = $flexObj->flexArray2Xml($row['rulesets'], true);
             }
             $this->moduleContentLegacy($row);
@@ -199,7 +199,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function moduleContent(array $row)
     {
-        $this->formResultCompiler = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormResultCompiler');
+        $this->formResultCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormResultCompiler::class);
 
         $wizard = $this->formResultCompiler->JStop();
         $wizard .= $this->buildForm($row);
@@ -224,18 +224,18 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         // Trick to use a virtual record
         $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
-        $originalProvider = 'TYPO3\\CMS\\Backend\\Form\\FormDataProvider\\DatabaseEditRow';
+        $originalProvider = \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class;
         $databaseEditRowProvider = $dataProviders[$originalProvider];
         unset($dataProviders[$originalProvider]);
         \Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::initialize($record);
-        $dataProviders['Causal\\ImageAutoresize\\Backend\\Form\\FormDataProvider\\VirtualDatabaseEditRow'] = $databaseEditRowProvider;
+        $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = $databaseEditRowProvider;
 
         /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
-        $formDataGroup = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormDataGroup\\TcaDatabaseRecord');
+        $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
         /** @var \TYPO3\CMS\Backend\Form\FormDataCompiler $formDataCompiler */
-        $formDataCompiler = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormDataCompiler', $formDataGroup);
+        $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
         /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
-        $nodeFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\NodeFactory');
+        $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
 
         $formDataCompilerInput = array(
             'tableName' => static::virtualTable,
@@ -549,9 +549,9 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     protected function writeToLocalconf($key, array $config)
     {
         /** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
         /** @var $configurationManager \TYPO3\CMS\Core\Configuration\ConfigurationManager */
-        $configurationManager = $objectManager->get('TYPO3\\CMS\\Core\\Configuration\\ConfigurationManager');
+        $configurationManager = $objectManager->get(\TYPO3\CMS\Core\Configuration\ConfigurationManager::class);
         return $configurationManager->setLocalConfigurationValueByPath('EXT/extConf/' . $key, serialize($config));
     }
 
@@ -562,7 +562,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function initTCEForms()
     {
-        $this->tceforms = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Form\\FormEngine');
+        $this->tceforms = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormEngine::class);
         if (version_compare(TYPO3_version, '7.2.99', '<=')) {
             $this->tceforms->initDefaultBEMode();
         }

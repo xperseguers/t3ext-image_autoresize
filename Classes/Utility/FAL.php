@@ -108,7 +108,7 @@ class FAL
     {
         if (version_compare(TYPO3_version, '6.99.99', '<=')) {
             /** @var \TYPO3\CMS\Core\Resource\Service\IndexerService $indexerService */
-            $indexerService = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\Service\\IndexerService');
+            $indexerService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\Service\IndexerService::class);
             $indexerService->indexFile($file);
         }
 
