@@ -1,7 +1,7 @@
 <?php
 defined('TYPO3_MODE') || die();
 
-$GLOBALS['TCA']['tx_imageautoresize'] = [
+return [
     'ctrl' => [
         'label' => 'title',
         'dividers2tabs' => true,
@@ -96,7 +96,6 @@ $GLOBALS['TCA']['tx_imageautoresize'] = [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.rulesets',
             'config' => [
                 'type' => 'flex',
-                'ds_pointerField' => 'list_type',
                 'ds' => [
                     'default' => 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
                 ],

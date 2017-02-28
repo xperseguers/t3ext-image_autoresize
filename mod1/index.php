@@ -16,6 +16,7 @@ use TYPO3\CMS\Backend\Module\BaseScriptClass;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 if (!$GLOBALS['BE_USER']->isAdmin()) {
     throw new \RuntimeException('Access Error: You don\'t have access to this module.', 1294586448);
@@ -102,7 +103,9 @@ class tx_imageautoresize_module1 extends BaseScriptClass
         $this->addStatisticsAndSocialLink();
 
         $row = $this->config;
-        $this->fixRecordForFormEngine($row, ['file_types', 'usergroup']);
+        if (version_compare(TYPO3_version, '7.6.17', '<')) {
+            $this->fixRecordForFormEngine($row, ['file_types', 'usergroup']);
+        }
         $this->moduleContent($row);
 
         // Compile document
@@ -152,7 +155,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     }
 
     /**
-     * Generates the module content (TYPO3 7+).
+     * Generates the module content.
      *
      * @param array $row
      * @return void
@@ -169,7 +172,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
     }
 
     /**
-     * Builds the expert configuration form (TYPO3 7+).
+     * Builds the expert configuration form.
      *
      * @param array $row
      * @return string
@@ -184,11 +187,26 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
         // Trick to use a virtual record
         $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
-        $originalProvider = \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class;
-        $databaseEditRowProvider = $dataProviders[$originalProvider];
-        unset($dataProviders[$originalProvider]);
+
+        // Recent version of TYPO3 is since 7.6.17 for TYPO3 v7 and > 8.6.1 for TYPO3 v8
+        $isRecentV7OrV8 = version_compare(TYPO3_version, '8.6.1', '>')
+            || (version_compare(TYPO3_version, '7.6.17', '>=') && version_compare(TYPO3_version, '8.0', '<'));
+        if ($isRecentV7OrV8) {
+            $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
+                'before' => [
+                    \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
+                ]
+            ];
+        } else {
+            // Either TYPO3 < 7.6.17 or TYPO3 8.0.0 - 8.6.1
+            $originalProvider = \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class;
+            $databaseEditRowProvider = $dataProviders[$originalProvider];
+            unset($dataProviders[$originalProvider]);
+            $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = $databaseEditRowProvider;
+        }
+
+        // Initialize record in our virtual provider
         \Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::initialize($record);
-        $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = $databaseEditRowProvider;
 
         /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
@@ -240,6 +258,15 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 			<input type="hidden" name="doSave" value="0" />
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
 			<input type="hidden" name="_scrollPosition" value="" />';
+
+        if (version_compare(TYPO3_version, '8.6', '>=')) {
+            $overriddenAjaxUrl = GeneralUtility::quoteJSvalue(BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add'));
+            $formContent .= <<<HTML
+<script type="text/javascript">
+    TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
+</script>
+HTML;
+        }
 
         return $formContent;
     }
@@ -398,8 +425,18 @@ class tx_imageautoresize_module1 extends BaseScriptClass
 
             $inputData_tmp = GeneralUtility::_GP('data');
             $data = $inputData_tmp[$table][$id];
+
+            if (version_compare(TYPO3_version, '8.6', '>=')) {
+                if (count($inputData_tmp[$table]) > 1) {
+                    foreach ($inputData_tmp[$table] as $key => $values) {
+                        if ($key === $id) continue;
+                        ArrayUtility::mergeRecursiveWithOverrule($data, $values);
+                    }
+                }
+            }
+
             $newConfig = $this->config;
-            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($newConfig, $data);
+            ArrayUtility::mergeRecursiveWithOverrule($newConfig, $data);
 
             // Action commands (sorting order and removals of FlexForm elements)
             $ffValue = &$data[$field];
@@ -469,8 +506,7 @@ class tx_imageautoresize_module1 extends BaseScriptClass
      */
     protected function loadVirtualTca()
     {
-        global $TCA;
-        include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
+        $GLOBALS['TCA'][static::virtualTable] = include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
         ExtensionManagementUtility::addLLrefForTCAdescr(static::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . static::virtualTable . '.xlf');
     }
 
