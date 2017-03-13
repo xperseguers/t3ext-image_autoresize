@@ -271,7 +271,7 @@ HTML;
     }
 
     /**
-     * Creates the toolbar buttons (TYPO3 7.6+).
+     * Creates the toolbar buttons.
      *
      * @return void
      */
@@ -317,45 +317,6 @@ HTML;
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
         $buttonBar->addButton($closeButton);
-    }
-
-    /**
-     * Retursn the panel of buttons for submitting the form or otherwise perform operations.
-     *
-     * @return array Returns all available buttons as an associative array (TYPO3 <= 7.5).
-     */
-    protected function getButtons()
-    {
-        $buttons = [
-            'csh' => '',
-            'shortcut' => '',
-            'close' => '',
-            'save' => '',
-            'save_close' => '',
-        ];
-
-        // CSH
-        $buttons['csh'] = BackendUtility::cshItem('_MOD_web_func', '', $GLOBALS['BACK_PATH']);
-
-        // CLOSE button
-        $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-        $closeLink = '<a href="#" onclick="document.location=\'' . htmlspecialchars($closeUrl) . '\'" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:closeConfiguration', true) . '">' .
-            \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-close') .
-            '</a>';
-        $buttons['close'] = $closeLink;
-
-        // SAVE button
-        $buttons['save'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save', ['html' => '<input type="image" name="_savedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveConfiguration', true) . '" />']);
-
-        // SAVE_CLOSE button
-        $buttons['save_close'] = \TYPO3\CMS\Backend\Utility\IconUtility::getSpriteIcon('actions-document-save-close', ['html' => '<input type="image" name="_saveandclosedok" class="c-inputButton" src="clear.gif" title="' . $this->languageService->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:saveCloseConfiguration', true) . '" />']);
-
-        // Shortcut
-        if ($GLOBALS['BE_USER']->mayMakeShortcut()) {
-            $buttons['shortcut'] = $this->doc->makeShortcutIcon('', 'function', $this->MCONF['name']);
-        }
-
-        return $buttons;
     }
 
     /**
