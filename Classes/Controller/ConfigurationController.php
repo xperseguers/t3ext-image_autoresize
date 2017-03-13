@@ -342,7 +342,7 @@ HTML;
             'threshold' => '400K',
             'max_width' => '1024',
             'max_height' => '768',
-            'auto_orient' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm' ? '0' : '1',
+            'auto_orient' => '1',
             'conversion_mapping' => implode(',', [
                 'ai => jpg',
                 'bmp => jpg',
