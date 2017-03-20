@@ -81,3 +81,15 @@ extension in your TYPO3 website:
 	Screencast available on https://jweiland.net/video-anleitungen/typo3/interessante-typo3-extensions/image-autoresize.html
 
 Thanks a lot for providing this online resource to the community.
+
+
+.. _requirements:
+
+Requirements
+------------
+
+In order to extract metadata while resizing images and automatically rotate images based on the EXIF information, those
+PHP methods should be available:
+
+- `exif_read_data`;
+- `iptcparse`.
