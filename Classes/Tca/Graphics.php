@@ -33,7 +33,7 @@ class Graphics
      * current TYPO3 install.
      *
      * @param array $settings content element configuration
-     * @return array content element configuration with dynamically added items
+     * @return void
      */
     public function getImageFileExtensions(array $settings)
     {
