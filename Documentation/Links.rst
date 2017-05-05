@@ -14,6 +14,9 @@ Links
 :TER:
 	https://typo3.org/extensions/repository/view/image_autoresize
 
+:Packagist:
+	https://packagist.org/packages/causal/image_autoresize
+
 :Bug Tracker:
 	https://forge.typo3.org/projects/extension-image_autoresize/issues
 
