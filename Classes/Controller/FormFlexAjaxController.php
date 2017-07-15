@@ -33,6 +33,24 @@ class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxC
         $GLOBALS['TCA']['tx_imageautoresize'] = include(ExtensionManagementUtility::extPath('image_autoresize') . 'Configuration/TCA/Module/Options.php');
         $GLOBALS['TCA']['tx_imageautoresize']['ajax'] = true;
 
+        if (version_compare(TYPO3_version, '8.7', '>=')) {
+            // Trick to use a virtual record
+            $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
+            $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
+                'before' => [
+                    \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
+                ]
+            ];
+
+            $record = [
+                'uid' => \Causal\ImageAutoresize\Controller\ConfigurationController::virtualRecordId,
+                'pid' => 0,
+            ];
+
+            // Initialize record in our virtual provider
+            \Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::initialize($record);
+        }
+
         $response = parent::containerAdd($request, $response);
         return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
