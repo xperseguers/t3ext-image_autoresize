@@ -473,26 +473,23 @@ class ImageResizer
      */
     protected function compileRulesets(array $rulesets)
     {
-        $sheets = GeneralUtility::resolveAllSheetsInDS($rulesets);
-        $rulesets = [];
+        $out = [];
 
-        foreach ($sheets['sheets'] as $sheet) {
-            $elements = $sheet['data']['sDEF']['lDEF']['ruleset']['el'];
-            foreach ($elements as $container) {
-                if (isset($container['container']['el'])) {
-                    $values = [];
-                    foreach ($container['container']['el'] as $key => $value) {
-                        if ($key === 'title') {
-                            continue;
-                        }
-                        $values[$key] = $value['vDEF'];
+        $elements = $rulesets['data']['sDEF']['lDEF']['ruleset']['el'];
+        foreach ($elements as $container) {
+            if (isset($container['container']['el'])) {
+                $values = [];
+                foreach ($container['container']['el'] as $key => $value) {
+                    if ($key === 'title') {
+                        continue;
                     }
-                    $rulesets[] = $this->expandValuesInRuleset($values);
+                    $values[$key] = $value['vDEF'];
                 }
+                $out[] = $this->expandValuesInRuleset($values);
             }
         }
 
-        return $rulesets;
+        return $out;
     }
 
     /**
