@@ -12,19 +12,19 @@ Links
 -----
 
 :TER:
-	https://typo3.org/extensions/repository/view/image_autoresize
+	https://extensions.typo3.org/extension/repository/image_autoresize
 
 :Packagist:
 	https://packagist.org/packages/causal/image_autoresize
 
 :Bug Tracker:
-	https://forge.typo3.org/projects/extension-image_autoresize/issues
+	https://github.com/xperseguers/t3ext-image_autoresize/issues
 
 :Release Notes:
 	https://forge.typo3.org/projects/extension-image_autoresize/wiki
 
 :Git Repository:
-	https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git
+	https://github.com/xperseguers/t3ext-image_autoresize
 
 :Translation:
 	https://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
@@ -38,57 +38,9 @@ Links
 How to contribute
 ^^^^^^^^^^^^^^^^^
 
-This extension is using the same contribution workflow as for TYPO3 Core, using https://review.typo3.org for the review
+This extension is using the same contribution workflow as for TYPO3 Core, but with GitHub PRs for the review
 process. Please read more about the workflow in the
 `TYPO3 wiki <https://wiki.typo3.org/Contribution_Walkthrough_Life_Of_A_Patch>`__.
-
-
-.. _links-how-to-contribute-tldr:
-
-tl;dr
-"""""
-
-.. code-block:: bash
-
-	cd /path/to/site/typo3conf/ext/
-
-	# Replace TER version with a git clone (or use symbolic link if you prefer)
-	rm -rf image_autoresize
-	git clone https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git
-	cd image_autoresize
-
-	# Setup your environment
-	git config user.name "Your Name"
-	git config user.email "your-email@example.com"
-	git config branch.autosetuprebase remote
-	# TODO: replace "xperseguers" with your own typo3.org username
-	git config url."ssh://xperseguers@review.typo3.org:29418".pushInsteadOf https://git.typo3.org
-
-	# Install commit hook (if this fails, please read "New to Gerrit?" below)
-	# TODO: replace "xperseguers" with your own typo3.org username
-	scp -p -P 29418 xperseguers@review.typo3.org:hooks/commit-msg .git/hooks/
-
-You may now change, enhance and/or fix whatever you want, then submit your patch:
-
-.. code-block:: bash
-
-	cd /path/to/site/typo3conf/ext/image_autoresize
-	# Stage changes for commit (don't add everything blindly of course!)
-	git add .
-	# Commit (or amend using "git commit --amend" if enhancing an existing patch)
-	git commit
-	# Send patch for review
-	git push origin HEAD:refs/for/master
-
-.. admonition:: New to Gerrit?
-	:class: tip
-
-	You may need to configure your Gerrit SSH key in order to push your patches.
-
-	#. Open https://review.typo3.org and authenticate with your typo3.org username.
-	#. Go to :menuselection:`Settings --> SSH public keys` and add your SSH public key.
-
-	Please refer to https://wiki.typo3.org/Contribution_Walkthrough_Environment_Setup if you have problems.
 
 
 .. _links-how-to-contribute-rules:
