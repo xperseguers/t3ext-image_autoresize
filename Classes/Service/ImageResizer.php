@@ -606,7 +606,13 @@ class ImageResizer
      */
     protected function reportAdditionalStorageClaimed($bytes)
     {
-        $fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+        $legacyFileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+        $fileName = PATH_site . 'typo3temp/.tx_imageautoresize';
+
+        // Note: transfer of legacy filename should be removed after some time
+        if (file_exists($legacyFileName) && !file_exists($fileName)) {
+            @rename($legacyFileName, $fileName);
+        }
 
         $data = [];
         if (file_exists($fileName)) {

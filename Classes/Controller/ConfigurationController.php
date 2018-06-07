@@ -487,7 +487,7 @@ HTML;
      */
     protected function addStatisticsAndSocialLink()
     {
-        $fileName = PATH_site . 'typo3conf/.tx_imageautoresize';
+        $fileName = PATH_site . 'typo3temp/.tx_imageautoresize';
 
         if (!is_file($fileName)) {
             return;
@@ -511,7 +511,7 @@ HTML;
 
         $twitterMessagePattern = $this->languageService->getLL('social.twitter');
         $message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
-        $url = 'https://typo3.org/extensions/repository/view/image_autoresize';
+        $url = 'https://extensions.typo3.org/extension/image_autoresize/';
 
         $twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
         $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
