@@ -72,6 +72,31 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         }
         $processedDirectories = [];
 
+        // Expand watched directories if they contain wildcard characters
+        $expandedDirectories = [];
+        foreach ($directories as $directory) {
+            if (($pos = strpos($directory, '/*')) !== false) {
+                $pattern = $this->imageResizer->getDirectoryPattern($directory);
+                $basePath = substr($directory, 0, $pos + 1);
+
+                $objects = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator(PATH_site . $basePath),
+                    \RecursiveIteratorIterator::SELF_FIRST
+                );
+                foreach ($objects as $name => $object) {
+                    $relativePath = substr($name, strlen(PATH_site));
+                    if (substr($relativePath, -2) === DIRECTORY_SEPARATOR . '.') {
+                        if (preg_match($pattern, $relativePath)) {
+                            $expandedDirectories[] = substr($relativePath, 0, -1);
+                        }
+                    }
+                }
+            } else {
+                $expandedDirectories[] = $directory;
+            }
+        }
+        $directories = $expandedDirectories;
+
         $success = true;
         foreach ($directories as $directory) {
             $skip = false;

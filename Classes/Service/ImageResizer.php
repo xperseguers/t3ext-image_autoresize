@@ -589,7 +589,7 @@ class ImageResizer
      * @param string $directory
      * @return string
      */
-    protected function getDirectoryPattern($directory)
+    public function getDirectoryPattern($directory)
     {
         $pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
         $pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
