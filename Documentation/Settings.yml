@@ -4,10 +4,10 @@
 
 ---
 conf.py:
-  copyright: 2010-2017
+  copyright: 2010-2018
   project: Resize Images Automatically
   version: 1.8
-  release: 1.8.2-dev
+  release: 1.8.2
   latex_documents:
   - - Index
     - image_autoresize.tex
