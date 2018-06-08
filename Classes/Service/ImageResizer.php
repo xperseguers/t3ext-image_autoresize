@@ -271,6 +271,21 @@ class ImageResizer
             }
         }
 
+        if (
+            isset($ruleset['max_size'])
+            && $ruleset['max_size'] > 0
+            && isset($metadata['width'])
+            && $metadata['width'] > 0
+            && isset($metadata['height'])
+            && $metadata['height'] > 0
+            && $metadata['width'] * $metadata['height'] > $ruleset['max_size']
+        ) {
+            $factor = sqrt($ruleset['max_size'] / ($metadata['width'] * $metadata['height']));
+
+            $ruleset['max_width'] = min($ruleset['max_width'], floor($metadata['width'] * $factor));
+            $ruleset['max_height'] = min($ruleset['max_height'], floor($metadata['height'] * $factor));
+        }
+
         if ($isRotated) {
             // Invert max_width and max_height as the picture
             // will be automatically rotated
@@ -543,6 +558,13 @@ class ImageResizer
                     if ($value <= 0) {
                         // Inherit configuration
                         $value = '';
+                    }
+                    break;
+                case 'max_size':
+                    if (!is_numeric($value)) {
+                        $unit = strtoupper(substr($value, -1));
+                        $factor = 1 * ($unit === 'M' ? 1000000 : 1);
+                        $value = intval(trim(substr($value, 0, strlen($value) - 1))) * $factor;
                     }
                     break;
                 case 'conversion_mapping':

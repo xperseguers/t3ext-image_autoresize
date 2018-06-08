@@ -25,7 +25,7 @@ Example: jpg,jpeg,png,tif,tiff
 If empty, the list of file types configured in General tab will be taken into account.</source>
 			</trans-unit>
 			<trans-unit id="threshold.description" xml:space="preserve">
-				<source>Images larger than this value will be resized (allowed units: B|K|M).
+				<source>Images with a file size larger than this value will be resized (allowed units: B|K|M).
 If empty, the threshold configured in General tab will be taken into account.</source>
 			</trans-unit>
 			<trans-unit id="max_width.description" xml:space="preserve">
@@ -35,6 +35,11 @@ If empty, the maximum width configured in General tab will be taken into account
 			<trans-unit id="max_height.description" xml:space="preserve">
 				<source>Images will be resized up to this maximum height.
 If empty, the maximum height configured in General tab will be taken into account.</source>
+			</trans-unit>
+			<trans-unit id="max_size.description" xml:space="preserve">
+				<source>Images will be resized up to this maximum size.
+Example: 8M (for a maximum image size of 8 megapixel)
+If empty, the maximum size configured in General tab will be taken into account.</source>
 			</trans-unit>
 			<trans-unit id="keep_metadata.description">
 				<source>Either inherit configuration from General settings or explicitly configure whether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</source>

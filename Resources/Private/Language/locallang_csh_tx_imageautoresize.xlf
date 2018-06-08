@@ -16,13 +16,17 @@ fileadmin/**/images/</source>
 Example: jpg,jpeg,png,tif,tiff</source>
 			</trans-unit>
 			<trans-unit id="threshold.description">
-				<source>Images larger than this value will be resized (allowed units: B|K|M).</source>
+				<source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
 			</trans-unit>
 			<trans-unit id="max_width.description">
 				<source>Images will be resized up to this maximum width.</source>
 			</trans-unit>
 			<trans-unit id="max_height.description">
 				<source>Images will be resized up to this maximum height.</source>
+			</trans-unit>
+			<trans-unit id="max_size.description">
+				<source>Images will be resized up to this maximum size.
+Example: 8M (for a maximum image size of 8 megapixel)</source>
 			</trans-unit>
 			<trans-unit id="auto_orient.description">
 				<source>Will try to auto-magically orient image (useful with photos).</source>

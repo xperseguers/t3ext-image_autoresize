@@ -17,8 +17,8 @@ Introduction
 What does it do?
 ----------------
 
-This extension automatically resizes images to a given maximum height/width right after they have been uploaded to the
-TYPO3 website. The aspect ratio is of course kept.
+This extension automatically resizes images to a given maximum height/width or total image size right after they have
+been uploaded to the TYPO3 website. The aspect ratio is of course kept.
 
 The idea behind this extension is that TYPO3 should make both administrators and editors happy. Administrators want the
 website's footprint on server as small as possible to be able to handle backups efficiently and want the web server to

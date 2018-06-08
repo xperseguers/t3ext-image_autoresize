@@ -37,11 +37,11 @@ You may use two different wildcards characters:
 
 .. _general-settings-size-threshold:
 
-Size threshold
-^^^^^^^^^^^^^^
+File size threshold
+^^^^^^^^^^^^^^^^^^^
 
-Only original pictures bigger than this value will be processed. The field accepts suffices "B" for bytes, "K" for KB
-and "M" for MB. The number itself is interpreted as an integer.
+Only original pictures with file size bigger than this value will be processed. The field accepts suffices "B" for
+bytes, "K" for KB and "M" for MB. The number itself is interpreted as an integer.
 
 
 .. _general-settings-image-types:
@@ -64,3 +64,10 @@ Maximum width / height
 
 These are the maximum dimensions in pixels a picture will be bound to after the resize processing. Aspect ratio will of
 course be preserved.
+
+Maximum image size (pixel area)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is the maximum size in pixels a picture will be bound to after the resize processing. Height and width are
+calculated as big as possible considering the defined maximum width / height. Aspect ratio will of course be preserved.
+The field accepts the suffice "M" for megapixels.

@@ -65,6 +65,15 @@ return [
                 'default' => 0,
             ],
         ],
+        'max_size' => [
+            'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size',
+            'config' => [
+                'type' => 'input',
+                'size' => '10',
+                'max' => '10',
+                'eval' => 'trim',
+            ],
+        ],
         'auto_orient' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.auto_orient',
             'config' => [
@@ -113,6 +122,6 @@ return [
 		'],
     ],
     'palettes' => [
-        'dimensions' => ['showitem' => 'max_width,max_height'],
+        'dimensions' => ['showitem' => 'max_width,max_height,max_size'],
     ],
 ];
