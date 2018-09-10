@@ -10,13 +10,16 @@
 				<source>Image types:</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.threshold">
-				<source>Size threshold:</source>
+				<source>File size threshold:</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_width">
 				<source>Maximum width:</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_height">
 				<source>Maximum height:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.max_size">
+				<source>Maximum image size (pixel area):</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.auto_orient">
 				<source>Automatic orientation</source>

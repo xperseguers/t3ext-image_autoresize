@@ -342,6 +342,7 @@ HTML;
             'threshold' => '400K',
             'max_width' => '1024',
             'max_height' => '768',
+            'max_size' => '100M',
             'auto_orient' => '1',
             'conversion_mapping' => implode(',', [
                 'ai => jpg',
