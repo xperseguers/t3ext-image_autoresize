@@ -20,6 +20,7 @@ The following is a very high level overview of the changes in this extension. Fo
 =======  ======================================================
 Version  Changes
 =======  ======================================================
+1.9.x    Support for bounding the maximum dimensions in pixels
 1.8.x    Compatibility with TYPO3 7 LTS - 8 LTS
 1.7.x    Support for 3rd-party metadata extraction services
 1.6.x    Compatibility with TYPO3 6.2 - 7.x
