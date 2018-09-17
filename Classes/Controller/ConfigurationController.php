@@ -284,7 +284,7 @@ HTML;
 
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
-            ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveDoc', true))
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveDoc')))
             ->setName('_savedok')
             ->setValue('1')
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
@@ -298,7 +298,7 @@ HTML;
             ->setName('_saveandclosedok')
             ->setClasses('t3js-editform-submitButton')
             ->setValue('1')
-            ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveCloseDoc', true))
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveCloseDoc')))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
@@ -311,7 +311,7 @@ HTML;
         $closeButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3js-editform-close')
-            ->setTitle($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.closeDoc', true))
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.closeDoc')))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-view-go-back',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
