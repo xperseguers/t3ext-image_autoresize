@@ -499,7 +499,7 @@ HTML;
             return;
         }
 
-        $resourcesPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($this->extKey) . 'Resources/Public/';
+        $resourcesPath = '../' . ExtensionManagementUtility::siteRelPath($this->extKey) . 'Resources/Public/';
         $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
         $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
