@@ -7,31 +7,31 @@ $boot = function ($_EXTKEY) {
 
     // Hook into \TYPO3\CMS\Core\Resource\ResourceStorage
     $signalSlotDispatcher->connect(
-        \TYPO3\CMS\Core\Resource\ResourceStorage::class,
+        'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
         \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_SanitizeFileName,
         \Causal\ImageAutoresize\Slots\FileUpload::class,
         \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_SanitizeFileName
     );
     $signalSlotDispatcher->connect(
-        \TYPO3\CMS\Core\Resource\ResourceStorage::class,
+        'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
         \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PostFileReplace,
         \Causal\ImageAutoresize\Slots\FileUpload::class,
         \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PostFileReplace
     );
     $signalSlotDispatcher->connect(
-        \TYPO3\CMS\Core\Resource\ResourceStorage::class,
+        'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
         \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PreFileAdd,
         \Causal\ImageAutoresize\Slots\FileUpload::class,
         \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PreFileAdd
     );
     $signalSlotDispatcher->connect(
-        \TYPO3\CMS\Core\Resource\ResourceStorage::class,
+        'TYPO3\\CMS\\Core\\Resource\\ResourceStorage',
         \TYPO3\CMS\Core\Resource\ResourceStorageInterface::SIGNAL_PostFileAdd,
         \Causal\ImageAutoresize\Slots\FileUpload::class,
         \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PopulateMetadata
     );
     $signalSlotDispatcher->connect(
-        \TYPO3\CMS\Extensionmanager\ViewHelpers\ProcessAvailableActionsViewHelper::class,
+        'TYPO3\\CMS\\Extensionmanager\\ViewHelpers\\ProcessAvailableActionsViewHelper',
         \TYPO3\CMS\Extensionmanager\ViewHelpers\ProcessAvailableActionsViewHelper::SIGNAL_ProcessActions,
         \Causal\ImageAutoresize\Slots\ExtensionManager::class,
         \Causal\ImageAutoresize\Slots\ExtensionManager::SIGNAL_ProcessActions
