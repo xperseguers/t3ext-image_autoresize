@@ -25,7 +25,7 @@ return [
                 'minitems' => '0',
                 'maxitems' => '20',
                 'size' => '6',
-                'multiple' => '1',
+                'multiple' => '0',
             ],
         ],
         'threshold' => [
