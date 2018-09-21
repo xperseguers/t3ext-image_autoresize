@@ -18,7 +18,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxController
+/**
+ * THIS CLASS IS USED IN TYPO3 v8 only
+ *
+ * @package Causal\ImageAutoresize\Controller
+ */
+class FormFlexAjaxControllerV8 extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxController
 {
 
     /**
@@ -28,7 +33,7 @@ class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxC
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function containerAdd(ServerRequestInterface $request): ResponseInterface
+    public function containerAdd(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $GLOBALS['TCA']['tx_imageautoresize'] = include(ExtensionManagementUtility::extPath('image_autoresize') . 'Configuration/TCA/Module/Options.php');
         $GLOBALS['TCA']['tx_imageautoresize']['ajax'] = true;
