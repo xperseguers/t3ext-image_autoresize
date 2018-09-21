@@ -107,7 +107,7 @@ class ConfigurationController
 
         $this->moduleTemplate->setForm($formTag);
 
-        $this->content .= sprintf('<h3>%s</h3>', $this->languageService->getLL('title', true));
+        $this->content .= sprintf('<h3>%s</h3>', htmlspecialchars($this->languageService->getLL('title')));
         $this->addStatisticsAndSocialLink();
 
         $row = $this->config;
@@ -247,14 +247,12 @@ class ConfigurationController
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
 			<input type="hidden" name="_scrollPosition" value="" />';
 
-        if (version_compare(TYPO3_version, '8.6', '>=')) {
-            $overriddenAjaxUrl = GeneralUtility::quoteJSvalue(BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add'));
-            $formContent .= <<<HTML
+        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue(BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add'));
+        $formContent .= <<<HTML
 <script type="text/javascript">
     TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
 </script>
 HTML;
-        }
 
         return $formContent;
     }
@@ -365,12 +363,10 @@ HTML;
             $inputData_tmp = GeneralUtility::_GP('data');
             $data = $inputData_tmp[$table][$id];
 
-            if (version_compare(TYPO3_version, '8.6', '>=')) {
-                if (count($inputData_tmp[$table]) > 1) {
-                    foreach ($inputData_tmp[$table] as $key => $values) {
-                        if ($key === $id) continue;
-                        ArrayUtility::mergeRecursiveWithOverrule($data, $values);
-                    }
+            if (count($inputData_tmp[$table]) > 1) {
+                foreach ($inputData_tmp[$table] as $key => $values) {
+                    if ($key === $id) continue;
+                    ArrayUtility::mergeRecursiveWithOverrule($data, $values);
                 }
             }
 
@@ -509,7 +505,7 @@ HTML;
         $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . $this->languageService->getLL('social.share', true) . '">
+                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . htmlspecialchars($this->languageService->getLL('social.share')) . '">
                     <i class="btn-icon"></i>
                     <span class="btn-text">Tweet</span>
                 </a>
