@@ -103,7 +103,7 @@ class ConfigurationController
         $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
         $this->processData();
 
-        $formTag = '<form action="" method="post" name="editform">';
+        $formTag = '<form action="" method="post" name="editform" id="EditDocumentController">';
 
         $this->moduleTemplate->setForm($formTag);
 
@@ -276,6 +276,7 @@ HTML;
             ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.saveDoc')))
             ->setName('_savedok')
             ->setValue('1')
+            ->setForm('EditDocumentController')
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-document-save',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
@@ -284,10 +285,11 @@ HTML;
 
         // SAVE & CLOSE button:
         $saveAndCloseButton = $buttonBar->makeInputButton()
-            ->setName('_saveandclosedok')
-            ->setClasses('t3js-editform-submitButton')
-            ->setValue('1')
             ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.saveCloseDoc')))
+            ->setName('_saveandclosedok')
+            ->setValue('1')
+            ->setForm('EditDocumentController')
+            ->setClasses('t3js-editform-submitButton')
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
@@ -298,9 +300,9 @@ HTML;
 
         // CLOSE button:
         $closeButton = $buttonBar->makeLinkButton()
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.closeDoc')))
             ->setHref('#')
             ->setClasses('t3js-editform-close')
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.closeDoc')))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-view-go-back',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
