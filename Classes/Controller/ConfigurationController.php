@@ -110,11 +110,8 @@ class ConfigurationController
         $this->content .= sprintf('<h3>%s</h3>', htmlspecialchars($this->languageService->getLL('title')));
         $this->addStatisticsAndSocialLink();
 
-        $row = $this->config;
-        if (version_compare(TYPO3_version, '7.6.17', '<')) {
-            $this->fixRecordForFormEngine($row, ['file_types', 'usergroup']);
-        }
-        $this->moduleContent($row);
+        // Generate the content
+        $this->moduleContent($this->config);
 
         // Compile document
         $this->addToolbarButtons();
@@ -124,33 +121,6 @@ class ConfigurationController
         $response->getBody()->write($content);
 
         return $response;
-    }
-
-    /**
-     * FormEngine now expects an array of data instead of a comma-separated list of
-     * values for select fields. This method ensures the corresponding fields in $row
-     * are of the expected type and "fix" them if needed.
-     *
-     * @param array &$row
-     * @param array $tcaSelectFields
-     * @return void
-     */
-    protected function fixRecordForFormEngine(array &$row, array $tcaSelectFields)
-    {
-        foreach ($tcaSelectFields as $tcaField) {
-            if (isset($row[$tcaField])) {
-                $row[$tcaField] = GeneralUtility::trimExplode(',', $row[$tcaField], true);
-            }
-        }
-        if (isset($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'])) {
-            foreach ($row['rulesets']['data']['sDEF']['lDEF']['ruleset']['el'] as &$el) {
-                foreach ($tcaSelectFields as $tcaField) {
-                    if (isset($el['container']['el'][$tcaField]['vDEF'])) {
-                        $el['container']['el'][$tcaField]['vDEF'] = GeneralUtility::trimExplode(',', $el['container']['el'][$tcaField]['vDEF'], true);
-                    }
-                }
-            }
-        }
     }
 
     /**
