@@ -39,7 +39,7 @@
 							</title>
 							<usergroup type="array">
 								<TCEforms type="array">
-									<label>LLL:EXT:lang/locallang_tca.xml:be_users.usergroup</label>
+									<label>LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:be_users.usergroup</label>
 									<config type="array">
 										<type>select</type>
 										<foreign_table>be_groups</foreign_table>

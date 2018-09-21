@@ -163,7 +163,7 @@ class ConfigurationController
     {
         $this->formResultCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormResultCompiler::class);
 
-        $wizard = $this->formResultCompiler->JStop();
+        $wizard = $this->formResultCompiler->addCssFiles();
         $wizard .= $this->buildForm($row);
         $wizard .= $this->formResultCompiler->printNeededJSFunctions();
 
@@ -187,22 +187,11 @@ class ConfigurationController
         // Trick to use a virtual record
         $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
 
-        // Recent version of TYPO3 is since 7.6.17 for TYPO3 v7 and > 8.6.1 for TYPO3 v8
-        $isRecentV7OrV8 = version_compare(TYPO3_version, '8.6.1', '>')
-            || (version_compare(TYPO3_version, '7.6.17', '>=') && version_compare(TYPO3_version, '8.0', '<'));
-        if ($isRecentV7OrV8) {
-            $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
-                'before' => [
-                    \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
-                ]
-            ];
-        } else {
-            // Either TYPO3 < 7.6.17 or TYPO3 8.0.0 - 8.6.1
-            $originalProvider = \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class;
-            $databaseEditRowProvider = $dataProviders[$originalProvider];
-            unset($dataProviders[$originalProvider]);
-            $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = $databaseEditRowProvider;
-        }
+        $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
+            'before' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
+            ]
+        ];
 
         // Initialize record in our virtual provider
         \Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::initialize($record);
@@ -284,7 +273,7 @@ HTML;
 
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveDoc')))
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.saveDoc')))
             ->setName('_savedok')
             ->setValue('1')
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
@@ -298,7 +287,7 @@ HTML;
             ->setName('_saveandclosedok')
             ->setClasses('t3js-editform-submitButton')
             ->setValue('1')
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.saveCloseDoc')))
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.saveCloseDoc')))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
@@ -311,7 +300,7 @@ HTML;
         $closeButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3js-editform-close')
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/locallang_core.xlf:rm.closeDoc')))
+            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.closeDoc')))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
                 'actions-view-go-back',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
