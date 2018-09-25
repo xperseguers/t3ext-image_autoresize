@@ -14,6 +14,11 @@
 
 namespace Causal\ImageAutoresize\Service;
 
+use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
+use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\Index\Indexer;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use Causal\ImageAutoresize\Utility\ImageUtility;
@@ -349,6 +354,17 @@ class ImageResizer
                 ImageUtility::resetOrientation($destFileName);
             }
 
+            // Inform FAL about new image size and dimensions
+            try {
+                $destinationFile = ResourceFactory::getInstance()->retrieveFileOrFolderObject($destFileName);
+                if ($destinationFile instanceof File) {
+                    $indexer = $this->getIndexer($destinationFile->getStorage());
+                    $indexer->updateIndexEntry($destinationFile);
+                }
+            } catch (FolderDoesNotExistException $e) {
+                // We are in upload process. Do nothing
+            }
+
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
         } else {
             // Destination file was not written
@@ -650,4 +666,14 @@ class ImageResizer
         GeneralUtility::writeFile($fileName, json_encode($data));
     }
 
+    /**
+     * Gets the indexer
+     *
+     * @param ResourceStorage $storage
+     * @return Indexer
+     */
+    protected function getIndexer(\TYPO3\CMS\Core\Resource\ResourceStorage $storage)
+    {
+        return GeneralUtility::makeInstance(Indexer::class, $storage);
+    }
 }
