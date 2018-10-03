@@ -42,9 +42,6 @@
 			<trans-unit id="extension.tiff">
 				<source>.tiff - Tagged Image Format</source>
 			</trans-unit>
-			<trans-unit id="message.emptyConfiguration">
-				<source>Extension image_autoresize is not properly configured!</source>
-			</trans-unit>
 			<trans-unit id="message.imageTransparent">
 				<source>Image %s has not been resized because transparency has been detected.</source>
 			</trans-unit>

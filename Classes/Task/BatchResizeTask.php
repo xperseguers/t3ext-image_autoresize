@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Task;
 
+use Causal\ImageAutoresize\Controller\ConfigurationController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
@@ -53,13 +54,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      */
     public function execute()
     {
-        $configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
-        if (!empty($configuration)) {
-            $configuration = unserialize($configuration);
-        }
-        if (!is_array($configuration)) {
-            throw new \RuntimeException('No configuration found', 1384103174);
-        }
+        $configuration = ConfigurationController::readConfiguration();
 
         $this->imageResizer = GeneralUtility::makeInstance(\Causal\ImageAutoresize\Service\ImageResizer::class);
         $this->imageResizer->initializeRulesets($configuration);

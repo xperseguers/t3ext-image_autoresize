@@ -94,7 +94,7 @@ class ConfigurationController
                 $this->writeToLocalconf($this->expertKey, []);
             }
         }
-        $this->config = $this->readConfiguration();
+        $this->config = static::readConfiguration();
         $this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
     }
 
@@ -301,7 +301,7 @@ HTML;
      *
      * @return array
      */
-    protected function getDefaultConfiguration()
+    protected static function getDefaultConfiguration()
     {
         return [
             'directories' => 'fileadmin/,uploads/',
@@ -403,13 +403,13 @@ HTML;
     /**
      * @return array
      */
-    protected function readConfiguration() : array
+    public static function readConfiguration() : array
     {
-        $configurationFileName = PATH_site . 'typo3conf/' . $this->extKey . '.config.php';
+        $configurationFileName = PATH_site . 'typo3conf/image_autoresize.config.php';
 
         $config = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($config) || empty($config)) {
-            $config = $this->getDefaultConfiguration();
+            $config = static::getDefaultConfiguration();
         }
 
         return $config;
@@ -423,7 +423,7 @@ HTML;
      */
     protected function persistConfiguration(array $config) : bool
     {
-        $configurationFileName = PATH_site . 'typo3conf/' . $this->extKey . '.config.php';
+        $configurationFileName = PATH_site . 'typo3conf/image_autoresize.config.php';
 
         $exportConfig = var_export($config, true);
         $exportConfig = str_replace('array (', '[', $exportConfig);

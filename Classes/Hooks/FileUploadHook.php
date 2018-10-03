@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Hooks;
 
+use Causal\ImageAutoresize\Controller\ConfigurationController;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\DataHandling\DataHandlerProcessUploadHookInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -45,17 +46,8 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
         if (static::$imageResizer === null) {
             static::$imageResizer = GeneralUtility::makeInstance(ImageResizer::class);
 
-            $configuration = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['image_autoresize_ff'];
-            if (!$configuration) {
-                $this->notify(
-                    $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xml:message.emptyConfiguration'),
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
-                );
-            }
-            $configuration = unserialize($configuration);
-            if (is_array($configuration)) {
-                static::$imageResizer->initializeRulesets($configuration);
-            }
+            $configuration = ConfigurationController::readConfiguration();
+            static::$imageResizer->initializeRulesets($configuration);
         }
     }
 
