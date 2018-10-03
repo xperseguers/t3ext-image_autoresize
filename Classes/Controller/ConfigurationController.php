@@ -85,8 +85,16 @@ class ConfigurationController
         $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         $this->languageService = $GLOBALS['LANG'];
 
-        $config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
-        $this->config = $config ? unserialize($config) : $this->getDefaultConfiguration();
+        if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey])) {
+            // Automatically migrate configuration from v1.8
+            $config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
+            $config = unserialize($config);
+            if (is_array($config) && !empty($config) && $this->persistConfiguration($config)) {
+                // Drop legacy configuration
+                $this->writeToLocalconf($this->expertKey, []);
+            }
+        }
+        $this->config = $this->readConfiguration();
         $this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
     }
 
@@ -358,11 +366,11 @@ HTML;
                 $newConfig[$field] = $ffValue;
             }
 
-            // Write back configuration to localconf.php
+            // Persist configuration
             $localconfConfig = $newConfig;
             $localconfConfig['conversion_mapping'] = implode(',', GeneralUtility::trimExplode(LF, $localconfConfig['conversion_mapping'], true));
 
-            if ($this->writeToLocalconf($this->expertKey, $localconfConfig)) {
+            if ($this->persistConfiguration($localconfConfig)) {
                 $this->config = $newConfig;
             }
         }
@@ -380,7 +388,7 @@ HTML;
      *
      * @param string $key
      * @param array $config
-     * @return boolean
+     * @return bool
      */
     protected function writeToLocalconf($key, array $config)
     {
@@ -389,6 +397,55 @@ HTML;
         /** @var $configurationManager \TYPO3\CMS\Core\Configuration\ConfigurationManager */
         $configurationManager = $objectManager->get(\TYPO3\CMS\Core\Configuration\ConfigurationManager::class);
         return $configurationManager->setLocalConfigurationValueByPath('EXT/extConf/' . $key, serialize($config));
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function readConfiguration() : array
+    {
+        $configurationFileName = PATH_site . 'typo3conf/' . $this->extKey . '.config.php';
+
+        $config = file_exists($configurationFileName) ? include($configurationFileName) : [];
+        if (!is_array($config) || empty($config)) {
+            $config = $this->getDefaultConfiguration();
+        }
+
+        return $config;
+    }
+
+    /**
+     * Writes configuration to typo3conf/image_autoresize.config.php.
+     *
+     * @param array $config
+     * @return bool
+     */
+    protected function persistConfiguration(array $config) : bool
+    {
+        $configurationFileName = PATH_site . 'typo3conf/' . $this->extKey . '.config.php';
+
+        $exportConfig = var_export($config, true);
+        $exportConfig = str_replace('array (', '[', $exportConfig);
+        if (substr($exportConfig, -1) === ')') {
+            $exportConfig = substr($exportConfig, 0, strlen($exportConfig) - 1) . ']';
+        }
+        $exportConfig = preg_replace('/=>\\s*[[]/s', '=> [', $exportConfig);
+        $lines = explode(LF, $exportConfig);
+        foreach ($lines as $i => $line) {
+            if (preg_match('/^(\\s+)(.+)$/', $line, $matches)) {
+                if ($matches[2] === '),') {
+                    // Convert ending of former array declaration to new syntax
+                    $matches[2] = '],';
+                }
+                $lines[$i] = str_repeat(' ', 2 * strlen($matches[1])) . $matches[2];
+            }
+        }
+        $exportConfig = implode(LF, $lines);
+
+        $content = '<?' . 'php' . LF . 'return ' . $exportConfig . ';' . LF;
+        $success = GeneralUtility::writeFile($configurationFileName, $content);
+        return true;
     }
 
     /**
