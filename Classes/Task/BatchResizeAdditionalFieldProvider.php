@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Task;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
 
 /**
  * Additional BE fields for batch resize task.
@@ -54,17 +55,21 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
      */
     public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject)
     {
+        $editCommand = version_compare(TYPO3_branch, '9.5', '>=')
+            ? $parentObject->getCurrentAction() === Action::EDIT
+            : $parentObject->CMD === 'edit';
+
         // Initialize selected fields
         if (!isset($taskInfo['scheduler_batchResize_directories'])) {
             $taskInfo['scheduler_batchResize_directories'] = $this->defaultDirectories;
-            if ($parentObject->CMD === 'edit') {
+            if ($editCommand) {
                 /** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
                 $taskInfo['scheduler_batchResize_directories'] = $task->directories;
             }
         }
         if (!isset($taskInfo['scheduler_batchResize_excludeDirectories'])) {
             $taskInfo['scheduler_batchResize_excludeDirectories'] = $this->defaultExcludeDirectories;
-            if ($parentObject->CMD === 'edit') {
+            if ($editCommand) {
                 /** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
                 $taskInfo['scheduler_batchResize_excludeDirectories'] = $task->excludeDirectories;
             }
