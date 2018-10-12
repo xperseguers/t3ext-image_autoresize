@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Utility;
 
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -77,13 +78,17 @@ class FAL
             $basePath = GeneralUtility::getFileAbsFileName($basePath);
             $identifier = substr($fileName, strlen($basePath) - 1);
 
-            $row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-                'uid',
-                'sys_file',
-                'storage=' . intval($targetFolder->getStorage()->getUid()) .
-                ' AND identifier=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($identifier, 'sys_file') .
-                \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('sys_file')
-            );
+            $row = GeneralUtility::makeInstance(ConnectionPool::class)
+                ->getConnectionForTable('sys_file')
+                ->select(
+                    ['uid'],
+                    'sys_file',
+                    [
+                        'storage' => $targetFolder->getStorage()->getUid(),
+                        'identifier' => $identifier,
+                    ]
+                )
+                ->fetch();
 
             if (!empty($row['uid'])) {
                 /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
