@@ -20,9 +20,6 @@ Links
 :Bug Tracker:
 	https://github.com/xperseguers/t3ext-image_autoresize/issues
 
-:Release Notes:
-	https://forge.typo3.org/projects/extension-image_autoresize/wiki
-
 :Git Repository:
 	https://github.com/xperseguers/t3ext-image_autoresize
 
