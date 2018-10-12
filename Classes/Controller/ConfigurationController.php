@@ -449,19 +449,6 @@ HTML;
     }
 
     /**
-     * Initializes <code>\TYPO3\CMS\Backend\Form\FormEngine</code> class for use in this module.
-     *
-     * @return void
-     */
-    protected function initTCEForms()
-    {
-        $this->tceforms = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormEngine::class);
-        $this->tceforms->doSaveFieldName = 'doSave';
-        $this->tceforms->localizationMode = '';
-        $this->tceforms->palettesCollapsed = 0;
-    }
-
-    /**
      * Loads the configuration of the virtual table 'tx_imageautoresize'.
      *
      * @return void
