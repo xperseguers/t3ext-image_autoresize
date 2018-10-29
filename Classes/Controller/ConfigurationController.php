@@ -17,6 +17,8 @@ namespace Causal\ImageAutoresize\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Configuration\Features;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -103,11 +105,13 @@ class ConfigurationController
      * As this controller goes only through the main() method, it is rather simple for now
      *
      * @param ServerRequestInterface $request the current request
-     * @param ResponseInterface $response
      * @return ResponseInterface the response with the content
      */
-    public function mainAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function mainAction(ServerRequestInterface $request) : ResponseInterface
     {
+        /** @var ResponseInterface $response */
+        $response = func_num_args() === 2 ? func_get_arg(1) : null;
+
         $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
         $this->processData();
 
@@ -126,7 +130,12 @@ class ConfigurationController
         $this->moduleTemplate->setContent($this->content);
         $content = $this->moduleTemplate->renderContent();
 
-        $response->getBody()->write($content);
+        if ($response !== null) {
+            $response->getBody()->write($content);
+        } else {
+            // Behaviour in TYPO3 v9
+            $response = new HtmlResponse($content);
+        }
 
         return $response;
     }
