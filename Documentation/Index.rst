@@ -45,7 +45,7 @@ Resize images automatically
 
 	:License:
 		This document is published under the Open Publication License
-		available from http://www.opencontent.org/openpub/
+		available from https://www.opencontent.org/openpub/
 
 	:Rendered:
 		|today|
@@ -57,7 +57,7 @@ Resize images automatically
 	**Other version of this document**
 
 	:PDF:
-		https://docs.typo3.org/typo3cms/extensions/image_autoresize/1.9.0/_pdf/
+		https://docs.typo3.org/typo3cms/extensions/image_autoresize/1.9.1/_pdf/
 
 
 	**Table of Contents**
