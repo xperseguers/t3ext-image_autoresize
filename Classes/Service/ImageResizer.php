@@ -262,12 +262,12 @@ class ImageResizer
         $gifCreator->absPrefix = PATH_site;
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
-        $imParams .= $ruleset['keep_metadata'] === '1' ? ' ###SkipStripProfile###' : '';
+        $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
         $metadata = ImageUtility::getMetadata($fileName, true);
         $this->lastMetadata = $metadata;
         $isRotated = false;
 
-        if ($ruleset['auto_orient'] === '1') {
+        if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
             $transformation = ImageUtility::getTransformation($orientation);
@@ -350,7 +350,7 @@ class ImageResizer
             $this->lastMetadata['COMPUTED']['Width'] = $tempFileInfo[0];
             $this->lastMetadata['COMPUTED']['Height'] = $tempFileInfo[1];
 
-            if ($isRotated && $ruleset['keep_metadata'] === '1' && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
+            if ($isRotated && (bool)$ruleset['keep_metadata'] === true && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
                 ImageUtility::resetOrientation($destFileName);
             }
 
