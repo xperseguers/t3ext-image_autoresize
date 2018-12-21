@@ -319,7 +319,7 @@ HTML;
             'max_width' => '1024',
             'max_height' => '768',
             'max_size' => '100M',
-            'auto_orient' => '1',
+            'auto_orient' => true,
             'conversion_mapping' => implode(',', [
                 'ai => jpg',
                 'bmp => jpg',
