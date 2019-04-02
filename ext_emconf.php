@@ -30,10 +30,10 @@ $EM_CONF[$_EXTKEY] = [
     'clearCacheOnLoad' => 0,
     'lockType' => '',
     'author_company' => 'Causal Sàrl',
-    'version' => '1.9.1',
+    'version' => '1.9.2-dev',
     'constraints' => [
         'depends' => [
-            'php' => '7.0.0-7.2.99',
+            'php' => '7.0.0-7.3.99',
             'typo3' => '8.7.0-9.5.99',
         ],
         'conflicts' => [],

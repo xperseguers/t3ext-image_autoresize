@@ -15,4 +15,5 @@ Known Problems
   types of remote storage.
 
 .. note::
-	Please use the extension's bug tracker on Forge to report bugs: https://forge.typo3.org/projects/extension-image_autoresize/issues
+	Please use the extension's bug tracker on GitHub to report bugs:
+    https://github.com/xperseguers/t3ext-image_autoresize/issues

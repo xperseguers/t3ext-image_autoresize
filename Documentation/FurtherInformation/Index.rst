@@ -11,9 +11,9 @@
 Further Information
 ===================
 
-Do not hesitate to visit the extension's website on Forge:
+Do not hesitate to visit the extension's website on GitHub:
 
-https://forge.typo3.org/projects/show/extension-image_autoresize
+https://github.com/xperseguers/t3ext-image_autoresize
 
 
 Translating the extension

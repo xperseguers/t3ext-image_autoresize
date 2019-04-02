@@ -35,7 +35,7 @@ Resize images automatically
 		image, picture, resize, autoresize, auto-resize, upload, batch, exif, iptc, fal, footprint, performance
 
 	:Copyright:
-		2010-2018
+		2010-2019
 
 	:Author:
 		Xavier Perseguers
