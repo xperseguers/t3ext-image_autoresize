@@ -50,5 +50,5 @@ $boot = function ($_EXTKEY) {
 
 };
 
-$boot($_EXTKEY);
+$boot('image_autoresize');
 unset($boot);
