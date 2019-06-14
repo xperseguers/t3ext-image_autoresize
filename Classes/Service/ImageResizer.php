@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Service;
 
+use Causal\ImageAutoresize\Utility\ImageUtility;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
@@ -21,7 +22,6 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use Causal\ImageAutoresize\Utility\ImageUtility;
 
 /**
  * This is a utility class to resize pictures based on rules.
@@ -350,7 +350,7 @@ class ImageResizer
             $this->lastMetadata['COMPUTED']['Width'] = $tempFileInfo[0];
             $this->lastMetadata['COMPUTED']['Height'] = $tempFileInfo[1];
 
-            if ($isRotated && (bool)$ruleset['keep_metadata'] === true && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] === 'gm') {
+            if ($isRotated && (bool)$ruleset['keep_metadata'] === true && $GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] === 'GraphicsMagick') {
                 ImageUtility::resetOrientation($destFileName);
             }
 
