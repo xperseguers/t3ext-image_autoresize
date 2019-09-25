@@ -280,11 +280,7 @@ class ImageUtility
     public static function getTransformation($orientation)
     {
         $transformation = '';
-        if (
-            (isset($GLOBALS['TYPO3_CONF_VARS']['GFX']['processor']) && $GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] === 'ImageMagick')
-            ||
-            (isset($GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5']) && $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_version_5'] !== 'gm')
-        ) {
+        if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] !== 'GraphicsMagick') {
             // ImageMagick
             if ($orientation >= 2 && $orientation <= 8) {
                 $transformation = '-auto-orient';
