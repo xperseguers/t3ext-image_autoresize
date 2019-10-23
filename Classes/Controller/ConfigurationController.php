@@ -419,6 +419,10 @@ HTML;
         $config = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($config) || empty($config)) {
             $config = static::getDefaultConfiguration();
+            // Merge with eventual hook configuration
+            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['image_autoresize']['defaultConfiguration'])) {
+                $config = array_merge($config, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['image_autoresize']['defaultConfiguration']);
+            }
         }
 
         return $config;
