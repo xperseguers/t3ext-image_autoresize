@@ -37,7 +37,7 @@ How to contribute
 
 This extension is using the same contribution workflow as for TYPO3 Core, but with GitHub PRs for the review
 process. Please read more about the workflow in the
-`TYPO3 Contribution Guide <https://docs.typo3.org/typo3cms/ContributionWorkflowGuide/>`__.
+`TYPO3 Contribution Guide <https://docs.typo3.org/m/typo3/guide-contributionworkflow/master/en-us/>`__.
 
 
 .. _links-how-to-contribute-rules:
@@ -51,7 +51,7 @@ Contribution rules
 - Unique logical change per patch [#]_
 
 .. _PSR-2: https://www.php-fig.org/psr/psr-2/
-.. _format used by TYPO3: https://docs.typo3.org/typo3cms/ContributionWorkflowGuide/Appendix/CommitMessage.html#commitmessage
+.. _format used by TYPO3: https://docs.typo3.org/m/typo3/guide-contributionworkflow/master/en-us/Appendix/CommitMessage.html#commitmessage
 
 
 .. rubric:: Footnotes
