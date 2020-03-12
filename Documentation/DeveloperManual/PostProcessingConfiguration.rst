@@ -6,30 +6,26 @@
 .. include:: ../Includes.txt
 
 
-.. _signal-post-processing-images:
+.. _signal-post-processing-configuration:
 
-Post-processing Images
-^^^^^^^^^^^^^^^^^^^^^^
+Post-processing Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _processing-afterImageResize:
+.. _processing-processConfiguration:
 
-Slot: afterImageResize
-""""""""""""""""""""""
+Slot: processConfiguration
+""""""""""""""""""""""""""
 
-This slot is used to post-process the resized image.
+This slot is used to post-process the configuration of the extension.
 
 Your slot should implement a method of the form:
 
 .. code-block:: php
 
-	public function postProcessImageResize($operation, $source, $destination,
-	                                       &$newWidth, &$newHeight)
+	public function postProcessConfiguration(array &$configuration)
 	{
 	    // Custom code
 	}
-
-Parameter ``$operation`` is either ``RESIZE`` if ``$source`` was resized or ``RESIZE_CONVERT`` if ``$source`` was first
-resized and then converted to another file format.
 
 
 Registering the slots
@@ -45,8 +41,8 @@ In your extension, open :file:`EXT:{extension-key}/ext_localconf.php` and add:
 	);
 
 	$signalSlotDispatcher->connect(
-	    \Causal\ImageAutoresize\Service\ImageResizer::class,
-	    'afterImageResize',
+	    \Causal\ImageAutoresize\Controller\ConfigurationController::class,
+	    'processConfiguration',
 	    \Company\MyExt\Slots\ImageAutoresize::class,
-	    'postProcessImageResize'
+	    'postProcessConfiguration'
 	);
