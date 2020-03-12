@@ -12,7 +12,7 @@ Links
 -----
 
 :TER:
-	https://extensions.typo3.org/extension/repository/image_autoresize
+	https://extensions.typo3.org/extension/image_autoresize
 
 :Packagist:
 	https://packagist.org/packages/causal/image_autoresize

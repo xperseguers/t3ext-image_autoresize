@@ -38,9 +38,9 @@ The following two figures show how an administrator may easily configure rules t
 
 ## Full Documentation
 
-Please head to https://docs.typo3.org/typo3cms/extensions/image_autoresize/ for the complete extension manual.
+Please head to https://docs.typo3.org/p/causal/image_autoresize/master/en-us/ for the complete extension manual.
 
 
 ## Contribution
 
-Please refer to https://docs.typo3.org/typo3cms/extensions/image_autoresize/Links.html for instructions.
+Please refer to https://docs.typo3.org/p/causal/image_autoresize/master/en-us/Links.html for instructions.
