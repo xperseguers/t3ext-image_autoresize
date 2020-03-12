@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 class ConfigurationController
 {
 
+    const SIGNAL_ProcessConfiguration = 'processConfiguration';
     const virtualTable = 'tx_imageautoresize';
     const virtualRecordId = 1;
 
@@ -416,12 +417,21 @@ HTML;
     {
         $configurationFileName = PATH_site . 'typo3conf/image_autoresize.config.php';
 
-        $config = file_exists($configurationFileName) ? include($configurationFileName) : [];
-        if (!is_array($config) || empty($config)) {
-            $config = static::getDefaultConfiguration();
+        $configuration = file_exists($configurationFileName) ? include($configurationFileName) : [];
+        if (!is_array($configuration) || empty($configuration)) {
+            $configuration = static::getDefaultConfiguration();
         }
 
-        return $config;
+        $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+        $signalSlotDispatcher->dispatch(
+            __CLASS__,
+            static::SIGNAL_ProcessConfiguration,
+            [
+                'configuration' => &$configuration,
+            ]
+        );
+
+        return $configuration;
     }
 
     /**
