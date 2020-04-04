@@ -148,7 +148,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $name = substr($fileName, strlen($filePath) + 1);
 
             // Skip files in recycler directory or whose type should not be processed
-            $skip = $name{0} === '.' || substr($filePath, -10) === '_recycler_';
+            $skip = substr($name, 0, 1) === '.' || substr($filePath, -10) === '_recycler_';
             // Skip exclude directories
             foreach ($excludeDirectories as $excludeDirectory) {
                 $excludeDirectory = GeneralUtility::getFileAbsFileName($excludeDirectory);

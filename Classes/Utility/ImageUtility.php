@@ -335,8 +335,8 @@ class ImageUtility
     public static function isTransparentPng($fileName)
     {
         $bytes = file_get_contents($fileName, false, null, 24, 2);    // read 24th and 25th bytes
-        $byte24 = ord($bytes{0});
-        $byte25 = ord($bytes{1});
+        $byte24 = ord(substr($bytes, 0, 1));
+        $byte25 = ord(substr($bytes, 1, 1));
         if ($byte24 === 16 || $byte25 === 6 || $byte25 === 4) {
             return true;
         } else {
