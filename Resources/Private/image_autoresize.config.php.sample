@@ -1,0 +1,62 @@
+<?php
+return [
+    'directories' => 'fileadmin/,fileadmin/user_upload/,uploads/',
+    'file_types' => 'jpg,jpeg,png,bmp,tif,tiff',
+    'threshold' => '300K',
+    'max_width' => '1920',
+    'max_height' => '1920',
+    'auto_orient' => '1',
+    'keep_metadata' => '0',
+    'conversion_mapping' => 'bmp => jpg,tif => jpg,tiff => jpg',
+    'resize_png_with_alpha' => '0',
+    'max_size' => '',
+    'rulesets' => [
+        'data' => [
+            'sDEF' => [
+                'lDEF' => [
+                    'ruleset' => [
+                        'el' => [
+                            '5c3c39ebe012d770233008' => [
+                                'container' => [
+                                    'el' => [
+                                        'title' => [
+                                            'vDEF' => 'Profiles',
+                                        ],
+                                        'usergroup' => [
+                                            'vDEF' => '',
+                                        ],
+                                        'directories' => [
+                                            'vDEF' => 'uploads/some-directory/',
+                                        ],
+                                        'file_types' => [
+                                            'vDEF' => '',
+                                        ],
+                                        'threshold' => [
+                                            'vDEF' => '',
+                                        ],
+                                        'max_width' => [
+                                            'vDEF' => '1200',
+                                        ],
+                                        'max_height' => [
+                                            'vDEF' => '1200',
+                                        ],
+                                        'max_size' => [
+                                            'vDEF' => '',
+                                        ],
+                                        'keep_metadata' => [
+                                            'vDEF' => '',
+                                        ],
+                                        'conversion_mapping' => [
+                                            'vDEF' => '',
+                                        ],
+                                    ],
+                                ],
+                                '_TOGGLE' => '0',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
