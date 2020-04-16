@@ -74,7 +74,11 @@ class FAL
 
         $file = null;
         $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
-        $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        if (version_compare(TYPO3_version, '10.0', '<')) {
+            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        } else {
+            $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+        }
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
 
         $storageConfiguration = $targetFolder->getStorage()->getConfiguration();
@@ -206,7 +210,11 @@ class FAL
             ? PATH_site
             : Environment::getPublicPath() . '/';
         $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
-        $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        if (version_compare(TYPO3_version, '10.0', '<')) {
+            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+        } else {
+            $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+        }
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
         $targetFilename = PathUtility::basename($fileName);
 
