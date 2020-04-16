@@ -12,5 +12,5 @@ To-Do list
 ==========
 
 .. note::
-	Please use the extension's bug tracker on GitHub to propose new features:
-    https://github.com/xperseguers/t3ext-image_autoresize/issues
+   Please use the extension's bug tracker on GitHub to propose new features:
+   https://github.com/xperseguers/t3ext-image_autoresize/issues
