@@ -29,6 +29,9 @@ use Causal\ImageAutoresize\Service\ImageResizer;
  * by \TYPO3\CMS\Core\Resource\ResourceStorage to automatically resize
  * huge pictures.
  *
+ * THIS SLOT HAS BEEN MIGRATED TO PSR-14 FOR TYPO3 v10:
+ * @see \Causal\ImageAutoresize\EventListener\CoreResourceStorageEventListener
+ *
  * @category    Slots
  * @package     TYPO3
  * @subpackage  tx_imageautoresize

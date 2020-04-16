@@ -10,3 +10,22 @@ services:
         identifier: 'causal/image_autoresize'
         method: 'processActions'
         event: TYPO3\CMS\Extensionmanager\Event\AvailableActionsForExtensionEvent
+
+  Causal\ImageAutoresize\EventListener\CoreResourceStorageEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'causal/image_autoresize'
+        method: 'sanitizeFileName'
+        event: TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent
+      - name: event.listener
+        identifier: 'causal/image_autoresize'
+        method: 'afterFileReplaced'
+        event: TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent
+      - name: event.listener
+        identifier: 'causal/image_autoresize'
+        method: 'beforeFileAdded'
+        event: TYPO3\CMS\Core\Resource\Event\BeforeFileAddedEvent
+      - name: event.listener
+        identifier: 'causal/image_autoresize'
+        method: 'populateMetadata'
+        event: TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent
