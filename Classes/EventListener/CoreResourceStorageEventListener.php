@@ -207,6 +207,36 @@ class CoreResourceStorageEventListener
     }
 
     /**
+     * Notifies the user using a Flash message.
+     *
+     * @param string $message The message
+     * @param integer $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
+     *                          \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
+     *                          or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
+     *                          Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
+     * @return void
+     * @internal This method is public only to be callable from a callback
+     */
+    public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
+    {
+        if (TYPO3_MODE !== 'BE') {
+            return;
+        }
+        $flashMessage = GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Messaging\FlashMessage::class,
+            $message,
+            '',
+            $severity,
+            true
+        );
+        /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
+        $flashMessageService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
+        /** @var \TYPO3\CMS\Core\Messaging\FlashMessageQueue $defaultFlashMessageQueue */
+        $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
+        $defaultFlashMessageQueue->enqueue($flashMessage);
+    }
+
+    /**
      * Returns the current BE user.
      *
      * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
