@@ -172,7 +172,15 @@ class CoreResourceStorageEventListener
      */
     public function populateMetadata(AfterFileAddedEvent $event): void
     {
-        // TODO
+        if (is_array(static::$metadata) && !empty(static::$metadata)) {
+            \Causal\ImageAutoresize\Utility\FAL::indexFile(
+                $event->getFile(),
+                '', '',
+                static::$metadata['COMPUTED']['Width'],
+                static::$metadata['COMPUTED']['Height'],
+                static::$metadata
+            );
+        }
     }
 
     /**
