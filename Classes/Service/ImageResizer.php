@@ -112,7 +112,7 @@ class ImageResizer
      * @param string $fileName
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|null $backendUser
      * @param array $ruleset The optional ruleset to use
-     * @return string|null Eiter null if no resize/conversion should take place or the resized/converted file name
+     * @return string|null Either null if no resize/conversion should take place or the resized/converted file name
      */
     public function getProcessedFileName($fileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null, array $ruleset = null)
     {
@@ -257,13 +257,12 @@ class ImageResizer
         }
 
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
         /** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        $gifCreator->init();
-        $gifCreator->absPrefix = $pathSite;
+        if (version_compare(TYPO3_version, '9.0', '<')) {
+            $gifCreator->init();
+            $gifCreator->absPrefix = PATH_site;
+        }
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
         $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
@@ -360,7 +359,12 @@ class ImageResizer
 
             // Inform FAL about new image size and dimensions
             try {
-                $destinationFile = ResourceFactory::getInstance()->retrieveFileOrFolderObject($destFileName);
+                if (version_compare(TYPO3_version, '10.0', '<')) {
+                    $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+                } else {
+                    $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+                }
+                $destinationFile = $resourceFactory->retrieveFileOrFolderObject($destFileName);
                 if ($destinationFile instanceof File) {
                     $indexer = $this->getIndexer($destinationFile->getStorage());
                     $indexer->updateIndexEntry($destinationFile);
@@ -432,10 +436,13 @@ class ImageResizer
         $ret = [];
 
         // Make file name relative and extract the extension
-        $relTargetFileName = substr($targetFileName, strlen(PATH_site));
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $relTargetFileName = substr($targetFileName, strlen($pathSite));
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
-        $beGroups = $backendUser !== null ? array_keys($GLOBALS['BE_USER']->userGroups) : [];
+        $beGroups = $backendUser !== null ? array_keys($backendUser->userGroups) : [];
         $fileSize = is_file($sourceFileName)
             ? filesize($sourceFileName)
             : -1;    // -1 is a special value so that file size is not taken into account (yet)

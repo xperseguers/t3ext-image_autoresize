@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
@@ -135,7 +136,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         // actually resizing the image while uploading, not during a batch processing (it's simply "too late").
         $backendUser = null;
 
-        if ($GLOBALS['BE_USER']->isAdmin()) {
+        if ($this->getBackendUser()->isAdmin()) {
             // As the scheduler user should never be an administrator, if current user is an administrator
             // the task is most probably run manually from the Scheduler module, so just show notifications
             $callbackNotification = [$this, 'notify'];
@@ -248,6 +249,16 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         }
 
         GeneralUtility::sysLog($message, 'image_autoresize', $severity);
+    }
+
+    /**
+     * Returns the current BE user.
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
     }
 
 }

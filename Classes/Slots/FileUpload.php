@@ -29,6 +29,9 @@ use Causal\ImageAutoresize\Service\ImageResizer;
  * by \TYPO3\CMS\Core\Resource\ResourceStorage to automatically resize
  * huge pictures.
  *
+ * THIS SLOT HAS BEEN MIGRATED TO PSR-14 FOR TYPO3 v10:
+ * @see \Causal\ImageAutoresize\EventListener\CoreResourceStorageEventListener
+ *
  * @category    Slots
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
@@ -99,7 +102,7 @@ class FileUpload
 
         $processedFileName = static::$imageResizer->getProcessedFileName(
             $targetDirectory . '/' . $fileName,
-            $GLOBALS['BE_USER']
+            $this->getBackendUser()
         );
         if ($processedFileName !== null) {
             static::$originalFileName = $fileName;
@@ -202,7 +205,7 @@ class FileUpload
             $targetFileName,
             $targetDirectory,
             $file,
-            $GLOBALS['BE_USER'],
+            $this->getBackendUser(),
             [$this, 'notify']
         );
 
@@ -259,6 +262,16 @@ class FileUpload
         /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */
         $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
         $defaultFlashMessageQueue->enqueue($flashMessage);
+    }
+
+    /**
+     * Returns the current BE user.
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
     }
 
 }

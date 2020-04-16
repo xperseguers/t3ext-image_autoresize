@@ -64,11 +64,23 @@ class ImageUtility
             $newMetadata = [
                 0 => $metadata,
             ];
-            foreach ($extractionServices as $service) {
-                if ($service->canProcess($virtualFileObject)) {
-                    $newMetadata[$service->getPriority()] = $service->extractMetaData($virtualFileObject, $newMetadata);
+
+            if (version_compare(TYPO3_version, '10.0', '>=')) {
+                foreach ($extractionServices as $priority => $services) {
+                    foreach ($services as $service) {
+                        if ($service->canProcess($virtualFileObject)) {
+                            $newMetadata[$priority] = $service->extractMetaData($virtualFileObject, $newMetadata);
+                        }
+                    }
+                }
+            } else {
+                foreach ($extractionServices as $service) {
+                    if ($service->canProcess($virtualFileObject)) {
+                        $newMetadata[$service->getPriority()] = $service->extractMetaData($virtualFileObject, $newMetadata);
+                    }
                 }
             }
+
             ksort($newMetadata);
             foreach ($newMetadata as $data) {
                 $metadata = array_merge($metadata, $data);
