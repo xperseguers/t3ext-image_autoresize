@@ -30,12 +30,14 @@ $boot = function ($_EXTKEY) {
         \Causal\ImageAutoresize\Slots\FileUpload::class,
         \Causal\ImageAutoresize\Slots\FileUpload::SIGNAL_PopulateMetadata
     );
-    $signalSlotDispatcher->connect(
-        'TYPO3\\CMS\\Extensionmanager\\ViewHelpers\\ProcessAvailableActionsViewHelper',
-        \TYPO3\CMS\Extensionmanager\ViewHelpers\ProcessAvailableActionsViewHelper::SIGNAL_ProcessActions,
-        \Causal\ImageAutoresize\Slots\ExtensionManager::class,
-        \Causal\ImageAutoresize\Slots\ExtensionManager::SIGNAL_ProcessActions
-    );
+    if (version_compare(TYPO3_version, '10.0', '<')) {
+        $signalSlotDispatcher->connect(
+            'TYPO3\\CMS\\Extensionmanager\\ViewHelpers\\ProcessAvailableActionsViewHelper',
+            \TYPO3\CMS\Extensionmanager\ViewHelpers\ProcessAvailableActionsViewHelper::SIGNAL_ProcessActions,
+            \Causal\ImageAutoresize\Slots\ExtensionManager::class,
+            \Causal\ImageAutoresize\Slots\ExtensionManager::SIGNAL_ProcessActions
+        );
+    }
 
     // Uploads in uploads/ of good old non-FAL files
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processUpload'][] = \Causal\ImageAutoresize\Hooks\FileUploadHook::class;

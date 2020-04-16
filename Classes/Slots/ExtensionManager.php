@@ -14,11 +14,15 @@
 
 namespace Causal\ImageAutoresize\Slots;
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Slot implementation to extend the list of actions in Extension Manager.
+ *
+ * THIS SLOT HAS BEEN MIGRATED TO PSR-14 FOR TYPO3 v10:
+ * @see \Causal\ImageAutoresize\EventListener\ExtensionManagerEventListener
  *
  * @category    Slots
  * @package     TYPO3
@@ -41,11 +45,16 @@ class ExtensionManager
     public function processActions(array $extension, array &$actions)
     {
         if ($extension['key'] === 'image_autoresize') {
-            $moduleUrl = BackendUtility::getModuleUrl('xMOD_tximageautoresize');
-
-            $extensionName = 'extensionmanager';
-            $titleKey = 'extensionList.configure';
-            $title = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($titleKey, $extensionName);
+            if (version_compare(TYPO3_branch, '9.0', '>=')) {
+                $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+                $moduleUrl = (string)$uriBuilder->buildUriFromRoute('xMOD_tximageautoresize');
+                $title = 'Configure';   // TODO: make translatable
+            } else {
+                $moduleUrl = BackendUtility::getModuleUrl('xMOD_tximageautoresize');
+                $extensionName = 'extensionmanager';
+                $titleKey = 'extensionList.configure';
+                $title = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($titleKey, $extensionName);
+            }
 
             $icon = 'actions-system-extension-configure';
             /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */

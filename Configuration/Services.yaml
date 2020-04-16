@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Causal\ImageAutoresize\EventListener\ExtensionManagerEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'causal/image_autoresize'
+        method: 'processActions'
+        event: TYPO3\CMS\Extensionmanager\Event\AvailableActionsForExtensionEvent
