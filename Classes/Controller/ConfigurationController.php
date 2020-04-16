@@ -18,6 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Configuration\Features;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -414,7 +415,10 @@ HTML;
      */
     public static function readConfiguration() : array
     {
-        $configurationFileName = PATH_site . 'typo3conf/image_autoresize.config.php';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $configurationFileName = $pathSite . 'typo3conf/image_autoresize.config.php';
 
         $config = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($config) || empty($config)) {
@@ -432,7 +436,10 @@ HTML;
      */
     protected function persistConfiguration(array $config) : bool
     {
-        $configurationFileName = PATH_site . 'typo3conf/image_autoresize.config.php';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $configurationFileName = $pathSite . 'typo3conf/image_autoresize.config.php';
 
         $exportConfig = var_export($config, true);
         $exportConfig = str_replace('array (', '[', $exportConfig);
@@ -498,7 +505,10 @@ HTML;
      */
     protected function addStatisticsAndSocialLink()
     {
-        $fileName = PATH_site . 'typo3temp/.tx_imageautoresize';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
 
         if (!is_file($fileName)) {
             return;

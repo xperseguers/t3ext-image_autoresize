@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Slots;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Resource\Driver\AbstractDriver;
@@ -90,7 +91,10 @@ class FileUpload
             return;
         }
 
-        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
 
         $processedFileName = static::$imageResizer->getProcessedFileName(
@@ -123,11 +127,15 @@ class FileUpload
             return;
         }
 
-        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
         $targetFileName = $targetDirectory . '/' . $file->getName();
 
-        $this->processFile($targetFileName, PathUtility::basename($targetFileName), $targetDirectory, $file);
+        $targetOnlyFileName = PathUtility::basename($targetFileName);
+        $this->processFile($targetFileName, $targetOnlyFileName, $targetDirectory, $file);
         $this->populateMetadata($file, $folder);
     }
 
@@ -155,7 +163,10 @@ class FileUpload
             static::$originalFileName = null;
         }
 
-        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? PATH_site : '';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
 
         $extension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));

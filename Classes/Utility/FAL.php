@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Utility;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -67,8 +68,12 @@ class FAL
      */
     protected static function findExistingFile($fileName)
     {
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+
         $file = null;
-        $relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
+        $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
         $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
 
@@ -197,7 +202,10 @@ class FAL
      */
     protected static function createIndex($fileName, $width, $height)
     {
-        $relativePath = substr(PathUtility::dirname($fileName), strlen(PATH_site));
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
         $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
         $targetFilename = PathUtility::basename($fileName);

@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Service;
 
 use Causal\ImageAutoresize\Utility\ImageUtility;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
@@ -256,10 +257,13 @@ class ImageResizer
         }
 
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
         /** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
         $gifCreator->init();
-        $gifCreator->absPrefix = PATH_site;
+        $gifCreator->absPrefix = $pathSite;
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
         $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
@@ -644,8 +648,11 @@ class ImageResizer
      */
     protected function reportAdditionalStorageClaimed($bytes)
     {
-        $legacyFileName = PATH_site . 'typo3conf/.tx_imageautoresize';
-        $fileName = PATH_site . 'typo3temp/.tx_imageautoresize';
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $legacyFileName = $pathSite . 'typo3conf/.tx_imageautoresize';
+        $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
 
         // Note: transfer of legacy filename should be removed after some time
         if (file_exists($legacyFileName) && !file_exists($fileName)) {

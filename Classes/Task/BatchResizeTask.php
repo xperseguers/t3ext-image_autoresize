@@ -55,6 +55,9 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     public function execute()
     {
         $configuration = ConfigurationController::readConfiguration();
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
 
         $this->imageResizer = GeneralUtility::makeInstance(\Causal\ImageAutoresize\Service\ImageResizer::class);
         $this->imageResizer->initializeRulesets($configuration);
@@ -75,11 +78,11 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                 $basePath = substr($directory, 0, $pos + 1);
 
                 $objects = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator(PATH_site . $basePath),
+                    new \RecursiveDirectoryIterator($pathSite . $basePath),
                     \RecursiveIteratorIterator::SELF_FIRST
                 );
                 foreach ($objects as $name => $object) {
-                    $relativePath = substr($name, strlen(PATH_site));
+                    $relativePath = substr($name, strlen($pathSite));
                     if (substr($relativePath, -2) === DIRECTORY_SEPARATOR . '.') {
                         if (preg_match($pattern, $relativePath)) {
                             $expandedDirectories[] = substr($relativePath, 0, -1);
