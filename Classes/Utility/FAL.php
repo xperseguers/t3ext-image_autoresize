@@ -55,8 +55,6 @@ class FAL
         }
         if ($file !== null) {
             static::updateIndex($file, $width, $height, $metadata);
-        } else {
-            static::createIndex($newFileName, $width, $height);
         }
     }
 
@@ -194,49 +192,6 @@ class FAL
             }
             $metadataRepository->update($file->getUid(), $newMetadata);
         }
-    }
-
-    /**
-     * Creates the index entry for a given file.
-     *
-     * @param string $fileName
-     * @param integer $width
-     * @param integer $height
-     * @return void
-     */
-    protected static function createIndex($fileName, $width, $height)
-    {
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
-        if (version_compare(TYPO3_version, '10.0', '<')) {
-            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-        } else {
-            $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
-        }
-        $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
-        $targetFilename = PathUtility::basename($fileName);
-
-        $storageConfiguration = $targetFolder->getStorage()->getConfiguration();
-        if (!isset($storageConfiguration['basePath'])) {
-            // Probably a file found in uploads/ or similar
-            return;
-        }
-        $basePath = rtrim($storageConfiguration['basePath'], '/') . '/';
-        $basePath = GeneralUtility::getFileAbsFileName($basePath);
-        $identifier = substr($fileName, strlen($basePath) - 1);
-
-        // TODO: possibly create file with nearly no info and populate them with
-        // a call to $file->getStorage()->getFileInfo($file) instead of using $driver
-        /** @var \TYPO3\CMS\Core\Resource\Driver\AbstractDriver $driver */
-        $driver = static::accessProtectedProperty($targetFolder->getStorage(), 'driver');
-        $fileInfo = $driver->getFileInfoByIdentifier($identifier);
-        $file = $resourceFactory->createFileObject($fileInfo);
-
-        /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-        $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
-        $fileRepository->addToIndex($file);
     }
 
     /**
