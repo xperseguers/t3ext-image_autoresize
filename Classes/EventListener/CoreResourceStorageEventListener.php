@@ -16,13 +16,47 @@ declare(strict_types = 1);
 
 namespace Causal\ImageAutoresize\EventListener;
 
+use Causal\ImageAutoresize\Controller\ConfigurationController;
+use Causal\ImageAutoresize\Service\ImageResizer;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Resource\Driver\LocalDriver;
 use TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent;
 use TYPO3\CMS\Core\Resource\Event\BeforeFileAddedEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 class CoreResourceStorageEventListener
 {
+
+    /**
+     * @var ImageResizer
+     */
+    protected static $imageResizer;
+
+    /**
+     * @var array|null
+     */
+    protected static $metadata;
+
+    /**
+     * @var string|null
+     */
+    protected static $originalFileName;
+
+    /**
+     * Default constructor.
+     */
+    public function __construct()
+    {
+        if (static::$imageResizer === null) {
+            static::$imageResizer = GeneralUtility::makeInstance(ImageResizer::class);
+
+            $configuration = ConfigurationController::readConfiguration();
+            static::$imageResizer->initializeRulesets($configuration);
+        }
+    }
 
     /**
      * Sanitizes the file name.
@@ -31,7 +65,28 @@ class CoreResourceStorageEventListener
      */
     public function sanitizeFileName(SanitizeFileNameEvent $event): void
     {
-        // TODO
+        $driver = $event->getDriver();
+        $folder = $event->getTargetFolder();
+        $fileName = $event->getFileName();
+
+        if (!($driver instanceof LocalDriver)) {
+            // Unfortunately unsupported yet
+            return;
+        }
+
+        $storageConfiguration = $folder->getStorage()->getConfiguration();
+        $pathSite = Environment::getPublicPath() . '/';
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
+
+        $processedFileName = static::$imageResizer->getProcessedFileName(
+            $targetDirectory . '/' . $fileName,
+            $this->getBackendUser()
+        );
+        if ($processedFileName !== null) {
+            static::$originalFileName = $fileName;
+            $event->setFileName(PathUtility::basename($processedFileName));
+        }
     }
 
     /**
@@ -62,6 +117,16 @@ class CoreResourceStorageEventListener
     public function populateMetadata(AfterFileAddedEvent $event): void
     {
         // TODO
+    }
+
+    /**
+     * Returns the current BE user.
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
     }
 
 }
