@@ -28,4 +28,5 @@ Available signals and slots:
 .. toctree::
 	:maxdepth: 2
 
+	PostProcessingConfiguration
 	PostProcessingImages
