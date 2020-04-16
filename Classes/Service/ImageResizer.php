@@ -112,7 +112,7 @@ class ImageResizer
      * @param string $fileName
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|null $backendUser
      * @param array $ruleset The optional ruleset to use
-     * @return string|null Eiter null if no resize/conversion should take place or the resized/converted file name
+     * @return string|null Either null if no resize/conversion should take place or the resized/converted file name
      */
     public function getProcessedFileName($fileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null, array $ruleset = null)
     {
@@ -435,7 +435,7 @@ class ImageResizer
         $relTargetFileName = substr($targetFileName, strlen(PATH_site));
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
-        $beGroups = $backendUser !== null ? array_keys($GLOBALS['BE_USER']->userGroups) : [];
+        $beGroups = $backendUser !== null ? array_keys($backendUser->userGroups) : [];
         $fileSize = is_file($sourceFileName)
             ? filesize($sourceFileName)
             : -1;    // -1 is a special value so that file size is not taken into account (yet)

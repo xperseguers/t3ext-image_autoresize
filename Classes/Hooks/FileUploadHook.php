@@ -65,7 +65,7 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
             '', // Target file name
             '', // Target directory
             null,
-            $GLOBALS['BE_USER'],
+            $this->getBackendUser(),
             [$this, 'notify']
         );
     }
@@ -98,6 +98,16 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
         /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */
         $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
         $defaultFlashMessageQueue->enqueue($flashMessage);
+    }
+
+    /**
+     * Returns the current BE user.
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
     }
 
 }
