@@ -63,14 +63,14 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
         if (!isset($taskInfo['scheduler_batchResize_directories'])) {
             $taskInfo['scheduler_batchResize_directories'] = $this->defaultDirectories;
             if ($editCommand) {
-                /** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
+                /** @var \Causal\ImageAutoresize\Task\BatchResizeTask $task */
                 $taskInfo['scheduler_batchResize_directories'] = $task->directories;
             }
         }
         if (!isset($taskInfo['scheduler_batchResize_excludeDirectories'])) {
             $taskInfo['scheduler_batchResize_excludeDirectories'] = $this->defaultExcludeDirectories;
             if ($editCommand) {
-                /** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
+                /** @var \Causal\ImageAutoresize\Task\BatchResizeTask $task */
                 $taskInfo['scheduler_batchResize_excludeDirectories'] = $task->excludeDirectories;
             }
         }
@@ -154,7 +154,7 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
      */
     public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task)
     {
-        /** @var $task \Causal\ImageAutoresize\Task\BatchResizeTask */
+        /** @var \Causal\ImageAutoresize\Task\BatchResizeTask $task */
         $task->directories = trim($submittedData['scheduler_batchResize_directories']);
         $task->excludeDirectories = trim($submittedData['scheduler_batchResize_excludeDirectories']);
     }

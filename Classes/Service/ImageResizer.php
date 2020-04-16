@@ -242,7 +242,7 @@ class ImageResizer
 
             if (empty($targetDirectory)) {
                 // Ensures $destFileName does not yet exist, otherwise make it unique!
-                /* @var $fileFunc \TYPO3\CMS\Core\Utility\File\BasicFileUtility */
+                /* @var \TYPO3\CMS\Core\Utility\File\BasicFileUtility $fileFunc */
                 $fileFunc = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Utility\File\BasicFileUtility::class);
                 $destFileName = $fileFunc->getUniqueName($destFileName, $destDirectory);
                 $targetDestFileName = $destFileName;
@@ -257,7 +257,7 @@ class ImageResizer
         }
 
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-        /** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
+        /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
         if (version_compare(TYPO3_version, '9.0', '<')) {
             $gifCreator->init();

@@ -420,9 +420,9 @@ HTML;
      */
     protected function writeToLocalconf($key, array $config)
     {
-        /** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
-        /** @var $configurationManager \TYPO3\CMS\Core\Configuration\ConfigurationManager */
+        /** @var \TYPO3\CMS\Core\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(\TYPO3\CMS\Core\Configuration\ConfigurationManager::class);
         return $configurationManager->setLocalConfigurationValueByPath('EXT/extConf/' . $key, serialize($config));
     }
