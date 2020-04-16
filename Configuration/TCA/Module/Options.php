@@ -106,7 +106,9 @@ return [
             'config' => [
                 'type' => 'flex',
                 'ds' => [
-                    'default' => 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
+                    'default' => version_compare(TYPO3_branch, '9.0', '>=')
+                        ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml'
+                        : 'FILE:EXT:image_autoresize/Configuration/FlexForms/RulesetsV8.xml',
                 ],
             ],
         ],

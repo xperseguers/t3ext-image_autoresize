@@ -16,6 +16,7 @@ namespace Causal\ImageAutoresize\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Core\Environment;
@@ -235,7 +236,14 @@ class ConfigurationController
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
 			<input type="hidden" name="_scrollPosition" value="" />';
 
-        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue(BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add'));
+        if (version_compare(TYPO3_branch, '9.0', '>=')) {
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
+        } else {
+            $moduleUrl = BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add');
+        }
+
+        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
         $formContent .= <<<HTML
 <script type="text/javascript">
     TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
@@ -257,9 +265,13 @@ HTML;
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $saveSplitButton = $buttonBar->makeSplitButton();
 
+        $locallangCore = version_compare(TYPO3_branch, '9.0', '>=')
+            ? 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf'
+            : 'LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf';
+
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.saveDoc')))
+            ->setTitle(htmlspecialchars($this->languageService->sL($locallangCore . ':rm.saveDoc')))
             ->setName('_savedok')
             ->setValue('1')
             ->setForm('EditDocumentController')
@@ -271,7 +283,7 @@ HTML;
 
         // SAVE & CLOSE button:
         $saveAndCloseButton = $buttonBar->makeInputButton()
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.saveCloseDoc')))
+            ->setTitle(htmlspecialchars($this->languageService->sL($locallangCore . ':rm.saveCloseDoc')))
             ->setName('_saveandclosedok')
             ->setValue('1')
             ->setForm('EditDocumentController')
@@ -286,7 +298,7 @@ HTML;
 
         // CLOSE button:
         $closeButton = $buttonBar->makeLinkButton()
-            ->setTitle(htmlspecialchars($this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:rm.closeDoc')))
+            ->setTitle(htmlspecialchars($this->languageService->sL($locallangCore . ':rm.closeDoc')))
             ->setHref('#')
             ->setClasses('t3js-editform-close')
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
@@ -386,7 +398,12 @@ HTML;
         }
 
         if ($close || $saveAndClose) {
-            $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
+            if (version_compare(TYPO3_branch, '9.0', '>=')) {
+                $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+                $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
+            } else {
+                $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
+            }
             \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
         }
     }
