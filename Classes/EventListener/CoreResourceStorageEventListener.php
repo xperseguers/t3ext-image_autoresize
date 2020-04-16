@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent;
 use TYPO3\CMS\Core\Resource\Event\BeforeFileAddedEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -106,7 +107,45 @@ class CoreResourceStorageEventListener
      */
     public function beforeFileAdded(BeforeFileAddedEvent $event): void
     {
-        // TODO
+        $driver = $event->getDriver();
+        $folder = $event->getTargetFolder();
+        $sourceFile = $event->getSourceFilePath();
+
+        if (!($driver instanceof LocalDriver)) {
+            // Unfortunately unsupported yet
+            return;
+        }
+
+        $storageConfiguration = $folder->getStorage()->getConfiguration();
+
+        if (static::$originalFileName) {
+            // Temporarily change back the file name to ensure original format is used
+            // when converting from one format to another with IM/GM
+            $targetFileName = static::$originalFileName;
+            static::$originalFileName = null;
+        }
+
+        $pathSite = Environment::getPublicPath() . '/';
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
+
+        $extension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
+
+        // Various operation (including IM/GM) relies on a file WITH an extension
+        $originalSourceFile = $sourceFile;
+        $sourceFile .= '.' . $extension;
+
+        if (rename($originalSourceFile, $sourceFile)) {
+            $newSourceFile = $this->processFile($sourceFile, $targetFileName, $targetDirectory);
+            $newExtension = strtolower(substr($newSourceFile, strrpos($newSourceFile, '.') + 1));
+
+            // We must go back to original (temporary) file name
+            rename($newSourceFile, $originalSourceFile);
+
+            if ($newExtension !== $extension) {
+                $event->setFileName(substr($targetFileName, 0, -strlen($extension)) . $newExtension);
+            }
+        }
     }
 
     /**
@@ -117,6 +156,29 @@ class CoreResourceStorageEventListener
     public function populateMetadata(AfterFileAddedEvent $event): void
     {
         // TODO
+    }
+
+    /**
+     * @param string $fileName Full path to the file to be processed
+     * @param string $targetFileName Target file name if not converted, no path included
+     * @param string $targetDirectory
+     * @param File|null $file
+     * @return string
+     */
+    protected function processFile(string $fileName, string &$targetFileName, string $targetDirectory, ?File $file = null)
+    {
+        $newFileName = static::$imageResizer->processFile(
+            $fileName,
+            $targetFileName,
+            $targetDirectory,
+            $file,
+            $this->getBackendUser(),
+            [$this, 'notify']
+        );
+
+        static::$metadata = static::$imageResizer->getLastMetadata();
+
+        return $newFileName;
     }
 
     /**

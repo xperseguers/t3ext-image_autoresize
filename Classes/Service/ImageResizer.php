@@ -257,13 +257,12 @@ class ImageResizer
         }
 
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
         /** @var $gifCreator \TYPO3\CMS\Frontend\Imaging\GifBuilder */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        $gifCreator->init();
-        $gifCreator->absPrefix = $pathSite;
+        if (version_compare(TYPO3_version, '9.0', '<')) {
+            $gifCreator->init();
+            $gifCreator->absPrefix = PATH_site;
+        }
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
         $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
@@ -360,7 +359,12 @@ class ImageResizer
 
             // Inform FAL about new image size and dimensions
             try {
-                $destinationFile = ResourceFactory::getInstance()->retrieveFileOrFolderObject($destFileName);
+                if (version_compare(TYPO3_version, '10.0', '<')) {
+                    $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+                } else {
+                    $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+                }
+                $destinationFile = $resourceFactory->retrieveFileOrFolderObject($destFileName);
                 if ($destinationFile instanceof File) {
                     $indexer = $this->getIndexer($destinationFile->getStorage());
                     $indexer->updateIndexEntry($destinationFile);
