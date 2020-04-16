@@ -432,7 +432,10 @@ class ImageResizer
         $ret = [];
 
         // Make file name relative and extract the extension
-        $relTargetFileName = substr($targetFileName, strlen(PATH_site));
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        $relTargetFileName = substr($targetFileName, strlen($pathSite));
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
         $beGroups = $backendUser !== null ? array_keys($backendUser->userGroups) : [];

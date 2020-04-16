@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
