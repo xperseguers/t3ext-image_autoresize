@@ -16,9 +16,9 @@
     "footprint",
     "performance"
   ],
-  "homepage": "https://forge.typo3.org/projects/extension-image_autoresize",
+  "homepage": "https://github.com/xperseguers/t3ext-image_autoresize",
   "support": {
-    "issues": "https://forge.typo3.org/projects/extension-image_autoresize/issues"
+    "issues": "https://github.com/xperseguers/t3ext-image_autoresize/issues"
   },
   "authors": [
     {
