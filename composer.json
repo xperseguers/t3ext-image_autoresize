@@ -41,24 +41,13 @@
   "replace": {
     "typo3-ter/image-autoresize": "self.version"
   },
-  "config": {
-    "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin"
-  },
-  "scripts": {
-    "post-autoload-dump": [
-      "mkdir -p .Build/Web/typo3conf/ext/",
-      "[ -L .Build/Web/typo3conf/ext/image_autoresize ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/image_autoresize"
-    ]
-  },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.9.x-dev"
+      "dev-master": "2.0.x-dev"
     },
     "typo3/cms": {
       "extension-key": "image_autoresize",
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": ".Build/Web"
+      "cms-package-dir": "{$vendor-dir}/typo3/cms"
     }
   }
 }
