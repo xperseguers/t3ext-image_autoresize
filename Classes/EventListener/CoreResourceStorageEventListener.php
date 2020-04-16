@@ -97,7 +97,24 @@ class CoreResourceStorageEventListener
      */
     public function afterFileReplaced(AfterFileReplacedEvent $event): void
     {
-        // TODO
+        $file = $event->getFile();
+        $folder = $file->getParentFolder();
+
+        if ($folder->getStorage()->getDriverType() !== 'Local') {
+            // Unfortunately unsupported yet
+            return;
+        }
+
+        $storageConfiguration = $folder->getStorage()->getConfiguration();
+        $pathSite = Environment::getPublicPath() . '/';
+        $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
+        $targetFileName = $targetDirectory . '/' . $file->getName();
+
+        $targetOnlyFileName = PathUtility::basename($targetFileName);
+        $this->processFile($targetFileName, $targetOnlyFileName, $targetDirectory, $file);
+        $metadataEvent = new AfterFileAddedEvent($file, $folder);
+        $this->populateMetadata($metadataEvent);
     }
 
     /**
