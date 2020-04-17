@@ -18,12 +18,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Configuration controller.
@@ -51,14 +51,9 @@ class ConfigurationController
     protected $expertKey = 'image_autoresize_ff';
 
     /**
-     * @var \TYPO3\CMS\Lang\LanguageService
+     * @var \TYPO3\CMS\Core\Localization\LanguageService
      */
     protected $languageService;
-
-    /**
-     * @var \TYPO3\CMS\Backend\Form\FormEngine
-     */
-    protected $tceforms;
 
     /**
      * @var \TYPO3\CMS\Backend\Form\FormResultCompiler $formResultCompiler
@@ -546,7 +541,8 @@ HTML;
             return;
         }
 
-        $resourcesPath = '../' . ExtensionManagementUtility::siteRelPath($this->extKey) . 'Resources/Public/';
+        $extPath = ExtensionManagementUtility::extPath($this->extKey, 'Resources/Public/');
+        $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
         $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
         $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
