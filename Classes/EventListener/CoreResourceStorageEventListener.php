@@ -128,6 +128,7 @@ class CoreResourceStorageEventListener
         $driver = $event->getDriver();
         $folder = $event->getTargetFolder();
         $sourceFile = $event->getSourceFilePath();
+        $targetFileName = $event->getFileName();
 
         if (!($driver instanceof LocalDriver)) {
             // Unfortunately unsupported yet
