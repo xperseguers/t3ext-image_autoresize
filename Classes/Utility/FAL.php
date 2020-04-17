@@ -17,6 +17,7 @@ namespace Causal\ImageAutoresize\Utility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -218,6 +219,101 @@ class FAL
         $property->setAccessible(true);
 
         return $property->getValue($object);
+    }
+
+    /**
+     * @param string $path
+     * @return array|null
+     */
+    public static function getDirectoryConfig(string $path): ?array
+    {
+        $config = null;
+
+        if (preg_match('#^(\d+):/(.*$)#', $path, $matches)) {
+            $basePath = static::getAbsoluteLocalPath((int)$matches[0]);
+            if ($basePath !== null) {
+                $directoryPattern = static::getDirectoryPattern($matches[2]);
+                $config = [
+                    'basePath' => $basePath,
+                    'directory' => $matches[2],
+                    'pattern' => $directoryPattern,
+                ];
+            }
+        } else {
+            // Only "uploads/" is now allowed to be using a non-FAL identifier without deprecation
+            if (!GeneralUtility::isFirstPartOfStr($path, 'uploads/')) {
+                $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
+                if (GeneralUtility::isFirstPartOfStr($path, 'fileadmin/')) {
+                    $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
+                }
+                if (version_compare(TYPO3_branch, '9.0', '>=')) {
+                    trigger_error($message, E_USER_DEPRECATED);
+                } else {
+                    GeneralUtility::deprecationLog($message);
+                }
+            }
+
+            $pathSite = version_compare(TYPO3_version, '9.0', '<')
+                ? PATH_site
+                : Environment::getPublicPath() . '/';
+            $directoryPattern = static::getDirectoryPattern($path);
+            $config = [
+                'basePath' => $pathSite,
+                'directory' => $path,
+                'pattern' => $directoryPattern,
+            ];
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param int $storageId
+     * @return string|null
+     */
+    protected static function getAbsoluteLocalPath(int $storageId): ?string
+    {
+        static $storageRepository = null;
+        static $cacheLocalPaths = [];
+
+        if (!isset($cacheLocalPaths[$storageId])) {
+            if ($storageRepository === null) {
+                $storageRepository = GeneralUtility::makeInstance(StorageRepository::class);
+            }
+            $storage = $storageRepository->findByUid($storageId);
+            if ($storage !== null && $storage->getDriverType() === 'Local') {
+                $storageConfiguration = $storage->getConfiguration();
+                $pathSite = version_compare(TYPO3_version, '9.0', '<')
+                    ? PATH_site
+                    : Environment::getPublicPath() . '/';
+                $localPath = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
+                $localPath .= $storageConfiguration['basePath'];
+            } else {
+                // Unfortunately unsupported yet
+                $localPath = null;
+            }
+            $cacheLocalPaths[$storageId] = $localPath;
+        }
+
+        return $cacheLocalPaths[$storageId];
+    }
+
+    /**
+     * Returns a regular expression pattern to match directories.
+     *
+     * @param string $directory
+     * @return string
+     */
+    public static function getDirectoryPattern(string $directory): string
+    {
+        if (empty($directory)) {
+            return '';
+        }
+        $pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
+        $pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
+        $pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
+
+        return $pattern;
     }
 
 }

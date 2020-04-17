@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Task;
 
+use Causal\ImageAutoresize\Utility\FAL;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
@@ -116,8 +117,8 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
         // Check for valid directories
         $directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_directories'], true);
         foreach ($directories as $directory) {
-            $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
-            if (!@is_dir($absoluteDirectory)) {
+            $directoryConfig = FAL::getDirectoryConfig($directory);
+            if (!@is_dir($directoryConfig['basePath'] . $directoryConfig['directory'])) {
                 $result = false;
                 (new fakeSchedulerModuleController())->addMessage(
                     sprintf(
@@ -131,8 +132,8 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 
         $directories = GeneralUtility::trimExplode(LF, $submittedData['scheduler_batchResize_excludeDirectories'], true);
         foreach ($directories as $directory) {
-            $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
-            if (!@is_dir($absoluteDirectory)) {
+            $directoryConfig = FAL::getDirectoryConfig($directory);
+            if (!@is_dir($directoryConfig['basePath'] . $directoryConfig['directory'])) {
                 $result = false;
                 (new fakeSchedulerModuleController())->addMessage(
                     sprintf(

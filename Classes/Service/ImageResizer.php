@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Service;
 
+use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
@@ -92,8 +93,10 @@ class ImageResizer
             if (empty($ruleset['usergroup'])) {
                 // Make sure not to try to override general configuration
                 // => only keep directories not present in general configuration
-                $ruleset['directories'] = array_diff($ruleset['directories'], $general['directories']);
-                if (count($ruleset['directories']) == 0) {
+                $generalDirectories = $this->associateDirectoryConfigs($general['directories']);
+                $rulesetDirectories = $this->associateDirectoryConfigs($ruleset['directories']);
+                $ruleset['directories'] = array_values(array_diff_key($rulesetDirectories, $generalDirectories));
+                if (empty($ruleset['directories'])) {
                     unset($rulesets[$k]);
                 }
             }
@@ -102,6 +105,20 @@ class ImageResizer
         // Use general configuration as very last rule set
         $rulesets[] = $general;
         $this->rulesets = $rulesets;
+    }
+
+    /**
+     * @param array $directoryConfigs
+     * @return array
+     */
+    protected function associateDirectoryConfigs(array $directoryConfigs): array
+    {
+        $out = [];
+        foreach ($directoryConfigs as $directoryConfig) {
+            $key = $directoryConfig['basePath'] . $directoryConfig['pattern'];
+            $out[$key] = $directoryConfig;
+        }
+        return $out;
     }
 
     /**
@@ -122,7 +139,7 @@ class ImageResizer
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
-        if (empty($ruleset)) {
+        if ($ruleset === null) {
             // File does not match any rule set
             return null;
         }
@@ -191,7 +208,7 @@ class ImageResizer
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
-        if (empty($ruleset)) {
+        if ($ruleset === null) {
             // File does not match any rule set
             return $fileName;
         }
@@ -199,7 +216,7 @@ class ImageResizer
         // Make file name relative, store as $targetFileName
         // This happens in scheduler task or when uploading to "uploads/"
         if (empty($targetFileName)) {
-            $targetFileName = PathUtility::stripPathSitePrefix($fileName);
+            $targetFileName = PathUtility::basename($fileName);
         }
 
         // Extract the extension
@@ -271,6 +288,8 @@ class ImageResizer
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
         if (version_compare(TYPO3_version, '9.0', '<')) {
             $gifCreator->init();
+            // Next line is likely to make the resizing fail if mounting a FAL folder outside
+            // of PATH_site (e.g., absolute configuration), we don't care in TYPO3 v8 anymore!
             $gifCreator->absPrefix = PATH_site;
         }
 
@@ -439,17 +458,12 @@ class ImageResizer
      * @param string $sourceFileName
      * @param string $targetFileName
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
-     * @return array
+     * @return array|null
      */
-    protected function getRuleset(string $sourceFileName, string $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null): array
+    protected function getRuleset(string $sourceFileName, string $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null): ?array
     {
-        $ret = [];
+        $ret = null;
 
-        // Make file name relative and extract the extension
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $relTargetFileName = substr($targetFileName, strlen($pathSite));
         // Extract the extension
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
@@ -472,8 +486,14 @@ class ImageResizer
                 continue;
             }
             $processFile = false;
-            foreach ($ruleset['directories'] as $directoryPattern) {
-                $processFile |= preg_match($directoryPattern, $relTargetFileName);
+            foreach ($ruleset['directories'] as $directoryConfig) {
+                if (GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath'])) {
+                    $relTargetFileName = substr($targetFileName, strlen($directoryConfig['basePath']));
+                    $processFile |= empty($directoryConfig['pattern']) || preg_match($directoryConfig['pattern'], $relTargetFileName);
+                }
+                if ((bool)$processFile) {
+                    break;  // No need to test other directories
+                }
             }
             $processFile &= in_array($fileExtension, $ruleset['file_types']);
             $processFile &= $fileSize === -1 || ($fileSize > $ruleset['threshold']);
@@ -491,16 +511,14 @@ class ImageResizer
      * Returns all directories found in the various rulesets.
      *
      * @return array
+     * @internal For use in \Causal\ImageAutoresize\Task\BatchResizeTask::execute()
      */
     public function getAllDirectories(): array
     {
         $directories = [];
         foreach ($this->rulesets as $ruleset) {
-            $dirs = GeneralUtility::trimExplode(',', $ruleset['directories_config'], true);
-            $directories = array_merge($directories, $dirs);
+            $directories += $ruleset['directories'];
         }
-        $directories = array_unique($directories);
-        asort($directories);
         return $directories;
     }
 
@@ -563,20 +581,17 @@ class ImageResizer
                     $value = GeneralUtility::trimExplode(',', $value, true);
                     break;
                 case 'directories':
-                    $values['directories_config'] = '';
-                    $value = GeneralUtility::trimExplode(',', $value, true);
+                    $directories = GeneralUtility::trimExplode(',', $value, true);
+                    $value = [];
                     // Sanitize name of the directories
-                    foreach ($value as &$directory) {
+                    foreach ($directories as $directory) {
                         $directory = rtrim($directory, '/') . '/';
-                        if (!empty($values['directories_config'])) {
-                            $values['directories_config'] .= ',';
+                        $directoryConfig = FAL::getDirectoryConfig($directory);
+                        if ($directoryConfig === null) {
+                            // Either invalid storage or non local driver
+                            continue;
                         }
-                        $values['directories_config'] .= $directory;
-                        $directory = $this->getDirectoryPattern($directory);
-                    }
-                    if (count($value) == 0) {
-                        // Inherit configuration
-                        $value = '';
+                        $value[] = $directoryConfig;
                     }
                     break;
                 case 'file_types':

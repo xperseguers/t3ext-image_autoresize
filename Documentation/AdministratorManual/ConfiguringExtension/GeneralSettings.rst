@@ -23,15 +23,16 @@ Directories
 ^^^^^^^^^^^
 
 This is a comma-separated list of directories that should be monitored for image uploads. This includes any subdirectory
-of them too. In the example above, both :file:`fileadmin/` and :file:`uploads/` will be monitored.
+of them too. In the example above, both :file:`fileadmin/` (corresponding to the FAL identifier :file:`1:/`) and
+:file:`uploads/` will be monitored.
 
 You may use two different wildcards characters:
 
-- The single asterisk (``*``) searches for a single directory. E.g., :file:`fileadmin/*/images/` will
+- The single asterisk (``*``) searches for a single directory. E.g., :file:`1:/*/images/` will
   match :file:`fileadmin/directory1/images/` and :file:`fileadmin/directory2/images/` but
   not :file:`fileadmin/directory3/subdirectory/images/`.
 
-- The double asterisk (``**``) searches for any number of subdirectories. E.g., :file:`fileadmin/**/images/` will match
+- The double asterisk (``**``) searches for any number of subdirectories. E.g., :file:`1:/**/images/` will match
   any subdirectory :file:`images` within :file:`fileadmin`, and of course any sub-subdirectory of it too.
 
 

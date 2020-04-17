@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
+use Causal\ImageAutoresize\Utility\FAL;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
@@ -70,19 +71,26 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             // Process watched directories
             $directories = $this->imageResizer->getAllDirectories();
         } else {
-            $directories = GeneralUtility::trimExplode(LF, $this->directories, true);
+            $dirs = GeneralUtility::trimExplode(LF, $this->directories, true);
+            $directories = [];
+            foreach ($dirs as $directory) {
+                $directoryConfig = FAL::getDirectoryConfig($directory);
+                if ($directoryConfig !== null) {
+                    $directories[] = $directoryConfig;
+                }
+            }
         }
         $processedDirectories = [];
 
         // Expand watched directories if they contain wildcard characters
         $expandedDirectories = [];
-        foreach ($directories as $directory) {
-            if (($pos = strpos($directory, '/*')) !== false) {
-                $pattern = $this->imageResizer->getDirectoryPattern($directory);
-                $basePath = substr($directory, 0, $pos + 1);
+        foreach ($directories as $directoryConfig) {
+            if (($pos = strpos($directoryConfig['directory'], '/*')) !== false) {
+                $pattern = $directoryConfig['pattern'];
+                $basePath = $directoryConfig['basePath'] . substr($directoryConfig['directory'], 0, $pos + 1);
 
                 $objects = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($pathSite . $basePath),
+                    new \RecursiveDirectoryIterator($basePath),
                     \RecursiveIteratorIterator::SELF_FIRST
                 );
                 foreach ($objects as $name => $object) {
@@ -94,14 +102,14 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                     }
                 }
             } else {
-                $expandedDirectories[] = $directory;
+                $expandedDirectories[] = $directoryConfig['basePath'] . $directoryConfig['directory'];
             }
         }
         $directories = $expandedDirectories;
+        sort($directories);
 
         $success = true;
         foreach ($directories as $directory) {
-            $skip = false;
             foreach ($processedDirectories as $processedDirectory) {
                 if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
                     continue 2;
@@ -120,16 +128,15 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * Batch resizes pictures in a given parent directory (including all subdirectories
      * recursively).
      *
-     * @param string $directory
+     * @param string $absolutePath
      * @return bool true if run was successful
      * @throws \RuntimeException
      */
-    protected function batchResizePictures(string $directory): bool
+    protected function batchResizePictures(string $absolutePath): bool
     {
-        $directory = GeneralUtility::getFileAbsFileName($directory);
         // Check if given directory exists
-        if (!@is_dir($directory)) {
-            throw new \RuntimeException('Given directory "' . $directory . '" does not exist', 1384102984);
+        if (!@is_dir($absolutePath)) {
+            throw new \RuntimeException('Given directory "' . $absolutePath . '" does not exist', 1384102984);
         }
 
         $allFileTypes = $this->imageResizer->getAllFileTypes();
@@ -147,23 +154,31 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $callbackNotification = [$this, 'syslog'];
         }
 
-        $excludeDirectories = GeneralUtility::trimExplode(LF, $this->excludeDirectories, true);
+        $dirs = GeneralUtility::trimExplode(LF, $this->excludeDirectories, true);
+        $excludeDirectories = [];
+        foreach ($dirs as $directory) {
+            $directoryConfig = FAL::getDirectoryConfig($directory);
+            if ($directoryConfig !== null) {
+                $excludeDirectories[] = $directoryConfig['basePath'] . $directoryConfig['directory'];
+            }
+        }
 
-        $directoryContent = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
+        $directoryContent = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolutePath));
         foreach ($directoryContent as $fileName => $file) {
             $filePath = $file->getPath();
             $name = substr($fileName, strlen($filePath) + 1);
 
             // Skip files in recycler directory or whose type should not be processed
             $skip = substr($name, 0, 1) === '.' || substr($filePath, -10) === '_recycler_';
-            // Skip exclude directories
-            foreach ($excludeDirectories as $excludeDirectory) {
-                $excludeDirectory = GeneralUtility::getFileAbsFileName($excludeDirectory);
-                if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
-                    rtrim($excludeDirectory, '/') === $filePath
-                ) {
-                    $skip = true;
-                    continue;
+            if (!$skip) {
+                // Check if we should skip since in one of the exclude directories
+                foreach ($excludeDirectories as $excludeDirectory) {
+                    if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
+                        rtrim($excludeDirectory, '/') === $filePath
+                    ) {
+                        $skip = true;
+                        break;
+                    }
                 }
             }
 

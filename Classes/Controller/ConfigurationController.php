@@ -309,7 +309,7 @@ HTML;
     protected static function getDefaultConfiguration(): array
     {
         return [
-            'directories' => 'fileadmin/,uploads/',
+            'directories' => '1:/,uploads/',
             'file_types' => 'jpg,jpeg,png',
             'threshold' => '400K',
             'max_width' => '1024',

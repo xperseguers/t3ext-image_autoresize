@@ -26,5 +26,5 @@ post-processing to automatically resize them according to your rule sets (see fi
 
 .. important::
    As the scheduler task will process each directory found in your rule sets, make sure to exclude directories you
-   normally do not show to your editors (e.g., :file:`fileadmin/templates`) which may contain large image assets that
-   should never be processed by this extension.
+   normally do not show to your editors (e.g., :file:`fileadmin/templates` or using FAL identifier:
+   :file:`1:/templates`) which may contain large image assets that should never be processed by this extension.
