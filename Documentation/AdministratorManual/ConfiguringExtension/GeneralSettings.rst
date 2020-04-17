@@ -68,6 +68,8 @@ course be preserved.
 Maximum image size (pixel area)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is the maximum size in pixels a picture will be bound to after the resize processing. Height and width are
-calculated as big as possible considering the defined maximum width / height. Aspect ratio will of course be preserved.
+This is the maximum size in pixels a picture will be bound to after the resize processing (thus ``height × width``).
+Height and width are calculated as big as possible considering the defined maximum width / height. Aspect ratio will of
+course be preserved.
+
 The field accepts the suffice "M" for megapixels.
