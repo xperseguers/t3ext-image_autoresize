@@ -26,7 +26,7 @@ use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
- * @license     http://www.gnu.org/copyleft/gpl.html
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface
 {

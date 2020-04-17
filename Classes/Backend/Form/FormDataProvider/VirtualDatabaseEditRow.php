@@ -24,7 +24,7 @@ use TYPO3\CMS\Backend\Form\FormDataProvider\AbstractDatabaseRecordProvider;
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
- * @license     http://www.gnu.org/copyleft/gpl.html
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class VirtualDatabaseEditRow extends AbstractDatabaseRecordProvider implements FormDataProviderInterface
 {

@@ -26,7 +26,7 @@ use Causal\ImageAutoresize\Service\ImageResizer;
  * @package     TYPO3
  * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
- * @license     http://www.gnu.org/copyleft/gpl.html
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {
