@@ -106,7 +106,7 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
      *
      * @param array $submittedData Reference to the array containing the data submitted by the user
      * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject Reference to the calling object (Scheduler's BE module)
-     * @return boolean true if validation was ok (or selected class is not relevant), false otherwise
+     * @return bool true if validation was ok (or selected class is not relevant), false otherwise
      */
     public function validateAdditionalFields(array &$submittedData, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject)
     {
@@ -150,7 +150,6 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
      *
      * @param array $submittedData Contains data submitted by the user
      * @param \Causal\ImageAutoresize\Task\BatchResizeTask $task Reference to the current task object
-     * @return void
      */
     public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task)
     {

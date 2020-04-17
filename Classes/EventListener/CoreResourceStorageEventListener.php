@@ -210,11 +210,10 @@ class CoreResourceStorageEventListener
      * Notifies the user using a Flash message.
      *
      * @param string $message The message
-     * @param integer $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
-     *                          \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
-     *                          or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
-     *                          Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
-     * @return void
+     * @param int $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
+     *                      \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
+     *                      or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
+     *                      Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
      * @internal This method is public only to be callable from a callback
      */
     public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)

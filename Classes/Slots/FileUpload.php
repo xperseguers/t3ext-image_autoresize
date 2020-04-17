@@ -118,7 +118,6 @@ class FileUpload
      *
      * @param File $file
      * @param string $uploadedFileName
-     * @return void
      */
     public function postFileReplace(File $file, $uploadedFileName)
     {
@@ -148,7 +147,6 @@ class FileUpload
      * @param string $targetFileName
      * @param \TYPO3\CMS\Core\Resource\Folder $folder
      * @param string $sourceFile
-     * @return void
      */
     public function preFileAdd(&$targetFileName, \TYPO3\CMS\Core\Resource\Folder $folder, $sourceFile)
     {
@@ -219,7 +217,6 @@ class FileUpload
      *
      * @param \TYPO3\CMS\Core\Resource\FileInterface $file
      * @param \TYPO3\CMS\Core\Resource\Folder $folder
-     * @return void
      */
     public function populateMetadata(\TYPO3\CMS\Core\Resource\FileInterface $file, \TYPO3\CMS\Core\Resource\Folder $folder)
     {
@@ -238,11 +235,10 @@ class FileUpload
      * Notifies the user using a Flash message.
      *
      * @param string $message The message
-     * @param integer $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
-     *                          \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
-     *                          or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
-     *                          Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
-     * @return void
+     * @param int $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
+     *                      \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
+     *                      or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
+     *                      Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
      * @internal This method is public only to be callable from a callback
      */
     public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)

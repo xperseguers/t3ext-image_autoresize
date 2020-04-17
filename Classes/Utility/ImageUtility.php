@@ -33,7 +33,7 @@ class ImageUtility
      * Returns the EXIF orientation of a given picture.
      *
      * @param string $fileName
-     * @return integer
+     * @return int
      */
     public static function getOrientation($fileName)
     {
@@ -262,8 +262,8 @@ class ImageUtility
     /**
      * Returns true if the given picture is rotated.
      *
-     * @param integer $orientation EXIF orientation
-     * @return integer
+     * @param int $orientation EXIF orientation
+     * @return int
      * @see http://www.impulseadventure.com/photo/exif-orientation.html
      */
     public static function isRotated($orientation)
@@ -286,7 +286,7 @@ class ImageUtility
     /**
      * Returns a command line parameter to fix the orientation of a rotated picture.
      *
-     * @param integer $orientation
+     * @param int $orientation
      * @return string
      */
     public static function getTransformation($orientation)
@@ -330,7 +330,6 @@ class ImageUtility
      * Resets the EXIF orientation flag of a picture.
      *
      * @param string $fileName
-     * @return void
      * @see http://sylvana.net/jpegcrop/exif_orientation.html
      */
     public static function resetOrientation($fileName)

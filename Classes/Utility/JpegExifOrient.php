@@ -62,8 +62,7 @@ class JpegExifOrient
      * Sets the Exif Orientation for a given JPG file.
      *
      * @param string $fileName
-     * @param integer $orientation
-     * @return void
+     * @param int $orientation
      * @throws \RuntimeException
      */
     public static function setOrientation($fileName, $orientation)
@@ -263,7 +262,7 @@ class JpegExifOrient
      * Reads one byte, testing for EOF.
      *
      * @param resource $handle
-     * @return integer
+     * @return int
      * @throws \RuntimeException
      */
     protected static function read_1_byte($handle)
@@ -280,7 +279,7 @@ class JpegExifOrient
      * Remark: All 2-byte quantities in JPEG markers are MSB first.
      *
      * @param resource $handle
-     * @return integer
+     * @return int
      * @throws \RuntimeException
      */
     protected static function read_2_bytes($handle)

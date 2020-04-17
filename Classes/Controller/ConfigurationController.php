@@ -142,7 +142,6 @@ class ConfigurationController
      * Generates the module content.
      *
      * @param array $row
-     * @return void
      */
     protected function moduleContent(array $row)
     {
@@ -251,8 +250,6 @@ HTML;
 
     /**
      * Creates the toolbar buttons.
-     *
-     * @return void
      */
     protected function addToolbarButtons()
     {
@@ -481,8 +478,6 @@ HTML;
 
     /**
      * Loads the configuration of the virtual table 'tx_imageautoresize'.
-     *
-     * @return void
      */
     protected function loadVirtualTca()
     {
@@ -515,8 +510,6 @@ HTML;
 
     /**
      * Returns some statistics and a social link to Twitter.
-     *
-     * @return void
      */
     protected function addStatisticsAndSocialLink()
     {

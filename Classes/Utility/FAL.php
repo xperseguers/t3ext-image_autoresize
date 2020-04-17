@@ -43,10 +43,9 @@ class FAL
      * @param \TYPO3\CMS\Core\Resource\File $file
      * @param string $origFileName
      * @param string $newFileName
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param array $metadata EXIF metadata
-     * @return void
      */
     public static function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = [])
     {
@@ -111,8 +110,8 @@ class FAL
      * Updates the index entry for a given file.
      *
      * @param \TYPO3\CMS\Core\Resource\File $file
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param array $metadata EXIF metadata
      * @return void
      */

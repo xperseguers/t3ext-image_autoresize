@@ -51,7 +51,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     /**
      * Batch resize pictures, called by scheduler.
      *
-     * @return boolean true if task run was successful
+     * @return bool true if task run was successful
      */
     public function execute()
     {
@@ -118,7 +118,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * recursively).
      *
      * @param string $directory
-     * @return boolean true if run was successful
+     * @return bool true if run was successful
      * @throws \RuntimeException
      */
     protected function batchResizePictures($directory)
@@ -188,11 +188,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * Notifies the user using a Flash message.
      *
      * @param string $message The message
-     * @param integer $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
-     *                          \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
-     *                          or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
-     *                          Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
-     * @return void
+     * @param int $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
+     *                      \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
+     *                      or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
+     *                      Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
      * @internal This method is public only to be callable from a callback
      */
     public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
@@ -225,7 +224,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * Creates an entry in syslog.
      *
      * @param string $message
-     * @param integer $severity
+     * @param int $severity
      * @return void
      */
     public function syslog($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)

@@ -64,7 +64,6 @@ class ImageResizer
      * of rule sets.
      *
      * @param array $configuration
-     * @return void
      */
     public function initializeRulesets(array $configuration)
     {
@@ -412,7 +411,7 @@ class ImageResizer
      *
      * @param callback $callbackNotification Callback to send notification
      * @param string $message
-     * @param integer $severity
+     * @param int $severity
      */
     protected function notify($callbackNotification, $message, $severity)
     {
@@ -650,8 +649,7 @@ class ImageResizer
     /**
      * Stores how many extra bytes have been freed.
      *
-     * @param integer $bytes
-     * @return void
+     * @param int $bytes
      */
     protected function reportAdditionalStorageClaimed($bytes)
     {

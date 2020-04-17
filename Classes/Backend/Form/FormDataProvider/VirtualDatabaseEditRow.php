@@ -38,7 +38,6 @@ class VirtualDatabaseEditRow extends AbstractDatabaseRecordProvider implements F
      * Initializes the virtual configuration.
      *
      * @param array $row
-     * @return void
      */
     public static function initialize(array $row)
     {
