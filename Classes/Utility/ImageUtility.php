@@ -293,6 +293,10 @@ class ImageUtility
      */
     public static function getTransformation(int $orientation): string
     {
+        if (version_compare(TYPO3_version, '9.0', '>=')) {
+            return '-auto-orient';
+        }
+
         $transformation = '';
         if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] !== 'GraphicsMagick') {
             // ImageMagick

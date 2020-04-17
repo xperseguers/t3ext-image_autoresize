@@ -291,6 +291,9 @@ class ImageResizer
             // Next line is likely to make the resizing fail if mounting a FAL folder outside
             // of PATH_site (e.g., absolute configuration), we don't care in TYPO3 v8 anymore!
             $gifCreator->absPrefix = PATH_site;
+        } else {
+            // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
+            $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
         }
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
@@ -304,7 +307,11 @@ class ImageResizer
             $isRotated = ImageUtility::isRotated($orientation);
             $transformation = ImageUtility::getTransformation($orientation);
             if ($transformation !== '') {
-                $imParams .= ' ' . $transformation;
+                if (version_compare(TYPO3_version, '9.0', '>=')) {
+                    $gifCreator->scalecmd = $transformation . ' ' . $gifCreator->scalecmd;
+                } else {
+                    $imParams .= ' ' . $transformation;
+                }
             }
         }
 
