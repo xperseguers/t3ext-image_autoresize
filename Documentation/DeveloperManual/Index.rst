@@ -26,7 +26,7 @@ from Flow official documentation. In short, *signals* are put into the code and 
 Available signals and slots:
 
 .. toctree::
-	:maxdepth: 2
+   :maxdepth: 2
 
-	PostProcessingConfiguration
-	PostProcessingImages
+   PostProcessingConfiguration
+   PostProcessingImages

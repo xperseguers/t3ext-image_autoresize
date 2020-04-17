@@ -14,7 +14,7 @@ Rule sets
 Rule sets are managed with the third tab of the configuration panel:
 
 .. figure:: ../../Images/rulesets.png
-	:alt: General rule sets
+   :alt: General rule sets
 
 They basically are a set of options that should override the general settings under certain circumstances. The picture
 above shows two rules:
@@ -29,7 +29,7 @@ above shows two rules:
 The following picture shows how a rule set is configured:
 
 .. figure:: ../../Images/ruleset-usergroup.png
-	:alt: Rules for a user groups
+   :alt: Rules for a user groups
 
 The parameters are identical to those for the general settings. The mechanism is easy to understand:
 
@@ -40,6 +40,6 @@ The parameters are identical to those for the general settings. The mechanism is
   settings.
 
 .. important::
-	When :ref:`batch processing <batch-processing>` images, rule sets restricted to a given list of user groups will
-	match but will not actually trigger the resize of the image since the user group cannot be determined anymore after
-	a file has been uploaded.
+   When :ref:`batch processing <batch-processing>` images, rule sets restricted to a given list of user groups will
+   match but will not actually trigger the resize of the image since the user group cannot be determined anymore after
+   a file has been uploaded.

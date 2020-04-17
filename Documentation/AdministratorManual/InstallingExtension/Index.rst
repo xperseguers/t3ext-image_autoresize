@@ -18,5 +18,5 @@ You may configure this extension as you were used to do prior to TYPO3 v9, by us
 Extension Manager (Admin Tools > Extensions):
 
 .. figure:: ../../Images/extension-manager-configuration.png
-	:alt: Configuration within Extension Manager
-	:width: 711
+   :alt: Configuration within Extension Manager
+   :width: 711

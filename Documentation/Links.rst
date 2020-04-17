@@ -12,22 +12,22 @@ Links
 -----
 
 :TER:
-	https://extensions.typo3.org/extension/image_autoresize
+   https://extensions.typo3.org/extension/image_autoresize
 
 :Packagist:
-	https://packagist.org/packages/causal/image_autoresize
+   https://packagist.org/packages/causal/image_autoresize
 
 :Bug Tracker:
-	https://github.com/xperseguers/t3ext-image_autoresize/issues
+   https://github.com/xperseguers/t3ext-image_autoresize/issues
 
 :Git Repository:
-	https://github.com/xperseguers/t3ext-image_autoresize
+   https://github.com/xperseguers/t3ext-image_autoresize
 
 :Translation:
-	https://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
+   https://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
 
 :Contact:
-	`@xperseguers <https://twitter.com/xperseguers>`__
+   `@xperseguers <https://twitter.com/xperseguers>`__
 
 
 .. _links-how-to-contribute:

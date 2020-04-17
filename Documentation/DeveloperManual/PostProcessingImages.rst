@@ -22,11 +22,11 @@ Your slot should implement a method of the form:
 
 .. code-block:: php
 
-	public function postProcessImageResize($operation, $source, $destination,
-	                                       &$newWidth, &$newHeight)
-	{
-	    // Custom code
-	}
+   public function postProcessImageResize($operation, $source, $destination,
+                                          &$newWidth, &$newHeight)
+   {
+       // Custom code
+   }
 
 Parameter ``$operation`` is either ``RESIZE`` if ``$source`` was resized or ``RESIZE_CONVERT`` if ``$source`` was first
 resized and then converted to another file format.
@@ -39,14 +39,14 @@ In your extension, open :file:`EXT:{extension-key}/ext_localconf.php` and add:
 
 .. code-block:: php
 
-	/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
-	$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-	    \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
-	);
+   /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
+   $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+       \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
+   );
 
-	$signalSlotDispatcher->connect(
-	    \Causal\ImageAutoresize\Service\ImageResizer::class,
-	    'afterImageResize',
-	    \Company\MyExt\Slots\ImageAutoresize::class,
-	    'postProcessImageResize'
-	);
+   $signalSlotDispatcher->connect(
+       \Causal\ImageAutoresize\Service\ImageResizer::class,
+       'afterImageResize',
+       \Company\MyExt\Slots\ImageAutoresize::class,
+       'postProcessImageResize'
+   );

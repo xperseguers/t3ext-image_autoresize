@@ -21,33 +21,29 @@ Workflow
 
 Simply upload your unmodified pictures either from the File > Filelist module (fileadmin) or from the edit form of a
 content element (text with image, image, ...) and enjoy the automatic resizing and orientation in portrait of your
-pictures (here with an original picture in 4080 × 2720, 3.6 MB with EXIF orientation set to "portrait"):
+pictures (here with an original picture in 3840 × 2560, 6.5 MB with EXIF orientation set to "portrait"):
 
 .. figure:: ../Images/example-autoresize.png
-	:alt: Example of an image that has been automatically resized
+   :alt: Example of an image that has been automatically resized
 
 As you see, the constraints of 1024 × 768 pixels have been taken into account even with the correct orientation of the
 picture. If the reorientation did not have been taken into account, the picture would have been resized to 682 × 1024
 instead (maximum ratio using the other dimension).
 
-Here is another example, from a content element "text w/image" where a BMP (:file:`screenshot.bmp`, 3.2 MB, 1184 × 884)
-has been added to the list of associated images:
+Here is another example, where a BMP (:file:`screenshot.bmp`, 15.7 MB, 2732 × 1920) has been uploaded:
 
 .. figure:: ../Images/example-converted.png
-	:alt: Example of an image that has been automatically converted from one format to another
+   :alt: Example of an image that has been automatically converted from one format to another
 
 The uploaded file :file:`screenshot.bmp` has automatically been both resized and converted to a new
-file ``screenshot.jpg`` (according to the image type conversion mapping option described in chapter :ref:`admin-manual`).
+file :file:`screenshot.jpg` (according to the image type conversion mapping option described in chapter
+:ref:`admin-manual`).
 
-Details of this image show that its footprint is now quite small (151 KB):
-
-.. figure:: ../Images/footprint.png
-	:alt: Details of an image with a smaller footprint that original file
+Details of this image show that its footprint is now quite small (131.4 KB).
 
 .. note::
-	This extension is fully compatible with FAL (File Abstraction Layer) introduced with TYPO3 6.0. When an image is
-	resized or converted from one format to another, the corresponding index in FAL (together with associated metadata
-	starting from TYPO3 6.2) is updated accordingly.
+   This extension is fully compatible with FAL (File Abstraction Layer) introduced with TYPO3 6.0 even if some path
+   references in this documentation may not use the "new" format of the form :file:`1:/user_upload`.
 
 
 .. _supported-image-types:
@@ -59,25 +55,25 @@ This extension performs the resize with the standard image library API from TYPO
 system, following formats are supported:
 
 ai
-	Adobe Illustrator
+   Adobe Illustrator
 
 bmp
-	Windows OS/2 Bitmap Graphics
+   Windows OS/2 Bitmap Graphics
 
 gif
-	Graphic Interchange Format
+   Graphic Interchange Format
 
 jpg/jpeg
-	JPEG/JIFF Image
+   JPEG/JIFF Image
 
 pcx
-	Paintbrush Bitmap Graphic
+   Paintbrush Bitmap Graphic
 
 png
-	Portable Network Graphic
+   Portable Network Graphic
 
 tga
-	Truevision Targa Graphic
+   Truevision Targa Graphic
 
 tif/tiff
-	Tagged Image Format
+   Tagged Image Format

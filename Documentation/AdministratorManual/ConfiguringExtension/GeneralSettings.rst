@@ -14,7 +14,7 @@ General settings
 General settings are configured with the first tab of the configuration panel:
 
 .. figure:: ../../Images/general-configuration.png
-	:alt: Overview of the general configuration panel
+   :alt: Overview of the general configuration panel
 
 
 .. _general-settings-directories:
@@ -53,8 +53,8 @@ This is the list of image formats that should be processed, if both the director
 actual list of available types is read from ``$TYPO3_CONF_VARS['GFX']['imagefile_ext']``.
 
 .. important::
-	PDF type is always removed from this list, whenever it is available, as it usually is not considered being an image
-	even if it can be processed by TYPO3 as such (to extract preview of the cover page for instance).
+   PDF type is always removed from this list, whenever it is available, as it usually is not considered being an image
+   even if it can be processed by TYPO3 as such (to extract preview of the cover page for instance).
 
 
 .. _general-settings-maximum-wh:

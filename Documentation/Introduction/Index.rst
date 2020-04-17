@@ -35,9 +35,9 @@ define the file types that should be handled (e.g., "jpg" and "tif" but not "png
 that weights only a few KB, why should we bother?
 
 .. hint::
-    You may use extension "extractor" `available in TER <https://typo3.org/extensions/repository/view/extractor>`__ to
-    automatically extract and populate metadata when you upload assets to your website. This is likely to give you much
-    better results than just relying on the built-in PHP-based metadata extractor.
+   You may use extension "extractor" `available in TER <https://typo3.org/extensions/repository/view/extractor>`__ to
+   automatically extract and populate metadata when you upload assets to your website. This is likely to give you much
+   better results than just relying on the built-in PHP-based metadata extractor.
 
 
 .. _screenshots:
@@ -54,17 +54,17 @@ may easily configure rules to resize uploaded images.
 .. _figure-general-configuration:
 
 .. figure:: ../Images/general-configuration.png
-	:alt: Overview of the general configuration panel
+   :alt: Overview of the general configuration panel
 
-	General configuration options to resize uploaded images
+   General configuration options to resize uploaded images
 
 
 .. _figure-general-options:
 
 .. figure:: ../Images/general-options.png
-	:alt: Overview of the general options panel
+   :alt: Overview of the general options panel
 
-	Additional options and conversion of image format
+   Additional options and conversion of image format
 
 
 .. _screencast:
@@ -76,9 +76,9 @@ The team from `jweiland.net <https://jweiland.net/>`_ prepared a screencast show
 extension in your TYPO3 website:
 
 .. figure:: ../Images/screencast-jweiland.jpg
-	:alt: Bilder automatisch verkleinern
+   :alt: Bilder automatisch verkleinern
 
-	Screencast available on https://jweiland.net/video-anleitungen/typo3/interessante-typo3-extensions/image-autoresize.html
+   Screencast available on https://jweiland.net/video-anleitungen/typo3/interessante-typo3-extensions/image-autoresize.html
 
 Thanks a lot for providing this online resource to the community.
 

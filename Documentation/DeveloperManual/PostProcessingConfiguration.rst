@@ -22,10 +22,10 @@ Your slot should implement a method of the form:
 
 .. code-block:: php
 
-	public function postProcessConfiguration(array &$configuration)
-	{
-	    // Custom code
-	}
+   public function postProcessConfiguration(array &$configuration)
+   {
+       // Custom code
+   }
 
 
 Registering the slots
@@ -35,14 +35,14 @@ In your extension, open :file:`EXT:{extension-key}/ext_localconf.php` and add:
 
 .. code-block:: php
 
-	/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
-	$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-	    \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
-	);
+   /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
+   $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+       \TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class
+   );
 
-	$signalSlotDispatcher->connect(
-	    \Causal\ImageAutoresize\Controller\ConfigurationController::class,
-	    'processConfiguration',
-	    \Company\MyExt\Slots\ImageAutoresize::class,
-	    'postProcessConfiguration'
-	);
+   $signalSlotDispatcher->connect(
+       \Causal\ImageAutoresize\Controller\ConfigurationController::class,
+       'processConfiguration',
+       \Company\MyExt\Slots\ImageAutoresize::class,
+       'postProcessConfiguration'
+   );

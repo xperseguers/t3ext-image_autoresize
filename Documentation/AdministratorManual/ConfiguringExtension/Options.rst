@@ -14,7 +14,7 @@ Options
 General options are configured with the first tab of the configuration panel:
 
 .. figure:: ../../Images/general-options.png
-	:alt: Overview of the general options panel
+   :alt: Overview of the general options panel
 
 
 .. _options-automatic-orientiation:
@@ -30,9 +30,9 @@ sensor. It is presumably a 2-axis tilt sensor, allowing 4 possible orientations 
 below):
 
 .. figure:: ../../Images/exif-orientation.png
-	:alt: Orientations as stored in EXIF
+   :alt: Orientations as stored in EXIF
 
-	Description and diagram adapted from http://www.impulseadventure.com/photo/exif-orientation.html
+   Description and diagram adapted from https://www.impulseadventure.com/photo/exif-orientation.html
 
 
 .. _options-keep-profile-metadata:
@@ -44,8 +44,8 @@ Normally color profile and metadata information such as EXIF, IPTC and XMP are r
 resize process. This option lets you keep them. Example of such information is shown below:
 
 .. figure:: ../../Images/metadata.png
-	:alt: Metadata of a picture
-	:width: 711
+   :alt: Metadata of a picture
+   :width: 711
 
 
 .. _options-resize-alpha-png:
