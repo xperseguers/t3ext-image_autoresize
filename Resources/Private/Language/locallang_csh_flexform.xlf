@@ -38,7 +38,7 @@ If empty, the maximum height configured in General tab will be taken into accoun
 			</trans-unit>
 			<trans-unit id="max_size.description" xml:space="preserve">
 				<source>Images will be resized up to this maximum size.
-Example: 8M (for a maximum image size of 8 megapixel)
+Example: 8M (for a maximum image size of 8 megapixels)
 If empty, the maximum size configured in General tab will be taken into account.</source>
 			</trans-unit>
 			<trans-unit id="keep_metadata.description">

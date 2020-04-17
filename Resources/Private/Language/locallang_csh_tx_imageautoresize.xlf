@@ -26,7 +26,7 @@ Example: jpg,jpeg,png,tif,tiff</source>
 			</trans-unit>
 			<trans-unit id="max_size.description">
 				<source>Images will be resized up to this maximum size.
-Example: 8M (for a maximum image size of 8 megapixel)</source>
+Example: 8M (for a maximum image size of 8 megapixels)</source>
 			</trans-unit>
 			<trans-unit id="auto_orient.description">
 				<source>Will try to auto-magically orient image (useful with photos).</source>
