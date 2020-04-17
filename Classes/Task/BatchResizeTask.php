@@ -15,7 +15,9 @@
 namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
@@ -121,7 +123,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      * @return bool true if run was successful
      * @throws \RuntimeException
      */
-    protected function batchResizePictures($directory)
+    protected function batchResizePictures(string $directory): bool
     {
         $directory = GeneralUtility::getFileAbsFileName($directory);
         // Check if given directory exists
@@ -194,7 +196,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      *                      Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
      * @internal This method is public only to be callable from a callback
      */
-    public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
+    public function notify(string $message, int $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
     {
         static $numberOfValidNotifications = 0;
 
@@ -225,29 +227,29 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
      *
      * @param string $message
      * @param int $severity
-     * @return void
      */
     public function syslog($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
     {
+        /** @var LoggerInterface $logger */
+        $logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+
         switch ($severity) {
             case \TYPO3\CMS\Core\Messaging\FlashMessage::NOTICE:
-                $severity = GeneralUtility::SYSLOG_SEVERITY_NOTICE;
+                $logger->notice($message);
                 break;
             case \TYPO3\CMS\Core\Messaging\FlashMessage::INFO:
-                $severity = GeneralUtility::SYSLOG_SEVERITY_INFO;
+                $logger->info($message);
                 break;
             case \TYPO3\CMS\Core\Messaging\FlashMessage::OK:
-                $severity = GeneralUtility::SYSLOG_SEVERITY_INFO;
+                $logger->log($message);
                 break;
             case \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING:
-                $severity = GeneralUtility::SYSLOG_SEVERITY_WARNING;
+                $logger->warning($message);
                 break;
             case \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR:
-                $severity = GeneralUtility::SYSLOG_SEVERITY_ERROR;
+                $logger->error($message);
                 break;
         }
-
-        GeneralUtility::sysLog($message, 'image_autoresize', $severity);
     }
 
     /**

@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Task;
 
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
 
@@ -118,12 +119,12 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
             $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
             if (!@is_dir($absoluteDirectory)) {
                 $result = false;
-                $parentObject->addMessage(
+                (new fakeSchedulerModuleController())->addMessage(
                     sprintf(
                         $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidDirectories'),
                         $directory
                     ),
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+                    FlashMessage::ERROR
                 );
             }
         }
@@ -133,12 +134,12 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
             $absoluteDirectory = GeneralUtility::getFileAbsFileName($directory);
             if (!@is_dir($absoluteDirectory)) {
                 $result = false;
-                $parentObject->addMessage(
+                (new fakeSchedulerModuleController())->addMessage(
                     sprintf(
                         $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidExcludeDirectories'),
                         $directory
                     ),
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+                    FlashMessage::ERROR);
             }
         }
 
@@ -158,4 +159,12 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
         $task->excludeDirectories = trim($submittedData['scheduler_batchResize_excludeDirectories']);
     }
 
+}
+
+class fakeSchedulerModuleController extends \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController
+{
+    public function addMessage($message, $severity = FlashMessage::OK)
+    {
+        parent::addMessage($message, $severity);
+    }
 }
