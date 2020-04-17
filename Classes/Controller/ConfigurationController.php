@@ -422,16 +422,12 @@ HTML;
         return $configurationManager->setLocalConfigurationValueByPath('EXT/extConf/' . $key, serialize($config));
     }
 
-
     /**
      * @return array
      */
     public static function readConfiguration() : array
     {
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $configurationFileName = $pathSite . 'typo3conf/image_autoresize.config.php';
+        $configurationFileName = static::getConfigurationFileName();
 
         $configuration = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($configuration) || empty($configuration)) {
@@ -451,17 +447,14 @@ HTML;
     }
 
     /**
-     * Writes configuration to typo3conf/image_autoresize.config.php.
+     * Writes configuration to image_autoresize.config.php.
      *
      * @param array $config
      * @return bool
      */
     protected function persistConfiguration(array $config) : bool
     {
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $configurationFileName = $pathSite . 'typo3conf/image_autoresize.config.php';
+        $configurationFileName = static::getConfigurationFileName();
 
         $exportConfig = var_export($config, true);
         $exportConfig = str_replace('array (', '[', $exportConfig);
@@ -583,6 +576,20 @@ HTML;
             </div>
         ';
     }
+
+    /**
+     * Returns the absolute path to the configuration file.
+     *
+     * @return string
+     */
+    protected static function getConfigurationFileName(): string
+    {
+        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+            ? PATH_site
+            : Environment::getPublicPath() . '/';
+        return $pathSite . 'typo3conf/image_autoresize.config.php';
+    }
+
 }
 
 // ReflectionMethod does not work properly with arguments passed as reference thus
