@@ -25,7 +25,6 @@ class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxC
      * Render a single flex form section container to add it to the DOM
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      * @return ResponseInterface
      */
     public function containerAdd(ServerRequestInterface $request): ResponseInterface
@@ -49,7 +48,7 @@ class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxC
         // Initialize record in our virtual provider
         \Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::initialize($record);
 
-        $response = parent::containerAdd($request, $response);
+        $response = parent::containerAdd($request);
         return $response->withHeader('Content-Type', 'application/json; charset=utf-8');
     }
 

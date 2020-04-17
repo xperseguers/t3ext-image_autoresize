@@ -16,6 +16,7 @@ namespace Causal\ImageAutoresize\Utility;
 
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -40,14 +41,21 @@ class FAL
     /**
      * Creates/updates the index entry for a given file.
      *
-     * @param \TYPO3\CMS\Core\Resource\File $file
+     * @param File $file
      * @param string $origFileName
      * @param string $newFileName
      * @param int $width
      * @param int $height
      * @param array $metadata EXIF metadata
      */
-    public static function indexFile(\TYPO3\CMS\Core\Resource\File $file = null, $origFileName, $newFileName, $width, $height, array $metadata = [])
+    public static function indexFile(
+        ?File $file = null,
+        string $origFileName,
+        string $newFileName,
+        int $width,
+        int $height,
+        array $metadata = []
+    ): void
     {
         if ($file === null) {
             $file = static::findExistingFile($origFileName);
@@ -63,7 +71,7 @@ class FAL
      * @param string $fileName
      * @return \TYPO3\CMS\Core\Resource\AbstractFile|null
      */
-    protected static function findExistingFile($fileName)
+    protected static function findExistingFile(string $fileName): ?\TYPO3\CMS\Core\Resource\AbstractFile
     {
         $pathSite = version_compare(TYPO3_version, '9.0', '<')
             ? PATH_site
@@ -109,13 +117,12 @@ class FAL
     /**
      * Updates the index entry for a given file.
      *
-     * @param \TYPO3\CMS\Core\Resource\File $file
+     * @param File $file
      * @param int $width
      * @param int $height
      * @param array $metadata EXIF metadata
-     * @return void
      */
-    protected static function updateIndex(\TYPO3\CMS\Core\Resource\File $file = null, $width, $height, array $metadata = [])
+    protected static function updateIndex(?File $file = null, int $width, int $height, array $metadata = []): void
     {
         if (count($metadata) > 0) {
             /** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
@@ -200,7 +207,7 @@ class FAL
      * @param string $propertyName
      * @return mixed
      */
-    protected static function accessProtectedProperty($object, $propertyName)
+    protected static function accessProtectedProperty($object, string $propertyName)
     {
         $className = get_class($object);
         if (!isset(static::$reflectedClasses[$className])) {

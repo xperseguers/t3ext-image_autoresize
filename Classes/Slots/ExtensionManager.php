@@ -42,7 +42,7 @@ class ExtensionManager
      * @param array $extension
      * @param array $actions
      */
-    public function processActions(array $extension, array &$actions)
+    public function processActions(array $extension, array &$actions): void
     {
         if ($extension['key'] === 'image_autoresize') {
             if (version_compare(TYPO3_branch, '9.0', '>=')) {

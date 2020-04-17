@@ -34,7 +34,7 @@ class Graphics
      *
      * @param array $settings content element configuration
      */
-    public function getImageFileExtensions(array $settings)
+    public function getImageFileExtensions(array $settings): void
     {
         $languageService = $this->getLanguageService();
 
@@ -62,7 +62,7 @@ class Graphics
     /**
      * Returns the language service.
      *
-     * @return \TYPO3\CMS\Lang\LanguageService
+     * @return \TYPO3\CMS\Core\Localization\LanguageService
      */
     protected function getLanguageService()
     {

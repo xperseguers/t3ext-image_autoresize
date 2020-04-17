@@ -15,6 +15,7 @@
 namespace Causal\ImageAutoresize\Hooks;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\DataHandling\DataHandlerProcessUploadHookInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -79,7 +80,7 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
      *                      Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
      * @internal This method is public only to be callable from a callback
      */
-    public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
+    public function notify(string $message, int $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK): void
     {
         if (TYPO3_MODE !== 'BE') {
             return;
@@ -101,9 +102,9 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
     /**
      * Returns the current BE user.
      *
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     * @return BackendUserAuthentication
      */
-    protected function getBackendUser()
+    protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
     }

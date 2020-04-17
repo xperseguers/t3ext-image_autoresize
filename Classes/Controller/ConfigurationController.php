@@ -105,7 +105,7 @@ class ConfigurationController
      * @param ServerRequestInterface $request the current request
      * @return ResponseInterface the response with the content
      */
-    public function mainAction(ServerRequestInterface $request) : ResponseInterface
+    public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
         /** @var ResponseInterface $response */
         $response = func_num_args() === 2 ? func_get_arg(1) : null;
@@ -143,7 +143,7 @@ class ConfigurationController
      *
      * @param array $row
      */
-    protected function moduleContent(array $row)
+    protected function moduleContent(array $row): void
     {
         $this->formResultCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormResultCompiler::class);
 
@@ -160,7 +160,7 @@ class ConfigurationController
      * @param array $row
      * @return string
      */
-    protected function buildForm(array $row)
+    protected function buildForm(array $row): string
     {
         $record = [
             'uid' => static::virtualRecordId,
@@ -251,7 +251,7 @@ HTML;
     /**
      * Creates the toolbar buttons.
      */
-    protected function addToolbarButtons()
+    protected function addToolbarButtons(): void
     {
         // Render SAVE type buttons:
         // The action of each button is decided by its name attribute. (See doProcessData())
@@ -302,21 +302,11 @@ HTML;
     }
 
     /**
-     * Prints out the module HTML.
-     *
-     * @return string HTML output
-     */
-    public function printContent()
-    {
-        echo $this->content;
-    }
-
-    /**
      * Returns the default configuration.
      *
      * @return array
      */
-    protected static function getDefaultConfiguration()
+    protected static function getDefaultConfiguration(): array
     {
         return [
             'directories' => 'fileadmin/,uploads/',
@@ -342,7 +332,7 @@ HTML;
      *
      * @return void
      */
-    protected function processData()
+    protected function processData(): void
     {
         $close = GeneralUtility::_GP('closeDoc');
         $save = GeneralUtility::_GP('_savedok');
@@ -410,7 +400,7 @@ HTML;
      * @param array $config
      * @return bool
      */
-    protected function writeToLocalconf($key, array $config)
+    protected function writeToLocalconf(string $key, array $config): bool
     {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
@@ -422,7 +412,7 @@ HTML;
     /**
      * @return array
      */
-    public static function readConfiguration() : array
+    public static function readConfiguration(): array
     {
         $configurationFileName = static::getConfigurationFileName();
 
@@ -449,7 +439,7 @@ HTML;
      * @param array $config
      * @return bool
      */
-    protected function persistConfiguration(array $config) : bool
+    protected function persistConfiguration(array $config): bool
     {
         $configurationFileName = static::getConfigurationFileName();
 
@@ -479,7 +469,7 @@ HTML;
     /**
      * Loads the configuration of the virtual table 'tx_imageautoresize'.
      */
-    protected function loadVirtualTca()
+    protected function loadVirtualTca(): void
     {
         $GLOBALS['TCA'][static::virtualTable] = include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
         ExtensionManagementUtility::addLLrefForTCAdescr(static::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . static::virtualTable . '.xlf');
@@ -490,9 +480,8 @@ HTML;
      * items.
      *
      * @param array &$valueArray : by reference
-     * @return void
      */
-    protected function persistFlexForm(array &$valueArray)
+    protected function persistFlexForm(array &$valueArray): void
     {
         foreach ($valueArray as $key => $value) {
             if ($key === 'el') {
@@ -511,7 +500,7 @@ HTML;
     /**
      * Returns some statistics and a social link to Twitter.
      */
-    protected function addStatisticsAndSocialLink()
+    protected function addStatisticsAndSocialLink(): void
     {
         $pathSite = version_compare(TYPO3_version, '9.0', '<')
             ? PATH_site

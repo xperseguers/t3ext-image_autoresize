@@ -14,6 +14,8 @@
 
 namespace Causal\ImageAutoresize\Utility;
 
+use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -35,7 +37,7 @@ class ImageUtility
      * @param string $fileName
      * @return int
      */
-    public static function getOrientation($fileName)
+    public static function getOrientation(string $fileName): int
     {
         $orientation = 1; // Fallback to "straight"
         $metadata = static::getMetadata($fileName);
@@ -52,7 +54,7 @@ class ImageUtility
      * @param bool $fullExtract
      * @return array
      */
-    public static function getMetadata($fileName, $fullExtract = false)
+    public static function getMetadata(string $fileName, bool $fullExtract = false): array
     {
         $metadata = static::getBasicMetadata($fileName);
 
@@ -96,12 +98,12 @@ class ImageUtility
      *
      * @param string $fileName
      * @param array $metadata
-     * @return \TYPO3\CMS\Core\Resource\File
+     * @return File
      */
-    protected static function getVirtualFileObject($fileName, array $metadata)
+    protected static function getVirtualFileObject(string $fileName, array $metadata): File
     {
-        /** @var \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory */
-        $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
+        /** @var ResourceFactory $resourceFactory */
+        $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
 
         $recordData = [
             'uid' => 0,
@@ -127,9 +129,9 @@ class ImageUtility
         $name = PathUtility::basename($fileName);
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
-        /** @var \TYPO3\CMS\Core\Resource\File $virtualFileObject */
+        /** @var File $virtualFileObject */
         $virtualFileObject = GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Resource\File::class,
+            File::class,
             [
                 'identifier' => '/' . $name,
                 'name' => $name,
@@ -148,7 +150,7 @@ class ImageUtility
      * @param string $fileName
      * @return array
      */
-    protected static function getBasicMetadata($fileName)
+    protected static function getBasicMetadata(string $fileName): array
     {
         $extension = strtolower(substr($fileName, strrpos($fileName, '.') + 1));
         $metadata = [];
@@ -219,10 +221,10 @@ class ImageUtility
     /**
      * Safely converts some text to UTF-8.
      *
-     * @param string $text
-     * @return string
+     * @param string|null $text
+     * @return string|null
      */
-    protected static function safeUtf8Encode($text)
+    protected static function safeUtf8Encode(?string $text): ?string
     {
         if (function_exists('mb_detect_encoding')) {
             if (mb_detect_encoding($text, 'UTF-8', true) !== 'UTF-8') {
@@ -244,7 +246,7 @@ class ImageUtility
      * @param array $components
      * @return float
      */
-    protected static function rationalToDecimal(array $components)
+    protected static function rationalToDecimal(array $components): float
     {
         foreach ($components as $key => $value) {
             $rationalParts = explode('/', $value);
@@ -263,10 +265,10 @@ class ImageUtility
      * Returns true if the given picture is rotated.
      *
      * @param int $orientation EXIF orientation
-     * @return int
+     * @return bool
      * @see http://www.impulseadventure.com/photo/exif-orientation.html
      */
-    public static function isRotated($orientation)
+    public static function isRotated(int $orientation): bool
     {
         $ret = false;
         switch ($orientation) {
@@ -289,7 +291,7 @@ class ImageUtility
      * @param int $orientation
      * @return string
      */
-    public static function getTransformation($orientation)
+    public static function getTransformation(int $orientation): string
     {
         $transformation = '';
         if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] !== 'GraphicsMagick') {
@@ -332,9 +334,9 @@ class ImageUtility
      * @param string $fileName
      * @see http://sylvana.net/jpegcrop/exif_orientation.html
      */
-    public static function resetOrientation($fileName)
+    public static function resetOrientation(string $fileName): void
     {
-        \Causal\ImageAutoresize\Utility\JpegExifOrient::setOrientation($fileName, 1);
+        JpegExifOrient::setOrientation($fileName, 1);
     }
 
     /**
@@ -343,7 +345,7 @@ class ImageUtility
      * @param string $fileName
      * @return bool
      */
-    public static function isTransparentPng($fileName)
+    public static function isTransparentPng(string $fileName): bool
     {
         $bytes = file_get_contents($fileName, false, null, 24, 2);    // read 24th and 25th bytes
         $byte24 = ord(substr($bytes, 0, 1));
@@ -361,8 +363,9 @@ class ImageUtility
      *
      * @param string $fileName
      * @return bool
+     * @throws \RuntimeException
      */
-    public static function isAnimatedGif($fileName)
+    public static function isAnimatedGif(string $fileName): bool
     {
         if (($fh = fopen($fileName, 'rb')) === false) {
             throw new \RuntimeException('Can\'t open ' . $fileName, 1454678600);

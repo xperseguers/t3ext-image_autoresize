@@ -19,7 +19,6 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -65,7 +64,7 @@ class ImageResizer
      *
      * @param array $configuration
      */
-    public function initializeRulesets(array $configuration)
+    public function initializeRulesets(array $configuration): void
     {
         $general = $configuration;
         $general['usergroup'] = '';
@@ -90,7 +89,7 @@ class ImageResizer
                     $ruleset[$key] = $value;
                 }
             }
-            if (count($ruleset['usergroup']) == 0) {
+            if (empty($ruleset['usergroup'])) {
                 // Make sure not to try to override general configuration
                 // => only keep directories not present in general configuration
                 $ruleset['directories'] = array_diff($ruleset['directories'], $general['directories']);
@@ -113,13 +112,17 @@ class ImageResizer
      * @param array $ruleset The optional ruleset to use
      * @return string|null Either null if no resize/conversion should take place or the resized/converted file name
      */
-    public function getProcessedFileName($fileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null, array $ruleset = null)
+    public function getProcessedFileName(
+        string $fileName,
+        ?\TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null,
+        ?array $ruleset = null
+    ): ?string
     {
         if ($ruleset === null) {
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
-        if (count($ruleset) === 0) {
+        if (empty($ruleset)) {
             // File does not match any rule set
             return null;
         }
@@ -165,12 +168,19 @@ class ImageResizer
      * @param string $fileName Full path to the file to be processed
      * @param string $targetFileName Expected target file name, if not converted (only file name, no path)
      * @param string $targetDirectory
-     * @param \TYPO3\CMS\Core\Resource\File $file
+     * @param File $file
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
      * @param callback $callbackNotification Callback to send notification
      * @return string File name that was finally written
      */
-    public function processFile($fileName, $targetFileName = '', $targetDirectory = '', \TYPO3\CMS\Core\Resource\File $file = null, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null, $callbackNotification = null)
+    public function processFile(
+        string $fileName,
+        string $targetFileName = '',
+        string $targetDirectory = '',
+        ?File $file = null,
+        ?\TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null,
+        $callbackNotification = null
+    ): string
     {
         $this->lastMetadata = null;
 
@@ -181,12 +191,13 @@ class ImageResizer
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
-        if (count($ruleset) === 0) {
+        if (empty($ruleset)) {
             // File does not match any rule set
             return $fileName;
         }
 
         // Make file name relative, store as $targetFileName
+        // This happens in scheduler task or when uploading to "uploads/"
         if (empty($targetFileName)) {
             $targetFileName = PathUtility::stripPathSitePrefix($fileName);
         }
@@ -385,7 +396,7 @@ class ImageResizer
      *
      * @return array|null
      */
-    public function getLastMetadata()
+    public function getLastMetadata(): ?array
     {
         return $this->lastMetadata;
     }
@@ -396,7 +407,7 @@ class ImageResizer
      * @param string $input
      * @return string
      */
-    protected function localize($input)
+    protected function localize(string $input): string
     {
         if (TYPO3_MODE === 'FE') {
             $output = is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->sL($input) : $input;
@@ -413,7 +424,7 @@ class ImageResizer
      * @param string $message
      * @param int $severity
      */
-    protected function notify($callbackNotification, $message, $severity)
+    protected function notify($callbackNotification, string $message, int $severity): void
     {
         $callableName = '';
         if (is_callable($callbackNotification, false, $callableName)) {
@@ -430,7 +441,7 @@ class ImageResizer
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
      * @return array
      */
-    protected function getRuleset($sourceFileName, $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null)
+    protected function getRuleset(string $sourceFileName, string $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null): array
     {
         $ret = [];
 
@@ -439,6 +450,7 @@ class ImageResizer
             ? PATH_site
             : Environment::getPublicPath() . '/';
         $relTargetFileName = substr($targetFileName, strlen($pathSite));
+        // Extract the extension
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
         $beGroups = $backendUser !== null ? array_keys($backendUser->userGroups) : [];
@@ -454,7 +466,7 @@ class ImageResizer
             }
             if (count($ruleset['usergroup']) > 0 && (
                     $backendUser === null ||
-                    count(array_intersect($ruleset['usergroup'], $beGroups)) == 0)
+                    count(array_intersect($ruleset['usergroup'], $beGroups)) === 0)
             ) {
                 // Backend user is not member of a group configured for the current rule set
                 continue;
@@ -465,11 +477,13 @@ class ImageResizer
             }
             $processFile &= in_array($fileExtension, $ruleset['file_types']);
             $processFile &= $fileSize === -1 || ($fileSize > $ruleset['threshold']);
-            if ($processFile) {
+            if ((bool)$processFile) {
+                // We found the ruleset to use!
                 $ret = $ruleset;
                 break;
             }
         }
+
         return $ret;
     }
 
@@ -478,7 +492,7 @@ class ImageResizer
      *
      * @return array
      */
-    public function getAllDirectories()
+    public function getAllDirectories(): array
     {
         $directories = [];
         foreach ($this->rulesets as $ruleset) {
@@ -495,7 +509,7 @@ class ImageResizer
      *
      * @return array
      */
-    public function getAllFileTypes()
+    public function getAllFileTypes(): array
     {
         $fileTypes = [];
         foreach ($this->rulesets as $ruleset) {
@@ -513,7 +527,7 @@ class ImageResizer
      * @param array $rulesets
      * @return array
      */
-    protected function compileRulesets(array $rulesets)
+    protected function compileRulesets(array $rulesets): array
     {
         $out = [];
 
@@ -540,7 +554,7 @@ class ImageResizer
      * @param array $ruleset
      * @return array
      */
-    protected function expandValuesInRuleset(array $ruleset)
+    protected function expandValuesInRuleset(array $ruleset): array
     {
         $values = [];
         foreach ($ruleset as $key => $value) {
@@ -619,7 +633,7 @@ class ImageResizer
      * @param array $mapping Array of lines similar to "bmp => jpg", "tif => jpg"
      * @return array Key/Value pairs of mapping: array('bmp' => 'jpg', 'tif' => 'jpg')
      */
-    protected function expandConversionMapping(array $mapping)
+    protected function expandConversionMapping(array $mapping): array
     {
         $ret = [];
         $matches = [];
@@ -632,26 +646,11 @@ class ImageResizer
     }
 
     /**
-     * Returns a regular expression pattern to match directories.
-     *
-     * @param string $directory
-     * @return string
-     */
-    public function getDirectoryPattern($directory)
-    {
-        $pattern = '/^' . str_replace('/', '\\/', $directory) . '/';
-        $pattern = str_replace('\\/**\\/', '\\/([^\/]+\\/)*', $pattern);
-        $pattern = str_replace('\\/*\\/', '\\/[^\/]+\\/', $pattern);
-
-        return $pattern;
-    }
-
-    /**
      * Stores how many extra bytes have been freed.
      *
      * @param int $bytes
      */
-    protected function reportAdditionalStorageClaimed($bytes)
+    protected function reportAdditionalStorageClaimed(int $bytes): void
     {
         $pathSite = version_compare(TYPO3_version, '9.0', '<')
             ? PATH_site
@@ -688,4 +687,5 @@ class ImageResizer
     {
         return GeneralUtility::makeInstance(Indexer::class, $storage);
     }
+
 }

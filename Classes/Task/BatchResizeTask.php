@@ -16,6 +16,7 @@ namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
 use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -255,9 +256,9 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     /**
      * Returns the current BE user.
      *
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     * @return BackendUserAuthentication
      */
-    protected function getBackendUser()
+    protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
     }

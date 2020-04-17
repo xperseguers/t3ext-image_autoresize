@@ -18,6 +18,7 @@ namespace Causal\ImageAutoresize\EventListener;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
 use Causal\ImageAutoresize\Service\ImageResizer;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Driver\LocalDriver;
 use TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent;
@@ -238,9 +239,9 @@ class CoreResourceStorageEventListener
     /**
      * Returns the current BE user.
      *
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     * @return BackendUserAuthentication
      */
-    protected function getBackendUser()
+    protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
     }
