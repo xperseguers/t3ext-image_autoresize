@@ -91,5 +91,5 @@ Requirements
 In order to extract metadata while resizing images and automatically rotate images based on the EXIF information, those
 PHP methods should be available:
 
-- `exif_read_data`;
-- `iptcparse`.
+- ``exif_read_data``;
+- ``iptcparse``.
