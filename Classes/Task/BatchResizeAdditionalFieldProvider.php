@@ -57,7 +57,10 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
      */
     public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject)
     {
-        $editCommand = version_compare(TYPO3_branch, '9.5', '>=')
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        $editCommand = version_compare($typo3Branch, '9.5', '>=')
             ? $parentObject->getCurrentAction() === Action::EDIT
             : $parentObject->CMD === 'edit';
 

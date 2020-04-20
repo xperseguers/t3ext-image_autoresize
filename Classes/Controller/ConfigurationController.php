@@ -231,7 +231,10 @@ class ConfigurationController
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
 			<input type="hidden" name="_scrollPosition" value="" />';
 
-        if (version_compare(TYPO3_branch, '9.0', '>=')) {
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        if (version_compare($typo3Branch, '9.0', '>=')) {
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
         } else {
@@ -258,7 +261,10 @@ HTML;
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $saveSplitButton = $buttonBar->makeSplitButton();
 
-        $locallangCore = version_compare(TYPO3_branch, '9.0', '>=')
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        $locallangCore = version_compare($typo3Branch, '9.0', '>=')
             ? 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf'
             : 'LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf';
 
@@ -381,7 +387,10 @@ HTML;
         }
 
         if ($close || $saveAndClose) {
-            if (version_compare(TYPO3_branch, '9.0', '>=')) {
+            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+                : TYPO3_branch;
+            if (version_compare($typo3Branch, '9.0', '>=')) {
                 $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
                 $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
             } else {
@@ -502,7 +511,10 @@ HTML;
      */
     protected function addStatisticsAndSocialLink(): void
     {
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        $pathSite = version_compare($typo3Branch, '9.0', '<')
             ? PATH_site
             : Environment::getPublicPath() . '/';
         $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
@@ -566,7 +578,10 @@ HTML;
      */
     protected static function getConfigurationFileName(): string
     {
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        $pathSite = version_compare($typo3Branch, '9.0', '<')
             ? PATH_site
             : Environment::getPublicPath() . '/';
         return $pathSite . 'typo3conf/image_autoresize.config.php';

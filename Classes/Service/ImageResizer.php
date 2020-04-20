@@ -286,7 +286,10 @@ class ImageResizer
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        if (version_compare(TYPO3_version, '9.0', '<')) {
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        if (version_compare($typo3Branch, '9.0', '<')) {
             $gifCreator->init();
             // Next line is likely to make the resizing fail if mounting a FAL folder outside
             // of PATH_site (e.g., absolute configuration), we don't care in TYPO3 v8 anymore!
@@ -307,7 +310,7 @@ class ImageResizer
             $isRotated = ImageUtility::isRotated($orientation);
             $transformation = ImageUtility::getTransformation($orientation);
             if ($transformation !== '') {
-                if (version_compare(TYPO3_version, '9.0', '>=')) {
+                if (version_compare($typo3Branch, '9.0', '>=')) {
                     $gifCreator->scalecmd = $transformation . ' ' . $gifCreator->scalecmd;
                 } else {
                     $imParams .= ' ' . $transformation;
@@ -395,7 +398,7 @@ class ImageResizer
 
             // Inform FAL about new image size and dimensions
             try {
-                if (version_compare(TYPO3_version, '10.0', '<')) {
+                if (version_compare($typo3Branch, '10.0', '<')) {
                     $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
                 } else {
                     $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
@@ -674,7 +677,10 @@ class ImageResizer
      */
     protected function reportAdditionalStorageClaimed(int $bytes): void
     {
-        $pathSite = version_compare(TYPO3_version, '9.0', '<')
+        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+            : TYPO3_branch;
+        $pathSite = version_compare($typo3Branch, '9.0', '<')
             ? PATH_site
             : Environment::getPublicPath() . '/';
         $legacyFileName = $pathSite . 'typo3conf/.tx_imageautoresize';
