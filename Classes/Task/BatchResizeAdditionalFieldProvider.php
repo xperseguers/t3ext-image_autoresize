@@ -61,7 +61,7 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
             ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
             : TYPO3_branch;
         $editCommand = version_compare($typo3Branch, '9.5', '>=')
-            ? $parentObject->getCurrentAction() === Action::EDIT
+            ? (string)$parentObject->getCurrentAction() === Action::EDIT
             : $parentObject->CMD === 'edit';
 
         // Initialize selected fields
