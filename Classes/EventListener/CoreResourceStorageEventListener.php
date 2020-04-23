@@ -77,6 +77,9 @@ class CoreResourceStorageEventListener
         }
 
         $storageConfiguration = $folder->getStorage()->getConfiguration();
+        if (empty($storageConfiguration)) {
+            return;
+        }
         $pathSite = Environment::getPublicPath() . '/';
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
@@ -107,6 +110,9 @@ class CoreResourceStorageEventListener
         }
 
         $storageConfiguration = $folder->getStorage()->getConfiguration();
+        if (empty($storageConfiguration)) {
+            return;
+        }
         $pathSite = Environment::getPublicPath() . '/';
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
         $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
@@ -136,6 +142,9 @@ class CoreResourceStorageEventListener
         }
 
         $storageConfiguration = $folder->getStorage()->getConfiguration();
+        if (empty($storageConfiguration)) {
+            return;
+        }
 
         if (static::$originalFileName) {
             // Temporarily change back the file name to ensure original format is used

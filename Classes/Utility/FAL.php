@@ -243,15 +243,16 @@ class FAL
                 ];
             }
         } else {
+            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
+                : TYPO3_branch;
+
             // Only "uploads/" is now allowed to be using a non-FAL identifier without deprecation
             if (!GeneralUtility::isFirstPartOfStr($path, 'uploads/')) {
                 $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
                 if (GeneralUtility::isFirstPartOfStr($path, 'fileadmin/')) {
                     $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
                 }
-                $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                    ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                    : TYPO3_branch;
                 if (version_compare($typo3Branch, '9.0', '>=')) {
                     trigger_error($message, E_USER_DEPRECATED);
                 } else {
