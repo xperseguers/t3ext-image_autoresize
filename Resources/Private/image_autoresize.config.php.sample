@@ -1,6 +1,6 @@
 <?php
 return [
-    'directories' => 'fileadmin/,fileadmin/user_upload/,uploads/',
+    'directories' => '1:/,1:/user_upload/,uploads/',
     'file_types' => 'jpg,jpeg,png,bmp,tif,tiff',
     'threshold' => '300K',
     'max_width' => '1920',
