@@ -149,12 +149,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         // actually resizing the image while uploading, not during a batch processing (it's simply "too late").
         $backendUser = null;
 
-        if ($this->getBackendUser()->isAdmin()) {
-            // As the scheduler user should never be an administrator, if current user is an administrator
-            // the task is most probably run manually from the Scheduler module, so just show notifications
-            $callbackNotification = [$this, 'notify'];
-        } else {
+        if (TYPO3_MODE !== 'BE' || PHP_SAPI === 'cli') {
             $callbackNotification = [$this, 'syslog'];
+        } else {
+            $callbackNotification = [$this, 'notify'];
         }
 
         $dirs = GeneralUtility::trimExplode(LF, $this->excludeDirectories, true);
