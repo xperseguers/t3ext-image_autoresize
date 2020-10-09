@@ -229,7 +229,7 @@ class CoreResourceStorageEventListener
      */
     public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
     {
-        if (TYPO3_MODE !== 'BE') {
+        if (TYPO3_MODE !== 'BE' || PHP_SAPI === 'cli') {
             return;
         }
         $flashMessage = GeneralUtility::makeInstance(
