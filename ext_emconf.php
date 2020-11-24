@@ -16,19 +16,11 @@ $EM_CONF[$_EXTKEY] = [
     'category' => 'be',
     'author' => 'Xavier Perseguers',
     'author_email' => 'xavier@causal.ch',
-    'shy' => '',
-    'dependencies' => '',
-    'conflicts' => '',
-    'priority' => '',
-    'module' => '',
     'doNotLoadInFE' => 1,
     'state' => 'stable',
-    'internal' => '',
     'uploadfolder' => 0,
     'createDirs' => '',
-    'modify_tables' => '',
     'clearCacheOnLoad' => 0,
-    'lockType' => '',
     'author_company' => 'Causal Sàrl',
     'version' => '2.0.3',
     'constraints' => [
@@ -39,8 +31,6 @@ $EM_CONF[$_EXTKEY] = [
         'conflicts' => [],
         'suggests' => [],
     ],
-    '_md5_values_when_last_written' => '',
-    'suggests' => [],
     'autoload' => [
         'psr-4' => ['Causal\\ImageAutoresize\\' => 'Classes']
     ],
