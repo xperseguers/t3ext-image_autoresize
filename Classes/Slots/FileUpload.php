@@ -225,8 +225,8 @@ class FileUpload
             \Causal\ImageAutoresize\Utility\FAL::indexFile(
                 $file,
                 '', '',
-                static::$metadata['COMPUTED']['Width'],
-                static::$metadata['COMPUTED']['Height'],
+                (int)static::$metadata['COMPUTED']['Width'],
+                (int)static::$metadata['COMPUTED']['Height'],
                 static::$metadata
             );
         }
