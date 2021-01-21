@@ -26,6 +26,7 @@ use TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent;
 use TYPO3\CMS\Core\Resource\Event\BeforeFileAddedEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -191,6 +192,11 @@ class CoreResourceStorageEventListener
                 static::$metadata['COMPUTED']['Height'],
                 static::$metadata
             );
+            if (ExtensionManagementUtility::isLoaded('extractor')
+                // Class CategoryHelper is available since version 2.1.0
+                && class_exists(\Causal\Extractor\Utility\CategoryHelper::class)) {
+                \Causal\Extractor\Utility\CategoryHelper::processCategories($event->getFile(), static::$metadata);
+            }
         }
     }
 

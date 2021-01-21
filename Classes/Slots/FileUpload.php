@@ -17,6 +17,7 @@ namespace Causal\ImageAutoresize\Slots;
 use Causal\ImageAutoresize\Controller\ConfigurationController;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Resource\Driver\AbstractDriver;
@@ -229,6 +230,11 @@ class FileUpload
                 (int)static::$metadata['COMPUTED']['Height'],
                 static::$metadata
             );
+            if (ExtensionManagementUtility::isLoaded('extractor')
+                // Class CategoryHelper is available since version 2.1.0
+                && class_exists(\Causal\Extractor\Utility\CategoryHelper::class)) {
+                \Causal\Extractor\Utility\CategoryHelper::processCategories($file, static::$metadata);
+            }
         }
     }
 
