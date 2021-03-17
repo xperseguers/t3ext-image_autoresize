@@ -188,8 +188,8 @@ class CoreResourceStorageEventListener
             \Causal\ImageAutoresize\Utility\FAL::indexFile(
                 $event->getFile(),
                 '', '',
-                static::$metadata['COMPUTED']['Width'],
-                static::$metadata['COMPUTED']['Height'],
+                (int)static::$metadata['COMPUTED']['Width'],
+                (int)static::$metadata['COMPUTED']['Height'],
                 static::$metadata
             );
             if (ExtensionManagementUtility::isLoaded('extractor')
