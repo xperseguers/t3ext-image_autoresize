@@ -9,6 +9,7 @@
 		<type>array</type>
 		<el>
 			<ruleset type="array">
+				<title></title>
 				<type>array</type>
 				<tx_templavoila type="array">
 					<title></title>
@@ -16,6 +17,7 @@
 				</tx_templavoila>
 				<el type="array">
 					<container type="array">
+						<title></title>
 						<type>array</type>
 						<tx_templavoila type="array">
 							<title>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.usergroup_ruleset</title>

@@ -7,6 +7,7 @@ $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
 
 return [
     'ctrl' => [
+        'title' => 'Options',
         'label' => 'title',
         'dividers2tabs' => true,
     ],
