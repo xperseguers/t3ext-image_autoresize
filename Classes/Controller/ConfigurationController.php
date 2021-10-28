@@ -78,6 +78,11 @@ class ConfigurationController
     public $content = '';
 
     /**
+     * @var string
+     */
+    protected $retUrl = '';
+
+    /**
      * Default constructor
      */
     public function __construct()
