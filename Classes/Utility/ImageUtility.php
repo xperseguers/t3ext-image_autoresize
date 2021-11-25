@@ -162,7 +162,7 @@ class ImageUtility
             if ($exif) {
                 $metadata = $exif;
                 // Fix description coming from EXIF
-                $metadata['ImageDescription'] = static::safeUtf8Encode($metadata['ImageDescription']);
+                $metadata['ImageDescription'] = static::safeUtf8Encode($metadata['ImageDescription'] ?? '');
 
                 // Process the longitude/latitude/altitude
                 if (isset($metadata['GPSLatitude']) && is_array($metadata['GPSLatitude'])) {
