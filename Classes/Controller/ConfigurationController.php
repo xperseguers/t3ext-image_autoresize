@@ -14,6 +14,8 @@
 
 namespace Causal\ImageAutoresize\Controller;
 
+use Causal\ImageAutoresize\Event\ProcessDefaultConfigurationEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -433,6 +435,9 @@ HTML;
         $configuration = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($configuration) || empty($configuration)) {
             $configuration = static::getDefaultConfiguration();
+
+            $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+            $configuration = $eventDispatcher->dispatch(new ProcessDefaultConfigurationEvent($configuration))->getConfiguration();
         }
 
         $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
