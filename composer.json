@@ -33,10 +33,10 @@
     "GPL-3.0-or-later"
   ],
   "require": {
-    "php": ">=7.2.0 <=7.4.99 || >=8.0.0 <=8.1.99",
+    "php": ">=7.4.0 <=7.4.99 || >=8.0.0 <=8.1.99",
     "ext-exif": "*",
     "ext-json": "*",
-    "typo3/cms-core": "^8.7 || ^9.5 || ^10 || ^11"
+    "typo3/cms-core": "^10 || ^11 || ^12"
   },
   "autoload": {
     "psr-4": {
@@ -48,11 +48,11 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.1.x-dev"
+      "dev-master": "2.1.x-dev",
+      "dev-feature/TYPO3v12": "2.2.x-dev"
     },
     "typo3/cms": {
-      "extension-key": "image_autoresize",
-      "cms-package-dir": "{$vendor-dir}/typo3/cms"
+      "extension-key": "image_autoresize"
     }
   }
 }
