@@ -241,9 +241,15 @@ class FAL
                 : TYPO3_branch;
 
             // Only "uploads/" is now allowed to be using a non-FAL identifier without deprecation
-            if (!GeneralUtility::isFirstPartOfStr($path, 'uploads/')) {
+            $isInUploadsDirectory = PHP_VERSION_ID >= 80000
+                ? str_starts_with($path, 'uploads/')
+                : GeneralUtility::isFirstPartOfStr($path, 'uploads/');
+            if (!$isInUploadsDirectory) {
                 $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
-                if (GeneralUtility::isFirstPartOfStr($path, 'fileadmin/')) {
+                $isInFileadminDirectory = PHP_VERSION_ID >= 80000
+                    ? str_starts_with($path, 'fileadmin/')
+                    : GeneralUtility::isFirstPartOfStr($path, 'fileadmin/');
+                if ($isInFileadminDirectory) {
                     $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
                 }
                 trigger_error($message, E_USER_DEPRECATED);

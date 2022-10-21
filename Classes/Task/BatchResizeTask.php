@@ -113,7 +113,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         $success = true;
         foreach ($directories as $directory) {
             foreach ($processedDirectories as $processedDirectory) {
-                if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
+                $isInProcessedDirectory = PHP_VERSION_ID >= 80000
+                    ? str_starts_with($directory, $processedDirectory)
+                    : GeneralUtility::isFirstPartOfStr($directory, $processedDirectory);
+                if ($isInProcessedDirectory) {
                     continue 2;
                 }
             }
@@ -173,8 +176,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             if (!$skip) {
                 // Check if we should skip since in one of the exclude directories
                 foreach ($excludeDirectories as $excludeDirectory) {
-                    if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
-                        rtrim($excludeDirectory, '/') === $filePath
+                    $isInExcludeDirectory = PHP_VERSION_ID >= 80000
+                        ? str_starts_with($filePath, $excludeDirectory)
+                        : GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory);
+                    if ($isInExcludeDirectory || rtrim($excludeDirectory, '/') === $filePath
                     ) {
                         $skip = true;
                         break;

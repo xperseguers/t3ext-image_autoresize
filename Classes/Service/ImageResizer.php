@@ -486,7 +486,10 @@ class ImageResizer
             }
             $processFile = false;
             foreach ($ruleset['directories'] as $directoryConfig) {
-                if (GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath'])) {
+                $IsInBasePath = PHP_VERSION_ID >= 80000
+                    ? str_starts_with($targetFileName, $directoryConfig['basePath'])
+                    : GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath']);
+                if ($IsInBasePath) {
                     $relTargetFileName = substr($targetFileName, strlen($directoryConfig['basePath']));
                     $processFile |= empty($directoryConfig['pattern']) || preg_match($directoryConfig['pattern'], $relTargetFileName);
                 }
