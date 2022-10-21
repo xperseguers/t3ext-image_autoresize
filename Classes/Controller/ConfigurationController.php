@@ -17,9 +17,11 @@ namespace Causal\ImageAutoresize\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -87,7 +89,6 @@ class ConfigurationController
      */
     public function __construct()
     {
-        $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         $this->languageService = $GLOBALS['LANG'];
         $this->config = static::readConfiguration();
         $this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
@@ -102,6 +103,12 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
+            $this->moduleTemplate = $moduleTemplateFactory->create($request);
+        } else {
+            $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
+        }
         $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
         $this->processData();
 
@@ -240,6 +247,11 @@ HTML;
         $saveSplitButton = $buttonBar->makeSplitButton();
 
         $locallangCore = 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf';
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+        } else {
+            $iconFactory = $this->moduleTemplate->getIconFactory();
+        }
 
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
@@ -247,7 +259,7 @@ HTML;
             ->setName('_savedok')
             ->setValue('1')
             ->setForm('EditDocumentController')
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+            ->setIcon($iconFactory->getIcon(
                 'actions-document-save',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
@@ -260,7 +272,7 @@ HTML;
             ->setValue('1')
             ->setForm('EditDocumentController')
             ->setClasses('t3js-editform-submitButton')
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+            ->setIcon($iconFactory->getIcon(
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
@@ -273,7 +285,7 @@ HTML;
             ->setTitle(htmlspecialchars($this->languageService->sL($locallangCore . ':rm.closeDoc')))
             ->setHref('#')
             ->setClasses('t3js-editform-close')
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+            ->setIcon($iconFactory->getIcon(
                 'actions-view-go-back',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
@@ -396,14 +408,17 @@ HTML;
             $configuration = static::getDefaultConfiguration();
         }
 
-        $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-        $signalSlotDispatcher->dispatch(
-            __CLASS__,
-            static::SIGNAL_ProcessConfiguration,
-            [
-                'configuration' => &$configuration,
-            ]
-        );
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+            $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+            $signalSlotDispatcher->dispatch(
+                __CLASS__,
+                static::SIGNAL_ProcessConfiguration,
+                [
+                    'configuration' => &$configuration,
+                ]
+            );
+        }
+        // TODO: TYPO3 v12 - Use PSR-14 based events and EventDispatcherInterface instead
 
         return $configuration;
     }
