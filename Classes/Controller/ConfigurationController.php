@@ -102,9 +102,6 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var ResponseInterface $response */
-        $response = func_num_args() === 2 ? func_get_arg(1) : null;
-
         $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
         $this->processData();
 
@@ -123,14 +120,7 @@ class ConfigurationController
         $this->moduleTemplate->setContent($this->content);
         $content = $this->moduleTemplate->renderContent();
 
-        if ($response !== null) {
-            $response->getBody()->write($content);
-        } else {
-            // Behaviour in TYPO3 v9
-            $response = new HtmlResponse($content);
-        }
-
-        return $response;
+        return new HtmlResponse($content);
     }
 
     /**
