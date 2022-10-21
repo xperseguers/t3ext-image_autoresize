@@ -42,7 +42,7 @@ class FAL
     /**
      * Creates/updates the index entry for a given file.
      *
-     * @param File $file
+     * @param File|null $file
      * @param string $origFileName
      * @param string $newFileName
      * @param int $width
@@ -50,7 +50,7 @@ class FAL
      * @param array $metadata EXIF metadata
      */
     public static function indexFile(
-        ?File $file = null,
+        ?File $file,
         string $origFileName,
         string $newFileName,
         int $width,
@@ -111,12 +111,12 @@ class FAL
     /**
      * Updates the index entry for a given file.
      *
-     * @param File $file
+     * @param File|null $file
      * @param int $width
      * @param int $height
      * @param array $metadata EXIF metadata
      */
-    protected static function updateIndex(?File $file = null, int $width, int $height, array $metadata = []): void
+    protected static function updateIndex(?File $file, int $width, int $height, array $metadata = []): void
     {
         if (count($metadata) > 0) {
             /** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
