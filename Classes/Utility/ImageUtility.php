@@ -20,6 +20,7 @@ namespace Causal\ImageAutoresize\Utility;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\Driver\DriverRegistry;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\Index\ExtractorRegistry;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
@@ -67,7 +68,11 @@ class ImageUtility
 
         if ($fullExtract && !empty($metadata)) {
             $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
-            $extractorRegistry = \TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
+            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+                $extractorRegistry = GeneralUtility::makeInstance(ExtractorRegistry::class);
+            } else {
+                $extractorRegistry = ExtractorRegistry::getInstance();
+            }
             $extractionServices = $extractorRegistry->getExtractorsWithDriverSupport('Local');
 
             $newMetadata = [
