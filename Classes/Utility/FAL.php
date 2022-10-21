@@ -171,7 +171,7 @@ class FAL
                 foreach ($metatadaKeys as $metadataKey) {
                     $value = null;
                     if (isset($metadata[$metadataKey])) {
-                        $value = trim($metadata[$metadataKey]);
+                        $value = trim((string)$metadata[$metadataKey]);
                         if (ord($value) === 1) $value = null;
                         switch ($metadataKey) {
                             case 'ColorSpace':
