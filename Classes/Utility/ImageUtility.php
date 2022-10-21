@@ -17,8 +17,12 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Utility;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Resource\Driver\DriverRegistry;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -97,9 +101,6 @@ class ImageUtility
      */
     protected static function getVirtualFileObject(string $fileName, array $metadata): File
     {
-        /** @var ResourceFactory $resourceFactory */
-        $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-
         $recordData = [
             'uid' => 0,
             'pid' => 0,
@@ -120,7 +121,17 @@ class ImageUtility
             'pathType' => 'absolute'
         ];
 
-        $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
+            $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
+            $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
+            $recordData['configuration'] = $storageConfiguration;
+            $virtualStorage = GeneralUtility::makeInstance(ResourceStorage::class, $driverObject, $recordData);
+        } else {
+            /** @var ResourceFactory $resourceFactory */
+            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+            $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
+        }
         $name = PathUtility::basename($fileName);
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
