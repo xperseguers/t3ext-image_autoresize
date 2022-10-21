@@ -1,5 +1,5 @@
 <?php
-defined('TYPO3_MODE') || die();
+defined('TYPO3') || die();
 
 $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
     ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()

@@ -21,6 +21,7 @@ use Causal\ImageAutoresize\Controller\ConfigurationController;
 use Causal\ImageAutoresize\Service\ImageResizer;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Driver\LocalDriver;
 use TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent;
@@ -236,7 +237,7 @@ class CoreResourceStorageEventListener
      */
     public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
     {
-        if (TYPO3_MODE !== 'BE' || PHP_SAPI === 'cli') {
+        if (!ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend() || PHP_SAPI === 'cli') {
             return;
         }
         $flashMessage = GeneralUtility::makeInstance(

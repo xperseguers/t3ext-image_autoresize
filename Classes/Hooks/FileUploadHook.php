@@ -18,6 +18,7 @@ use Causal\ImageAutoresize\Controller\ConfigurationController;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\DataHandling\DataHandlerProcessUploadHookInterface;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
 
@@ -82,7 +83,7 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
      */
     public function notify(string $message, int $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK): void
     {
-        if (TYPO3_MODE !== 'BE' || PHP_SAPI === 'cli') {
+        if (!ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend() || PHP_SAPI === 'cli') {
             return;
         }
         $flashMessage = GeneralUtility::makeInstance(

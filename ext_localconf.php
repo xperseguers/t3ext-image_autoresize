@@ -1,5 +1,5 @@
 <?php
-defined('TYPO3_MODE') || die();
+defined('TYPO3') || die();
 
 (static function (string $_EXTKEY) {
     // Uploads in uploads/ of good old non-FAL files

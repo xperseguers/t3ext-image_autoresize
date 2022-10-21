@@ -17,6 +17,7 @@ namespace Causal\ImageAutoresize\Service;
 use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
@@ -417,7 +418,7 @@ class ImageResizer
      */
     protected function localize(string $input): string
     {
-        if (TYPO3_MODE === 'FE') {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             $output = is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->sL($input) : $input;
         } else {
             $output = $GLOBALS['LANG']->sL($input);
