@@ -21,6 +21,8 @@ use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
+use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -374,7 +376,11 @@ HTML;
         if ($close || $saveAndClose) {
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
-            \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
+            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+                throw new PropagateResponseException(new RedirectResponse($closeUrl, 303), 1666353555);
+            } else {
+                \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
+            }
         }
     }
 
