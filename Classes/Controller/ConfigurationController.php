@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Controller;
 
+use Causal\ImageAutoresize\Event\ProcessConfigurationEvent;
 use Causal\ImageAutoresize\Event\ProcessDefaultConfigurationEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -412,13 +413,12 @@ HTML;
      */
     public static function readConfiguration(): array
     {
+        $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $configurationFileName = static::getConfigurationFileName();
 
         $configuration = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($configuration) || empty($configuration)) {
             $configuration = static::getDefaultConfiguration();
-
-            $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
             $configuration = $eventDispatcher->dispatch(new ProcessDefaultConfigurationEvent($configuration))->getConfiguration();
         }
 
@@ -432,7 +432,7 @@ HTML;
                 ]
             );
         }
-        // TODO: TYPO3 v12 - Use PSR-14 based events and EventDispatcherInterface instead
+        $configuration = $eventDispatcher->dispatch(new ProcessConfigurationEvent($configuration))->getConfiguration();
 
         return $configuration;
     }

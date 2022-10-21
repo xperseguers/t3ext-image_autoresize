@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Event;
 
-final class ProcessDefaultConfigurationEvent
+final class ProcessConfigurationEvent
 {
     /**
      * @param array
