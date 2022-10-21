@@ -89,16 +89,6 @@ class ConfigurationController
     {
         $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         $this->languageService = $GLOBALS['LANG'];
-
-        if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey])) {
-            // Automatically migrate configuration from v1.8
-            $config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
-            $config = unserialize($config);
-            if (is_array($config) && !empty($config) && $this->persistConfiguration($config)) {
-                // Drop legacy configuration
-                $this->writeToLocalconf($this->expertKey, []);
-            }
-        }
         $this->config = static::readConfiguration();
         $this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
     }
