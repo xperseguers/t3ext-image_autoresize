@@ -299,7 +299,7 @@ class ImageResizer
         $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
-        $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
+        $imParams .= (bool)($ruleset['keep_metadata'] ?? false) === true ? ' ###SkipStripProfile###' : '';
         $metadata = ImageUtility::getMetadata($fileName, true);
         $this->lastMetadata = $metadata;
         $isRotated = false;
