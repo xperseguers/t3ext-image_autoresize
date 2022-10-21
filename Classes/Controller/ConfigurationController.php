@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -11,6 +12,8 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Controller;
 
