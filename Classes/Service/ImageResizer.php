@@ -340,7 +340,6 @@ class ImageResizer
         }
 
         $originalFileSize = filesize($fileName);
-        $tempFileInfo = null;
         if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'])) {
             $currentLocale = (string)setlocale(LC_CTYPE, '0');
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
