@@ -339,6 +339,10 @@ class ImageResizer
 
         $originalFileSize = filesize($fileName);
         $tempFileInfo = null;
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'])) {
+            $currentLocale = (string)setlocale(LC_CTYPE, '0');
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
+        }
         $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         if (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
