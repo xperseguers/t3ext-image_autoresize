@@ -236,15 +236,8 @@ class ConfigurationController
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
 			<input type="hidden" name="_scrollPosition" value="" />';
 
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        if (version_compare($typo3Branch, '9.0', '>=')) {
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
-        } else {
-            $moduleUrl = BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add');
-        }
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
 
         $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
         $formContent .= <<<HTML
@@ -266,12 +259,7 @@ HTML;
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $saveSplitButton = $buttonBar->makeSplitButton();
 
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $locallangCore = version_compare($typo3Branch, '9.0', '>=')
-            ? 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf'
-            : 'LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf';
+        $locallangCore = 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf';
 
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
@@ -392,15 +380,8 @@ HTML;
         }
 
         if ($close || $saveAndClose) {
-            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                : TYPO3_branch;
-            if (version_compare($typo3Branch, '9.0', '>=')) {
-                $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-                $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
-            } else {
-                $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
-            }
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
             \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
         }
     }
@@ -516,13 +497,7 @@ HTML;
      */
     protected function addStatisticsAndSocialLink(): void
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
+        $fileName = Environment::getPublicPath() . '/typo3temp/.tx_imageautoresize';
 
         if (!is_file($fileName)) {
             return;
@@ -583,13 +558,7 @@ HTML;
      */
     protected static function getConfigurationFileName(): string
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        return $pathSite . 'typo3conf/image_autoresize.config.php';
+        return Environment::getPublicPath() . '/typo3conf/image_autoresize.config.php';
     }
 
 }

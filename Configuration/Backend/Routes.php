@@ -14,8 +14,6 @@ return [
     ],
     'TxImageAutoresize::record_flex_container_add' => [
         'path' => '/image_autoresize/record_flex_container_add',
-        'target' => version_compare($typo3Branch, '9.4', '>=')
-            ? \Causal\ImageAutoresize\Controller\FormFlexAjaxController::class . '::containerAdd'
-            : \Causal\ImageAutoresize\Controller\FormFlexAjaxControllerV8::class . '::containerAdd'
+        'target' => \Causal\ImageAutoresize\Controller\FormFlexAjaxController::class . '::containerAdd'
     ],
 ];

@@ -74,20 +74,10 @@ class FAL
      */
     protected static function findExistingFile(string $fileName): ?\TYPO3\CMS\Core\Resource\AbstractFile
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-
+        $pathSite = Environment::getPublicPath() . '/';
         $file = null;
         $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
-        if (version_compare($typo3Branch, '10.0', '<')) {
-            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-        } else {
-            $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
-        }
+        $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
 
         $storageConfiguration = $targetFolder->getStorage()->getConfiguration();
@@ -253,16 +243,10 @@ class FAL
                 if (GeneralUtility::isFirstPartOfStr($path, 'fileadmin/')) {
                     $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
                 }
-                if (version_compare($typo3Branch, '9.0', '>=')) {
-                    trigger_error($message, E_USER_DEPRECATED);
-                } else {
-                    GeneralUtility::deprecationLog($message);
-                }
+                trigger_error($message, E_USER_DEPRECATED);
             }
 
-            $pathSite = version_compare($typo3Branch, '9.0', '<')
-                ? PATH_site
-                : Environment::getPublicPath() . '/';
+            $pathSite = Environment::getPublicPath() . '/';
             $directoryPattern = static::getDirectoryPattern($path);
             $config = [
                 'basePath' => $pathSite,
@@ -290,12 +274,7 @@ class FAL
             $storage = $storageRepository->findByUid($storageId);
             if ($storage !== null && $storage->getDriverType() === 'Local') {
                 $storageConfiguration = $storage->getConfiguration();
-                $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                    ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                    : TYPO3_branch;
-                $pathSite = version_compare($typo3Branch, '9.0', '<')
-                    ? PATH_site
-                    : Environment::getPublicPath() . '/';
+                $pathSite = Environment::getPublicPath() . '/';
                 $localPath = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
                 $localPath .= $storageConfiguration['basePath'];
             } else {

@@ -286,18 +286,8 @@ class ImageResizer
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        if (version_compare($typo3Branch, '9.0', '<')) {
-            $gifCreator->init();
-            // Next line is likely to make the resizing fail if mounting a FAL folder outside
-            // of PATH_site (e.g., absolute configuration), we don't care in TYPO3 v8 anymore!
-            $gifCreator->absPrefix = PATH_site;
-        } else {
-            // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
-            $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
-        }
+        // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
+        $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
         $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
@@ -308,14 +298,7 @@ class ImageResizer
         if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
-            $transformation = ImageUtility::getTransformation($orientation);
-            if ($transformation !== '') {
-                if (version_compare($typo3Branch, '9.0', '>=')) {
-                    $gifCreator->scalecmd = $transformation . ' ' . $gifCreator->scalecmd;
-                } else {
-                    $imParams .= ' ' . $transformation;
-                }
-            }
+            $gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
         }
 
         if (
@@ -398,11 +381,7 @@ class ImageResizer
 
             // Inform FAL about new image size and dimensions
             try {
-                if (version_compare($typo3Branch, '10.0', '<')) {
-                    $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-                } else {
-                    $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
-                }
+                $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
                 $destinationFile = $resourceFactory->retrieveFileOrFolderObject($destFileName);
                 if ($destinationFile instanceof File) {
                     $indexer = $this->getIndexer($destinationFile->getStorage());
@@ -677,19 +656,7 @@ class ImageResizer
      */
     protected function reportAdditionalStorageClaimed(int $bytes): void
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $legacyFileName = $pathSite . 'typo3conf/.tx_imageautoresize';
-        $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
-
-        // Note: transfer of legacy filename should be removed after some time
-        if (file_exists($legacyFileName) && !file_exists($fileName)) {
-            @rename($legacyFileName, $fileName);
-        }
+        $fileName = Environment::getPublicPath() . '/typo3temp/.tx_imageautoresize';
 
         $data = [];
         if (file_exists($fileName)) {

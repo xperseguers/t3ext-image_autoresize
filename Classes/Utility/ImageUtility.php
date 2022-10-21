@@ -67,21 +67,10 @@ class ImageUtility
                 0 => $metadata,
             ];
 
-            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                : TYPO3_branch;
-            if (version_compare($typo3Branch, '10.0', '>=')) {
-                foreach ($extractionServices as $priority => $services) {
-                    foreach ($services as $service) {
-                        if ($service->canProcess($virtualFileObject)) {
-                            $newMetadata[$priority] = $service->extractMetaData($virtualFileObject, $newMetadata);
-                        }
-                    }
-                }
-            } else {
-                foreach ($extractionServices as $service) {
+            foreach ($extractionServices as $priority => $services) {
+                foreach ($services as $service) {
                     if ($service->canProcess($virtualFileObject)) {
-                        $newMetadata[$service->getPriority()] = $service->extractMetaData($virtualFileObject, $newMetadata);
+                        $newMetadata[$priority] = $service->extractMetaData($virtualFileObject, $newMetadata);
                     }
                 }
             }
@@ -293,49 +282,11 @@ class ImageUtility
      *
      * @param int $orientation
      * @return string
+     * @deprecated
      */
     public static function getTransformation(int $orientation): string
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        if (version_compare($typo3Branch, '9.0', '>=')) {
-            return '-auto-orient';
-        }
-
-        $transformation = '';
-        if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] !== 'GraphicsMagick') {
-            // ImageMagick
-            if ($orientation >= 2 && $orientation <= 8) {
-                $transformation = '-auto-orient';
-            }
-        } else {
-            // GraphicsMagick
-            switch ($orientation) {
-                case 2: // horizontal flip
-                    $transformation = '-flip horizontal';
-                    break;
-                case 3: // 180°
-                    $transformation = '-rotate 180';
-                    break;
-                case 4: // vertical flip
-                    $transformation = '-flip vertical';
-                    break;
-                case 5: // vertical flip + 90 rotate right
-                    $transformation = '-transpose';
-                    break;
-                case 6: // 90° rotate right
-                    $transformation = '-rotate 90';
-                    break;
-                case 7: // horizontal flip + 90 rotate right
-                    $transformation = '-transverse';
-                    break;
-                case 8: // 90° rotate left
-                    $transformation = '-rotate 270';
-                    break;
-            }
-        }
-        return $transformation;
+        return '-auto-orient';
     }
 
     /**

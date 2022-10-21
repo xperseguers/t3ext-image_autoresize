@@ -45,17 +45,9 @@ class ExtensionManager
     public function processActions(array $extension, array &$actions): void
     {
         if ($extension['key'] === 'image_autoresize') {
-            if (version_compare(TYPO3_branch, '9.0', '>=')) {
-                $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-                $moduleUrl = (string)$uriBuilder->buildUriFromRoute('xMOD_tximageautoresize');
-                $title = 'Configure';   // TODO: make translatable
-            } else {
-                $moduleUrl = BackendUtility::getModuleUrl('xMOD_tximageautoresize');
-                $extensionName = 'extensionmanager';
-                $titleKey = 'extensionList.configure';
-                $title = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($titleKey, $extensionName);
-            }
-
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $moduleUrl = (string)$uriBuilder->buildUriFromRoute('xMOD_tximageautoresize');
+            $title = 'Configure';   // TODO: make translatable
             $icon = 'actions-system-extension-configure';
             /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
