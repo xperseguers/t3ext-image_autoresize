@@ -17,8 +17,10 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Service;
 
+use Causal\ImageAutoresize\Event\ImageResizedEvent;
 use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -363,7 +365,17 @@ class ImageResizer
                     ]
                 );
             }
-            // TODO: TYPO3 v12 - Use PSR-14 based events and EventDispatcherInterface instead
+            $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+            /** @var ImageResizedEvent $event */
+            $event = $eventDispatcher->dispatch(new ImageResizedEvent(
+                ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
+                $fileName,
+                $tempFileInfo[3],
+                $tempFileInfo[0],
+                $tempFileInfo[1]
+            ));
+            $tempFileInfo[0] = $event->getNewWidth();
+            $tempFileInfo[1] = $event->getNewHeight();
 
             $newFileSize = filesize($tempFileInfo[3]);
             $this->reportAdditionalStorageClaimed($originalFileSize - $newFileSize);
