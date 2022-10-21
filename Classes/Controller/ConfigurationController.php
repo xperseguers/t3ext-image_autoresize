@@ -302,7 +302,7 @@ HTML;
     protected static function getDefaultConfiguration(): array
     {
         return [
-            'directories' => '1:/,uploads/',
+            'directories' => '1:/',
             'file_types' => 'jpg,jpeg,png',
             'threshold' => '400K',
             'max_width' => '1024',
