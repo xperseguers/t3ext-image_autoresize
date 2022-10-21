@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -12,10 +13,17 @@
  * The TYPO3 project - inspiring people to share!
  */
 
+declare(strict_types=1);
+
 namespace Causal\ImageAutoresize\Utility;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Resource\Driver\DriverRegistry;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\Index\ExtractorRegistry;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -60,28 +68,21 @@ class ImageUtility
 
         if ($fullExtract && !empty($metadata)) {
             $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
-            $extractorRegistry = \TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
+            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+                $extractorRegistry = GeneralUtility::makeInstance(ExtractorRegistry::class);
+            } else {
+                $extractorRegistry = ExtractorRegistry::getInstance();
+            }
             $extractionServices = $extractorRegistry->getExtractorsWithDriverSupport('Local');
 
             $newMetadata = [
                 0 => $metadata,
             ];
 
-            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                : TYPO3_branch;
-            if (version_compare($typo3Branch, '10.0', '>=')) {
-                foreach ($extractionServices as $priority => $services) {
-                    foreach ($services as $service) {
-                        if ($service->canProcess($virtualFileObject)) {
-                            $newMetadata[$priority] = $service->extractMetaData($virtualFileObject, $newMetadata);
-                        }
-                    }
-                }
-            } else {
-                foreach ($extractionServices as $service) {
+            foreach ($extractionServices as $priority => $services) {
+                foreach ($services as $service) {
                     if ($service->canProcess($virtualFileObject)) {
-                        $newMetadata[$service->getPriority()] = $service->extractMetaData($virtualFileObject, $newMetadata);
+                        $newMetadata[$priority] = $service->extractMetaData($virtualFileObject, $newMetadata);
                     }
                 }
             }
@@ -105,9 +106,6 @@ class ImageUtility
      */
     protected static function getVirtualFileObject(string $fileName, array $metadata): File
     {
-        /** @var ResourceFactory $resourceFactory */
-        $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-
         $recordData = [
             'uid' => 0,
             'pid' => 0,
@@ -128,7 +126,17 @@ class ImageUtility
             'pathType' => 'absolute'
         ];
 
-        $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
+            $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
+            $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
+            $recordData['configuration'] = $storageConfiguration;
+            $virtualStorage = GeneralUtility::makeInstance(ResourceStorage::class, $driverObject, $recordData);
+        } else {
+            /** @var ResourceFactory $resourceFactory */
+            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+            $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
+        }
         $name = PathUtility::basename($fileName);
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
@@ -293,49 +301,11 @@ class ImageUtility
      *
      * @param int $orientation
      * @return string
+     * @deprecated
      */
     public static function getTransformation(int $orientation): string
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        if (version_compare($typo3Branch, '9.0', '>=')) {
-            return '-auto-orient';
-        }
-
-        $transformation = '';
-        if ($GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] !== 'GraphicsMagick') {
-            // ImageMagick
-            if ($orientation >= 2 && $orientation <= 8) {
-                $transformation = '-auto-orient';
-            }
-        } else {
-            // GraphicsMagick
-            switch ($orientation) {
-                case 2: // horizontal flip
-                    $transformation = '-flip horizontal';
-                    break;
-                case 3: // 180°
-                    $transformation = '-rotate 180';
-                    break;
-                case 4: // vertical flip
-                    $transformation = '-flip vertical';
-                    break;
-                case 5: // vertical flip + 90 rotate right
-                    $transformation = '-transpose';
-                    break;
-                case 6: // 90° rotate right
-                    $transformation = '-rotate 90';
-                    break;
-                case 7: // horizontal flip + 90 rotate right
-                    $transformation = '-transverse';
-                    break;
-                case 8: // 90° rotate left
-                    $transformation = '-rotate 270';
-                    break;
-            }
-        }
-        return $transformation;
+        return '-auto-orient';
     }
 
     /**

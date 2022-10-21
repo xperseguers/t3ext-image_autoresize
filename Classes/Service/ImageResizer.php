@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -12,11 +13,17 @@
  * The TYPO3 project - inspiring people to share!
  */
 
+declare(strict_types=1);
+
 namespace Causal\ImageAutoresize\Service;
 
+use Causal\ImageAutoresize\Event\ImageResizedEvent;
 use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
@@ -56,7 +63,9 @@ class ImageResizer
      */
     public function __construct()
     {
-        $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+            $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+        }
     }
 
     /**
@@ -286,18 +295,8 @@ class ImageResizer
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        if (version_compare($typo3Branch, '9.0', '<')) {
-            $gifCreator->init();
-            // Next line is likely to make the resizing fail if mounting a FAL folder outside
-            // of PATH_site (e.g., absolute configuration), we don't care in TYPO3 v8 anymore!
-            $gifCreator->absPrefix = PATH_site;
-        } else {
-            // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
-            $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
-        }
+        // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
+        $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
         $imParams .= (bool)$ruleset['keep_metadata'] === true ? ' ###SkipStripProfile###' : '';
@@ -308,14 +307,7 @@ class ImageResizer
         if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
-            $transformation = ImageUtility::getTransformation($orientation);
-            if ($transformation !== '') {
-                if (version_compare($typo3Branch, '9.0', '>=')) {
-                    $gifCreator->scalecmd = $transformation . ' ' . $gifCreator->scalecmd;
-                } else {
-                    $imParams .= ' ' . $transformation;
-                }
-            }
+            $gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
         }
 
         if (
@@ -349,24 +341,41 @@ class ImageResizer
 
         $originalFileSize = filesize($fileName);
         $tempFileInfo = null;
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'])) {
+            $currentLocale = (string)setlocale(LC_CTYPE, '0');
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
+        }
         $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         if (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
             $tempFileInfo = null;
         }
         if ($tempFileInfo) {
-            // Signal to post-process the image
-            $this->signalSlotDispatcher->dispatch(
-                __CLASS__,
-                'afterImageResize',
-                [
-                    'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
-                    'source' => $fileName,
-                    'destination' => $tempFileInfo[3],
-                    'newWidth' => &$tempFileInfo[0],
-                    'newHeight' => &$tempFileInfo[1],
-                ]
-            );
+            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+                // Signal to post-process the image
+                $this->signalSlotDispatcher->dispatch(
+                    __CLASS__,
+                    'afterImageResize',
+                    [
+                        'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
+                        'source' => $fileName,
+                        'destination' => $tempFileInfo[3],
+                        'newWidth' => &$tempFileInfo[0],
+                        'newHeight' => &$tempFileInfo[1],
+                    ]
+                );
+            }
+            $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+            /** @var ImageResizedEvent $event */
+            $event = $eventDispatcher->dispatch(new ImageResizedEvent(
+                ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
+                $fileName,
+                $tempFileInfo[3],
+                $tempFileInfo[0],
+                $tempFileInfo[1]
+            ));
+            $tempFileInfo[0] = $event->getNewWidth();
+            $tempFileInfo[1] = $event->getNewHeight();
 
             $newFileSize = filesize($tempFileInfo[3]);
             $this->reportAdditionalStorageClaimed($originalFileSize - $newFileSize);
@@ -398,11 +407,7 @@ class ImageResizer
 
             // Inform FAL about new image size and dimensions
             try {
-                if (version_compare($typo3Branch, '10.0', '<')) {
-                    $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-                } else {
-                    $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
-                }
+                $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
                 $destinationFile = $resourceFactory->retrieveFileOrFolderObject($destFileName);
                 if ($destinationFile instanceof File) {
                     $indexer = $this->getIndexer($destinationFile->getStorage());
@@ -438,7 +443,7 @@ class ImageResizer
      */
     protected function localize(string $input): string
     {
-        if (TYPO3_MODE === 'FE') {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             $output = is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->sL($input) : $input;
         } else {
             $output = $GLOBALS['LANG']->sL($input);
@@ -497,7 +502,10 @@ class ImageResizer
             }
             $processFile = false;
             foreach ($ruleset['directories'] as $directoryConfig) {
-                if (GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath'])) {
+                $IsInBasePath = PHP_VERSION_ID >= 80000
+                    ? str_starts_with($targetFileName, $directoryConfig['basePath'])
+                    : GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath']);
+                if ($IsInBasePath) {
                     $relTargetFileName = substr($targetFileName, strlen($directoryConfig['basePath']));
                     $processFile |= empty($directoryConfig['pattern']) || preg_match($directoryConfig['pattern'], $relTargetFileName);
                 }
@@ -677,19 +685,7 @@ class ImageResizer
      */
     protected function reportAdditionalStorageClaimed(int $bytes): void
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $legacyFileName = $pathSite . 'typo3conf/.tx_imageautoresize';
-        $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
-
-        // Note: transfer of legacy filename should be removed after some time
-        if (file_exists($legacyFileName) && !file_exists($fileName)) {
-            @rename($legacyFileName, $fileName);
-        }
+        $fileName = Environment::getPublicPath() . '/typo3temp/.tx_imageautoresize';
 
         $data = [];
         if (file_exists($fileName)) {

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -11,6 +12,8 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Utility;
 
@@ -42,7 +45,7 @@ class FAL
     /**
      * Creates/updates the index entry for a given file.
      *
-     * @param File $file
+     * @param File|null $file
      * @param string $origFileName
      * @param string $newFileName
      * @param int $width
@@ -50,7 +53,7 @@ class FAL
      * @param array $metadata EXIF metadata
      */
     public static function indexFile(
-        ?File $file = null,
+        ?File $file,
         string $origFileName,
         string $newFileName,
         int $width,
@@ -74,20 +77,10 @@ class FAL
      */
     protected static function findExistingFile(string $fileName): ?\TYPO3\CMS\Core\Resource\AbstractFile
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-
+        $pathSite = Environment::getPublicPath() . '/';
         $file = null;
         $relativePath = substr(PathUtility::dirname($fileName), strlen($pathSite));
-        if (version_compare($typo3Branch, '10.0', '<')) {
-            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
-        } else {
-            $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
-        }
+        $resourceFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\ResourceFactory::class);
         $targetFolder = $resourceFactory->retrieveFileOrFolderObject($relativePath);
 
         $storageConfiguration = $targetFolder->getStorage()->getConfiguration();
@@ -121,12 +114,12 @@ class FAL
     /**
      * Updates the index entry for a given file.
      *
-     * @param File $file
+     * @param File|null $file
      * @param int $width
      * @param int $height
      * @param array $metadata EXIF metadata
      */
-    protected static function updateIndex(?File $file = null, int $width, int $height, array $metadata = []): void
+    protected static function updateIndex(?File $file, int $width, int $height, array $metadata = []): void
     {
         if (count($metadata) > 0) {
             /** @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository $metadataRepository */
@@ -178,7 +171,7 @@ class FAL
                 foreach ($metatadaKeys as $metadataKey) {
                     $value = null;
                     if (isset($metadata[$metadataKey])) {
-                        $value = trim($metadata[$metadataKey]);
+                        $value = trim((string)$metadata[$metadataKey]);
                         if (ord($value) === 1) $value = null;
                         switch ($metadataKey) {
                             case 'ColorSpace':
@@ -248,21 +241,21 @@ class FAL
                 : TYPO3_branch;
 
             // Only "uploads/" is now allowed to be using a non-FAL identifier without deprecation
-            if (!GeneralUtility::isFirstPartOfStr($path, 'uploads/')) {
+            $isInUploadsDirectory = PHP_VERSION_ID >= 80000
+                ? str_starts_with($path, 'uploads/')
+                : GeneralUtility::isFirstPartOfStr($path, 'uploads/');
+            if (!$isInUploadsDirectory) {
                 $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
-                if (GeneralUtility::isFirstPartOfStr($path, 'fileadmin/')) {
+                $isInFileadminDirectory = PHP_VERSION_ID >= 80000
+                    ? str_starts_with($path, 'fileadmin/')
+                    : GeneralUtility::isFirstPartOfStr($path, 'fileadmin/');
+                if ($isInFileadminDirectory) {
                     $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
                 }
-                if (version_compare($typo3Branch, '9.0', '>=')) {
-                    trigger_error($message, E_USER_DEPRECATED);
-                } else {
-                    GeneralUtility::deprecationLog($message);
-                }
+                trigger_error($message, E_USER_DEPRECATED);
             }
 
-            $pathSite = version_compare($typo3Branch, '9.0', '<')
-                ? PATH_site
-                : Environment::getPublicPath() . '/';
+            $pathSite = Environment::getPublicPath() . '/';
             $directoryPattern = static::getDirectoryPattern($path);
             $config = [
                 'basePath' => $pathSite,
@@ -290,12 +283,7 @@ class FAL
             $storage = $storageRepository->findByUid($storageId);
             if ($storage !== null && $storage->getDriverType() === 'Local') {
                 $storageConfiguration = $storage->getConfiguration();
-                $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                    ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                    : TYPO3_branch;
-                $pathSite = version_compare($typo3Branch, '9.0', '<')
-                    ? PATH_site
-                    : Environment::getPublicPath() . '/';
+                $pathSite = Environment::getPublicPath() . '/';
                 $localPath = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
                 $localPath .= $storageConfiguration['basePath'];
             } else {

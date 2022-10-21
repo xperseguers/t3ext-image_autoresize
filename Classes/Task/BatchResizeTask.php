@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -12,6 +13,8 @@
  * The TYPO3 project - inspiring people to share!
  */
 
+declare(strict_types=1);
+
 namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
@@ -19,6 +22,7 @@ use Causal\ImageAutoresize\Utility\FAL;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
@@ -60,12 +64,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     public function execute()
     {
         $configuration = ConfigurationController::readConfiguration();
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
+        $pathSite = Environment::getPublicPath() . '/';
 
         $this->imageResizer = GeneralUtility::makeInstance(\Causal\ImageAutoresize\Service\ImageResizer::class);
         $this->imageResizer->initializeRulesets($configuration);
@@ -114,7 +113,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         $success = true;
         foreach ($directories as $directory) {
             foreach ($processedDirectories as $processedDirectory) {
-                if (GeneralUtility::isFirstPartOfStr($directory, $processedDirectory)) {
+                $isInProcessedDirectory = PHP_VERSION_ID >= 80000
+                    ? str_starts_with($directory, $processedDirectory)
+                    : GeneralUtility::isFirstPartOfStr($directory, $processedDirectory);
+                if ($isInProcessedDirectory) {
                     continue 2;
                 }
             }
@@ -149,7 +151,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         // actually resizing the image while uploading, not during a batch processing (it's simply "too late").
         $backendUser = null;
 
-        if (TYPO3_MODE !== 'BE' || PHP_SAPI === 'cli') {
+        if (!ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend() || PHP_SAPI === 'cli') {
             $callbackNotification = [$this, 'syslog'];
         } else {
             $callbackNotification = [$this, 'notify'];
@@ -174,8 +176,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             if (!$skip) {
                 // Check if we should skip since in one of the exclude directories
                 foreach ($excludeDirectories as $excludeDirectory) {
-                    if (GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory) ||
-                        rtrim($excludeDirectory, '/') === $filePath
+                    $isInExcludeDirectory = PHP_VERSION_ID >= 80000
+                        ? str_starts_with($filePath, $excludeDirectory)
+                        : GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory);
+                    if ($isInExcludeDirectory || rtrim($excludeDirectory, '/') === $filePath
                     ) {
                         $skip = true;
                         break;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -12,14 +13,23 @@
  * The TYPO3 project - inspiring people to share!
  */
 
+declare(strict_types=1);
+
 namespace Causal\ImageAutoresize\Controller;
 
+use Causal\ImageAutoresize\Event\ProcessConfigurationEvent;
+use Causal\ImageAutoresize\Event\ProcessDefaultConfigurationEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
+use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -87,18 +97,7 @@ class ConfigurationController
      */
     public function __construct()
     {
-        $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         $this->languageService = $GLOBALS['LANG'];
-
-        if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey])) {
-            // Automatically migrate configuration from v1.8
-            $config = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$this->expertKey];
-            $config = unserialize($config);
-            if (is_array($config) && !empty($config) && $this->persistConfiguration($config)) {
-                // Drop legacy configuration
-                $this->writeToLocalconf($this->expertKey, []);
-            }
-        }
         $this->config = static::readConfiguration();
         $this->config['conversion_mapping'] = implode(LF, explode(',', $this->config['conversion_mapping']));
     }
@@ -112,9 +111,12 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var ResponseInterface $response */
-        $response = func_num_args() === 2 ? func_get_arg(1) : null;
-
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
+            $this->moduleTemplate = $moduleTemplateFactory->create($request);
+        } else {
+            $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
+        }
         $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
         $this->processData();
 
@@ -133,14 +135,7 @@ class ConfigurationController
         $this->moduleTemplate->setContent($this->content);
         $content = $this->moduleTemplate->renderContent();
 
-        if ($response !== null) {
-            $response->getBody()->write($content);
-        } else {
-            // Behaviour in TYPO3 v9
-            $response = new HtmlResponse($content);
-        }
-
-        return $response;
+        return new HtmlResponse($content);
     }
 
     /**
@@ -236,15 +231,8 @@ class ConfigurationController
 			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />
 			<input type="hidden" name="_scrollPosition" value="" />';
 
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        if (version_compare($typo3Branch, '9.0', '>=')) {
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
-        } else {
-            $moduleUrl = BackendUtility::getModuleUrl('TxImageAutoresize::record_flex_container_add');
-        }
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
 
         $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
         $formContent .= <<<HTML
@@ -266,12 +254,12 @@ HTML;
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $saveSplitButton = $buttonBar->makeSplitButton();
 
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $locallangCore = version_compare($typo3Branch, '9.0', '>=')
-            ? 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf'
-            : 'LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf';
+        $locallangCore = 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf';
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+        } else {
+            $iconFactory = $this->moduleTemplate->getIconFactory();
+        }
 
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
@@ -279,7 +267,7 @@ HTML;
             ->setName('_savedok')
             ->setValue('1')
             ->setForm('EditDocumentController')
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+            ->setIcon($iconFactory->getIcon(
                 'actions-document-save',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
@@ -292,7 +280,7 @@ HTML;
             ->setValue('1')
             ->setForm('EditDocumentController')
             ->setClasses('t3js-editform-submitButton')
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+            ->setIcon($iconFactory->getIcon(
                 'actions-document-save-close',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
@@ -305,7 +293,7 @@ HTML;
             ->setTitle(htmlspecialchars($this->languageService->sL($locallangCore . ':rm.closeDoc')))
             ->setHref('#')
             ->setClasses('t3js-editform-close')
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon(
+            ->setIcon($iconFactory->getIcon(
                 'actions-view-go-back',
                 \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
             ));
@@ -320,7 +308,7 @@ HTML;
     protected static function getDefaultConfiguration(): array
     {
         return [
-            'directories' => '1:/,uploads/',
+            'directories' => '1:/',
             'file_types' => 'jpg,jpeg,png',
             'threshold' => '400K',
             'max_width' => '1024',
@@ -392,16 +380,13 @@ HTML;
         }
 
         if ($close || $saveAndClose) {
-            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                : TYPO3_branch;
-            if (version_compare($typo3Branch, '9.0', '>=')) {
-                $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-                $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
+            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+                throw new PropagateResponseException(new RedirectResponse($closeUrl, 303), 1666353555);
             } else {
-                $closeUrl = BackendUtility::getModuleUrl('tools_ExtensionmanagerExtensionmanager');
+                \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
             }
-            \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
         }
     }
 
@@ -428,21 +413,26 @@ HTML;
      */
     public static function readConfiguration(): array
     {
+        $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $configurationFileName = static::getConfigurationFileName();
 
         $configuration = file_exists($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($configuration) || empty($configuration)) {
             $configuration = static::getDefaultConfiguration();
+            $configuration = $eventDispatcher->dispatch(new ProcessDefaultConfigurationEvent($configuration))->getConfiguration();
         }
 
-        $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-        $signalSlotDispatcher->dispatch(
-            __CLASS__,
-            static::SIGNAL_ProcessConfiguration,
-            [
-                'configuration' => &$configuration,
-            ]
-        );
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+            $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+            $signalSlotDispatcher->dispatch(
+                __CLASS__,
+                static::SIGNAL_ProcessConfiguration,
+                [
+                    'configuration' => &$configuration,
+                ]
+            );
+        }
+        $configuration = $eventDispatcher->dispatch(new ProcessConfigurationEvent($configuration))->getConfiguration();
 
         return $configuration;
     }
@@ -516,13 +506,7 @@ HTML;
      */
     protected function addStatisticsAndSocialLink(): void
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        $fileName = $pathSite . 'typo3temp/.tx_imageautoresize';
+        $fileName = Environment::getPublicPath() . '/typo3temp/.tx_imageautoresize';
 
         if (!is_file($fileName)) {
             return;
@@ -583,13 +567,7 @@ HTML;
      */
     protected static function getConfigurationFileName(): string
     {
-        $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-            : TYPO3_branch;
-        $pathSite = version_compare($typo3Branch, '9.0', '<')
-            ? PATH_site
-            : Environment::getPublicPath() . '/';
-        return $pathSite . 'typo3conf/image_autoresize.config.php';
+        return Environment::getPublicPath() . '/typo3conf/image_autoresize.config.php';
     }
 
 }
