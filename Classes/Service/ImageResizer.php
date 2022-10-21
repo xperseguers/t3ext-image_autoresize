@@ -18,6 +18,7 @@ use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
@@ -57,7 +58,9 @@ class ImageResizer
      */
     public function __construct()
     {
-        $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+            $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+        }
     }
 
     /**
@@ -339,18 +342,21 @@ class ImageResizer
             $tempFileInfo = null;
         }
         if ($tempFileInfo) {
-            // Signal to post-process the image
-            $this->signalSlotDispatcher->dispatch(
-                __CLASS__,
-                'afterImageResize',
-                [
-                    'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
-                    'source' => $fileName,
-                    'destination' => $tempFileInfo[3],
-                    'newWidth' => &$tempFileInfo[0],
-                    'newHeight' => &$tempFileInfo[1],
-                ]
-            );
+            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+                // Signal to post-process the image
+                $this->signalSlotDispatcher->dispatch(
+                    __CLASS__,
+                    'afterImageResize',
+                    [
+                        'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
+                        'source' => $fileName,
+                        'destination' => $tempFileInfo[3],
+                        'newWidth' => &$tempFileInfo[0],
+                        'newHeight' => &$tempFileInfo[1],
+                    ]
+                );
+            }
+            // TODO: TYPO3 v12 - Use PSR-14 based events and EventDispatcherInterface instead
 
             $newFileSize = filesize($tempFileInfo[3]);
             $this->reportAdditionalStorageClaimed($originalFileSize - $newFileSize);
