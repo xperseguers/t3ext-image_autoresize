@@ -217,7 +217,10 @@ class ImageResizer
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
 
-        if ($ruleset === null) {
+        $fileSize = is_file($fileName)
+            ? filesize($fileName)
+            : -1;    // -1 is a special value so that file size is not taken into account (yet)
+        if ($ruleset === null || ($fileSize === -1 || ($fileSize < $ruleset['threshold']))) {
             // File does not match any rule set
             return $fileName;
         }
@@ -482,9 +485,6 @@ class ImageResizer
         $fileExtension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
         $beGroups = $backendUser !== null ? array_keys($backendUser->userGroups) : [];
-        $fileSize = is_file($sourceFileName)
-            ? filesize($sourceFileName)
-            : -1;    // -1 is a special value so that file size is not taken into account (yet)
 
         // Try to find a matching ruleset
         foreach ($this->rulesets as $ruleset) {
@@ -513,7 +513,6 @@ class ImageResizer
                 }
             }
             $processFile &= in_array($fileExtension, $ruleset['file_types']);
-            $processFile &= $fileSize === -1 || ($fileSize > $ruleset['threshold']);
             if ((bool)$processFile) {
                 // We found the ruleset to use!
                 $ret = $ruleset;
