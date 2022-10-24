@@ -348,7 +348,10 @@ class ImageResizer
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
         }
         $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
-        if (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
+        if ($tempFileInfo === null) {
+            $message = $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.cannotResize');
+            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+        } elseif (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
             $tempFileInfo = null;
         }

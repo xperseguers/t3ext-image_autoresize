@@ -57,6 +57,9 @@
 			<trans-unit id="message.imageNotWritable">
 				<source>Image %s cannot be resized because file is not writable.</source>
 			</trans-unit>
+			<trans-unit id="message.cannotResize">
+				<source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
