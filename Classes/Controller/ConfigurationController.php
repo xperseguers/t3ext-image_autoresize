@@ -519,7 +519,7 @@ HTML;
 
         $extPath = ExtensionManagementUtility::extPath($this->extKey, 'Resources/Public/');
         $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
-        $pageRenderer = $this->moduleTemplate->getPageRenderer();
+        $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
         $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
