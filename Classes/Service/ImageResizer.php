@@ -621,7 +621,7 @@ class ImageResizer
                     if (!is_numeric($value)) {
                         $unit = strtoupper(substr($value, -1));
                         $factor = 1 * ($unit === 'K' ? 1024 : ($unit === 'M' ? 1024 * 1024 : 0));
-                        $value = intval(trim(substr($value, 0, strlen($value) - 1))) * $factor;
+                        $value = intval(trim((string)substr($value, 0, strlen($value) - 1))) * $factor;
                     }
                 // Beware: fall-back to next value processing
                 case 'max_width':
@@ -635,7 +635,7 @@ class ImageResizer
                     if (!is_numeric($value)) {
                         $unit = strtoupper(substr($value, -1));
                         $factor = 1 * ($unit === 'M' ? 1000000 : 1);
-                        $value = intval(trim(substr($value, 0, strlen($value) - 1))) * $factor;
+                        $value = intval(trim((string)substr($value, 0, strlen($value) - 1))) * $factor;
                     }
                     break;
                 case 'conversion_mapping':
