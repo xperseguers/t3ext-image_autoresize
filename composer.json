@@ -48,8 +48,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.1.x-dev",
-      "dev-feature/TYPO3v12": "2.2.x-dev"
+      "dev-master": "2.2.x-dev"
     },
     "typo3/cms": {
       "extension-key": "image_autoresize"
