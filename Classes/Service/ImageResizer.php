@@ -376,8 +376,8 @@ class ImageResizer
                 ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
                 $fileName,
                 $tempFileInfo[3],
-                $tempFileInfo[0],
-                $tempFileInfo[1]
+                (int)$tempFileInfo[0],
+                (int)$tempFileInfo[1]
             ));
             $tempFileInfo[0] = $event->getNewWidth();
             $tempFileInfo[1] = $event->getNewHeight();
