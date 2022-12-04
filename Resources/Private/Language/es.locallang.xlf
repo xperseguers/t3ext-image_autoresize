@@ -3,17 +3,17 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="es-ES">
     <header/>
     <body>
-      <trans-unit id="saveConfiguration">
+      <trans-unit id="saveConfiguration" approved="yes">
         <source>Save configuration</source>
-        <target state="needs-translation">Save configuration</target>
+        <target state="final">Salvar la configuración</target>
       </trans-unit>
-      <trans-unit id="saveCloseConfiguration">
+      <trans-unit id="saveCloseConfiguration" approved="yes">
         <source>Save and close configuration</source>
-        <target state="needs-translation">Save and close configuration</target>
+        <target state="final">Guardar y cerrar la configuración</target>
       </trans-unit>
-      <trans-unit id="closeConfiguration">
+      <trans-unit id="closeConfiguration" approved="yes">
         <source>Close configuration</source>
-        <target state="needs-translation">Close configuration</target>
+        <target state="final">Cerrar la configuración</target>
       </trans-unit>
       <trans-unit id="extension.ai">
         <source>.ai - Adobe Illustrator</source>
@@ -55,25 +55,25 @@
         <source>.tiff - Tagged Image Format</source>
         <target state="needs-translation">.tiff - Tagged Image Format</target>
       </trans-unit>
-      <trans-unit id="message.imageTransparent">
+      <trans-unit id="message.imageTransparent" approved="yes">
         <source>Image %s has not been resized because transparency has been detected.</source>
-        <target state="needs-translation">Image %s has not been resized because transparency has been detected.</target>
+        <target state="final">La imagen %s no ha sido cambiada de tamaño debido a la transparencia que se ha detectado.</target>
       </trans-unit>
       <trans-unit id="message.imageAnimated">
         <source>Image %s has not been resized because it is an animated GIF.</source>
         <target state="needs-translation">Image %s has not been resized because it is an animated GIF.</target>
       </trans-unit>
-      <trans-unit id="message.imageResized">
+      <trans-unit id="message.imageResized" approved="yes">
         <source>Image %s has been automatically resized to %sx%s pixels.</source>
-        <target state="needs-translation">Image %s has been automatically resized to %sx%s pixels.</target>
+        <target state="final">La imagen %s ha sido automaticamente cambiada de tamaño a %xs%s píxeles.</target>
       </trans-unit>
-      <trans-unit id="message.imageResizedAndRenamed">
+      <trans-unit id="message.imageResizedAndRenamed" approved="yes">
         <source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
-        <target state="needs-translation">Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</target>
+        <target state="final">La imagen %s ha sido aucomaticamente cambiada al tamaño %sx%s píxeles y fue rebautizada como %s.</target>
       </trans-unit>
-      <trans-unit id="message.imageNotWritable">
+      <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
-        <target state="needs-translation">Image %s cannot be resized because file is not writable.</target>
+        <target state="final">La imagen %s no puede ser cambiada de tamaño porque està protegida contra la escritura.</target>
       </trans-unit>
       <trans-unit id="message.cannotResize">
         <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
