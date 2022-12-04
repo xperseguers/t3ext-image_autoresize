@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:12Z" product-name="image_autoresize" target-language="da">
+    <header/>
+    <body>
+      <trans-unit id="title.description">
+        <source>Title of the rule set. This is only used in this form to help you keep your rule sets organized.</source>
+        <target state="needs-translation">Title of the rule set. This is only used in this form to help you keep your rule sets organized.</target>
+      </trans-unit>
+      <trans-unit id="usergroup.description" xml:space="preserve">
+				<source>Set of backend user groups to which the rule set should be applied.
+May be left empty.</source>
+			<target state="needs-translation">Set of backend user groups to which the rule set should be applied.
+May be left empty.</target></trans-unit>
+      <trans-unit id="directories.description" xml:space="preserve">
+				<source>Comma-separated list of directories to be monitored.
+Example: fileadmin/
+If empty, the list of directories configured in General tab will be taken into account.
+
+Wildcards are supported:
+fileadmin/*/images/
+fileadmin/**/images/</source>
+			<target state="needs-translation">Comma-separated list of directories to be monitored.
+Example: fileadmin/
+If empty, the list of directories configured in General tab will be taken into account.
+
+Wildcards are supported:
+fileadmin/*/images/
+fileadmin/**/images/</target></trans-unit>
+      <trans-unit id="file_types.description" xml:space="preserve">
+				<source>Comma-separated list of file types to be handled.
+Example: jpg,jpeg,png,tif,tiff
+If empty, the list of file types configured in General tab will be taken into account.</source>
+			<target state="needs-translation">Comma-separated list of file types to be handled.
+Example: jpg,jpeg,png,tif,tiff
+If empty, the list of file types configured in General tab will be taken into account.</target></trans-unit>
+      <trans-unit id="threshold.description" xml:space="preserve">
+				<source>Images with a file size larger than this value will be resized (allowed units: B|K|M).
+If empty, the threshold configured in General tab will be taken into account.</source>
+			<target state="needs-translation">Images with a file size larger than this value will be resized (allowed units: B|K|M).
+If empty, the threshold configured in General tab will be taken into account.</target></trans-unit>
+      <trans-unit id="max_width.description" xml:space="preserve">
+				<source>Images will be resized up to this maximum width.
+If empty, the maximum width configured in General tab will be taken into account.</source>
+			<target state="needs-translation">Images will be resized up to this maximum width.
+If empty, the maximum width configured in General tab will be taken into account.</target></trans-unit>
+      <trans-unit id="max_height.description" xml:space="preserve">
+				<source>Images will be resized up to this maximum height.
+If empty, the maximum height configured in General tab will be taken into account.</source>
+			<target state="needs-translation">Images will be resized up to this maximum height.
+If empty, the maximum height configured in General tab will be taken into account.</target></trans-unit>
+      <trans-unit id="max_size.description" xml:space="preserve">
+				<source>Images will be resized up to this maximum size.
+Example: 8M (for a maximum image size of 8 megapixels)
+If empty, the maximum size configured in General tab will be taken into account.</source>
+			<target state="needs-translation">Images will be resized up to this maximum size.
+Example: 8M (for a maximum image size of 8 megapixels)
+If empty, the maximum size configured in General tab will be taken into account.</target></trans-unit>
+      <trans-unit id="keep_metadata.description">
+        <source>Either inherit configuration from General settings or explicitly configure whether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</source>
+        <target state="needs-translation">Either inherit configuration from General settings or explicitly configure whether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</target>
+      </trans-unit>
+      <trans-unit id="conversion_mapping.description" xml:space="preserve">
+				<source>Comma-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
+If empty, the conversion mapping instructions configured in Options tab will be taken into account.</source>
+			<target state="needs-translation">Comma-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
+If empty, the conversion mapping instructions configured in Options tab will be taken into account.</target></trans-unit>
+    </body>
+  </file>
+</xliff>
