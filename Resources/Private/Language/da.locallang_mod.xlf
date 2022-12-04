@@ -3,45 +3,45 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-11-08T15:56:07Z" product-name="image_autoresize" target-language="da">
     <header/>
     <body>
-      <trans-unit id="title">
+      <trans-unit id="title" approved="yes">
         <source>Image Auto-Resize Configuration</source>
-        <target state="needs-translation">Image Auto-Resize Configuration</target>
+        <target state="final">Image Auto-Resize konfiguration</target>
       </trans-unit>
-      <trans-unit id="storage.claimed">
+      <trans-unit id="storage.claimed" approved="yes">
         <source>Total storage claimed: %s (with %s images)</source>
-        <target state="needs-translation">Total storage claimed: %s (with %s images)</target>
+        <target state="final">Totale lager sparet: %s (ved %s billeder)</target>
       </trans-unit>
-      <trans-unit id="social.share">
+      <trans-unit id="social.share" approved="yes">
         <source>Share result!</source>
-        <target state="needs-translation">Share result!</target>
+        <target state="final">Del resultat!</target>
       </trans-unit>
-      <trans-unit id="social.twitter">
+      <trans-unit id="social.twitter" approved="yes">
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
-        <target state="needs-translation">#image_autoresize already saved %s of free space on my #TYPO3 website</target>
+        <target state="final">#image_autoresize har allerede sparet %s af fri diskplads på mit #TYPO3 website</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.name">
+      <trans-unit id="batchResizeTask.name" approved="yes">
         <source>Batch resize images</source>
-        <target state="needs-translation">Batch resize images</target>
+        <target state="final">Batch ændring af størrelse på billeder</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.description">
+      <trans-unit id="batchResizeTask.description" approved="yes">
         <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="needs-translation">This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</target>
+        <target state="final">Denne opgave løber gennem mapper og leder efter filer, der ikke automatisk fik ændret størrelse under upload (f. eks fordi de blev uploadet via en direkte forbindelse (FTP, ol)) og ændrer størrelse på dem efter regler angivet i konfigurationen. Vær opmærksom på at regler baseret på brugergrupper vil blive sammenlignet, men herefter droppet, fordi kontekst i Scheduler opgaven ikke inkluderer brugergrupper.</target>
       </trans-unit>
-      <trans-unit id="label.batchResize.directories">
+      <trans-unit id="label.batchResize.directories" approved="yes">
         <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="needs-translation">Directories to process (one by line, overrides watched directories):</target>
+        <target state="final">Mapper der skal gennemløbes (en pr. linje, tilsidesætter overvågende mapper):</target>
       </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories">
+      <trans-unit id="label.batchResize.excludeDirectories" approved="yes">
         <source>Exclude directories (one by line):</source>
-        <target state="needs-translation">Exclude directories (one by line):</target>
+        <target state="final">Udeluk mapper (én pr. linje):</target>
       </trans-unit>
-      <trans-unit id="msg.invalidDirectories">
+      <trans-unit id="msg.invalidDirectories" approved="yes">
         <source>Cannot process non-existing directory: %s</source>
-        <target state="needs-translation">Cannot process non-existing directory: %s</target>
+        <target state="final">Kan ikke løbe gennem mapper der ikke eksisterer: %s</target>
       </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories">
+      <trans-unit id="msg.invalidExcludeDirectories" approved="yes">
         <source>Cannot exclude non-existing directory: %s</source>
-        <target state="needs-translation">Cannot exclude non-existing directory: %s</target>
+        <target state="final">Kan ikke udelukke mapper der ikke eksisterer: %s</target>
       </trans-unit>
     </body>
   </file>
