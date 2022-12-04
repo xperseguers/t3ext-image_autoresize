@@ -3,15 +3,15 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:12Z" product-name="image_autoresize" target-language="es-ES">
     <header/>
     <body>
-      <trans-unit id="title.description">
+      <trans-unit id="title.description" approved="yes">
         <source>Title of the rule set. This is only used in this form to help you keep your rule sets organized.</source>
-        <target state="needs-translation">Title of the rule set. This is only used in this form to help you keep your rule sets organized.</target>
+        <target state="final">Título del conjunto de reglas. Esto sólo se utiliza en este formulario para ayudarle a mantener sus conjuntos de reglas organizados.</target>
       </trans-unit>
-      <trans-unit id="usergroup.description" xml:space="preserve">
+      <trans-unit id="usergroup.description" xml:space="preserve" approved="yes">
 				<source>Set of backend user groups to which the rule set should be applied.
 May be left empty.</source>
-			<target state="needs-translation">Set of backend user groups to which the rule set should be applied.
-May be left empty.</target></trans-unit>
+			<target state="final">Conjunto de grupos de usuarios de back-end a los que se debe aplicar el conjunto de reglas. 
+Puede dejarse vacío.</target></trans-unit>
       <trans-unit id="directories.description" xml:space="preserve">
 				<source>Comma-separated list of directories to be monitored.
 Example: fileadmin/
@@ -27,28 +27,28 @@ If empty, the list of directories configured in General tab will be taken into a
 Wildcards are supported:
 fileadmin/*/images/
 fileadmin/**/images/</target></trans-unit>
-      <trans-unit id="file_types.description" xml:space="preserve">
+      <trans-unit id="file_types.description" xml:space="preserve" approved="yes">
 				<source>Comma-separated list of file types to be handled.
 Example: jpg,jpeg,png,tif,tiff
 If empty, the list of file types configured in General tab will be taken into account.</source>
-			<target state="needs-translation">Comma-separated list of file types to be handled.
-Example: jpg,jpeg,png,tif,tiff
-If empty, the list of file types configured in General tab will be taken into account.</target></trans-unit>
+			<target state="final">Lista separada por comas de tipo de archivo para ser manipulados.
+Ejemplo: jpg, jpeg, png, tif, tiff
+Si está vacío, la lista de tipo de archivo configurado en la lengüeta general será tenida en cuenta.</target></trans-unit>
       <trans-unit id="threshold.description" xml:space="preserve">
 				<source>Images with a file size larger than this value will be resized (allowed units: B|K|M).
 If empty, the threshold configured in General tab will be taken into account.</source>
 			<target state="needs-translation">Images with a file size larger than this value will be resized (allowed units: B|K|M).
 If empty, the threshold configured in General tab will be taken into account.</target></trans-unit>
-      <trans-unit id="max_width.description" xml:space="preserve">
+      <trans-unit id="max_width.description" xml:space="preserve" approved="yes">
 				<source>Images will be resized up to this maximum width.
 If empty, the maximum width configured in General tab will be taken into account.</source>
-			<target state="needs-translation">Images will be resized up to this maximum width.
-If empty, the maximum width configured in General tab will be taken into account.</target></trans-unit>
-      <trans-unit id="max_height.description" xml:space="preserve">
+			<target state="final">La imágenes serán cambiadas de tamaño a la anchura maxima.
+Si vacío, la anchura maxima configurada en la lengüeta general sera utilizada.</target></trans-unit>
+      <trans-unit id="max_height.description" xml:space="preserve" approved="yes">
 				<source>Images will be resized up to this maximum height.
 If empty, the maximum height configured in General tab will be taken into account.</source>
-			<target state="needs-translation">Images will be resized up to this maximum height.
-If empty, the maximum height configured in General tab will be taken into account.</target></trans-unit>
+			<target state="final">Las imágenes serán cambiadas de tamaño con esta altura maxima.
+Si vacío, la altura maxima configurada en la lengüeta general será utilizada.</target></trans-unit>
       <trans-unit id="max_size.description" xml:space="preserve">
 				<source>Images will be resized up to this maximum size.
 Example: 8M (for a maximum image size of 8 megapixels)
