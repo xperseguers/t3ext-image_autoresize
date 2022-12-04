@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="fr">
+    <header/>
+    <body>
+      <trans-unit id="tx_imageautoresize.directories">
+        <source>Directories:</source>
+        <target state="needs-translation">Directories:</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.file_types">
+        <source>Image types:</source>
+        <target state="needs-translation">Image types:</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold">
+        <source>File size threshold:</source>
+        <target state="needs-translation">File size threshold:</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_width">
+        <source>Maximum width:</source>
+        <target state="needs-translation">Maximum width:</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_height">
+        <source>Maximum height:</source>
+        <target state="needs-translation">Maximum height:</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size">
+        <source>Maximum image size (pixel area):</source>
+        <target state="needs-translation">Maximum image size (pixel area):</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient">
+        <source>Automatic orientation</source>
+        <target state="needs-translation">Automatic orientation</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata">
+        <source>Keep profile and metadata</source>
+        <target state="needs-translation">Keep profile and metadata</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
+        <source>Use general setting</source>
+        <target state="needs-translation">Use general setting</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes">
+        <source>Yes</source>
+        <target state="needs-translation">Yes</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.no">
+        <source>No</source>
+        <target state="needs-translation">No</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
+        <source>Resize PNG files with alpha-channel</source>
+        <target state="needs-translation">Resize PNG files with alpha-channel</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping">
+        <source>Image type conversion mapping</source>
+        <target state="needs-translation">Image type conversion mapping</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets">
+        <source>Rule sets</source>
+        <target state="needs-translation">Rule sets</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.title">
+        <source>Title:</source>
+        <target state="needs-translation">Title:</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+        <source>User group rule set</source>
+        <target state="needs-translation">User group rule set</target>
+      </trans-unit>
+      <trans-unit id="tabs.options">
+        <source>Options</source>
+        <target state="needs-translation">Options</target>
+      </trans-unit>
+      <trans-unit id="tabs.rulesets">
+        <source>Rule Sets</source>
+        <target state="needs-translation">Rule Sets</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
