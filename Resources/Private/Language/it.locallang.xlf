@@ -3,17 +3,17 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="it">
     <header/>
     <body>
-      <trans-unit id="saveConfiguration">
+      <trans-unit id="saveConfiguration" approved="yes">
         <source>Save configuration</source>
-        <target state="needs-translation">Save configuration</target>
+        <target state="final">Salva configurazione</target>
       </trans-unit>
-      <trans-unit id="saveCloseConfiguration">
+      <trans-unit id="saveCloseConfiguration" approved="yes">
         <source>Save and close configuration</source>
-        <target state="needs-translation">Save and close configuration</target>
+        <target state="final">Salva e chiudi configurazione</target>
       </trans-unit>
-      <trans-unit id="closeConfiguration">
+      <trans-unit id="closeConfiguration" approved="yes">
         <source>Close configuration</source>
-        <target state="needs-translation">Close configuration</target>
+        <target state="final">Chiudi configurazione</target>
       </trans-unit>
       <trans-unit id="extension.ai">
         <source>.ai - Adobe Illustrator</source>
@@ -27,13 +27,13 @@
         <source>.gif - Graphic Interchange Format</source>
         <target state="needs-translation">.gif - Graphic Interchange Format</target>
       </trans-unit>
-      <trans-unit id="extension.jpg">
+      <trans-unit id="extension.jpg" approved="yes">
         <source>.jpg - JPEG/JIFF Image</source>
-        <target state="needs-translation">.jpg - JPEG/JIFF Image</target>
+        <target state="final">.jpg - Immagine JPEG/JIFF</target>
       </trans-unit>
-      <trans-unit id="extension.jpeg">
+      <trans-unit id="extension.jpeg" approved="yes">
         <source>.jpeg - JPEG/JIFF Image</source>
-        <target state="needs-translation">.jpeg - JPEG/JIFF Image</target>
+        <target state="final">.jpeg - Immagine JPEG/JIFF</target>
       </trans-unit>
       <trans-unit id="extension.pcx">
         <source>.pcx - Paintbrush Bitmap Graphic</source>
@@ -55,25 +55,25 @@
         <source>.tiff - Tagged Image Format</source>
         <target state="needs-translation">.tiff - Tagged Image Format</target>
       </trans-unit>
-      <trans-unit id="message.imageTransparent">
+      <trans-unit id="message.imageTransparent" approved="yes">
         <source>Image %s has not been resized because transparency has been detected.</source>
-        <target state="needs-translation">Image %s has not been resized because transparency has been detected.</target>
+        <target state="final">Immagine %s non è stata ridimensionata, perché è stato rilevato trasparenza.</target>
       </trans-unit>
-      <trans-unit id="message.imageAnimated">
+      <trans-unit id="message.imageAnimated" approved="yes">
         <source>Image %s has not been resized because it is an animated GIF.</source>
-        <target state="needs-translation">Image %s has not been resized because it is an animated GIF.</target>
+        <target state="final">Immagine %s non è stata ridimensionata, perché è una GIF animata.</target>
       </trans-unit>
-      <trans-unit id="message.imageResized">
+      <trans-unit id="message.imageResized" approved="yes">
         <source>Image %s has been automatically resized to %sx%s pixels.</source>
-        <target state="needs-translation">Image %s has been automatically resized to %sx%s pixels.</target>
+        <target state="final">Immagine %s è stata ridimensionata automaticamente a %sx%s pixel.</target>
       </trans-unit>
-      <trans-unit id="message.imageResizedAndRenamed">
+      <trans-unit id="message.imageResizedAndRenamed" approved="yes">
         <source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
-        <target state="needs-translation">Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</target>
+        <target state="final">Immagine %s è stata ridimensionata automaticamente a %sx%s pixel ed è stato rinominato in %s.</target>
       </trans-unit>
-      <trans-unit id="message.imageNotWritable">
+      <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
-        <target state="needs-translation">Image %s cannot be resized because file is not writable.</target>
+        <target state="final">Immagine %s non può essere ridimensionato perché il file non è scrivibile.</target>
       </trans-unit>
       <trans-unit id="message.cannotResize">
         <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
