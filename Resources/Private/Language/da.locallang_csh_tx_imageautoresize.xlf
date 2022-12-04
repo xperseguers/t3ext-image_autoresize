@@ -3,35 +3,35 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:16Z" product-name="image_autoresize" target-language="da">
     <header/>
     <body>
-      <trans-unit id="directories.description" xml:space="preserve">
+      <trans-unit id="directories.description" xml:space="preserve" approved="yes">
 				<source>Comma-separated list of directories to be monitored.
 Example: fileadmin/
 
 Wildcards are supported:
 fileadmin/*/images/
 fileadmin/**/images/</source>
-			<target state="needs-translation">Comma-separated list of directories to be monitored.
-Example: fileadmin/
+			<target state="final">Komma-separeret liste af kataloger som skal overvåges.
+Eksempel: fileadmin/
 
-Wildcards are supported:
-fileadmin/*/images/
-fileadmin/**/images/</target></trans-unit>
-      <trans-unit id="file_types.description" xml:space="preserve">
+Jokertegn understøttes:
+fileadmin/*/billeder/
+fileadmin/**/billeder/</target></trans-unit>
+      <trans-unit id="file_types.description" xml:space="preserve" approved="yes">
 				<source>Comma-separated list of file types to be handled.
 Example: jpg,jpeg,png,tif,tiff</source>
-			<target state="needs-translation">Comma-separated list of file types to be handled.
-Example: jpg,jpeg,png,tif,tiff</target></trans-unit>
-      <trans-unit id="threshold.description">
+			<target state="final">Komma-separeret liste af filtyper som skal håndteres.
+Eksempel: jpg,jpeg,png,tif,tiff</target></trans-unit>
+      <trans-unit id="threshold.description" approved="yes">
         <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
-        <target state="needs-translation">Images with a file size larger than this value will be resized (allowed units: B|K|M).</target>
+        <target state="final">Billeder større end denne værdi vil få ændret størrelse (tilladte enheder: B|K|M).</target>
       </trans-unit>
-      <trans-unit id="max_width.description">
+      <trans-unit id="max_width.description" approved="yes">
         <source>Images will be resized up to this maximum width.</source>
-        <target state="needs-translation">Images will be resized up to this maximum width.</target>
+        <target state="final">Billeder vil få ændret størrelse op til denne maksimale bredde.</target>
       </trans-unit>
-      <trans-unit id="max_height.description">
+      <trans-unit id="max_height.description" approved="yes">
         <source>Images will be resized up to this maximum height.</source>
-        <target state="needs-translation">Images will be resized up to this maximum height.</target>
+        <target state="final">Billeder vil få ændret størrelse op til denne maksimale højde.</target>
       </trans-unit>
       <trans-unit id="max_size.description">
         <source>Images will be resized up to this maximum size.
@@ -39,34 +39,34 @@ Example: 8M (for a maximum image size of 8 megapixels)</source>
         <target state="needs-translation">Images will be resized up to this maximum size.
 Example: 8M (for a maximum image size of 8 megapixels)</target>
       </trans-unit>
-      <trans-unit id="auto_orient.description">
+      <trans-unit id="auto_orient.description" approved="yes">
         <source>Will try to auto-magically orient image (useful with photos).</source>
-        <target state="needs-translation">Will try to auto-magically orient image (useful with photos).</target>
+        <target state="final">Vil auto-magisk forsøge at orientere billede (nyttig for fotografier).</target>
       </trans-unit>
-      <trans-unit id="keep_metadata.description">
+      <trans-unit id="keep_metadata.description" approved="yes">
         <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
-        <target state="needs-translation">If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</target>
+        <target state="final">Hvis aktiv, så vil IM ikke anvende $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] og således bevares farveprofil og metadata så som EXIF, IPTC og XMP.</target>
       </trans-unit>
-      <trans-unit id="resize_png_with_alpha.description">
+      <trans-unit id="resize_png_with_alpha.description" approved="yes">
         <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost</source>
-        <target state="needs-translation">If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost</target>
+        <target state="final">Hvis valgt, vil PNG-filer med alfa-kanal få ændret størrelsen, selvom tranparency vil gå tabt</target>
       </trans-unit>
-      <trans-unit id="conversion_mapping.description" xml:space="preserve">
+      <trans-unit id="conversion_mapping.description" xml:space="preserve" approved="yes">
 				<source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
 Example:
 bmp =&gt; jpg
 tif =&gt; jpg</source>
-			<target state="needs-translation">Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
-Example:
+			<target state="final">Linje-separeret liste af konverterings-kortlægningsinstruktioner. Dette lader dig konvertere typen af billede automatisk, mens størrelsen for det ændres.
+Eksempel:
 bmp =&gt; jpg
 tif =&gt; jpg</target></trans-unit>
-      <trans-unit id="rulesets.description" xml:space="preserve">
+      <trans-unit id="rulesets.description" xml:space="preserve" approved="yes">
 				<source>You may define as many rule sets as you wish.
 They will be evaluated one after the other in order to possibly override general settings.
 The evalutation stops as soon as a matching rule set has been found.</source>
-			<target state="needs-translation">You may define as many rule sets as you wish.
-They will be evaluated one after the other in order to possibly override general settings.
-The evalutation stops as soon as a matching rule set has been found.</target></trans-unit>
+			<target state="final">Du kan definere så mange regelsæt som du ønsker.
+De vil blive evalueret en efter en for om muligt, at tilsidesætte generelle indstillinger.
+Evalueringen stopper så snart et matchende regelsæt bliver fundet.</target></trans-unit>
     </body>
   </file>
 </xliff>
