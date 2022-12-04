@@ -21,6 +21,6 @@ Translating the extension
 
 Please help translating this extension by contributing on
 
-https://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
+https://crowdin.com/project/typo3-extension-imageautoresiz
 
 Have more fun with TYPO3!

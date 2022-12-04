@@ -24,7 +24,7 @@ Links
    https://github.com/xperseguers/t3ext-image_autoresize
 
 :Translation:
-   https://translation.typo3.org/projects/TYPO3.ext.image_autoresize/
+   https://crowdin.com/project/typo3-extension-imageautoresiz
 
 :Contact:
    `@xperseguers <https://twitter.com/xperseguers>`__
