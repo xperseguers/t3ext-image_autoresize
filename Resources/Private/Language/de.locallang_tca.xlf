@@ -3,33 +3,33 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="de">
     <header/>
     <body>
-      <trans-unit id="tx_imageautoresize.directories">
+      <trans-unit id="tx_imageautoresize.directories" approved="yes">
         <source>Directories:</source>
-        <target state="needs-translation">Directories:</target>
+        <target state="final">Verzeichnisse:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.file_types">
+      <trans-unit id="tx_imageautoresize.file_types" approved="yes">
         <source>Image types:</source>
-        <target state="needs-translation">Image types:</target>
+        <target state="final">Abbildtypen:</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.threshold">
         <source>File size threshold:</source>
         <target state="needs-translation">File size threshold:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_width">
+      <trans-unit id="tx_imageautoresize.max_width" approved="yes">
         <source>Maximum width:</source>
-        <target state="needs-translation">Maximum width:</target>
+        <target state="final">Maximale Breite:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_height">
+      <trans-unit id="tx_imageautoresize.max_height" approved="yes">
         <source>Maximum height:</source>
-        <target state="needs-translation">Maximum height:</target>
+        <target state="final">Maximale Höhe:</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_size">
         <source>Maximum image size (pixel area):</source>
         <target state="needs-translation">Maximum image size (pixel area):</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.auto_orient">
+      <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
         <source>Automatic orientation</source>
-        <target state="needs-translation">Automatic orientation</target>
+        <target state="final">Automatische Ausrichtung</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata">
         <source>Keep profile and metadata</source>
@@ -39,13 +39,13 @@
         <source>Use general setting</source>
         <target state="needs-translation">Use general setting</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.yes">
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
         <source>Yes</source>
-        <target state="needs-translation">Yes</target>
+        <target state="final">Ja</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.no">
+      <trans-unit id="tx_imageautoresize.keep_metadata.no" approved="yes">
         <source>No</source>
-        <target state="needs-translation">No</target>
+        <target state="final">Nein</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
         <source>Resize PNG files with alpha-channel</source>
@@ -55,21 +55,21 @@
         <source>Image type conversion mapping</source>
         <target state="needs-translation">Image type conversion mapping</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.rulesets">
+      <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
         <source>Rule sets</source>
-        <target state="needs-translation">Rule sets</target>
+        <target state="final">Regeln</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.title">
+      <trans-unit id="tx_imageautoresize.title" approved="yes">
         <source>Title:</source>
-        <target state="needs-translation">Title:</target>
+        <target state="final">Titel:</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.usergroup_ruleset">
         <source>User group rule set</source>
         <target state="needs-translation">User group rule set</target>
       </trans-unit>
-      <trans-unit id="tabs.options">
+      <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
-        <target state="needs-translation">Options</target>
+        <target state="final">Optionen</target>
       </trans-unit>
       <trans-unit id="tabs.rulesets">
         <source>Rule Sets</source>
