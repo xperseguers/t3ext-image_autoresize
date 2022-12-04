@@ -3,77 +3,77 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="nl">
     <header/>
     <body>
-      <trans-unit id="tx_imageautoresize.directories">
+      <trans-unit id="tx_imageautoresize.directories" approved="yes">
         <source>Directories:</source>
-        <target state="needs-translation">Directories:</target>
+        <target state="final">Mappen:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.file_types">
+      <trans-unit id="tx_imageautoresize.file_types" approved="yes">
         <source>Image types:</source>
-        <target state="needs-translation">Image types:</target>
+        <target state="final">Bestandstypen:</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.threshold">
         <source>File size threshold:</source>
         <target state="needs-translation">File size threshold:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_width">
+      <trans-unit id="tx_imageautoresize.max_width" approved="yes">
         <source>Maximum width:</source>
-        <target state="needs-translation">Maximum width:</target>
+        <target state="final">Maximale breedte:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_height">
+      <trans-unit id="tx_imageautoresize.max_height" approved="yes">
         <source>Maximum height:</source>
-        <target state="needs-translation">Maximum height:</target>
+        <target state="final">Maximale hoogte:</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_size">
         <source>Maximum image size (pixel area):</source>
         <target state="needs-translation">Maximum image size (pixel area):</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.auto_orient">
+      <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
         <source>Automatic orientation</source>
-        <target state="needs-translation">Automatic orientation</target>
+        <target state="final">Automatisch draaien</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata">
+      <trans-unit id="tx_imageautoresize.keep_metadata" approved="yes">
         <source>Keep profile and metadata</source>
-        <target state="needs-translation">Keep profile and metadata</target>
+        <target state="final">Profiel en metadata behouden</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit" approved="yes">
         <source>Use general setting</source>
-        <target state="needs-translation">Use general setting</target>
+        <target state="final">Algemene instellingen gebruiken</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.yes">
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
         <source>Yes</source>
-        <target state="needs-translation">Yes</target>
+        <target state="final">Ja</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.no">
+      <trans-unit id="tx_imageautoresize.keep_metadata.no" approved="yes">
         <source>No</source>
-        <target state="needs-translation">No</target>
+        <target state="final">Nee</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha" approved="yes">
         <source>Resize PNG files with alpha-channel</source>
-        <target state="needs-translation">Resize PNG files with alpha-channel</target>
+        <target state="final">PNG bestanden met alfa-kanaal schalen</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.conversion_mapping">
+      <trans-unit id="tx_imageautoresize.conversion_mapping" approved="yes">
         <source>Image type conversion mapping</source>
-        <target state="needs-translation">Image type conversion mapping</target>
+        <target state="final">Conversieregels voor bestandstype</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.rulesets">
+      <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
         <source>Rule sets</source>
-        <target state="needs-translation">Rule sets</target>
+        <target state="final">Regels</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.title">
+      <trans-unit id="tx_imageautoresize.title" approved="yes">
         <source>Title:</source>
-        <target state="needs-translation">Title:</target>
+        <target state="final">Titel:</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
         <source>User group rule set</source>
-        <target state="needs-translation">User group rule set</target>
+        <target state="final">Gebruikersgroep-regels</target>
       </trans-unit>
-      <trans-unit id="tabs.options">
+      <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
-        <target state="needs-translation">Options</target>
+        <target state="final">Opties</target>
       </trans-unit>
-      <trans-unit id="tabs.rulesets">
+      <trans-unit id="tabs.rulesets" approved="yes">
         <source>Rule Sets</source>
-        <target state="needs-translation">Rule Sets</target>
+        <target state="final">Regels</target>
       </trans-unit>
     </body>
   </file>
