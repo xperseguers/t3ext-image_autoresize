@@ -12,7 +12,7 @@ ChangeLog
 =========
 
 The following is a very high level overview of the changes in this extension. For more details,
-`read the online log <https://git.typo3.org/TYPO3CMS/Extensions/image_autoresize.git/log>`_.
+`read the online log <https://github.com/xperseguers/t3ext-image_autoresize/commits/master>`_.
 
 
 .. tabularcolumns:: |r|p{13.7cm}|
