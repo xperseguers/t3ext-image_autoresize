@@ -86,7 +86,10 @@ class FileUploadHook implements DataHandlerProcessUploadHookInterface
      */
     public function notify(string $message, int $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK): void
     {
-        if (!ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend() || PHP_SAPI === 'cli') {
+        if (PHP_SAPI === 'cli'
+            || !(isset($GLOBALS['TYPO3_REQUEST'])
+                && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend())
+        ) {
             return;
         }
         $flashMessage = GeneralUtility::makeInstance(

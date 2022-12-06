@@ -237,7 +237,10 @@ class CoreResourceStorageEventListener
      */
     public function notify($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
     {
-        if (!ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend() || PHP_SAPI === 'cli') {
+        if (PHP_SAPI === 'cli'
+            || !(isset($GLOBALS['TYPO3_REQUEST'])
+                && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend())
+        ) {
             return;
         }
         $flashMessage = GeneralUtility::makeInstance(
