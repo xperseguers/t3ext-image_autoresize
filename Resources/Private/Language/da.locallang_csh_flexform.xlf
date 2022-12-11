@@ -49,13 +49,13 @@ Hvis tom, så vil den maksimale bredde som er konfigureret i fanen Generelt bliv
 If empty, the maximum height configured in General tab will be taken into account.</source>
 			<target state="final">Billeder vil få ændret størrelse op til denne maksimale højde.
 Hvis tom, så vil den maksimale højde som er konfigureret i fanen Generelt blive taget i brug.</target></trans-unit>
-      <trans-unit id="max_size.description" xml:space="preserve">
+      <trans-unit id="max_size.description" xml:space="preserve" approved="yes">
 				<source>Images will be resized up to this maximum size.
 Example: 8M (for a maximum image size of 8 megapixels)
 If empty, the maximum size configured in General tab will be taken into account.</source>
-			<target state="needs-translation">Images will be resized up to this maximum size.
-Example: 8M (for a maximum image size of 8 megapixels)
-If empty, the maximum size configured in General tab will be taken into account.</target></trans-unit>
+			<target state="final">Billeder vil blive ændret op til denne maksimale størrelse.
+Eksempel: 8M (for en maksimal billedstørrelse på 8 megapixels)
+Hvis tom vil den maksimale størrelse konfigureret i fanen Generelt, blive taget i betragtning.</target></trans-unit>
       <trans-unit id="keep_metadata.description" approved="yes">
         <source>Either inherit configuration from General settings or explicitly configure whether to keep/strip off color profile and metadata such as EXIF, IPTC and XMP.</source>
         <target state="final">Enten nedarv konfiguration fra indstillinger i Generelt eller konfigurér eksplicit hvorvidt farveprofiler og metadata som EXIF, IPTC og XMP skal bevares/fjernes.</target>
