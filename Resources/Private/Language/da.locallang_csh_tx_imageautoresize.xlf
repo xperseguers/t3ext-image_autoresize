@@ -33,11 +33,11 @@ Eksempel: jpg,jpeg,png,tif,tiff</target></trans-unit>
         <source>Images will be resized up to this maximum height.</source>
         <target state="final">Billeder vil få ændret størrelse op til denne maksimale højde.</target>
       </trans-unit>
-      <trans-unit id="max_size.description">
+      <trans-unit id="max_size.description" approved="yes">
         <source>Images will be resized up to this maximum size.
 Example: 8M (for a maximum image size of 8 megapixels)</source>
-        <target state="needs-translation">Images will be resized up to this maximum size.
-Example: 8M (for a maximum image size of 8 megapixels)</target>
+        <target state="final">Billeder vil blive ændret op til denne maksimale størrelse.
+Eksempel: 8M (for en maksimal billedstørrelse på 8 megapixel)</target>
       </trans-unit>
       <trans-unit id="auto_orient.description" approved="yes">
         <source>Will try to auto-magically orient image (useful with photos).</source>
