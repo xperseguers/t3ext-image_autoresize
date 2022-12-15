@@ -22,7 +22,6 @@ use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
@@ -30,6 +29,7 @@ use TYPO3\CMS\Core\Resource\Index\Indexer;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * This is a utility class to resize pictures based on rules.
@@ -241,7 +241,7 @@ class ImageResizer
         if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(
-                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageTransparent'),
+                    LocalizationUtility::translate('message.imageTransparent', 'image_autoresize'),
                     $targetFileName
                 );
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
@@ -250,7 +250,7 @@ class ImageResizer
         }
         if ($fileExtension === 'gif' && ImageUtility::isAnimatedGif($fileName)) {
             $message = sprintf(
-                $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageAnimated'),
+                LocalizationUtility::translate('message.imageAnimated', 'image_autoresize'),
                 $targetFileName
             );
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
@@ -265,7 +265,7 @@ class ImageResizer
 
         if (!is_writable($fileName)) {
             $message = sprintf(
-                $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageNotWritable'),
+                LocalizationUtility::translate('message.imageNotWritable', 'image_autoresize'),
                 $targetFileName
             );
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
@@ -349,7 +349,7 @@ class ImageResizer
         }
         $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         if ($tempFileInfo === null) {
-            $message = $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.cannotResize');
+            $message = LocalizationUtility::translate('message.cannotResize', 'image_autoresize');
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
         } elseif (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
@@ -391,12 +391,12 @@ class ImageResizer
 
             if ($fileName === $destFileName) {
                 $message = sprintf(
-                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageResized'),
+                    LocalizationUtility::translate('message.imageResized', 'image_autoresize'),
                     $targetFileName, $tempFileInfo[0], $tempFileInfo[1]
                 );
             } else {
                 $message = sprintf(
-                    $this->localize('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageResizedAndRenamed'),
+                    LocalizationUtility::translate('message.imageResizedAndRenamed', 'image_autoresize'),
                     $targetFileName, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($targetDestFileName)
                 );
             }
@@ -438,22 +438,6 @@ class ImageResizer
     public function getLastMetadata(): ?array
     {
         return $this->lastMetadata;
-    }
-
-    /**
-     * Localizes a label.
-     *
-     * @param string $input
-     * @return string
-     */
-    protected function localize(string $input): string
-    {
-        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            $output = is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE']->sL($input) : $input;
-        } else {
-            $output = $GLOBALS['LANG']->sL($input);
-        }
-        return $output;
     }
 
     /**
