@@ -166,7 +166,7 @@ class ImageResizer
         }
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
-        if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
+        if ($fileExtension === 'png' && !($ruleset['resize_png_with_alpha'] ?? false)) {
             if (file_exists($fileName) && ImageUtility::isTransparentPng($fileName)) {
                 return null;
             }
@@ -238,7 +238,7 @@ class ImageResizer
         }
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
-        if ($fileExtension === 'png' && !$ruleset['resize_png_with_alpha']) {
+        if ($fileExtension === 'png' && !($ruleset['resize_png_with_alpha'] ?? false)) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(
                     LocalizationUtility::translate('message.imageTransparent', 'image_autoresize'),
