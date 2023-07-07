@@ -151,10 +151,9 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         // actually resizing the image while uploading, not during a batch processing (it's simply "too late").
         $backendUser = null;
 
-        if (PHP_SAPI === 'cli'
-            || !(isset($GLOBALS['TYPO3_REQUEST'])
-                && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend())
-        ) {
+        if ((($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof \Psr\Http\Message\ServerRequestInterface
+                && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()
+            ) || Environment::isCli()) {
             $callbackNotification = [$this, 'syslog'];
         } else {
             $callbackNotification = [$this, 'notify'];
