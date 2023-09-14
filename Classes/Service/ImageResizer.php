@@ -332,13 +332,13 @@ class ImageResizer
             // Invert max_width and max_height as the picture
             // will be automatically rotated
             $options = [
-                'maxW' => $ruleset['max_height'],
-                'maxH' => $ruleset['max_width'],
+                'maxW' => (int) $ruleset['max_height'],
+                'maxH' => (int) $ruleset['max_width'],
             ];
         } else {
             $options = [
-                'maxW' => $ruleset['max_width'],
-                'maxH' => $ruleset['max_height'],
+                'maxW' => (int) $ruleset['max_width'],
+                'maxH' => (int) $ruleset['max_height'],
             ];
         }
 
