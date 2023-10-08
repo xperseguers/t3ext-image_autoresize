@@ -520,7 +520,7 @@ class ImageResizer
     {
         $directories = [];
         foreach ($this->rulesets as $ruleset) {
-            $directories += $ruleset['directories'];
+            $directories = array_merge($directories, $ruleset['directories']);
         }
         return $directories;
     }
