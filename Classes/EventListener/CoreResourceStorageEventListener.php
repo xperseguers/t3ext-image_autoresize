@@ -85,7 +85,7 @@ class CoreResourceStorageEventListener
         }
         $pathSite = Environment::getPublicPath() . '/';
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
-        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
 
         $processedFileName = static::$imageResizer->getProcessedFileName(
             $targetDirectory . '/' . $fileName,
@@ -118,7 +118,7 @@ class CoreResourceStorageEventListener
         }
         $pathSite = Environment::getPublicPath() . '/';
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
-        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
         $targetFileName = $targetDirectory . '/' . $file->getName();
 
         $targetOnlyFileName = PathUtility::basename($targetFileName);
@@ -158,7 +158,7 @@ class CoreResourceStorageEventListener
 
         $pathSite = Environment::getPublicPath() . '/';
         $targetDirectory = $storageConfiguration['pathType'] === 'relative' ? $pathSite : '';
-        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getReadablePath(), '/');
+        $targetDirectory .= rtrim(rtrim($storageConfiguration['basePath'], '/') . $folder->getIdentifier(), '/');
 
         $extension = strtolower(substr($targetFileName, strrpos($targetFileName, '.') + 1));
 
