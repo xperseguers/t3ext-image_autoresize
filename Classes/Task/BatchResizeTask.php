@@ -122,7 +122,9 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             }
 
             // Execute bach resize
-            $success |= $this->batchResizePictures($directory);
+            if (is_dir($directory)) {
+                $success |= $this->batchResizePictures($directory);
+            }
             $processedDirectories[] = $directory;
         }
 
