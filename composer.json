@@ -16,9 +16,10 @@
     "footprint",
     "performance"
   ],
-  "homepage": "https://github.com/xperseguers/t3ext-image_autoresize",
   "support": {
-    "issues": "https://github.com/xperseguers/t3ext-image_autoresize/issues"
+    "docs": "https://docs.typo3.org/p/causal/image_autoresize/main/en-us/",
+    "issues": "https://github.com/xperseguers/t3ext-image_autoresize/issues",
+    "source": "https://github.com/xperseguers/t3ext-image_autoresize"
   },
   "authors": [
     {
