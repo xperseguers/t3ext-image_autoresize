@@ -308,11 +308,43 @@ class ImageResizer
         $isRotated = false;
 
         if ((bool)$ruleset['auto_orient'] === true) {
-            $orientation = ImageUtility::getOrientation($fileName);
+            $orientation = ImageUtility::getOrientation($fileName);			
             $isRotated = ImageUtility::isRotated($orientation);
-            $gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
-        }
-
+			//$gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
+			
+			switch((int) $orientation) {
+						
+				case 2:
+					$gifCreator->scalecmd = '-flop';
+					break;
+						
+				case 3:
+					$gifCreator->scalecmd = '-rotate 180';
+					break;
+						
+				case 4:
+					$gifCreator->scalecmd = '-rotate 180 -flop';
+					break;
+						
+				case 5:
+					$gifCreator->scalecmd = '-rotate -90 -flop';
+					break;
+						
+				case 6:
+					$gifCreator->scalecmd = '-rotate -90';
+					break;
+						
+				case 7:
+					$gifCreator->scalecmd = '-rotate 90 -flop';
+					break;
+						
+				case 8:
+					$gifCreator->scalecmd = '-rotate 90';
+					break;
+			}
+		
+		}
+				
         if (
             isset($ruleset['max_size'])
             && $ruleset['max_size'] > 0
@@ -347,6 +379,8 @@ class ImageResizer
             $currentLocale = (string)setlocale(LC_CTYPE, '0');
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
         }
+		
+		
         $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         if ($tempFileInfo === null) {
             $message = LocalizationUtility::translate('message.cannotResize', 'image_autoresize');
