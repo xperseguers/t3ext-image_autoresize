@@ -165,7 +165,7 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 
 class fakeSchedulerModuleController extends \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController
 {
-    public function addMessage($message, $severity = FlashMessage::OK)
+    public function addMessage(\TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate, string $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK): void
     {
         parent::addMessage($message, $severity);
     }
