@@ -20,6 +20,7 @@ namespace Causal\ImageAutoresize\Task;
 use Causal\ImageAutoresize\Utility\FAL;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
 
 /**
@@ -121,12 +122,16 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
             $directoryConfig = FAL::getDirectoryConfig($directory);
             if (!@is_dir($directoryConfig['basePath'] . $directoryConfig['directory'])) {
                 $result = false;
-                (new fakeSchedulerModuleController())->addMessage(
+
+                GeneralUtility::makeInstance(
+                    FlashMessage::class,
                     sprintf(
                         $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidDirectories'),
                         $directory
                     ),
-                    FlashMessage::ERROR
+                    'EXT:image_autoresize: invalidDirectories error',
+                    ContextualFeedbackSeverity::ERROR,
+                    true
                 );
             }
         }
@@ -136,12 +141,18 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
             $directoryConfig = FAL::getDirectoryConfig($directory);
             if (!@is_dir($directoryConfig['basePath'] . $directoryConfig['directory'])) {
                 $result = false;
-                (new fakeSchedulerModuleController())->addMessage(
+
+
+                GeneralUtility::makeInstance(
+                    FlashMessage::class,
                     sprintf(
                         $GLOBALS['LANG']->sL('LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:msg.invalidExcludeDirectories'),
                         $directory
                     ),
-                    FlashMessage::ERROR);
+                    'EXT:image_autoresize: invalidExcludeDirectories error',
+                    ContextualFeedbackSeverity::ERROR,
+                    true
+                );
             }
         }
 
@@ -159,14 +170,5 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
         /** @var \Causal\ImageAutoresize\Task\BatchResizeTask $task */
         $task->directories = trim($submittedData['scheduler_batchResize_directories']);
         $task->excludeDirectories = trim($submittedData['scheduler_batchResize_excludeDirectories']);
-    }
-
-}
-
-class fakeSchedulerModuleController extends \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController
-{
-    public function addMessage(\TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate, string $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity = \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK): void
-    {
-        parent::addMessage($message, $severity);
     }
 }
