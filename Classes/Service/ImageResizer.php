@@ -310,7 +310,41 @@ class ImageResizer
         if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
-            $gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
+
+            if ((bool)$ruleset['auto_orient_custom'] === true) {
+                switch ((int) $orientation) {
+
+                    case 2:
+                        $gifCreator->scalecmd = '-flop';
+                        break;
+
+                    case 3:
+                        $gifCreator->scalecmd = '-rotate 180';
+                        break;
+
+                    case 4:
+                        $gifCreator->scalecmd = '-rotate 180 -flop';
+                        break;
+
+                    case 5:
+                        $gifCreator->scalecmd = '-rotate -90 -flop';
+                        break;
+
+                    case 6:
+                        $gifCreator->scalecmd = '-rotate -90';
+                        break;
+
+                    case 7:
+                        $gifCreator->scalecmd = '-rotate 90 -flop';
+                        break;
+
+                    case 8:
+                        $gifCreator->scalecmd = '-rotate 90';
+                        break;
+                }
+            } else {
+                $gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
+            }
         }
 
         if (
