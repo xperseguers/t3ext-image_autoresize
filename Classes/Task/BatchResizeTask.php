@@ -266,7 +266,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                 $logger->info($message);
                 break;
             case \TYPO3\CMS\Core\Messaging\FlashMessage::OK:
-                $logger->log($message);
+                $logger->log(\Psr\Log\LogLevel::INFO, $message);
                 break;
             case \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING:
                 $logger->warning($message);
