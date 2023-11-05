@@ -353,6 +353,7 @@ class ImageResizer
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
         } elseif (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
+            @unlink($tempFileInfo[3]);
             $tempFileInfo = null;
         }
         if ($tempFileInfo) {
