@@ -33,19 +33,3 @@
 .. By default, code blocks use PHP syntax highlighting
 
 .. highlight:: php
-
-.. ==================================================
-.. EXTERNAL LINKS
-.. --------------------------------------------------
-
-.. _`5 min tutorial video`: https://www.youtube.com/watch?v=YeGqHMDT7R8
-
-.. _`git repository of the TYPO3 ReST tools`: https://git.typo3.org/Documentation/RestTools.git/
-
-.. _`Sphinx/reStructuredText Documentation Viewer (restdoc)`: https://extensions.typo3.org/extension/restdoc
-
-.. _Sphinx: http://sphinx-doc.org/
-
-.. _`the TYPO3 wiki`: https://wiki.typo3.org/Rendering_reST
-
-.. _`Tips and Tricks`: https://wiki.typo3.org/Tips_and_Tricks_%28reST%29
