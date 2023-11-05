@@ -1,11 +1,4 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
-.. include:: ../Includes.txt
-
-
+.. include:: ../Includes.rst.txt
 .. _signal-post-processing-configuration:
 
 Post-processing Configuration
