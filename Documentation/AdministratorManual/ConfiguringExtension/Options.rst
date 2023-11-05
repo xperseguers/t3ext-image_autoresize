@@ -34,6 +34,11 @@ below):
 
    Description and diagram adapted from https://www.impulseadventure.com/photo/exif-orientation.html
 
+.. note::
+
+   You find sample images in all orientations on
+   https://github.com/recurser/exif-orientation-examples
+
 
 .. _options-keep-profile-metadata:
 
