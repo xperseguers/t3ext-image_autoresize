@@ -35,7 +35,7 @@ define the file types that should be handled (e.g., "jpg" and "tif" but not "png
 that weights only a few KB, why should we bother?
 
 .. hint::
-   You may use extension "extractor" `available in TER <https://typo3.org/extensions/repository/view/extractor>`__ to
+   You may use extension "extractor" `available in TER <https://extensions.typo3.org/extension/extractor>`__ to
    automatically extract and populate metadata when you upload assets to your website. This is likely to give you much
    better results than just relying on the built-in PHP-based metadata extractor.
 

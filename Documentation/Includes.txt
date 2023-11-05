@@ -28,7 +28,7 @@
 
 .. _`git repository of the TYPO3 ReST tools`: https://git.typo3.org/Documentation/RestTools.git/
 
-.. _`Sphinx/reStructuredText Documentation Viewer (restdoc)`: https://typo3.org/extensions/repository/view/restdoc
+.. _`Sphinx/reStructuredText Documentation Viewer (restdoc)`: https://extensions.typo3.org/extension/restdoc
 
 .. _Sphinx: http://sphinx-doc.org/
 
