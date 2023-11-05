@@ -21,8 +21,9 @@ Your slot should implement a method of the form:
        // Custom code
    }
 
-Parameter ``$operation`` is either ``RESIZE`` if ``$source`` was resized or ``RESIZE_CONVERT`` if ``$source`` was first
-resized and then converted to another file format.
+Parameter ``$operation`` is either ``RESIZE`` if ``$source`` was resized or
+``RESIZE_CONVERT`` if ``$source`` was first resized and then converted to
+another file format.
 
 
 Registering the slots

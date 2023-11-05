@@ -64,7 +64,13 @@ Resize images automatically
    AdministratorManual/Index
    DeveloperManual/Index
    KnownProblems/Index
-   ToDoList/Index
    FurtherInformation/Index
    ChangeLog/Index
    Links
+
+.. Meta Menu
+
+.. toctree::
+   :hidden:
+
+   Sitemap
