@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Causal\ImageAutoresize\Task;
 
 use Causal\ImageAutoresize\Utility\FAL;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\Enumeration\Action;
@@ -165,7 +166,17 @@ class BatchResizeAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Additio
 
 class fakeSchedulerModuleController extends \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController
 {
-    public function addMessage($message, $severity = FlashMessage::OK)
+    /**
+     * @param ModuleTemplate $moduleTemplate
+     * @param $message
+     * @param $severity
+     * @return void
+     */
+    public function addMessage(
+        ModuleTemplate $moduleTemplate,
+        $message,
+        $severity = FlashMessage::OK
+    ): void
     {
         parent::addMessage($message, $severity);
     }
