@@ -167,12 +167,12 @@ class ImageResizer
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
         if ($fileExtension === 'png' && !($ruleset['resize_png_with_alpha'] ?? false)) {
-            if (file_exists($fileName) && ImageUtility::isTransparentPng($fileName)) {
+            if (is_file($fileName) && ImageUtility::isTransparentPng($fileName)) {
                 return null;
             }
         }
 
-        if ($fileExtension === 'gif' && file_exists($fileName) && ImageUtility::isAnimatedGif($fileName)) {
+        if ($fileExtension === 'gif' && is_file($fileName) && ImageUtility::isAnimatedGif($fileName)) {
             return null;
         }
 
@@ -674,7 +674,7 @@ class ImageResizer
         $fileName = Environment::getPublicPath() . '/typo3temp/.tx_imageautoresize';
 
         $data = [];
-        if (file_exists($fileName)) {
+        if (is_file($fileName)) {
             $data = json_decode(file_get_contents($fileName), true);
             if (!is_array($data)) {
                 $data = [];

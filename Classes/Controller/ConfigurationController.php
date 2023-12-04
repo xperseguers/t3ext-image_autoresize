@@ -416,7 +416,7 @@ HTML;
         $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $configurationFileName = static::getConfigurationFileName();
 
-        $configuration = file_exists($configurationFileName) ? include($configurationFileName) : [];
+        $configuration = is_file($configurationFileName) ? include($configurationFileName) : [];
         if (!is_array($configuration) || empty($configuration)) {
             $configuration = static::getDefaultConfiguration();
             $configuration = $eventDispatcher->dispatch(new ProcessDefaultConfigurationEvent($configuration))->getConfiguration();
