@@ -14,6 +14,7 @@ For more details,
 =======  ======================================================
 Version  Changes
 =======  ======================================================
+2.3.x    Configuration stored along with the site definitions
 2.2.x    * Compatibility with TYPO3 10 LTS - 12 LTS
          * **Beware:** Dropped compatibility with PHP 7.2 and 7.3
 2.1.x    Compatibility with TYPO3 8 LTS - 11 LTS
