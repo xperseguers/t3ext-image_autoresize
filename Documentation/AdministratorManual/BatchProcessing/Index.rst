@@ -4,7 +4,7 @@
 Batch processing images
 -----------------------
 
-This extension provides a scheduler task to batch process uploaded images in the
+This extension provides a command to batch process uploaded images in the
 directories you normally watch for image upload (see :ref:`general-settings`).
 
 It is particularly useful if you let users upload images outside of TYPO3 (e.g.,
