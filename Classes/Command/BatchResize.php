@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -13,67 +14,68 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-declare(strict_types=1);
-
-namespace Causal\ImageAutoresize\Task;
+namespace Causal\ImageAutoresize\Command;
 
 use Causal\ImageAutoresize\Controller\ConfigurationController;
-use Causal\ImageAutoresize\Utility\FAL;
-use Psr\Log\LoggerInterface;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Causal\ImageAutoresize\Service\ImageResizer;
+use Causal\ImageAutoresize\Utility\FAL;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Scheduler task to batch resize pictures.
- *
- * @category    Task
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
- * @author      Xavier Perseguers <xavier@causal.ch>
- * @license     https://www.gnu.org/licenses/gpl-3.0.html
- */
-class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
+class BatchResize extends Command
 {
-
-    /**
-     * @var string
-     * @additionalField
-     */
-    public $directories = '';
-
-    /**
-     * @var string
-     * @additionalField
-     */
-    public $excludeDirectories = '';
-
     /**
      * @var ImageResizer
      */
     protected $imageResizer;
 
     /**
-     * Batch resize pictures, called by scheduler.
-     *
-     * @return bool true if task run was successful
+     * @var SymfonyStyle
      */
-    public function execute()
+    protected $io;
+
+    protected function configure()
     {
+        $this->addArgument(
+            'defaultDirectories',
+            InputArgument::OPTIONAL,
+            'Comma-separated list of directories to process (overrides watched directories)'
+        );
+        $this->addArgument(
+            'excludeDirectories',
+            InputArgument::OPTIONAL,
+            'Comma-separated list of directories to exclude from processing'
+        );
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->io = new SymfonyStyle($input, $output);
+        $this->io->title('Batch resize images');
+
         $configuration = ConfigurationController::readConfiguration();
         $pathSite = Environment::getPublicPath() . '/';
 
-        $this->imageResizer = GeneralUtility::makeInstance(\Causal\ImageAutoresize\Service\ImageResizer::class);
+        $this->imageResizer = GeneralUtility::makeInstance(ImageResizer::class);
         $this->imageResizer->initializeRulesets($configuration);
 
-        if (empty($this->directories)) {
+        $defaultDirectories = $input->getArgument('defaultDirectories');
+        if (empty($defaultDirectories)) {
             // Process watched directories
             $directories = $this->imageResizer->getAllDirectories();
         } else {
-            $dirs = GeneralUtility::trimExplode(LF, $this->directories, true);
+            $dirs = GeneralUtility::trimExplode(LF, $defaultDirectories, true);
             $directories = [];
             foreach ($dirs as $directory) {
                 $directoryConfig = FAL::getDirectoryConfig($directory);
@@ -123,23 +125,24 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 
             // Execute bach resize
             if (is_dir($directory)) {
-                $success |= $this->batchResizePictures($directory);
+                $success |= $this->batchResizePictures($input, $directory);
             }
             $processedDirectories[] = $directory;
         }
 
-        return $success;
+        return $success ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**
      * Batch resizes pictures in a given parent directory (including all subdirectories
      * recursively).
      *
+     * @oaram InputInterface $input
      * @param string $absolutePath
      * @return bool true if run was successful
      * @throws \RuntimeException
      */
-    protected function batchResizePictures(string $absolutePath): bool
+    protected function batchResizePictures(InputInterface $input, string $absolutePath): bool
     {
         // Check if given directory exists
         if (!@is_dir($absolutePath)) {
@@ -153,6 +156,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         // actually resizing the image while uploading, not during a batch processing (it's simply "too late").
         $backendUser = null;
 
+        /*
         if ((($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof \Psr\Http\Message\ServerRequestInterface
                 && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()
             ) || Environment::isCli()) {
@@ -160,8 +164,10 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         } else {
             $callbackNotification = [$this, 'notify'];
         }
+        */
+        $callbackNotification = [$this, 'notify'];
 
-        $dirs = GeneralUtility::trimExplode(LF, $this->excludeDirectories, true);
+        $dirs = GeneralUtility::trimExplode(LF, $input->getArgument('excludeDirectories'), true);
         $excludeDirectories = [];
         foreach ($dirs as $directory) {
             $directoryConfig = FAL::getDirectoryConfig($directory);
@@ -176,7 +182,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $name = substr($fileName, strlen($filePath) + 1);
 
             // Skip files in recycler directory or whose type should not be processed
-            $skip = substr($name, 0, 1) === '.' || substr($filePath, -10) === '_recycler_';
+            $skip = $name[0] === '.' || substr($filePath, -10) === '_recycler_';
             if (!$skip) {
                 // Check if we should skip since in one of the exclude directories
                 foreach ($excludeDirectories as $excludeDirectory) {
@@ -194,7 +200,7 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             if (!$skip) {
                 if (($dotPosition = strrpos($name, '.')) !== false) {
                     $fileExtension = strtolower(substr($name, $dotPosition + 1));
-                    if (in_array($fileExtension, $allFileTypes)) {
+                    if (in_array($fileExtension, $allFileTypes, true)) {
                         $this->imageResizer->processFile(
                             $fileName,
                             '',    // target file name
@@ -211,80 +217,24 @@ class BatchResizeTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
         return true;
     }
 
-    /**
-     * Notifies the user using a Flash message.
-     *
-     * @param string $message The message
-     * @param int $severity Optional severity, must be either of \TYPO3\CMS\Core\Messaging\FlashMessage::INFO,
-     *                      \TYPO3\CMS\Core\Messaging\FlashMessage::OK, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING
-     *                      or \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR.
-     *                      Default is \TYPO3\CMS\Core\Messaging\FlashMessage::OK.
-     * @internal This method is public only to be callable from a callback
-     */
-    public function notify(string $message, int $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
+    public function notify(string $message, int $severity = FlashMessage::OK)
     {
-        static $numberOfValidNotifications = 0;
-
-        if ($severity <= \TYPO3\CMS\Core\Messaging\FlashMessage::OK || \TYPO3\CMS\Core\Messaging\FlashMessage::OK) {
-            $numberOfValidNotifications++;
-            if ($numberOfValidNotifications > 20) {
-                // Do not show more "ok" messages
-                return;
-            }
-        }
-
-        $flashMessage = GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Messaging\FlashMessage::class,
-            $message,
-            '',
-            $severity,
-            true
-        );
-        /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
-        $flashMessageService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
-        /** @var \TYPO3\CMS\Core\Messaging\FlashMessageQueue $defaultFlashMessageQueue */
-        $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
-        $defaultFlashMessageQueue->enqueue($flashMessage);
-    }
-
-    /**
-     * Creates an entry in syslog.
-     *
-     * @param string $message
-     * @param int $severity
-     */
-    public function syslog($message, $severity = \TYPO3\CMS\Core\Messaging\FlashMessage::OK)
-    {
-        /** @var LoggerInterface $logger */
-        $logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
-
         switch ($severity) {
-            case \TYPO3\CMS\Core\Messaging\FlashMessage::NOTICE:
-                $logger->notice($message);
+            case FlashMessage::NOTICE:
+                $this->io->note($message);
                 break;
-            case \TYPO3\CMS\Core\Messaging\FlashMessage::INFO:
-                $logger->info($message);
+            case FlashMessage::INFO:
+                $this->io->info($message);
                 break;
-            case \TYPO3\CMS\Core\Messaging\FlashMessage::OK:
-                $logger->info($message);
+            case FlashMessage::OK:
+                $this->io->success($message);
                 break;
-            case \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING:
-                $logger->warning($message);
+            case FlashMessage::WARNING:
+                $this->io->warning($message);
                 break;
-            case \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR:
-                $logger->error($message);
+            case FlashMessage::ERROR:
+                $this->io->error($message);
                 break;
         }
     }
-
-    /**
-     * Returns the current BE user.
-     *
-     * @return BackendUserAuthentication
-     */
-    protected function getBackendUser(): BackendUserAuthentication
-    {
-        return $GLOBALS['BE_USER'];
-    }
-
 }
