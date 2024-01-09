@@ -352,13 +352,14 @@ class ImageResizer
             $message = LocalizationUtility::translate('message.cannotResize', 'image_autoresize');
             $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
         } elseif (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
-            // Conversion leads to same or bigger file (rounded to 10KB to accomodate tiny variations in compression) => skip!
+            // Conversion leads to same or bigger file (rounded to 10KB to accommodate tiny variations in compression) => skip!
             @unlink($tempFileInfo[3]);
             $tempFileInfo = null;
         }
         if ($tempFileInfo) {
             if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
                 // Signal to post-process the image
+                // @deprecated Will be removed in version 2.4.0
                 $this->signalSlotDispatcher->dispatch(
                     __CLASS__,
                     'afterImageResize',

@@ -423,6 +423,7 @@ HTML;
         }
 
         if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+            // @deprecated Will be removed in version 2.4.0
             $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
             $signalSlotDispatcher->dispatch(
                 __CLASS__,
