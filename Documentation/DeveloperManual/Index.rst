@@ -15,7 +15,7 @@ The concept of PSR-14 events allows for easy implementation of the
 `Observer pattern <https://en.wikipedia.org/wiki/Observer_pattern>`_ in
 software, something similar to *signal and slots* or *hooks* in former versions
 of TYPO3. Please read chapter
-`Event dispatcher (PSR-14 events) <https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/EventDispatcher/Index.html>`__
+`Event dispatcher (PSR-14 events) <https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Events/EventDispatcher/Index.html>`__
 from TYPO3 Core documentation.
 
 **Available events:**
