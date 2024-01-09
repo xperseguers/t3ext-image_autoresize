@@ -226,7 +226,7 @@ class ImageResizer
         }
 
         // Make file name relative, store as $targetFileName
-        // This happens in scheduler task or when uploading to "uploads/"
+        // This happens in scheduler task
         if (empty($targetFileName)) {
             $targetFileName = PathUtility::basename($fileName);
         }

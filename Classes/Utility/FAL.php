@@ -236,24 +236,15 @@ class FAL
                 ];
             }
         } else {
-            $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-                ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-                : TYPO3_branch;
-
-            // Only "uploads/" is now allowed to be using a non-FAL identifier without deprecation
-            $isInUploadsDirectory = PHP_VERSION_ID >= 80000
-                ? str_starts_with($path, 'uploads/')
-                : GeneralUtility::isFirstPartOfStr($path, 'uploads/');
-            if (!$isInUploadsDirectory) {
-                $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
-                $isInFileadminDirectory = PHP_VERSION_ID >= 80000
-                    ? str_starts_with($path, 'fileadmin/')
-                    : GeneralUtility::isFirstPartOfStr($path, 'fileadmin/');
-                if ($isInFileadminDirectory) {
-                    $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
-                }
-                trigger_error($message, E_USER_DEPRECATED);
+            // @deprecated Will be removed in version 2.4.0 (plenty of time to migrate)
+            $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
+            $isInFileadminDirectory = PHP_VERSION_ID >= 80000
+                ? str_starts_with($path, 'fileadmin/')
+                : GeneralUtility::isFirstPartOfStr($path, 'fileadmin/');
+            if ($isInFileadminDirectory) {
+                $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
             }
+            trigger_error($message, E_USER_DEPRECATED);
 
             $pathSite = Environment::getPublicPath() . '/';
             $directoryPattern = static::getDirectoryPattern($path);
