@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="ar">
+    <header/>
+    <body>
+      <trans-unit id="saveConfiguration">
+        <source>Save configuration</source>
+        <target state="needs-translation">Save configuration</target>
+      </trans-unit>
+      <trans-unit id="saveCloseConfiguration">
+        <source>Save and close configuration</source>
+        <target state="needs-translation">Save and close configuration</target>
+      </trans-unit>
+      <trans-unit id="closeConfiguration">
+        <source>Close configuration</source>
+        <target state="needs-translation">Close configuration</target>
+      </trans-unit>
+      <trans-unit id="extension.ai">
+        <source>.ai - Adobe Illustrator</source>
+        <target state="needs-translation">.ai - Adobe Illustrator</target>
+      </trans-unit>
+      <trans-unit id="extension.bmp">
+        <source>.bmp - Windows OS/2 Bitmap Graphics</source>
+        <target state="needs-translation">.bmp - Windows OS/2 Bitmap Graphics</target>
+      </trans-unit>
+      <trans-unit id="extension.gif">
+        <source>.gif - Graphic Interchange Format</source>
+        <target state="needs-translation">.gif - Graphic Interchange Format</target>
+      </trans-unit>
+      <trans-unit id="extension.jpg">
+        <source>.jpg - JPEG/JIFF Image</source>
+        <target state="needs-translation">.jpg - JPEG/JIFF Image</target>
+      </trans-unit>
+      <trans-unit id="extension.jpeg">
+        <source>.jpeg - JPEG/JIFF Image</source>
+        <target state="needs-translation">.jpeg - JPEG/JIFF Image</target>
+      </trans-unit>
+      <trans-unit id="extension.pcx">
+        <source>.pcx - Paintbrush Bitmap Graphic</source>
+        <target state="needs-translation">.pcx - Paintbrush Bitmap Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.png">
+        <source>.png - Portable Network Graphic</source>
+        <target state="needs-translation">.png - Portable Network Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tga">
+        <source>.tga - Truevision Targa Graphic</source>
+        <target state="needs-translation">.tga - Truevision Targa Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tif">
+        <source>.tif - Tagged Image Format</source>
+        <target state="needs-translation">.tif - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="extension.tiff">
+        <source>.tiff - Tagged Image Format</source>
+        <target state="needs-translation">.tiff - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="message.imageTransparent">
+        <source>Image %s has not been resized because transparency has been detected.</source>
+        <target state="needs-translation">Image %s has not been resized because transparency has been detected.</target>
+      </trans-unit>
+      <trans-unit id="message.imageAnimated">
+        <source>Image %s has not been resized because it is an animated GIF.</source>
+        <target state="needs-translation">Image %s has not been resized because it is an animated GIF.</target>
+      </trans-unit>
+      <trans-unit id="message.imageResized">
+        <source>Image %s has been automatically resized to %sx%s pixels.</source>
+        <target state="needs-translation">Image %s has been automatically resized to %sx%s pixels.</target>
+      </trans-unit>
+      <trans-unit id="message.imageResizedAndRenamed">
+        <source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
+        <target state="needs-translation">Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</target>
+      </trans-unit>
+      <trans-unit id="message.imageNotWritable">
+        <source>Image %s cannot be resized because file is not writable.</source>
+        <target state="needs-translation">Image %s cannot be resized because file is not writable.</target>
+      </trans-unit>
+      <trans-unit id="message.cannotResize">
+        <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
+        <target state="needs-translation">Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
