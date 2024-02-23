@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -233,9 +234,19 @@ class ConfigurationController
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
 
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.4', '>=')) {
+            $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+            $class = new \ReflectionClass($pageRenderer);
+            $property = $class->getProperty('nonce');
+            $property->setAccessible(true);
+            $nonce = $property->getValue($pageRenderer)->consume();
+        } else {
+            $nonce = '';
+        }
+
         $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
         $formContent .= <<<HTML
-<script type="text/javascript">
+<script type="text/javascript" nonce="$nonce">
     TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
 </script>
 HTML;
@@ -529,7 +540,7 @@ HTML;
 
         $extPath = ExtensionManagementUtility::extPath($this->extKey, 'Resources/Public/');
         $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
-        $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
         $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
