@@ -18,6 +18,7 @@ namespace Causal\ImageAutoresize\EventListener;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extensionmanager\Event\AvailableActionsForExtensionEvent;
 
@@ -51,14 +52,18 @@ class ExtensionManagerEventListener
         $actions[0] = $configureAction;
         unset($actions[1], $actions[2], $actions[3], $actions[4]);
 
-        $title = htmlspecialchars($event->getPackageData()['title']);
-        $titleAction = htmlspecialchars($moduleUrl);
-        $pattern = "/>$title</";
-        $replacement = "'><a href=\"$titleAction\">$title</a><'";
-        $actions[] = "<script type=\"text/javascript\">
-            var titleCell = document.getElementById('image_autoresize').getElementsByTagName('td')[2];
-            titleCell.innerHTML = titleCell.innerHTML.replace($pattern, $replacement);
-        </script>";
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.4', '<')) {
+            // Starting from TYPO3 v12, we do not expect the extension title to be a link
+            // and this prevents a possible CSP violation in the Backend
+            $title = htmlspecialchars($event->getPackageData()['title']);
+            $titleAction = htmlspecialchars($moduleUrl);
+            $pattern = "/>$title</";
+            $replacement = "'><a href=\"$titleAction\">$title</a><'";
+            $actions[] = "<script type=\"text/javascript\">
+                var titleCell = document.getElementById('image_autoresize').getElementsByTagName('td')[2];
+                titleCell.innerHTML = titleCell.innerHTML.replace($pattern, $replacement);
+            </script>";
+        }
 
         $event->setActions($actions);
     }
