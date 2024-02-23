@@ -85,6 +85,12 @@ return [
                 'type' => 'check',
             ],
         ],
+        'auto_orient_custom' => [
+            'label' => 'Use custom auto_orient (flop rotate 6 and 8 handling, based on image exif)',
+            'config' => [
+                'type' => 'check',
+            ],
+        ],
         'keep_metadata' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.keep_metadata',
             'config' => [
@@ -121,7 +127,7 @@ return [
             'directories,threshold,file_types,
 			--palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:ALT.imgDimensions;dimensions,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.options,
-				auto_orient,keep_metadata,resize_png_with_alpha,conversion_mapping,
+				auto_orient,auto_orient_custom,keep_metadata,resize_png_with_alpha,conversion_mapping,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.rulesets,
 				rulesets
 		'],
