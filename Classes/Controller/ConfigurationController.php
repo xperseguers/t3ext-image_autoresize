@@ -357,10 +357,20 @@ HTML;
             // Action commands (sorting order and removals of FlexForm elements)
             $ffValue = &$data[$field];
             if ($ffValue) {
-                $actionCMDs = GeneralUtility::_GP('_ACTION_FLEX_FORMdata');
-                if (is_array($actionCMDs[$table][$id][$field]['data'])) {
-                    $dataHandler = new CustomDataHandler();
-                    $dataHandler->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
+                // Remove FlexForm elements if needed
+                if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.4', '>=')) {
+                    foreach ($ffValue['data']['sDEF']['lDEF']['ruleset']['el'] ?? [] as $key => $value) {
+                        if (($value['_ACTION'] ?? '') === 'DELETE') {
+                            unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]);
+                        }
+                        unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]['_ACTION']);
+                    }
+                } else {
+                    $actionCMDs = GeneralUtility::_GP('_ACTION_FLEX_FORMdata');
+                    if (is_array($actionCMDs[$table][$id][$field]['data'])) {
+                        $dataHandler = new CustomDataHandler();
+                        $dataHandler->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
+                    }
                 }
                 // Renumber all FlexForm temporary ids
                 $this->persistFlexForm($ffValue['data']);
