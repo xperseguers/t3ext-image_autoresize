@@ -126,6 +126,16 @@ class ImageUtility
         ];
 
         if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
+            $allowedPaths = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? [];
+            if (is_string($allowedPaths)) {
+                // The setting was a string before and is now an array
+                // For compatibility reasons, we cast a string to an array here for now
+                $allowedPaths = [$allowedPaths];
+            }
+            $allowedPaths[] = $storageConfiguration['basePath'];
+            $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
+
             $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
             $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
             $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
