@@ -125,7 +125,11 @@ class ImageUtility
             'pathType' => 'absolute'
         ];
 
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
+        if (version_compare($typo3Version, '10.4.43', '>=')
+            || version_compare($typo3Version, '11.5.35', '>=')
+            || version_compare($typo3Version, '12.4.11', '>=')) {
             // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
             $allowedPaths = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? [];
             if (is_string($allowedPaths)) {
@@ -135,7 +139,8 @@ class ImageUtility
             }
             $allowedPaths[] = $storageConfiguration['basePath'];
             $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
-
+        }
+        if (version_compare($typo3Version, '11.5', '>=')) {
             $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
             $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
             $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
