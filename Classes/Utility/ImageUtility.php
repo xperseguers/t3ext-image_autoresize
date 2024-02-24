@@ -14,6 +14,7 @@
 
 namespace Causal\ImageAutoresize\Utility;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -127,6 +128,27 @@ class ImageUtility
             'basePath' => PathUtility::dirname($fileName),
             'pathType' => 'absolute'
         ];
+
+        $typo3Version = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
+            ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getVersion()
+            : TYPO3_version;
+        // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
+        if (version_compare($typo3Version, '8.7.57', '>=')
+            || version_compare($typo3Version, '9.5.46', '>=')
+            || version_compare($typo3Version, '10.4.43', '>=')
+            || version_compare($typo3Version, '11.5.35', '>=')) {
+            // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
+            $allowedPaths = isset($GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'])
+                ? $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath']
+                : [];
+            if (is_string($allowedPaths)) {
+                // The setting was a string before and is now an array
+                // For compatibility reasons, we cast a string to an array here for now
+                $allowedPaths = [$allowedPaths];
+            }
+            $allowedPaths[] = $storageConfiguration['basePath'];
+            $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
+        }
 
         $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
         $name = PathUtility::basename($fileName);
