@@ -127,6 +127,7 @@ class ImageUtility
 
         $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
         // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
+        $backupLockRootPath = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? null;
         if (version_compare($typo3Version, '10.4.43', '>=')
             || version_compare($typo3Version, '11.5.35', '>=')
             || version_compare($typo3Version, '12.4.11', '>=')) {
@@ -137,6 +138,7 @@ class ImageUtility
                 // For compatibility reasons, we cast a string to an array here for now
                 $allowedPaths = [$allowedPaths];
             }
+            $backupLockRootPath = $allowedPaths;
             $allowedPaths[] = $storageConfiguration['basePath'];
             $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
         }
@@ -151,6 +153,8 @@ class ImageUtility
             $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
             $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
         }
+        // Restore the original lockRootPath
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $backupLockRootPath;
         $name = PathUtility::basename($fileName);
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
