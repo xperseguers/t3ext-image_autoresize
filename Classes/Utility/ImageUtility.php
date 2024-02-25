@@ -133,6 +133,9 @@ class ImageUtility
             ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getVersion()
             : TYPO3_version;
         // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
+        $backupLockRootPath = isset($GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'])
+            ? $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath']
+            : null;
         if (version_compare($typo3Version, '8.7.57', '>=')
             || version_compare($typo3Version, '9.5.46', '>=')
             || version_compare($typo3Version, '10.4.43', '>=')
@@ -146,11 +149,14 @@ class ImageUtility
                 // For compatibility reasons, we cast a string to an array here for now
                 $allowedPaths = [$allowedPaths];
             }
+            $backupLockRootPath = $allowedPaths;
             $allowedPaths[] = $storageConfiguration['basePath'];
             $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
         }
 
         $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
+        // Restore the original lockRootPath
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $backupLockRootPath;
         $name = PathUtility::basename($fileName);
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
