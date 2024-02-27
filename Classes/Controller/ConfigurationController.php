@@ -117,14 +117,13 @@ class ConfigurationController
         } else {
             $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         }
-        $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
         $this->processData($request);
 
         $formTag = '<form action="" method="post" name="editform" id="EditDocumentController">';
 
         $this->moduleTemplate->setForm($formTag);
 
-        $this->content .= sprintf('<h3>%s</h3>', htmlspecialchars($this->languageService->getLL('title')));
+        $this->content .= sprintf('<h3>%s</h3>', htmlspecialchars($this->sL('title')));
         $this->addStatisticsAndSocialLink();
 
         // Generate the content
@@ -546,12 +545,12 @@ HTML;
         $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
         $totalSpaceClaimed = GeneralUtility::formatSize((int)$data['bytes']);
-        $messagePattern = $this->languageService->getLL('storage.claimed');
+        $messagePattern = $this->sL('storage.claimed');
         $message = sprintf($messagePattern, $totalSpaceClaimed, (int)$data['images']);
 
         $flashMessage = htmlspecialchars($message);
 
-        $twitterMessagePattern = $this->languageService->getLL('social.twitter');
+        $twitterMessagePattern = $this->sL('social.twitter');
         $message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
         $url = 'https://extensions.typo3.org/extension/image_autoresize/';
 
@@ -559,7 +558,7 @@ HTML;
         $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . htmlspecialchars($this->languageService->getLL('social.share')) . '">
+                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . htmlspecialchars($this->sL('social.share')) . '">
                     <i class="btn-icon"></i>
                     <span class="btn-text">Tweet</span>
                 </a>
@@ -600,6 +599,11 @@ HTML;
         return $newConfigurationFileName;
     }
 
+    protected function sL(string $key): string
+    {
+        $input = 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:' . $key;
+        return $this->languageService->sL($input);
+    }
 }
 
 // ReflectionMethod does not work properly with arguments passed as reference thus
