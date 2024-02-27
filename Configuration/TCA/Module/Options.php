@@ -14,6 +14,7 @@ return [
     'columns' => [
         'directories' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories.description',
             'config' => [
                 'type' => 'input',
                 'size' => '50',
@@ -35,6 +36,7 @@ return [
         ],
         'threshold' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold.description',
             'config' => [
                 'type' => 'input',
                 'size' => '10',
@@ -72,6 +74,7 @@ return [
         ],
         'max_size' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size.description',
             'config' => [
                 'type' => 'input',
                 'size' => '10',
@@ -81,24 +84,28 @@ return [
         ],
         'auto_orient' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.auto_orient',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.auto_orient.description',
             'config' => [
                 'type' => 'check',
             ],
         ],
         'keep_metadata' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.keep_metadata',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.keep_metadata.description',
             'config' => [
                 'type' => 'check',
             ],
         ],
         'resize_png_with_alpha' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.resize_png_with_alpha',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.resize_png_with_alpha.description',
             'config' => [
                 'type' => 'check',
             ],
         ],
         'conversion_mapping' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.conversion_mapping',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.conversion_mapping.description',
             'config' => [
                 'type' => 'text',
                 'cols' => '20',
@@ -108,6 +115,7 @@ return [
         ],
         'rulesets' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.rulesets',
+            'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.rulesets.description',
             'config' => [
                 'type' => 'flex',
                 'ds' => [

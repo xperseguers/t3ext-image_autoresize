@@ -6,11 +6,22 @@
 			<trans-unit id="tx_imageautoresize.directories">
 				<source>Directories:</source>
 			</trans-unit>
+			<trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve">
+				<source>Comma-separated list of directories to be monitored.
+Example: 1:/ (for fileadmin/)
+
+Wildcards are supported:
+1:/*/images/
+1:/**/images/</source>
+			</trans-unit>
 			<trans-unit id="tx_imageautoresize.file_types">
 				<source>Image types:</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.threshold">
 				<source>File size threshold:</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.threshold.description">
+				<source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_width">
 				<source>Maximum width:</source>
@@ -21,11 +32,20 @@
 			<trans-unit id="tx_imageautoresize.max_size">
 				<source>Maximum image size (pixel area):</source>
 			</trans-unit>
+			<trans-unit id="tx_imageautoresize.max_size.description">
+				<source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
+			</trans-unit>
 			<trans-unit id="tx_imageautoresize.auto_orient">
 				<source>Automatic orientation</source>
 			</trans-unit>
+			<trans-unit id="tx_imageautoresize.auto_orient.description">
+				<source>Will try to auto-magically orient image (useful with photos).</source>
+			</trans-unit>
 			<trans-unit id="tx_imageautoresize.keep_metadata">
 				<source>Keep profile and metadata</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.keep_metadata.description">
+				<source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.keep_metadata.inherit">
 				<source>Use general setting</source>
@@ -39,11 +59,22 @@
 			<trans-unit id="tx_imageautoresize.resize_png_with_alpha">
 				<source>Resize PNG files with alpha-channel</source>
 			</trans-unit>
+			<trans-unit id="tx_imageautoresize.resize_png_with_alpha.description">
+				<source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
+			</trans-unit>
 			<trans-unit id="tx_imageautoresize.conversion_mapping">
 				<source>Image type conversion mapping</source>
 			</trans-unit>
+			<trans-unit id="tx_imageautoresize.conversion_mapping.description">
+				<source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
+			</trans-unit>
 			<trans-unit id="tx_imageautoresize.rulesets">
 				<source>Rule sets</source>
+			</trans-unit>
+			<trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve">
+				<source>You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.title">
 				<source>Title:</source>
