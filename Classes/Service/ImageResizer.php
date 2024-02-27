@@ -26,6 +26,7 @@ use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -243,7 +244,11 @@ class ImageResizer
                     LocalizationUtility::translate('message.imageTransparent', 'image_autoresize'),
                     $targetFileName
                 );
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+                if (version_compare($typo3Version, '12.0', '>=')) {
+                    $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+                } else {
+                    $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+                }
                 return $fileName;
             }
         }
@@ -252,7 +257,11 @@ class ImageResizer
                 LocalizationUtility::translate('message.imageAnimated', 'image_autoresize'),
                 $targetFileName
             );
-            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+            if (version_compare($typo3Version, '12.0', '>=')) {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
+            } else {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+            }
             return $fileName;
         }
 
@@ -267,7 +276,11 @@ class ImageResizer
                 LocalizationUtility::translate('message.imageNotWritable', 'image_autoresize'),
                 $targetFileName
             );
-            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            if (version_compare($typo3Version, '12.0', '>=')) {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+            } else {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            }
             return $fileName;
         }
 
@@ -297,8 +310,15 @@ class ImageResizer
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
         // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
-        $gifCreator->scalecmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
+        if (version_compare($typo3Version, '13.0', '>=')) {
+            $scaleCmd = trim(str_replace('-auto-orient', '', $gifCreator->getGraphicalFunctions()->scalecmd));
+            $gifCreator->getGraphicalFunctions()->scalecmd = $scaleCmd;
+        } else {
+            $scaleCmd = trim(str_replace('-auto-orient', '', $gifCreator->scalecmd));
+            $gifCreator->scalecmd = $scaleCmd;
+        }
 
         $imParams = isset($gifCreator->cmds[$destExtension]) ? $gifCreator->cmds[$destExtension] : '';
         $imParams .= (bool)($ruleset['keep_metadata'] ?? false) === true ? ' ###SkipStripProfile###' : '';
@@ -309,7 +329,11 @@ class ImageResizer
         if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
-            $gifCreator->scalecmd = '-auto-orient ' . $gifCreator->scalecmd;
+            if (version_compare($typo3Version, '13.0', '>=')) {
+                $gifCreator->getGraphicalFunctions()->scalecmd = '-auto-orient ' . $scaleCmd;
+            } else {
+                $gifCreator->scalecmd = '-auto-orient ' . $scaleCmd;
+            }
         }
 
         if (
@@ -346,17 +370,25 @@ class ImageResizer
             $currentLocale = (string)setlocale(LC_CTYPE, '0');
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
         }
-        $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
+        if (version_compare($typo3Version, '13.0', '>=')) {
+            $tempFileInfo = $gifCreator->getGraphicalFunctions()->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
+        } else {
+            $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
+        }
         if ($tempFileInfo === null) {
             $message = LocalizationUtility::translate('message.cannotResize', 'image_autoresize');
-            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            if (version_compare($typo3Version, '12.0', '>=')) {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
+            } else {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            }
         } elseif (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accommodate tiny variations in compression) => skip!
             @unlink($tempFileInfo[3]);
             $tempFileInfo = null;
         }
         if ($tempFileInfo) {
-            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+            if (version_compare($typo3Version, '12.0', '<')) {
                 // Signal to post-process the image
                 // @deprecated Will be removed in version 2.4.0
                 $this->signalSlotDispatcher->dispatch(
@@ -423,7 +455,11 @@ class ImageResizer
                 // We are in upload process. Do nothing
             }
 
-            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
+            if (version_compare($typo3Version, '12.0', '>=')) {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
+            } else {
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
+            }
         } else {
             // Destination file was not written
             $destFileName = $fileName;
@@ -446,9 +482,9 @@ class ImageResizer
      *
      * @param callback $callbackNotification Callback to send notification
      * @param string $message
-     * @param int $severity
+     * @param int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity
      */
-    protected function notify($callbackNotification, string $message, int $severity): void
+    protected function notify($callbackNotification, string $message, $severity): void
     {
         $callableName = '';
         if (is_callable($callbackNotification, false, $callableName)) {
