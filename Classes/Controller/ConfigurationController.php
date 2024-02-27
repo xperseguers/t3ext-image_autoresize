@@ -111,7 +111,8 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        if (version_compare($typo3Version, '11.5', '>=')) {
             $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
             $this->moduleTemplate = $moduleTemplateFactory->create($request);
         } else {
@@ -131,10 +132,15 @@ class ConfigurationController
 
         // Compile document
         $this->addToolbarButtons();
-        $this->moduleTemplate->setContent($this->content);
-        $content = $this->moduleTemplate->renderContent();
 
-        return new HtmlResponse($content);
+        if (version_compare($typo3Version, '12.5', '<')) {
+            $this->moduleTemplate->setContent($this->content);
+            $content = $this->moduleTemplate->renderContent();
+            return new HtmlResponse($content);
+        }
+
+        $this->moduleTemplate->assign('content', $this->content);
+        return $this->moduleTemplate->renderResponse('Configuration');
     }
 
     /**
