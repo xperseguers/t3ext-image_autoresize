@@ -127,7 +127,7 @@ class ConfigurationController
         $this->addStatisticsAndSocialLink();
 
         // Generate the content
-        $this->moduleContent($this->config);
+        $this->moduleContent($request, $this->config);
 
         // Compile document
         $this->addToolbarButtons();
@@ -140,14 +140,15 @@ class ConfigurationController
     /**
      * Generates the module content.
      *
+     * @param ServerRequestInterface $request
      * @param array $row
      */
-    protected function moduleContent(array $row): void
+    protected function moduleContent(ServerRequestInterface $request, array $row): void
     {
         $this->formResultCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormResultCompiler::class);
 
         $wizard = $this->formResultCompiler->addCssFiles();
-        $wizard .= $this->buildForm($row);
+        $wizard .= $this->buildForm($request, $row);
         $wizard .= $this->formResultCompiler->printNeededJSFunctions();
 
         $this->content .= $wizard;
@@ -156,10 +157,11 @@ class ConfigurationController
     /**
      * Builds the expert configuration form.
      *
+     * @param ServerRequestInterface $request
      * @param array $row
      * @return string
      */
-    protected function buildForm(array $row): string
+    protected function buildForm(ServerRequestInterface $request, array $row): string
     {
         $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
 
@@ -192,6 +194,7 @@ class ConfigurationController
         $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
 
         $formDataCompilerInput = [
+            'request' => $request,
             'tableName' => static::virtualTable,
             'vanillaUid' => $record['uid'],
             'command' => 'edit',
