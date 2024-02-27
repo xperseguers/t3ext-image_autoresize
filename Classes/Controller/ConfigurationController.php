@@ -457,7 +457,7 @@ HTML;
                 __CLASS__,
                 static::SIGNAL_ProcessConfiguration,
                 [
-                    'configuration' => &$configuration,
+                    /* 'configuration' => */ &$configuration,
                 ]
             );
         }

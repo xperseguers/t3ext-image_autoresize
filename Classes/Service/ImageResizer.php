@@ -395,11 +395,11 @@ class ImageResizer
                     __CLASS__,
                     'afterImageResize',
                     [
-                        'operation' => ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
-                        'source' => $fileName,
-                        'destination' => $tempFileInfo[3],
-                        'newWidth' => &$tempFileInfo[0],
-                        'newHeight' => &$tempFileInfo[1],
+                        /* 'operation' => */ ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
+                        /* 'source' => */ $fileName,
+                        /* 'destination' => */ $tempFileInfo[3],
+                        /* 'newWidth' => */ &$tempFileInfo[0],
+                        /* 'newHeight' => */ &$tempFileInfo[1],
                     ]
                 );
             }
