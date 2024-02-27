@@ -577,21 +577,42 @@ HTML;
                 </a>
             </div>';
 
-        $this->content .= '
-            <div class="alert alert-info">
-                <div class="media">
-                    <div class="media-left">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-info fa-stack-1x"></i>
-                        </span>
-                    </div>
-                    <div class="media-body">
-                        ' . $flashMessage . '
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        if (version_compare($typo3Version, '12.5', '>=')) {
+            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            $icon = $iconFactory->getIcon(
+                'actions-info',
+                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+            );
+            $this->content .= '
+                <div class="alert alert-info">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="icon-emphasized"> ' . $icon . '</span>
+                        </div>
+                        <div class="media-body">
+                            ' . $flashMessage . '
+                        </div>
                     </div>
                 </div>
-            </div>
-        ';
+            ';
+        } else {
+            $this->content .= '
+                <div class="alert alert-info">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-info fa-stack-1x"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            ' . $flashMessage . '
+                        </div>
+                    </div>
+                </div>
+            ';
+        }
     }
 
     /**
