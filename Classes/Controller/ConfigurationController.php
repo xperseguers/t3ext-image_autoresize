@@ -118,7 +118,7 @@ class ConfigurationController
             $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         }
         $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
-        $this->processData();
+        $this->processData($request);
 
         $formTag = '<form action="" method="post" name="editform" id="EditDocumentController">';
 
@@ -339,20 +339,21 @@ HTML;
     /**
      * Processes submitted data and stores it to localconf.php.
      *
+     * @param ServerRequestInterface $request
      * @return void
      */
-    protected function processData(): void
+    protected function processData(ServerRequestInterface $request): void
     {
-        $close = GeneralUtility::_GP('closeDoc');
-        $save = GeneralUtility::_GP('_savedok');
-        $saveAndClose = GeneralUtility::_GP('_saveandclosedok');
+        $close = (bool)($request->getParsedBody()['closeDoc'] ?? false);
+        $save = (bool)($request->getParsedBody()['doSave'] ?? false);
+        $saveAndClose = (bool)($request->getParsedBody()['_saveandclosedok'] ?? false);
 
         if ($save || $saveAndClose) {
             $table = static::virtualTable;
             $id = static::virtualRecordId;
             $field = 'rulesets';
 
-            $inputData_tmp = GeneralUtility::_GP('data');
+            $inputData_tmp = $request->getParsedBody()['data'];
             $data = $inputData_tmp[$table][$id];
 
             if (count($inputData_tmp[$table]) > 1) {
