@@ -161,6 +161,8 @@ class ConfigurationController
      */
     protected function buildForm(array $row): string
     {
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+
         $record = [
             'uid' => static::virtualRecordId,
             'pid' => 0,
@@ -181,8 +183,11 @@ class ConfigurationController
 
         /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
-        /** @var \TYPO3\CMS\Backend\Form\FormDataCompiler $formDataCompiler */
-        $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
+        if (version_compare($typo3Version, '12.4', '>=')) {
+            $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class);
+        } else {
+            $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
+        }
         /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
         $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
 
@@ -196,7 +201,7 @@ class ConfigurationController
         // Load the configuration of virtual table 'tx_imageautoresize'
         $this->loadVirtualTca();
 
-        $formData = $formDataCompiler->compile($formDataCompilerInput);
+        $formData = $formDataCompiler->compile($formDataCompilerInput, $formDataGroup);
         $formData['renderType'] = 'outerWrapContainer';
         $formResult = $nodeFactory->create($formData)->render();
 
@@ -233,7 +238,7 @@ class ConfigurationController
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
 
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.4', '>=')) {
+        if (version_compare($typo3Version, '12.4', '>=')) {
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
             $class = new \ReflectionClass($pageRenderer);
             $property = $class->getProperty('nonce');
