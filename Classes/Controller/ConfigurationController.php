@@ -133,7 +133,7 @@ class ConfigurationController
         // Compile document
         $this->addToolbarButtons();
 
-        if (version_compare($typo3Version, '12.5', '<')) {
+        if (version_compare($typo3Version, '12.4', '<')) {
             $this->moduleTemplate->setContent($this->content);
             $content = $this->moduleTemplate->renderContent();
             return new HtmlResponse($content);
@@ -578,7 +578,7 @@ HTML;
             </div>';
 
         $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
-        if (version_compare($typo3Version, '12.5', '>=')) {
+        if (version_compare($typo3Version, '12.4', '>=')) {
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
             $icon = $iconFactory->getIcon(
                 'actions-info',
