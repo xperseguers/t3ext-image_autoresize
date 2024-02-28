@@ -193,25 +193,30 @@ class ConfigurationController
         $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
         if (version_compare($typo3Version, '12.4', '>=')) {
             $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class);
+            $formDataCompilerInput = [
+                'request' => $request,
+                'tableName' => static::virtualTable,
+                'vanillaUid' => $record['uid'],
+                'command' => 'edit',
+                'returnUrl' => '',
+            ];
         } else {
             $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
+            $formDataCompilerInput = [
+                'tableName' => static::virtualTable,
+                'vanillaUid' => $record['uid'],
+                'command' => 'edit',
+                'returnUrl' => '',
+            ];
         }
-        /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
-        $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
-
-        $formDataCompilerInput = [
-            'request' => $request,
-            'tableName' => static::virtualTable,
-            'vanillaUid' => $record['uid'],
-            'command' => 'edit',
-            'returnUrl' => '',
-        ];
 
         // Load the configuration of virtual table 'tx_imageautoresize'
         $this->loadVirtualTca();
 
         $formData = $formDataCompiler->compile($formDataCompilerInput, $formDataGroup);
         $formData['renderType'] = 'outerWrapContainer';
+        /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
+        $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
         $formResult = $nodeFactory->create($formData)->render();
 
         // Remove header and footer
