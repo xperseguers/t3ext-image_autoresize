@@ -263,7 +263,7 @@ class ConfigurationController
         if (script.src.indexOf('/java-script-item-handler.js') !== -1) {
             script.addEventListener('load', function() {
                 setTimeout(function () {
-                    window.TYPO3.settings.ajaxUrls.record_flex_container_add = $overriddenAjaxUrl;
+                    TYPO3.settings.ajaxUrls.record_flex_container_add = $overriddenAjaxUrl;
                 }, 400);    // to be safe on slower machines
             });
         }
