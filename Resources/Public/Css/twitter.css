@@ -40,5 +40,9 @@
 
 .custom-tweet-button .btn .label {
     margin-left: 3px;
-    white-space: nowrap
+    white-space: nowrap;
+    /* Needed for TYPO3 v10 and v11: */
+    top: -2px;
+    font-size: 12px;
+    font-weight: 500;
 }
