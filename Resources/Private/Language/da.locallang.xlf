@@ -65,11 +65,11 @@
       </trans-unit>
       <trans-unit id="message.imageResized">
         <source>Image %s has been automatically resized to %s×%s pixels.</source>
-        <target state="needs-translation">Image %s has been automatically resized to %s×%s pixels.</target>
+        <target state="translated">Billede %s er automatisk blevet skaleret til %s×%s pixels.</target>
       </trans-unit>
       <trans-unit id="message.imageResizedAndRenamed">
         <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
-        <target state="needs-translation">Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</target>
+        <target state="translated">Billede %s er automatisk blevet ændret til %s×%s pixels og er blevet omdøbt til %s.</target>
       </trans-unit>
       <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
