@@ -10,6 +10,7 @@
 				<type>array</type>
 				<el type="array">
 					<container type="array">
+						<title>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.usergroup_ruleset</title>
 						<el type="array">
 							<title type="array">
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.title</label>
