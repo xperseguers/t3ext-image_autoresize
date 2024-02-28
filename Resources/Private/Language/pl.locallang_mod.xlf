@@ -19,30 +19,6 @@
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
         <target state="needs-translation">#image_autoresize already saved %s of free space on my #TYPO3 website</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.name" approved="yes">
-        <source>Batch resize images</source>
-        <target state="final">Masowe skalowanie obrazów</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.description" approved="yes">
-        <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="final">To zadanie przechodzi przez katalogi i szuka plików które nie zostały automatycznie przeskalowane podczas wgrywania (np. gdy zostały załadowane przez mechanizm bezpośredni taki jak FTP), a następnie skaluje je według zdefiniowanych reguł. Miej na uwadze to, że reguły bazujące na grupach użytkowników będą spełnione lecz zostaną pominięte ponieważ w kontekście zadania harmonogramu grupy te nie istnieją.</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.directories" approved="yes">
-        <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="final">Katalogi do przetwarzania (jeden na linię, nadpisuje obserwowane katalogi):</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories" approved="yes">
-        <source>Exclude directories (one by line):</source>
-        <target state="final">Wyklucz lokalizacje (każda w oddzielnej linii):</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidDirectories" approved="yes">
-        <source>Cannot process non-existing directory: %s</source>
-        <target state="final">Nie można przetworzyć nieistniejącego katalogu: %s</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories" approved="yes">
-        <source>Cannot exclude non-existing directory: %s</source>
-        <target state="final">Nie można wykluczyć nieistniejącej lokalizacji: %s</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>
