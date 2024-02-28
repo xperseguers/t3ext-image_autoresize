@@ -11,9 +11,9 @@
         <source>Image types:</source>
         <target state="final">Types d'images :</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.threshold">
+      <trans-unit id="tx_imageautoresize.threshold" approved="yes">
         <source>File size threshold:</source>
-        <target state="needs-translation">File size threshold:</target>
+        <target state="final">Seuil de taille de fichier :</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_width" approved="yes">
         <source>Maximum width:</source>
@@ -23,9 +23,9 @@
         <source>Maximum height:</source>
         <target state="final">Hauteur maximale :</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_size">
+      <trans-unit id="tx_imageautoresize.max_size" approved="yes">
         <source>Maximum image size (pixel area):</source>
-        <target state="translated">Taille maximale de l'image (pixel)</target>
+        <target state="final">Taille maximale de l'image (zone de pixels) :</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
         <source>Automatic orientation</source>
@@ -67,9 +67,9 @@
         <source>User group rule set</source>
         <target state="final">Réglages prédéfinis pour des groupes d'utilisateurs</target>
       </trans-unit>
-      <trans-unit id="tabs.options">
+      <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
-        <target state="needs-translation">Options</target>
+        <target state="final">Options</target>
       </trans-unit>
       <trans-unit id="tabs.rulesets" approved="yes">
         <source>Rule Sets</source>
