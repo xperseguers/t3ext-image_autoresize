@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -217,22 +218,31 @@ class BatchResize extends Command
         return true;
     }
 
-    public function notify(string $message, int $severity = FlashMessage::OK)
+    /**
+     * @param string $message
+     * @param int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity
+     * @return void
+     */
+    public function notify(string $message, $severity)
     {
+        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '>=')) {
+            $severity = (int)$severity;
+        }
+
         switch ($severity) {
-            case FlashMessage::NOTICE:
+            case -2:
                 $this->io->note($message);
                 break;
-            case FlashMessage::INFO:
+            case -1:
                 $this->io->info($message);
                 break;
-            case FlashMessage::OK:
+            case 0:
                 $this->io->success($message);
                 break;
-            case FlashMessage::WARNING:
+            case 1:
                 $this->io->warning($message);
                 break;
-            case FlashMessage::ERROR:
+            case 2:
                 $this->io->error($message);
                 break;
         }

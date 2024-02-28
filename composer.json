@@ -37,15 +37,12 @@
     "php": ">=7.4.0 <=7.4.99 || >=8.0.0 <=8.3.99",
     "ext-exif": "*",
     "ext-json": "*",
-    "typo3/cms-core": "^10 || ^11 || ^12"
+    "typo3/cms-core": "^10 || ^11 || ^12 || ^13"
   },
   "autoload": {
     "psr-4": {
       "Causal\\ImageAutoresize\\": "Classes/"
     }
-  },
-  "replace": {
-    "typo3-ter/image-autoresize": "self.version"
   },
   "extra": {
     "branch-alias": {

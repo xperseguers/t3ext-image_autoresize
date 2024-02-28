@@ -49,10 +49,10 @@
 				<source>Image %s has not been resized because it is an animated GIF.</source>
 			</trans-unit>
 			<trans-unit id="message.imageResized">
-				<source>Image %s has been automatically resized to %sx%s pixels.</source>
+				<source>Image %s has been automatically resized to %s×%s pixels.</source>
 			</trans-unit>
 			<trans-unit id="message.imageResizedAndRenamed">
-				<source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
+				<source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
 			</trans-unit>
 			<trans-unit id="message.imageNotWritable">
 				<source>Image %s cannot be resized because file is not writable.</source>

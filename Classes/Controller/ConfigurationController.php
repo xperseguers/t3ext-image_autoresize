@@ -111,44 +111,50 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        if (version_compare($typo3Version, '11.5', '>=')) {
             $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
             $this->moduleTemplate = $moduleTemplateFactory->create($request);
         } else {
             $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
         }
-        $this->languageService->includeLLFile('EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf');
-        $this->processData();
+        $this->processData($request);
 
         $formTag = '<form action="" method="post" name="editform" id="EditDocumentController">';
 
         $this->moduleTemplate->setForm($formTag);
 
-        $this->content .= sprintf('<h3>%s</h3>', htmlspecialchars($this->languageService->getLL('title')));
+        $this->content .= sprintf('<h3>%s</h3>', htmlspecialchars($this->sL('title')));
         $this->addStatisticsAndSocialLink();
 
         // Generate the content
-        $this->moduleContent($this->config);
+        $this->moduleContent($request, $this->config);
 
         // Compile document
         $this->addToolbarButtons();
-        $this->moduleTemplate->setContent($this->content);
-        $content = $this->moduleTemplate->renderContent();
 
-        return new HtmlResponse($content);
+        if (version_compare($typo3Version, '12.4', '<')) {
+            $this->moduleTemplate->setContent($this->content);
+            $content = $this->moduleTemplate->renderContent();
+            return new HtmlResponse($content);
+        }
+
+        $this->moduleTemplate->assign('content', $this->content);
+        return $this->moduleTemplate->renderResponse('Configuration');
     }
 
     /**
      * Generates the module content.
      *
+     * @param ServerRequestInterface $request
      * @param array $row
      */
-    protected function moduleContent(array $row): void
+    protected function moduleContent(ServerRequestInterface $request, array $row): void
     {
         $this->formResultCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormResultCompiler::class);
 
         $wizard = $this->formResultCompiler->addCssFiles();
-        $wizard .= $this->buildForm($row);
+        $wizard .= $this->buildForm($request, $row);
         $wizard .= $this->formResultCompiler->printNeededJSFunctions();
 
         $this->content .= $wizard;
@@ -157,11 +163,14 @@ class ConfigurationController
     /**
      * Builds the expert configuration form.
      *
+     * @param ServerRequestInterface $request
      * @param array $row
      * @return string
      */
-    protected function buildForm(array $row): string
+    protected function buildForm(ServerRequestInterface $request, array $row): string
     {
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+
         $record = [
             'uid' => static::virtualRecordId,
             'pid' => 0,
@@ -182,12 +191,16 @@ class ConfigurationController
 
         /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
-        /** @var \TYPO3\CMS\Backend\Form\FormDataCompiler $formDataCompiler */
-        $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
+        if (version_compare($typo3Version, '12.4', '>=')) {
+            $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class);
+        } else {
+            $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
+        }
         /** @var \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory */
         $nodeFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\NodeFactory::class);
 
         $formDataCompilerInput = [
+            'request' => $request,
             'tableName' => static::virtualTable,
             'vanillaUid' => $record['uid'],
             'command' => 'edit',
@@ -197,7 +210,7 @@ class ConfigurationController
         // Load the configuration of virtual table 'tx_imageautoresize'
         $this->loadVirtualTca();
 
-        $formData = $formDataCompiler->compile($formDataCompilerInput);
+        $formData = $formDataCompiler->compile($formDataCompilerInput, $formDataGroup);
         $formData['renderType'] = 'outerWrapContainer';
         $formResult = $nodeFactory->create($formData)->render();
 
@@ -233,23 +246,38 @@ class ConfigurationController
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
+        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
 
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.4', '>=')) {
+        if (version_compare($typo3Version, '12.4', '>=')) {
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
             $class = new \ReflectionClass($pageRenderer);
             $property = $class->getProperty('nonce');
             $property->setAccessible(true);
             $nonce = $property->getValue($pageRenderer)->consume();
-        } else {
-            $nonce = '';
-        }
 
-        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
-        $formContent .= <<<HTML
+            $formContent .= <<<HTML
 <script type="text/javascript" nonce="$nonce">
+    var scripts = document.querySelectorAll('script');
+    for (var i = 0; i < scripts.length; i++) {
+        const script = scripts[i];
+        if (script.src.indexOf('/java-script-item-handler.js') !== -1) {
+            script.addEventListener('load', function() {
+                setTimeout(function () {
+                    TYPO3.settings.ajaxUrls.record_flex_container_add = $overriddenAjaxUrl;
+                }, 400);    // to be safe on slower machines
+            });
+        }
+    }
+</script>
+HTML;
+        } else {
+            // Up to TYPO3 v11:
+            $formContent .= <<<HTML
+<script type="text/javascript">
     TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
 </script>
 HTML;
+        }
 
         return $formContent;
     }
@@ -339,20 +367,21 @@ HTML;
     /**
      * Processes submitted data and stores it to localconf.php.
      *
+     * @param ServerRequestInterface $request
      * @return void
      */
-    protected function processData(): void
+    protected function processData(ServerRequestInterface $request): void
     {
-        $close = GeneralUtility::_GP('closeDoc');
-        $save = GeneralUtility::_GP('_savedok');
-        $saveAndClose = GeneralUtility::_GP('_saveandclosedok');
+        $close = (bool)($request->getParsedBody()['closeDoc'] ?? false);
+        $save = (bool)($request->getParsedBody()['doSave'] ?? false);
+        $saveAndClose = (bool)($request->getParsedBody()['_saveandclosedok'] ?? false);
 
         if ($save || $saveAndClose) {
             $table = static::virtualTable;
             $id = static::virtualRecordId;
             $field = 'rulesets';
 
-            $inputData_tmp = GeneralUtility::_GP('data');
+            $inputData_tmp = $request->getParsedBody()['data'];
             $data = $inputData_tmp[$table][$id];
 
             if (count($inputData_tmp[$table]) > 1) {
@@ -497,7 +526,6 @@ HTML;
     protected function loadVirtualTca(): void
     {
         $GLOBALS['TCA'][static::virtualTable] = include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
-        ExtensionManagementUtility::addLLrefForTCAdescr(static::virtualTable, 'EXT:' . $this->extKey . '/Resource/Private/Language/locallang_csh_' . static::virtualTable . '.xlf');
     }
 
     /**
@@ -542,43 +570,62 @@ HTML;
         $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
-        $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
         $totalSpaceClaimed = GeneralUtility::formatSize((int)$data['bytes']);
-        $messagePattern = $this->languageService->getLL('storage.claimed');
+        $messagePattern = $this->sL('storage.claimed');
         $message = sprintf($messagePattern, $totalSpaceClaimed, (int)$data['images']);
 
         $flashMessage = htmlspecialchars($message);
 
-        $twitterMessagePattern = $this->languageService->getLL('social.twitter');
+        $twitterMessagePattern = $this->sL('social.twitter');
         $message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
         $url = 'https://extensions.typo3.org/extension/image_autoresize/';
 
         $twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
-        $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . htmlspecialchars($this->languageService->getLL('social.share')) . '">
-                    <i class="btn-icon"></i>
-                    <span class="btn-text">Tweet</span>
+                <a href="' . $twitterLink . '" title="' . htmlspecialchars($this->sL('social.share')) . '" target="_blank" class="btn">
+                    <i></i>
+                    <span class="label">Post</span>
                 </a>
             </div>';
 
-        $this->content .= '
-            <div class="alert alert-info">
-                <div class="media">
-                    <div class="media-left">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-info fa-stack-1x"></i>
-                        </span>
-                    </div>
-                    <div class="media-body">
-                        ' . $flashMessage . '
+        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        if (version_compare($typo3Version, '12.4', '>=')) {
+            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            $icon = $iconFactory->getIcon(
+                'actions-info',
+                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+            );
+            $this->content .= '
+                <div class="alert alert-info">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="icon-emphasized"> ' . $icon . '</span>
+                        </div>
+                        <div class="media-body">
+                            ' . $flashMessage . '
+                        </div>
                     </div>
                 </div>
-            </div>
-        ';
+            ';
+        } else {
+            $this->content .= '
+                <div class="alert alert-info">
+                    <div class="media">
+                        <div class="media-left">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-info fa-stack-1x"></i>
+                            </span>
+                        </div>
+                        <div class="media-body">
+                            ' . $flashMessage . '
+                        </div>
+                    </div>
+                </div>
+            ';
+        }
     }
 
     /**
@@ -599,6 +646,11 @@ HTML;
         return $newConfigurationFileName;
     }
 
+    protected function sL(string $key): string
+    {
+        $input = 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:' . $key;
+        return $this->languageService->sL($input);
+    }
 }
 
 // ReflectionMethod does not work properly with arguments passed as reference thus

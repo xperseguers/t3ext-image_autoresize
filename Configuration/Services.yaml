@@ -4,6 +4,9 @@ services:
     autoconfigure: true
     public: false
 
+  Causal\ImageAutoresize\Controller\FormFlexAjaxController:
+    public: true
+
   Causal\ImageAutoresize\Command\BatchResize:
     tags:
       - name: 'console.command'
