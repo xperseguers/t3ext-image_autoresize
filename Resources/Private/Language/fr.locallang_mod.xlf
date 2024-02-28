@@ -19,30 +19,6 @@
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
         <target state="final">#image_autoresize a déjà fait gagner %s d'espace disque pour mon site #TYPO3</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.name" approved="yes">
-        <source>Batch resize images</source>
-        <target state="final">Redimensionnement d'images par lot</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.description" approved="yes">
-        <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="final">Cette tâche parcourt les répertoires, recherche des fichiers qui n'ont pas été redimensionnés automatiquement lors du chargement (p. ex. parce qu'ils ont été chargés par un mécanisme direct comme FTP) et les redimensionne selon vos règles. Veuillez noter que les règles basées sur des groupes d'utilisateurs vont être détectées mais auront pour effet de suspendre le traitement puisque dans le contexte d'une tâche planifiée, les groupes n'existent pas.</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.directories" approved="yes">
-        <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="final">Répertoires à traiter (un par ligne, surcharge les répertoires surveillés) :</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories" approved="yes">
-        <source>Exclude directories (one by line):</source>
-        <target state="final">Exclure les répertoires (un par ligne) :</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidDirectories" approved="yes">
-        <source>Cannot process non-existing directory: %s</source>
-        <target state="final">Impossible de traiter un répertoire qui n'existe pas : %s</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories" approved="yes">
-        <source>Cannot exclude non-existing directory: %s</source>
-        <target state="final">Impossible d'exclure un répertoire qui n'existe pas : %s</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>
