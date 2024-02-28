@@ -64,12 +64,12 @@
         <target state="final">L'image %s n'a pas été redimensionnée car c'est un GIF animé</target>
       </trans-unit>
       <trans-unit id="message.imageResized" approved="yes">
-        <source>Image %s has been automatically resized to %sx%s pixels.</source>
-        <target state="final">L'image %s a été automatiquement redimensionnée à %sx%s pixels.</target>
+        <source>Image %s has been automatically resized to %s×%s pixels.</source>
+        <target state="final">L'image %s a été automatiquement redimensionnée à %s×%s pixels.</target>
       </trans-unit>
       <trans-unit id="message.imageResizedAndRenamed" approved="yes">
-        <source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
-        <target state="final">L'image %s a été automatiquement redimensionnée à %sx%s pixels et a été renommée en %s.</target>
+        <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
+        <target state="final">L'image %s a été automatiquement redimensionnée à %s×%s pixels et a été renommée en %s.</target>
       </trans-unit>
       <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
