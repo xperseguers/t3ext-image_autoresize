@@ -570,7 +570,6 @@ HTML;
         $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
-        $pageRenderer->addJsFile($resourcesPath . 'JavaScript/popup.js');
 
         $totalSpaceClaimed = GeneralUtility::formatSize((int)$data['bytes']);
         $messagePattern = $this->sL('storage.claimed');
@@ -583,10 +582,9 @@ HTML;
         $url = 'https://extensions.typo3.org/extension/image_autoresize/';
 
         $twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
-        $twitterLink = GeneralUtility::quoteJSvalue($twitterLink);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="#" onclick="popitup(' . $twitterLink . ',\'twitter\')" title="' . htmlspecialchars($this->sL('social.share')) . '">
+                <a href="' . $twitterLink . '" title="' . htmlspecialchars($this->sL('social.share')) . '" target="_blank">
                     <i class="btn-icon"></i>
                     <span class="btn-text">Tweet</span>
                 </a>
