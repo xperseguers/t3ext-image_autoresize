@@ -3,45 +3,21 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-11-08T15:56:07Z" product-name="image_autoresize" target-language="de">
     <header/>
     <body>
-      <trans-unit id="title">
+      <trans-unit id="title" approved="yes">
         <source>Image Auto-Resize Configuration</source>
-        <target state="needs-translation">Image Auto-Resize Configuration</target>
+        <target state="final">Konfiguration der automatischen Bildgrößenanpassung</target>
       </trans-unit>
-      <trans-unit id="storage.claimed">
+      <trans-unit id="storage.claimed" approved="yes">
         <source>Total storage claimed: %s (with %s images)</source>
-        <target state="needs-translation">Total storage claimed: %s (with %s images)</target>
+        <target state="final">Beanspruchter Gesamtspeicherplatz: %s (mit %s Bildern)</target>
       </trans-unit>
-      <trans-unit id="social.share">
+      <trans-unit id="social.share" approved="yes">
         <source>Share result!</source>
-        <target state="needs-translation">Share result!</target>
+        <target state="final">Ergebnis mitteilen!</target>
       </trans-unit>
-      <trans-unit id="social.twitter">
+      <trans-unit id="social.twitter" approved="yes">
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
-        <target state="needs-translation">#image_autoresize already saved %s of free space on my #TYPO3 website</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.name">
-        <source>Batch resize images</source>
-        <target state="needs-translation">Batch resize images</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.description">
-        <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="needs-translation">This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.directories">
-        <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="needs-translation">Directories to process (one by line, overrides watched directories):</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories">
-        <source>Exclude directories (one by line):</source>
-        <target state="needs-translation">Exclude directories (one by line):</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidDirectories">
-        <source>Cannot process non-existing directory: %s</source>
-        <target state="needs-translation">Cannot process non-existing directory: %s</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories">
-        <source>Cannot exclude non-existing directory: %s</source>
-        <target state="needs-translation">Cannot exclude non-existing directory: %s</target>
+        <target state="final">#image_autoresize hat bereits %s an freiem Speicherplatz auf meiner #TYPO3-Website eingespart</target>
       </trans-unit>
     </body>
   </file>
