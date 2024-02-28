@@ -19,30 +19,6 @@
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
         <target state="needs-translation">#image_autoresize already saved %s of free space on my #TYPO3 website</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.name" approved="yes">
-        <source>Batch resize images</source>
-        <target state="final">Afbeeldingen in groepen schalen</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.description" approved="yes">
-        <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="final">Deze taakt doorzoekt mappen naar bestanden die niet automatisch geschaald werden tijden het uploaden (bijvoorbeeld omdat ze via een andere weg zoals FTP geüpload werden) en schaalt ze volgens de regels. Let op dat regels gebaseerd op gebruikersgroepen genegeerd zullen worden in de Taakplanner omdat groepen daar niet bestaan.</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.directories" approved="yes">
-        <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="final">Mappen die doorzocht moeten worden (een per regel, overschrijft de normale instelling):</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories" approved="yes">
-        <source>Exclude directories (one by line):</source>
-        <target state="final">Uit te sluiten mappen (een per regel):</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidDirectories" approved="yes">
-        <source>Cannot process non-existing directory: %s</source>
-        <target state="final">Kan niet-bestaande map niet behandelen: %s</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories" approved="yes">
-        <source>Cannot exclude non-existing directory: %s</source>
-        <target state="final">Kan een niet-bestaande map niet uitsluiten: %s</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>
