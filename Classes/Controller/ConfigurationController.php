@@ -246,6 +246,7 @@ class ConfigurationController
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
+        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
 
         if (version_compare($typo3Version, '12.4', '>=')) {
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
@@ -253,16 +254,30 @@ class ConfigurationController
             $property = $class->getProperty('nonce');
             $property->setAccessible(true);
             $nonce = $property->getValue($pageRenderer)->consume();
-        } else {
-            $nonce = '';
-        }
 
-        $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
-        $formContent .= <<<HTML
+            $formContent .= <<<HTML
 <script type="text/javascript" nonce="$nonce">
+    var scripts = document.querySelectorAll('script');
+    for (var i = 0; i < scripts.length; i++) {
+        const script = scripts[i];
+        if (script.src.indexOf('/java-script-item-handler.js') !== -1) {
+            script.addEventListener('load', function() {
+                setTimeout(function () {
+                    window.TYPO3.settings.ajaxUrls.record_flex_container_add = $overriddenAjaxUrl;
+                }, 400);    // to be safe on slower machines
+            });
+        }
+    }
+</script>
+HTML;
+        } else {
+            // Up to TYPO3 v11:
+            $formContent .= <<<HTML
+<script type="text/javascript">
     TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
 </script>
 HTML;
+        }
 
         return $formContent;
     }
