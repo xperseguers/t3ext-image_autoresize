@@ -584,9 +584,9 @@ HTML;
         $twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
         $flashMessage .= '
             <div class="custom-tweet-button">
-                <a href="' . $twitterLink . '" title="' . htmlspecialchars($this->sL('social.share')) . '" target="_blank">
-                    <i class="btn-icon"></i>
-                    <span class="btn-text">Tweet</span>
+                <a href="' . $twitterLink . '" title="' . htmlspecialchars($this->sL('social.share')) . '" target="_blank" class="btn">
+                    <i></i>
+                    <span class="label">Post</span>
                 </a>
             </div>';
 
