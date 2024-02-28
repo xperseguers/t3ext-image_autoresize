@@ -19,30 +19,6 @@
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
         <target state="needs-translation">#image_autoresize already saved %s of free space on my #TYPO3 website</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.name">
-        <source>Batch resize images</source>
-        <target state="needs-translation">Batch resize images</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.description">
-        <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="needs-translation">This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.directories">
-        <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="needs-translation">Directories to process (one by line, overrides watched directories):</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories">
-        <source>Exclude directories (one by line):</source>
-        <target state="needs-translation">Exclude directories (one by line):</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidDirectories">
-        <source>Cannot process non-existing directory: %s</source>
-        <target state="needs-translation">Cannot process non-existing directory: %s</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories">
-        <source>Cannot exclude non-existing directory: %s</source>
-        <target state="needs-translation">Cannot exclude non-existing directory: %s</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>
