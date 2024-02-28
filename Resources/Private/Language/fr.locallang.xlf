@@ -15,45 +15,45 @@
         <source>Close configuration</source>
         <target state="final">Fermer la configuration</target>
       </trans-unit>
-      <trans-unit id="extension.ai">
+      <trans-unit id="extension.ai" approved="yes">
         <source>.ai - Adobe Illustrator</source>
-        <target state="needs-translation">.ai - Adobe Illustrator</target>
+        <target state="final">.ai - Adobe Illustrator</target>
       </trans-unit>
-      <trans-unit id="extension.bmp">
+      <trans-unit id="extension.bmp" approved="yes">
         <source>.bmp - Windows OS/2 Bitmap Graphics</source>
-        <target state="needs-translation">.bmp - Windows OS/2 Bitmap Graphics</target>
+        <target state="final">.bmp - Windows OS/2 Bitmap Graphics</target>
       </trans-unit>
-      <trans-unit id="extension.gif">
+      <trans-unit id="extension.gif" approved="yes">
         <source>.gif - Graphic Interchange Format</source>
-        <target state="needs-translation">.gif - Graphic Interchange Format</target>
+        <target state="final">.gif - Graphic Interchange Format</target>
       </trans-unit>
-      <trans-unit id="extension.jpg">
+      <trans-unit id="extension.jpg" approved="yes">
         <source>.jpg - JPEG/JIFF Image</source>
-        <target state="needs-translation">.jpg - JPEG/JIFF Image</target>
+        <target state="final">.jpg - JPEG/JIFF Image</target>
       </trans-unit>
-      <trans-unit id="extension.jpeg">
+      <trans-unit id="extension.jpeg" approved="yes">
         <source>.jpeg - JPEG/JIFF Image</source>
-        <target state="needs-translation">.jpeg - JPEG/JIFF Image</target>
+        <target state="final">.jpeg - JPEG/JIFF Image</target>
       </trans-unit>
-      <trans-unit id="extension.pcx">
+      <trans-unit id="extension.pcx" approved="yes">
         <source>.pcx - Paintbrush Bitmap Graphic</source>
-        <target state="needs-translation">.pcx - Paintbrush Bitmap Graphic</target>
+        <target state="final">.pcx - Paintbrush Bitmap Graphic</target>
       </trans-unit>
-      <trans-unit id="extension.png">
+      <trans-unit id="extension.png" approved="yes">
         <source>.png - Portable Network Graphic</source>
-        <target state="needs-translation">.png - Portable Network Graphic</target>
+        <target state="final">.png - Portable Network Graphic</target>
       </trans-unit>
-      <trans-unit id="extension.tga">
+      <trans-unit id="extension.tga" approved="yes">
         <source>.tga - Truevision Targa Graphic</source>
-        <target state="needs-translation">.tga - Truevision Targa Graphic</target>
+        <target state="final">.tga - Truevision Targa Graphic</target>
       </trans-unit>
-      <trans-unit id="extension.tif">
+      <trans-unit id="extension.tif" approved="yes">
         <source>.tif - Tagged Image Format</source>
-        <target state="needs-translation">.tif - Tagged Image Format</target>
+        <target state="final">.tif - Tagged Image Format</target>
       </trans-unit>
-      <trans-unit id="extension.tiff">
+      <trans-unit id="extension.tiff" approved="yes">
         <source>.tiff - Tagged Image Format</source>
-        <target state="needs-translation">.tiff - Tagged Image Format</target>
+        <target state="final">.tiff - Tagged Image Format</target>
       </trans-unit>
       <trans-unit id="message.imageTransparent" approved="yes">
         <source>Image %s has not been resized because transparency has been detected.</source>
@@ -75,9 +75,9 @@
         <source>Image %s cannot be resized because file is not writable.</source>
         <target state="final">L'image %s n'a pas pu être redimensionnée parce que le fichier est protégé en écriture.</target>
       </trans-unit>
-      <trans-unit id="message.cannotResize">
+      <trans-unit id="message.cannotResize" approved="yes">
         <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
-        <target state="needs-translation">Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</target>
+        <target state="final">L'image n'a pas pu être redimensionnée car ImageMagick ou GraphicsMagick semble être mal configuré.</target>
       </trans-unit>
     </body>
   </file>
