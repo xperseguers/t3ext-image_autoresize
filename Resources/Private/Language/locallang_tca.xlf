@@ -4,7 +4,7 @@
 		<header/>
 		<body>
 			<trans-unit id="tx_imageautoresize.directories">
-				<source>Directories:</source>
+				<source>Directories</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve">
 				<source>Comma-separated list of directories to be monitored.
@@ -15,22 +15,22 @@ Wildcards are supported:
 1:/**/images/</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.file_types">
-				<source>Image types:</source>
+				<source>Image types</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.threshold">
-				<source>File size threshold:</source>
+				<source>File size threshold</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.threshold.description">
 				<source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_width">
-				<source>Maximum width:</source>
+				<source>Maximum width</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_height">
-				<source>Maximum height:</source>
+				<source>Maximum height</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_size">
-				<source>Maximum image size (pixel area):</source>
+				<source>Maximum image size (pixel area)</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_size.description">
 				<source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
@@ -77,7 +77,7 @@ They will be evaluated one after the other in order to possibly override general
 The evalutation stops as soon as a matching rule set has been found.</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.title">
-				<source>Title:</source>
+				<source>Title</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.usergroup_ruleset">
 				<source>User group rule set</source>
