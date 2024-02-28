@@ -234,24 +234,6 @@ class FAL
                     'pattern' => $directoryPattern,
                 ];
             }
-        } else {
-            // @deprecated Will be removed in version 2.4.0 (plenty of time to migrate)
-            $message = 'Please migrate your directory to a FAL identifier: "' . $path . '".';
-            $isInFileadminDirectory = PHP_VERSION_ID >= 80000
-                ? str_starts_with($path, 'fileadmin/')
-                : GeneralUtility::isFirstPartOfStr($path, 'fileadmin/');
-            if ($isInFileadminDirectory) {
-                $message .= ' Here it should be instead: ' . preg_replace('#^fileadmin/#', '1:/', $path);
-            }
-            trigger_error($message, E_USER_DEPRECATED);
-
-            $pathSite = Environment::getPublicPath() . '/';
-            $directoryPattern = static::getDirectoryPattern($path);
-            $config = [
-                'basePath' => $pathSite,
-                'directory' => $path,
-                'pattern' => $directoryPattern,
-            ];
         }
 
         return $config;

@@ -46,7 +46,6 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 class ConfigurationController
 {
 
-    const SIGNAL_ProcessConfiguration = 'processConfiguration';
     const virtualTable = 'tx_imageautoresize';
     const virtualRecordId = 1;
 
@@ -55,10 +54,6 @@ class ConfigurationController
      */
     protected $extKey = 'image_autoresize';
 
-    /**
-     * @var array
-     */
-    protected $expertKey = 'image_autoresize_ff';
 
     /**
      * @var \TYPO3\CMS\Core\Localization\LanguageService
@@ -476,17 +471,6 @@ HTML;
             $configuration = $eventDispatcher->dispatch(new ProcessDefaultConfigurationEvent($configuration))->getConfiguration();
         }
 
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
-            // @deprecated Will be removed in version 2.4.0
-            $signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-            $signalSlotDispatcher->dispatch(
-                __CLASS__,
-                static::SIGNAL_ProcessConfiguration,
-                [
-                    /* 'configuration' => */ &$configuration,
-                ]
-            );
-        }
         $configuration = $eventDispatcher->dispatch(new ProcessConfigurationEvent($configuration))->getConfiguration();
 
         return $configuration;
@@ -640,7 +624,7 @@ HTML;
      */
     protected static function getConfigurationFileName(): string
     {
-        // TODO: Remove this silent migration with version 2.4.0 or so
+        // TODO: Remove this silent migration with version 2.4.1 or so
         $oldConfigurationFileName = Environment::getPublicPath() . '/typo3conf/image_autoresize.config.php';
         $newConfigurationFileName = Environment::getConfigPath() . '/image_autoresize.config.php';
 

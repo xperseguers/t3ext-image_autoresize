@@ -315,18 +315,6 @@ class ImageUtility
     }
 
     /**
-     * Returns a command line parameter to fix the orientation of a rotated picture.
-     *
-     * @param int $orientation
-     * @return string
-     * @deprecated
-     */
-    public static function getTransformation(int $orientation): string
-    {
-        return '-auto-orient';
-    }
-
-    /**
      * Resets the EXIF orientation flag of a picture.
      *
      * @param string $fileName

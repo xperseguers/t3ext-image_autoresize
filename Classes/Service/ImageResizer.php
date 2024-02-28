@@ -388,21 +388,6 @@ class ImageResizer
             $tempFileInfo = null;
         }
         if ($tempFileInfo) {
-            if (version_compare($typo3Version, '12.0', '<')) {
-                // Signal to post-process the image
-                // @deprecated Will be removed in version 2.4.0
-                $this->signalSlotDispatcher->dispatch(
-                    __CLASS__,
-                    'afterImageResize',
-                    [
-                        /* 'operation' => */ ($fileName === $destFileName) ? 'RESIZE' : 'RESIZE_CONVERT',
-                        /* 'source' => */ $fileName,
-                        /* 'destination' => */ $tempFileInfo[3],
-                        /* 'newWidth' => */ &$tempFileInfo[0],
-                        /* 'newHeight' => */ &$tempFileInfo[1],
-                    ]
-                );
-            }
             $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
             /** @var ImageResizedEvent $event */
             $event = $eventDispatcher->dispatch(new ImageResizedEvent(
