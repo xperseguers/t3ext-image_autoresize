@@ -63,13 +63,13 @@
         <source>Image %s has not been resized because it is an animated GIF.</source>
         <target state="needs-translation">Image %s has not been resized because it is an animated GIF.</target>
       </trans-unit>
-      <trans-unit id="message.imageResized" approved="yes">
-        <source>Image %s has been automatically resized to %sx%s pixels.</source>
-        <target state="final">Obraz %s został automatycznie przeskalowany do %sx%s pikseli.</target>
+      <trans-unit id="message.imageResized">
+        <source>Image %s has been automatically resized to %s×%s pixels.</source>
+        <target state="needs-translation">Image %s has been automatically resized to %s×%s pixels.</target>
       </trans-unit>
-      <trans-unit id="message.imageResizedAndRenamed" approved="yes">
-        <source>Image %s has been automatically resized to %sx%s pixels and has been renamed as %s.</source>
-        <target state="final">Obraz %s został automatycznie przeskalowany do %sx%s pikseli, a jego nazwa zmieniona na %s.</target>
+      <trans-unit id="message.imageResizedAndRenamed">
+        <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
+        <target state="needs-translation">Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</target>
       </trans-unit>
       <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
