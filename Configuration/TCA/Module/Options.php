@@ -1,10 +1,6 @@
 <?php
 defined('TYPO3') || die();
 
-$typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-    ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-    : TYPO3_branch;
-
 return [
     'ctrl' => [
         'title' => 'Options',
@@ -119,7 +115,9 @@ return [
             'config' => [
                 'type' => 'flex',
                 'ds' => [
-                    'default' => 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
+                    'default' => version_compare((new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch(), '12.0', '>=')
+                        ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
+                        : 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
                 ],
             ],
         ],
