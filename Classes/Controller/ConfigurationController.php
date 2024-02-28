@@ -106,7 +106,7 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        $typo3Version = (new Typo3Version())->getBranch();
         if (version_compare($typo3Version, '11.5', '>=')) {
             $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
             $this->moduleTemplate = $moduleTemplateFactory->create($request);
@@ -293,7 +293,7 @@ HTML;
         $saveSplitButton = $buttonBar->makeSplitButton();
 
         $locallangCore = 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf';
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+        if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
         } else {
             $iconFactory = $this->moduleTemplate->getIconFactory();
@@ -398,7 +398,7 @@ HTML;
             $ffValue = &$data[$field];
             if ($ffValue) {
                 // Remove FlexForm elements if needed
-                if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.4', '>=')) {
+                if (version_compare((new Typo3Version())->getBranch(), '12.4', '>=')) {
                     foreach ($ffValue['data']['sDEF']['lDEF']['ruleset']['el'] ?? [] as $key => $value) {
                         if (($value['_ACTION'] ?? '') === 'DELETE') {
                             unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]);
@@ -431,7 +431,7 @@ HTML;
         if ($close || $saveAndClose) {
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
-            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
                 throw new PropagateResponseException(new RedirectResponse($closeUrl, 303), 1666353555);
             } else {
                 \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);

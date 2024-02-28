@@ -63,7 +63,7 @@ class ImageResizer
      */
     public function __construct()
     {
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '<')) {
+        if (version_compare((new Typo3Version())->getBranch(), '12.0', '<')) {
             $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
         }
     }
@@ -238,6 +238,7 @@ class ImageResizer
         }
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
+        $typo3Version = (new Typo3Version())->getBranch();
         if ($fileExtension === 'png' && !($ruleset['resize_png_with_alpha'] ?? false)) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(

@@ -67,7 +67,7 @@ class ImageUtility
 
         if ($fullExtract && !empty($metadata)) {
             $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
-            if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '11.5', '>=')) {
+            if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
                 $extractorRegistry = GeneralUtility::makeInstance(ExtractorRegistry::class);
             } else {
                 $extractorRegistry = ExtractorRegistry::getInstance();
@@ -125,7 +125,7 @@ class ImageUtility
             'pathType' => 'absolute'
         ];
 
-        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        $typo3Version = (new Typo3Version())->getVersion();
         // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
         $backupLockRootPath = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? null;
         if (version_compare($typo3Version, '10.4.43', '>=')

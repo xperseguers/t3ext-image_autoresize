@@ -225,7 +225,7 @@ class BatchResize extends Command
      */
     public function notify(string $message, $severity)
     {
-        if (version_compare((string)GeneralUtility::makeInstance(Typo3Version::class), '12.0', '>=')) {
+        if (version_compare((new Typo3Version())->getBranch(), '12.0', '>=')) {
             $severity = (int)$severity;
         }
 
