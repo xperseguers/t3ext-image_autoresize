@@ -4,40 +4,69 @@
     <header/>
     <body>
       <trans-unit id="tx_imageautoresize.directories" approved="yes">
-        <source>Directories:</source>
-        <target state="final">Verzeichnisse:</target>
+        <source>Directories</source>
+        <target state="final">Verzeichnisse</target>
       </trans-unit>
+      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve" approved="yes">
+				<source>Comma-separated list of directories to be monitored.
+Example: 1:/ (for fileadmin/)
+
+Wildcards are supported:
+1:/*/images/
+1:/**/images/</source>
+			<target state="final">Durch Kommata getrennte Liste der zu überwachenden Verzeichnisse.
+Beispiel: 1:/ (für fileadmin/)
+
+Wildcards werden unterstützt:
+1:/*/images/
+1:/**/images/</target></trans-unit>
       <trans-unit id="tx_imageautoresize.file_types" approved="yes">
-        <source>Image types:</source>
-        <target state="final">Abbildtypen:</target>
+        <source>Image types</source>
+        <target state="final">Bildtypen</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.threshold">
-        <source>File size threshold:</source>
-        <target state="needs-translation">File size threshold:</target>
+      <trans-unit id="tx_imageautoresize.threshold" approved="yes">
+        <source>File size threshold</source>
+        <target state="final">Schwellenwert für die Dateigröße</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold.description" approved="yes">
+        <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
+        <target state="final">Bilder, deren Dateigröße diesen Wert überschreitet, werden verkleinert (erlaubte Einheiten: B|K|M).</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_width" approved="yes">
-        <source>Maximum width:</source>
-        <target state="final">Maximale Breite:</target>
+        <source>Maximum width</source>
+        <target state="final">Maximale Breite</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_height" approved="yes">
-        <source>Maximum height:</source>
-        <target state="final">Maximale Höhe:</target>
+        <source>Maximum height</source>
+        <target state="final">Maximale Höhe</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_size">
-        <source>Maximum image size (pixel area):</source>
-        <target state="needs-translation">Maximum image size (pixel area):</target>
+      <trans-unit id="tx_imageautoresize.max_size" approved="yes">
+        <source>Maximum image size (pixel area)</source>
+        <target state="final">Maximale Bildgröße (Pixelbereich)</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size.description" approved="yes">
+        <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
+        <target state="final">Die Bilder werden bis zu dieser Maximalgröße verkleinert. Beispiel: 8M (für 8 Megapixel).</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
         <source>Automatic orientation</source>
         <target state="final">Automatische Ausrichtung</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata">
-        <source>Keep profile and metadata</source>
-        <target state="needs-translation">Keep profile and metadata</target>
+      <trans-unit id="tx_imageautoresize.auto_orient.description" approved="yes">
+        <source>Will try to auto-magically orient image (useful with photos).</source>
+        <target state="final">Versucht, das Bild automatisch auszurichten (nützlich bei Fotos).</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
+      <trans-unit id="tx_imageautoresize.keep_metadata" approved="yes">
+        <source>Keep profile and metadata</source>
+        <target state="final">Profil und Metadaten behalten</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.description" approved="yes">
+        <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
+        <target state="final">Wenn diese Option aktiviert ist, verwendet IM nicht $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'], so dass das Farbprofil und Metadaten wie EXIF, IPTC und XMP erhalten bleiben.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit" approved="yes">
         <source>Use general setting</source>
-        <target state="needs-translation">Use general setting</target>
+        <target state="final">Standard-Einstellungen benutzen</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
         <source>Yes</source>
@@ -47,33 +76,48 @@
         <source>No</source>
         <target state="final">Nein</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha" approved="yes">
         <source>Resize PNG files with alpha-channel</source>
-        <target state="needs-translation">Resize PNG files with alpha-channel</target>
+        <target state="final">PNG-Dateien mit Alpha-Kanal skalieren</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.conversion_mapping">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description" approved="yes">
+        <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
+        <target state="final">Wenn aktiviert, werden PNG-Dateien mit einem Alphakanal verkleinert, obwohl die Transparenz verloren geht.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping" approved="yes">
         <source>Image type conversion mapping</source>
-        <target state="needs-translation">Image type conversion mapping</target>
+        <target state="final">Zuordnung der Bildtypkonvertierung</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping.description" approved="yes">
+        <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
+        <target state="final">Zeilengetrennte Liste von Zuordnungsanweisungen für die Konvertierung. So können Sie den Bildtyp bei der Größenänderung automatisch konvertieren.</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
         <source>Rule sets</source>
         <target state="final">Regeln</target>
       </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve" approved="yes">
+				<source>You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</source>
+			<target state="final">Sie können so viele Regelsätze definieren, wie Sie möchten.
+Sie werden nacheinander ausgewertet, um möglicherweise allgemeine Einstellungen außer Kraft zu setzen.
+Die Auswertung stoppt, sobald ein passender Regelsatz gefunden wurde.</target></trans-unit>
       <trans-unit id="tx_imageautoresize.title" approved="yes">
-        <source>Title:</source>
-        <target state="final">Titel:</target>
+        <source>Title</source>
+        <target state="final">Titel</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
         <source>User group rule set</source>
-        <target state="needs-translation">User group rule set</target>
+        <target state="final">Regelsatz für Benutzergruppen</target>
       </trans-unit>
       <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
         <target state="final">Optionen</target>
       </trans-unit>
-      <trans-unit id="tabs.rulesets">
+      <trans-unit id="tabs.rulesets" approved="yes">
         <source>Rule Sets</source>
-        <target state="needs-translation">Rule Sets</target>
+        <target state="final">Regelsätze</target>
       </trans-unit>
     </body>
   </file>
