@@ -19,30 +19,6 @@
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
         <target state="final">#image_autoresize har allerede sparet %s af fri diskplads på mit #TYPO3 website</target>
       </trans-unit>
-      <trans-unit id="batchResizeTask.name" approved="yes">
-        <source>Batch resize images</source>
-        <target state="final">Batch ændring af størrelse på billeder</target>
-      </trans-unit>
-      <trans-unit id="batchResizeTask.description" approved="yes">
-        <source>This task crawls directories, searches for files that were not resized automatically during upload (e.g., because they were uploaded through a direct mechanism such as FTP) and resizes them according to your rules. Please note that rules based on user groups will match but then skipped as in the context of the schedular task, groups do not exist.</source>
-        <target state="final">Denne opgave løber gennem mapper og leder efter filer, der ikke automatisk fik ændret størrelse under upload (f. eks fordi de blev uploadet via en direkte forbindelse (FTP, ol)) og ændrer størrelse på dem efter regler angivet i konfigurationen. Vær opmærksom på at regler baseret på brugergrupper vil blive sammenlignet, men herefter droppet, fordi kontekst i Scheduler opgaven ikke inkluderer brugergrupper.</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.directories" approved="yes">
-        <source>Directories to process (one by line, overrides watched directories):</source>
-        <target state="final">Mapper der skal gennemløbes (en pr. linje, tilsidesætter overvågende mapper):</target>
-      </trans-unit>
-      <trans-unit id="label.batchResize.excludeDirectories" approved="yes">
-        <source>Exclude directories (one by line):</source>
-        <target state="final">Udeluk mapper (én pr. linje):</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidDirectories" approved="yes">
-        <source>Cannot process non-existing directory: %s</source>
-        <target state="final">Kan ikke løbe gennem mapper der ikke eksisterer: %s</target>
-      </trans-unit>
-      <trans-unit id="msg.invalidExcludeDirectories" approved="yes">
-        <source>Cannot exclude non-existing directory: %s</source>
-        <target state="final">Kan ikke udelukke mapper der ikke eksisterer: %s</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>
