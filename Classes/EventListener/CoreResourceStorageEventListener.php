@@ -163,6 +163,11 @@ class CoreResourceStorageEventListener
 
         // Various operation (including IM/GM) relies on a file WITH an extension
         $originalSourceFile = $sourceFile;
+        // Remove the original extension if it exists (happens when not uploading a file but
+        // adding a from some PHP code)
+        $sourceFile = preg_replace('/\.' . $extension . '$/', '', $sourceFile);
+        // $sourceFile will possibly be the same as $originalSourceFile but it will not
+        // hurt the rename operation below and will go inside the block for actual processing
         $sourceFile .= '.' . $extension;
 
         if (rename($originalSourceFile, $sourceFile)) {
