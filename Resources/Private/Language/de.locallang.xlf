@@ -57,7 +57,7 @@
       </trans-unit>
       <trans-unit id="message.imageTransparent" approved="yes">
         <source>Image %s has not been resized because transparency has been detected.</source>
-        <target state="final">Bild %s wurde nicht angepasst, weil Transparenz erkannt wurde.</target>
+        <target state="final">Das Bild %s wurde nicht angepasst, weil Transparenz erkannt wurde.</target>
       </trans-unit>
       <trans-unit id="message.imageAnimated" approved="yes">
         <source>Image %s has not been resized because it is an animated GIF.</source>
@@ -73,7 +73,7 @@
       </trans-unit>
       <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
-        <target state="final">Bild %s kann nicht geändert werden, da die Datei schreibgeschützt ist.</target>
+        <target state="final">Das Bild %s kann nicht geändert werden, da die Datei schreibgeschützt ist.</target>
       </trans-unit>
       <trans-unit id="message.cannotResize" approved="yes">
         <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
