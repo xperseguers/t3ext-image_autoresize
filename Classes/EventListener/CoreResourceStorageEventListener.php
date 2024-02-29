@@ -190,7 +190,11 @@ class CoreResourceStorageEventListener
      */
     public function populateMetadata(AfterFileAddedEvent $event): void
     {
-        if (is_array(static::$metadata) && !empty(static::$metadata)) {
+        // We respect the administrator's choice to not extract metadata
+        // upon file upload in order to prevent possible privacy issues
+        $autoExtractMetadata = $event->getFile()->getStorage()->autoExtractMetadataEnabled();
+
+        if ($autoExtractMetadata && is_array(static::$metadata) && !empty(static::$metadata)) {
             \Causal\ImageAutoresize\Utility\FAL::indexFile(
                 $event->getFile(),
                 '', '',
