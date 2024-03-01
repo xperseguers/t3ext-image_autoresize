@@ -17,8 +17,8 @@ Directories
 
 This is a comma-separated list of directories that should be monitored for image
 uploads. This includes any subdirectory of them too. In the example above,
-:file:`fileadmin/` (corresponding to the FAL identifier :file:`1:/`) will be
-monitored.
+:file:`1:/` (corresponding to the well-known directory :file:`fileadmin/`) will
+be monitored.
 
 You may use two different wildcards characters:
 

@@ -15,6 +15,8 @@ For more details,
 Version  Changes
 =======  ======================================================
 2.4.x    * Early compatibility with TYPO3 v13
+         * Better respect of privacy by respecting whether or not to
+           automatically extracting metadata prior to the resizing process
 2.3.x    * Configuration stored along with the site definitions
          * Scheduler task rewritten as a Symfony command
 2.2.x    * Compatibility with TYPO3 10 LTS - 12 LTS
