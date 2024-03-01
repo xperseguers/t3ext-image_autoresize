@@ -98,7 +98,7 @@ class FAL
                         'identifier' => $identifier,
                     ]
                 )
-                ->fetch();
+                ->fetchAssociative();
 
             if (!empty($row['uid'])) {
                 /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
