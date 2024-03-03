@@ -79,6 +79,10 @@ class ImageUtility
             ];
 
             foreach ($extractionServices as $priority => $services) {
+                // Since TYPO3 v12, $services is not an array of $services anymore but the service itself
+                if (!is_array($services)) {
+                    $services = [$services];
+                }
                 foreach ($services as $service) {
                     if ($service->canProcess($virtualFileObject)) {
                         $newMetadata[$priority] = $service->extractMetaData($virtualFileObject, $newMetadata);
