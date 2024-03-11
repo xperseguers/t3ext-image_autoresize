@@ -224,12 +224,12 @@ class FAL
     {
         $config = null;
 
-        if (preg_match('#^(\d+):/(.*$)#', $path, $matches)) {
+        if (preg_match('#^(\d+):(/.*$)#', $path, $matches)) {
             $basePath = static::getAbsoluteLocalPath((int)$matches[0]);
             if ($basePath !== null) {
                 $directoryPattern = static::getDirectoryPattern($matches[2]);
                 $config = [
-                    'basePath' => $basePath,
+                    'basePath' => rtrim($basePath, '/'),
                     'directory' => $matches[2],
                     'pattern' => $directoryPattern,
                 ];
