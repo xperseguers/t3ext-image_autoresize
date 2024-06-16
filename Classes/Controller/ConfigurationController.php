@@ -349,8 +349,8 @@ HTML;
             'directories' => '1:/',
             'file_types' => 'jpg,jpeg,png',
             'threshold' => '400K',
-            'max_width' => '1024',
-            'max_height' => '768',
+            'max_width' => '1920',
+            'max_height' => '1080',
             'max_size' => '100M',
             'auto_orient' => true,
             'conversion_mapping' => implode(',', [
