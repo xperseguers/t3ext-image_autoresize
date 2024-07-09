@@ -49,24 +49,9 @@ class ImageResizer
     protected $rulesets = [];
 
     /**
-     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     */
-    protected $signalSlotDispatcher;
-
-    /**
      * @var array|null
      */
     protected $lastMetadata = null;
-
-    /**
-     * Default constructor
-     */
-    public function __construct()
-    {
-        if (version_compare((new Typo3Version())->getBranch(), '12.0', '<')) {
-            $this->signalSlotDispatcher = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-        }
-    }
 
     /**
      * Initializes the hook configuration as a meaningful ordered list
