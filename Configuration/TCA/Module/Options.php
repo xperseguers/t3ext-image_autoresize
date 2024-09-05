@@ -5,7 +5,6 @@ return [
     'ctrl' => [
         'title' => 'Options',
         'label' => 'title',
-        'dividers2tabs' => true,
     ],
     'columns' => [
         'directories' => [
