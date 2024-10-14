@@ -217,7 +217,12 @@ class CoreResourceStorageEventListener
      * @param File|null $file
      * @return string
      */
-    protected function processFile(string $fileName, string &$targetFileName, string $targetDirectory, ?File $file = null)
+    protected function processFile(
+        string $fileName,
+        string &$targetFileName,
+        string $targetDirectory,
+        ?File $file = null
+    ): string
     {
         $newFileName = static::$imageResizer->processFile(
             $fileName,

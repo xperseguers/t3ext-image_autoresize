@@ -20,6 +20,7 @@ use Causal\ImageAutoresize\Event\ImageResizedEvent;
 use Causal\ImageAutoresize\Utility\FAL;
 use Causal\ImageAutoresize\Utility\ImageUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
@@ -472,7 +473,11 @@ class ImageResizer
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
      * @return array|null
      */
-    protected function getRuleset(string $sourceFileName, string $targetFileName, \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null): ?array
+    protected function getRuleset(
+        string $sourceFileName,
+        string $targetFileName,
+        ?BackendUserAuthentication $backendUser = null
+    ): ?array
     {
         $ret = null;
 
