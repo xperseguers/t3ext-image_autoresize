@@ -9,7 +9,7 @@ $typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
 return [
     // Register configuration module entry point
     'xMOD_tximageautoresize' => [
-        'path' => '/image_autoresize/configuration/',
+        'path' => '/image_autoresize/configuration',
         'target' => \Causal\ImageAutoresize\Controller\ConfigurationController::class . '::mainAction'
     ],
     'TxImageAutoresize::record_flex_container_add' => [
