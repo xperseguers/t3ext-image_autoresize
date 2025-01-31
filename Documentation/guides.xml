@@ -9,5 +9,5 @@
                edit-on-github-branch="master"
                edit-on-github="xperseguers/t3ext-image_autoresize"
                typo3-core-preferred="stable"/>
-    <project title="Resize Images Automatically" release="2.4.2" version="2.4" copyright="2010-2024"/>
+    <project title="Resize Images Automatically" release="2.4.3" version="2.4" copyright="2010-2025"/>
 </guides>
