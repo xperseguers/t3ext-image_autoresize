@@ -178,7 +178,11 @@ class CoreResourceStorageEventListener
             rename($newSourceFile, $originalSourceFile);
 
             if ($newExtension !== $extension) {
+                // Rename the file to the original name with the new extension
                 $event->setFileName(substr($targetFileName, 0, -strlen($extension)) . $newExtension);
+            } else {
+                // No conversion, keep the original file name
+                $event->setFileName($targetFileName);
             }
         }
     }
