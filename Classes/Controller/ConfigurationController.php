@@ -23,7 +23,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
@@ -437,24 +436,6 @@ HTML;
                 \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
             }
         }
-    }
-
-    /**
-     * Writes a configuration line to AdditionalConfiguration.php.
-     * We don't use the <code>tx_install</code> methods as they add unneeded
-     * comments at the end of the file.
-     *
-     * @param string $key
-     * @param array $config
-     * @return bool
-     */
-    protected function writeToLocalconf(string $key, array $config): bool
-    {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
-        /** @var \TYPO3\CMS\Core\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = $objectManager->get(\TYPO3\CMS\Core\Configuration\ConfigurationManager::class);
-        return $configurationManager->setLocalConfigurationValueByPath('EXT/extConf/' . $key, serialize($config));
     }
 
     /**
