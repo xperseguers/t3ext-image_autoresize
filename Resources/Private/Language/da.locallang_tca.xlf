@@ -22,7 +22,7 @@ Jokertegn understøttes:
 1:/**/billeder/</target></trans-unit>
       <trans-unit id="tx_imageautoresize.file_types" approved="yes">
         <source>Image types</source>
-        <target state="final">Billedetyper</target>
+        <target state="final">Billedtyper</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.threshold" approved="yes">
         <source>File size threshold</source>
