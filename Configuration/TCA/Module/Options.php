@@ -1,6 +1,7 @@
 <?php
 defined('TYPO3') || die();
 
+$typo3Version = (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion();
 return [
     'ctrl' => [
         'title' => 'Options',
@@ -10,12 +11,20 @@ return [
         'directories' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories',
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories.description',
-            'config' => [
-                'type' => 'input',
-                'size' => '50',
-                'max' => '255',
-                'eval' => 'trim,required',
-            ],
+            'config' => $typo3Version >= 12
+                ? [
+                    'type' => 'input',
+                    'size' => '50',
+                    'max' => '255',
+                    'eval' => 'trim',
+                    'required' => true,
+                ]
+                : [
+                    'type' => 'input',
+                    'size' => '50',
+                    'max' => '255',
+                    'eval' => 'trim,required',
+                ],
         ],
         'file_types' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.file_types',
@@ -32,40 +41,74 @@ return [
         'threshold' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold',
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold.description',
-            'config' => [
-                'type' => 'input',
-                'size' => '10',
-                'max' => '10',
-                'eval' => 'trim,required',
-            ],
+            'config' => $typo3Version >= 12
+                ? [
+                    'type' => 'input',
+                    'size' => '10',
+                    'max' => '10',
+                    'eval' => 'trim',
+                    'required' => true,
+                ]
+                : [
+                    'type' => 'input',
+                    'size' => '10',
+                    'max' => '10',
+                    'eval' => 'trim,required',
+                ],
         ],
         'max_width' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_width',
-            'config' => [
-                'type' => 'input',
-                'size' => '5',
-                'max' => '5',
-                'eval' => 'int,required',
-                'checkbox' => '0',
-                'range' => [
-                    'lower' => '100',
+            'config' => $typo3Version >= 12
+                ? [
+                    'type' => 'input',
+                    'size' => 5,
+                    'max' => 5,
+                    'eval' => 'int',
+                    'checkbox' => false,
+                    'range' => [
+                        'lower' => 100,
+                    ],
+                    'default' => 0,
+                    'required' => true,
+                ]
+                : [
+                    'type' => 'input',
+                    'size' => 5,
+                    'max' => 5,
+                    'eval' => 'int,required',
+                    'checkbox' => 0,
+                    'range' => [
+                        'lower' => 100,
+                    ],
+                    'default' => 0,
                 ],
-                'default' => 0,
-            ],
         ],
         'max_height' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_height',
-            'config' => [
-                'type' => 'input',
-                'size' => '5',
-                'max' => '5',
-                'eval' => 'int,required',
-                'checkbox' => '0',
-                'range' => [
-                    'lower' => '100',
+            'config' => $typo3Version >= 12
+                ? [
+                    'type' => 'input',
+                    'size' => 5,
+                    'max' => 5,
+                    'eval' => 'int',
+                    'checkbox' => false,
+                    'range' => [
+                        'lower' => 100,
+                    ],
+                    'default' => 0,
+                    'required' => true,
+                ]
+                : [
+                    'type' => 'input',
+                    'size' => 5,
+                    'max' => 5,
+                    'eval' => 'int,required',
+                    'checkbox' => 0,
+                    'range' => [
+                        'lower' => 100,
+                    ],
+                    'default' => 0,
                 ],
-                'default' => 0,
-            ],
         ],
         'max_size' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size',
@@ -103,8 +146,8 @@ return [
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.conversion_mapping.description',
             'config' => [
                 'type' => 'text',
-                'cols' => '20',
-                'rows' => '5',
+                'cols' => 20,
+                'rows' => 5,
                 'eval' => 'trim',
             ],
         ],
