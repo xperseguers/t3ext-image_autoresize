@@ -411,7 +411,7 @@ class ImageResizer
             $this->lastMetadata['COMPUTED']['Width'] = $tempFileInfo[0];
             $this->lastMetadata['COMPUTED']['Height'] = $tempFileInfo[1];
 
-            if ($isRotated && (bool)$ruleset['keep_metadata'] === true && $GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] === 'GraphicsMagick') {
+            if ($isRotated && (bool)($ruleset['keep_metadata'] ?? false) === true && $GLOBALS['TYPO3_CONF_VARS']['GFX']['processor'] === 'GraphicsMagick') {
                 ImageUtility::resetOrientation($destFileName);
             }
 
