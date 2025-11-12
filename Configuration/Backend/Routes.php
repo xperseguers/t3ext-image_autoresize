@@ -3,9 +3,6 @@
 /**
  * Definitions for routes provided by EXT:image_autoresize
  */
-$typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-    ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-    : TYPO3_branch;
 return [
     // Register configuration module entry point
     'xMOD_tximageautoresize' => [

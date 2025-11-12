@@ -224,14 +224,14 @@ class ImageResizer
         }
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
-        $typo3Version = (new Typo3Version())->getBranch();
+        $typo3Version = (new Typo3Version())->getMajorVersion();
         if ($fileExtension === 'png' && !($ruleset['resize_png_with_alpha'] ?? false)) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(
                     LocalizationUtility::translate('message.imageTransparent', 'image_autoresize'),
                     $targetFileName
                 );
-                if (version_compare($typo3Version, '12.0', '>=')) {
+                if ($typo3Version >= 12) {
                     $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
                 } else {
                     $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
@@ -244,7 +244,7 @@ class ImageResizer
                 LocalizationUtility::translate('message.imageAnimated', 'image_autoresize'),
                 $targetFileName
             );
-            if (version_compare($typo3Version, '12.0', '>=')) {
+            if ($typo3Version >= 12) {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
             } else {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
@@ -263,7 +263,7 @@ class ImageResizer
                 LocalizationUtility::translate('message.imageNotWritable', 'image_autoresize'),
                 $targetFileName
             );
-            if (version_compare($typo3Version, '12.0', '>=')) {
+            if ($typo3Version >= 12) {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             } else {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
@@ -297,9 +297,9 @@ class ImageResizer
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        $typo3Version = (new Typo3Version())->getMajorVersion();
         // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
-        if (version_compare($typo3Version, '13.0', '>=')) {
+        if ($typo3Version >= 13) {
             $scaleCmd = trim(str_replace('-auto-orient', '', $gifCreator->getGraphicalFunctions()->scalecmd));
             $gifCreator->getGraphicalFunctions()->scalecmd = $scaleCmd;
         } else {
@@ -316,7 +316,7 @@ class ImageResizer
         if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
-            if (version_compare($typo3Version, '13.0', '>=')) {
+            if ($typo3Version >= 13) {
                 $gifCreator->getGraphicalFunctions()->scalecmd = '-auto-orient ' . $scaleCmd;
             } else {
                 $gifCreator->scalecmd = '-auto-orient ' . $scaleCmd;
@@ -357,14 +357,14 @@ class ImageResizer
             $currentLocale = (string)setlocale(LC_CTYPE, '0');
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
         }
-        if (version_compare($typo3Version, '13.0', '>=')) {
+        if ($typo3Version >= 13) {
             $tempFileInfo = $gifCreator->getGraphicalFunctions()->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         } else {
             $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         }
         if ($tempFileInfo === null) {
             $message = LocalizationUtility::translate('message.cannotResize', 'image_autoresize');
-            if (version_compare($typo3Version, '12.0', '>=')) {
+            if ($typo3Version >= 12) {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             } else {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
@@ -427,7 +427,7 @@ class ImageResizer
                 // We are in upload process. Do nothing
             }
 
-            if (version_compare($typo3Version, '12.0', '>=')) {
+            if ($typo3Version >= 12) {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
             } else {
                 $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);

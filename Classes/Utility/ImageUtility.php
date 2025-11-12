@@ -67,7 +67,7 @@ class ImageUtility
 
         if ($fullExtract && !empty($metadata)) {
             $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
-            if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
+            if ((new Typo3Version())->getMajorVersion() >= 11) {
                 $extractorRegistry = GeneralUtility::makeInstance(ExtractorRegistry::class);
             } else {
                 $extractorRegistry = ExtractorRegistry::getInstance();
@@ -129,24 +129,19 @@ class ImageUtility
             'pathType' => 'absolute'
         ];
 
-        $typo3Version = (new Typo3Version())->getVersion();
+        // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
         // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
-        $backupLockRootPath = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? null;
-        if (version_compare($typo3Version, '10.4.43', '>=')
-            || version_compare($typo3Version, '11.5.35', '>=')
-            || version_compare($typo3Version, '12.4.11', '>=')) {
-            // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
-            $allowedPaths = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? [];
-            if (is_string($allowedPaths)) {
-                // The setting was a string before and is now an array
-                // For compatibility reasons, we cast a string to an array here for now
-                $allowedPaths = [$allowedPaths];
-            }
-            $backupLockRootPath = $allowedPaths;
-            $allowedPaths[] = $storageConfiguration['basePath'];
-            $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
+        $allowedPaths = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? [];
+        if (is_string($allowedPaths)) {
+            // The setting was a string before and is now an array
+            // For compatibility reasons, we cast a string to an array here for now
+            $allowedPaths = [$allowedPaths];
         }
-        if (version_compare($typo3Version, '11.5', '>=')) {
+        $backupLockRootPath = $allowedPaths;
+        $allowedPaths[] = $storageConfiguration['basePath'];
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
+        $typo3Version = (new Typo3Version())->getMajorVersion();
+        if ($typo3Version >= 11) {
             $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
             $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
             $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
