@@ -552,7 +552,7 @@ HTML;
         $message = sprintf($twitterMessagePattern, $totalSpaceClaimed);
         $url = 'https://extensions.typo3.org/extension/image_autoresize/';
 
-        $twitterLink = 'https://twitter.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
+        $twitterLink = 'https://x.com/intent/tweet?text=' . urlencode($message) . '&url=' . urlencode($url);
         $flashMessage .= '
             <div class="custom-tweet-button">
                 <a href="' . $twitterLink . '" title="' . htmlspecialchars($this->sL('social.share')) . '" target="_blank" class="btn">
