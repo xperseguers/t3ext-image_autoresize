@@ -157,7 +157,7 @@ return [
             'config' => [
                 'type' => 'flex',
                 'ds' => [
-                    'default' => version_compare((new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch(), '12.0', '>=')
+                    'default' => $typo3Version >= 12
                         ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
                         : 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
                 ],

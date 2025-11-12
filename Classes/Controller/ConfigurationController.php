@@ -105,8 +105,8 @@ class ConfigurationController
      */
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
-        $typo3Version = (new Typo3Version())->getBranch();
-        if (version_compare($typo3Version, '11.5', '>=')) {
+        $typo3Version = (new Typo3Version())->getMajorVersion();
+        if ($typo3Version >= 11) {
             $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
             $this->moduleTemplate = $moduleTemplateFactory->create($request);
         } else {
@@ -127,7 +127,7 @@ class ConfigurationController
         // Compile document
         $this->addToolbarButtons();
 
-        if (version_compare($typo3Version, '12.4', '<')) {
+        if ($typo3Version < 12) {
             $this->moduleTemplate->setContent($this->content);
             $content = $this->moduleTemplate->renderContent();
             return new HtmlResponse($content);
@@ -163,7 +163,7 @@ class ConfigurationController
      */
     protected function buildForm(ServerRequestInterface $request, array $row): string
     {
-        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        $typo3Version = (new Typo3Version())->getMajorVersion();
 
         $record = [
             'uid' => static::virtualRecordId,
@@ -185,7 +185,7 @@ class ConfigurationController
 
         /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
-        if (version_compare($typo3Version, '12.4', '>=')) {
+        if ($typo3Version >= 12) {
             $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class);
             $formDataCompilerInput = [
                 'request' => $request,
@@ -247,7 +247,7 @@ class ConfigurationController
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
         $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
 
-        if (version_compare($typo3Version, '12.4', '>=')) {
+        if ($typo3Version >= 12) {
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
             $class = new \ReflectionClass($pageRenderer);
             $property = $class->getProperty('nonce');
@@ -292,7 +292,7 @@ HTML;
         $saveSplitButton = $buttonBar->makeSplitButton();
 
         $locallangCore = 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf';
-        if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
+        if ((new Typo3Version())->getMajorVersion() >= 11) {
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
         } else {
             $iconFactory = $this->moduleTemplate->getIconFactory();
@@ -371,6 +371,7 @@ HTML;
      */
     protected function processData(ServerRequestInterface $request): void
     {
+        $typo3Version = (new Typo3Version())->getMajorVersion();
         $close = (bool)($request->getParsedBody()['closeDoc'] ?? false);
         $save = (bool)($request->getParsedBody()['doSave'] ?? false);
         $saveAndClose = (bool)($request->getParsedBody()['_saveandclosedok'] ?? false);
@@ -397,7 +398,7 @@ HTML;
             $ffValue = &$data[$field];
             if ($ffValue) {
                 // Remove FlexForm elements if needed
-                if (version_compare((new Typo3Version())->getBranch(), '12.4', '>=')) {
+                if ($typo3Version >= 12) {
                     foreach ($ffValue['data']['sDEF']['lDEF']['ruleset']['el'] ?? [] as $key => $value) {
                         if (($value['_ACTION'] ?? '') === 'DELETE') {
                             unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]);
@@ -430,7 +431,7 @@ HTML;
         if ($close || $saveAndClose) {
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
-            if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
+            if ($typo3Version >= 11) {
                 throw new PropagateResponseException(new RedirectResponse($closeUrl, 303), 1666353555);
             } else {
                 \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
@@ -560,8 +561,8 @@ HTML;
                 </a>
             </div>';
 
-        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
-        if (version_compare($typo3Version, '12.4', '>=')) {
+        $typo3Version = (new Typo3Version())->getMajorVersion();
+        if ($typo3Version >= 12) {
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
             $icon = $iconFactory->getIcon(
                 'actions-info',

@@ -52,7 +52,7 @@ class ExtensionManagerEventListener
         $actions[0] = $configureAction;
         unset($actions[1], $actions[2], $actions[3], $actions[4]);
 
-        if (version_compare((new Typo3Version())->getBranch(), '12.4', '<')) {
+        if ((new Typo3Version())->getMajorVersion() < 12) {
             // Starting from TYPO3 v12, we do not expect the extension title to be a link
             // and this prevents a possible CSP violation in the Backend
             $title = htmlspecialchars($event->getPackageData()['title']);
