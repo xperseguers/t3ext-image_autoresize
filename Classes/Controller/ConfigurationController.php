@@ -614,15 +614,7 @@ HTML;
      */
     protected static function getConfigurationFileName(): string
     {
-        // TODO: Remove this silent migration with version 2.4.1 or so
-        $oldConfigurationFileName = Environment::getPublicPath() . '/typo3conf/image_autoresize.config.php';
-        $newConfigurationFileName = Environment::getConfigPath() . '/image_autoresize.config.php';
-
-        if (is_file($oldConfigurationFileName) && !is_file($newConfigurationFileName)) {
-            rename($oldConfigurationFileName, $newConfigurationFileName);
-        }
-
-        return $newConfigurationFileName;
+        return Environment::getConfigPath() . '/image_autoresize.config.php';
     }
 
     protected function sL(string $key): string
