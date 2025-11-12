@@ -298,6 +298,11 @@ HTML;
             $iconFactory = $this->moduleTemplate->getIconFactory();
         }
 
+        $typo3Version = (new Typo3Version())->getMajorVersion();
+        $iconSize = $typo3Version >= 13
+            ? \TYPO3\CMS\Core\Imaging\IconSize::SMALL
+            : \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL;
+
         // SAVE button:
         $saveButton = $buttonBar->makeInputButton()
             ->setTitle(htmlspecialchars($this->languageService->sL($locallangCore . ':rm.saveDoc')))
@@ -306,7 +311,7 @@ HTML;
             ->setForm('EditDocumentController')
             ->setIcon($iconFactory->getIcon(
                 'actions-document-save',
-                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+                $iconSize
             ));
         $saveSplitButton->addItem($saveButton, true);
 
@@ -319,7 +324,7 @@ HTML;
             ->setClasses('t3js-editform-submitButton')
             ->setIcon($iconFactory->getIcon(
                 'actions-document-save-close',
-                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+                $iconSize
             ));
         $saveSplitButton->addItem($saveAndCloseButton);
 
@@ -332,7 +337,7 @@ HTML;
             ->setClasses('t3js-editform-close')
             ->setIcon($iconFactory->getIcon(
                 'actions-view-go-back',
-                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+                $iconSize
             ));
         $buttonBar->addButton($closeButton);
     }
@@ -564,9 +569,12 @@ HTML;
         $typo3Version = (new Typo3Version())->getMajorVersion();
         if ($typo3Version >= 12) {
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            $iconSize = $typo3Version >= 13
+                ? \TYPO3\CMS\Core\Imaging\IconSize::SMALL
+                : \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL;
             $icon = $iconFactory->getIcon(
                 'actions-info',
-                \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL
+                $iconSize
             );
             $this->content .= '
                 <div class="alert alert-info">

@@ -43,7 +43,11 @@ class ExtensionManagerEventListener
         $icon = 'actions-system-extension-configure';
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-        $icon = (string)$iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
+        $typo3Version = (new Typo3Version())->getMajorVersion();
+        $iconSize = $typo3Version >= 13
+            ? \TYPO3\CMS\Core\Imaging\IconSize::SMALL
+            : \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL;
+        $icon = (string)$iconFactory->getIcon($icon, $iconSize);
 
         $actions = $event->getActions();
 
