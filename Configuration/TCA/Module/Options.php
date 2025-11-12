@@ -156,11 +156,13 @@ return [
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.rulesets.description',
             'config' => [
                 'type' => 'flex',
-                'ds' => [
-                    'default' => $typo3Version >= 12
-                        ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
-                        : 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
-                ],
+                'ds' => $typo3Version >= 14
+                    ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
+                    : [
+                        'default' => $typo3Version >= 12
+                            ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
+                            : 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
+                    ],
             ],
         ],
     ],

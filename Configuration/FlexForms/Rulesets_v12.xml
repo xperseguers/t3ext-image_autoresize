@@ -5,25 +5,26 @@
 	<ROOT>
 		<type>array</type>
 		<el>
-			<ruleset type="array">
+			<ruleset>
 				<title></title>
 				<type>array</type>
-				<el type="array">
-					<container type="array">
+				<section>1</section>
+				<el>
+					<container>
 						<title>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.usergroup_ruleset</title>
-						<el type="array">
-							<title type="array">
+						<el>
+							<title>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.title</label>
-								<config type="array">
+								<config>
 									<type>input</type>
 									<size>30</size>
 									<max>50</max>
 									<eval>trim</eval>
 								</config>
 							</title>
-							<usergroup type="array">
+							<usergroup>
 								<label>LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_users.usergroup</label>
-								<config type="array">
+								<config>
 									<type>select</type>
 									<renderType>selectMultipleSideBySide</renderType>
 									<itemsProcFunc>Causal\ImageAutoresize\Tca\BackendUserGroups->getAll</itemsProcFunc>
@@ -34,19 +35,19 @@
 									<multiple>0</multiple>
 								</config>
 							</usergroup>
-							<directories type="array">
+							<directories>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories</label>
 								<description>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories.description</description>
-								<config type="array">
+								<config>
 									<type>input</type>
 									<size>50</size>
 									<max>255</max>
 									<eval>trim</eval>
 								</config>
 							</directories>
-							<file_types type="array">
+							<file_types>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.file_types</label>
-								<config type="array">
+								<config>
 									<type>select</type>
 									<renderType>selectMultipleSideBySide</renderType>
 									<itemsProcFunc>Causal\ImageAutoresize\Tca\Graphics->getImageFileExtensions</itemsProcFunc>
@@ -56,10 +57,10 @@
 									<multiple>0</multiple>
 								</config>
 							</file_types>
-							<threshold type="array">
+							<threshold>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold</label>
 								<description>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold.description</description>
-								<config type="array">
+								<config>
 									<type>input</type>
 									<size>10</size>
 									<max>10</max>
@@ -67,9 +68,9 @@
 									<checkbox>0</checkbox>
 								</config>
 							</threshold>
-							<max_width type="array">
+							<max_width>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_width</label>
-								<config type="array">
+								<config>
 									<type>input</type>
 									<size>5</size>
 									<max>5</max>
@@ -81,9 +82,9 @@
 									<default>0</default>
 								</config>
 							</max_width>
-							<max_height type="array">
+							<max_height>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_height</label>
-								<config type="array">
+								<config>
 									<type>input</type>
 									<size>5</size>
 									<max>5</max>
@@ -95,10 +96,10 @@
 									<default>0</default>
 								</config>
 							</max_height>
-							<max_size type="array">
+							<max_size>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size</label>
 								<description>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size.description</description>
-								<config type="array">
+								<config>
 									<type>input</type>
 									<size>10</size>
 									<max>10</max>
@@ -106,7 +107,7 @@
 									<checkbox>0</checkbox>
 								</config>
 							</max_size>
-							<keep_metadata type="array">
+							<keep_metadata>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.keep_metadata</label>
 								<description>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.keep_metadata.description</description>
 								<config>

@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -502,6 +503,10 @@ HTML;
     protected function loadVirtualTca(): void
     {
         $GLOBALS['TCA'][static::virtualTable] = include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
+        if ((new Typo3Version())->getMajorVersion() >= 14) {
+            $tcaSchemaFactory = GeneralUtility::makeInstance(TcaSchemaFactory::class);
+            $tcaSchemaFactory->rebuild($GLOBALS['TCA']);
+        }
     }
 
     /**
