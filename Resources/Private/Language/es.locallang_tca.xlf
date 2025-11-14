@@ -107,9 +107,9 @@ La evaluación se detiene en cuanto se encuentra un conjunto de reglas coinciden
         <source>Title</source>
         <target state="final">Título</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
         <source>User group rule set</source>
-        <target state="translated">Conjunto de reglas de grupo de usuarios</target>
+        <target state="final">Conjunto de reglas de grupo de usuarios</target>
       </trans-unit>
       <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
