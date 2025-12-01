@@ -182,7 +182,8 @@ class FAL
                                 }
                                 break;
                             case 'DateTimeOriginal':
-                                $value = strtotime($value);
+                                $timestamp = strtotime($value);
+                                $value = ($timestamp !== false && $timestamp > 0) ? $timestamp : null;
                                 break;
                         }
                     }
