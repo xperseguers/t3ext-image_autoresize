@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="nl">
+    <header/>
+    <body>
+      <trans-unit id="saveConfiguration" approved="yes">
+        <source>Save configuration</source>
+        <target state="final">Configuratie opslaan</target>
+      </trans-unit>
+      <trans-unit id="saveCloseConfiguration" approved="yes">
+        <source>Save and close configuration</source>
+        <target state="final">Configuratie opslaan en sluiten</target>
+      </trans-unit>
+      <trans-unit id="closeConfiguration" approved="yes">
+        <source>Close configuration</source>
+        <target state="final">Configuratie sluiten</target>
+      </trans-unit>
+      <trans-unit id="extension.ai">
+        <source>.ai - Adobe Illustrator</source>
+        <target state="needs-translation">.ai - Adobe Illustrator</target>
+      </trans-unit>
+      <trans-unit id="extension.bmp" approved="yes">
+        <source>.bmp - Windows OS/2 Bitmap Graphics</source>
+        <target state="final">.bmp - Windows OS/2 Rasterafbeelding</target>
+      </trans-unit>
+      <trans-unit id="extension.gif">
+        <source>.gif - Graphic Interchange Format</source>
+        <target state="needs-translation">.gif - Graphic Interchange Format</target>
+      </trans-unit>
+      <trans-unit id="extension.jpg" approved="yes">
+        <source>.jpg - JPEG/JIFF Image</source>
+        <target state="final">.jpg - JPEG/JIFF Afbeelding</target>
+      </trans-unit>
+      <trans-unit id="extension.jpeg" approved="yes">
+        <source>.jpeg - JPEG/JIFF Image</source>
+        <target state="final">.jpeg - JPEG/JIFF Afbeelding</target>
+      </trans-unit>
+      <trans-unit id="extension.pcx">
+        <source>.pcx - Paintbrush Bitmap Graphic</source>
+        <target state="needs-translation">.pcx - Paintbrush Bitmap Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.png">
+        <source>.png - Portable Network Graphic</source>
+        <target state="needs-translation">.png - Portable Network Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tga">
+        <source>.tga - Truevision Targa Graphic</source>
+        <target state="needs-translation">.tga - Truevision Targa Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tif">
+        <source>.tif - Tagged Image Format</source>
+        <target state="needs-translation">.tif - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="extension.tiff">
+        <source>.tiff - Tagged Image Format</source>
+        <target state="needs-translation">.tiff - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="message.imageTransparent" approved="yes">
+        <source>Image %s has not been resized because transparency has been detected.</source>
+        <target state="final">Afbeelding %s is niet geschaald omdat transparantie gevonden is.</target>
+      </trans-unit>
+      <trans-unit id="message.imageAnimated">
+        <source>Image %s has not been resized because it is an animated GIF.</source>
+        <target state="translated">Afbeelding %s is niet geschaald omdat het een geanimeerde GIF is.</target>
+      </trans-unit>
+      <trans-unit id="message.imageResized">
+        <source>Image %s has been automatically resized to %s×%s pixels.</source>
+        <target state="needs-translation">Image %s has been automatically resized to %s×%s pixels.</target>
+      </trans-unit>
+      <trans-unit id="message.imageResizedAndRenamed">
+        <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
+        <target state="needs-translation">Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</target>
+      </trans-unit>
+      <trans-unit id="message.imageNotWritable" approved="yes">
+        <source>Image %s cannot be resized because file is not writable.</source>
+        <target state="final">Afbeelding %s kan niet geschaald worden omdat het bestand niet beschrijfbaar is.</target>
+      </trans-unit>
+      <trans-unit id="message.cannotResize">
+        <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
+        <target state="needs-translation">Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
