@@ -12,6 +12,8 @@ For more details,
 =======  ======================================================
 Version  Changes
 =======  ======================================================
+2.5.x    * Early compatibility with TYPO3 v14
+         * **Beware:** Dropped support for TYPO3 v10 and v11
 2.4.x    * Early compatibility with TYPO3 v13
          * Better respect of privacy by respecting whether or not to
            automatically extracting metadata prior to the resizing process

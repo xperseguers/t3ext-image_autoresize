@@ -27,6 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class BatchResize extends Command
@@ -117,10 +118,7 @@ class BatchResize extends Command
         $success = true;
         foreach ($directories as $directory) {
             foreach ($processedDirectories as $processedDirectory) {
-                $isInProcessedDirectory = PHP_VERSION_ID >= 80000
-                    ? str_starts_with($directory, $processedDirectory)
-                    : GeneralUtility::isFirstPartOfStr($directory, $processedDirectory);
-                if ($isInProcessedDirectory) {
+                if (str_starts_with($directory, $processedDirectory)) {
                     continue 2;
                 }
             }
@@ -188,10 +186,7 @@ class BatchResize extends Command
             if (!$skip) {
                 // Check if we should skip since in one of the exclude directories
                 foreach ($excludeDirectories as $excludeDirectory) {
-                    $isInExcludeDirectory = PHP_VERSION_ID >= 80000
-                        ? str_starts_with($filePath, $excludeDirectory)
-                        : GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory);
-                    if ($isInExcludeDirectory || rtrim($excludeDirectory, '/') === $filePath
+                    if (str_starts_with($filePath, $excludeDirectory) || rtrim($excludeDirectory, '/') === $filePath
                     ) {
                         $skip = true;
                         break;
@@ -221,16 +216,11 @@ class BatchResize extends Command
 
     /**
      * @param string $message
-     * @param int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity
-     * @return void
+     * @param ContextualFeedbackSeverity $severity
      */
-    public function notify(string $message, $severity)
+    public function notify(string $message, ContextualFeedbackSeverity $severity): void
     {
-        if (version_compare((new Typo3Version())->getBranch(), '12.0', '>=')) {
-            $severity = $severity->value;
-        }
-
-        switch ($severity) {
+        switch ($severity->value) {
             case -2:
                 $this->io->note($message);
                 break;

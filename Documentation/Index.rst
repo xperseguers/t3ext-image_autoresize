@@ -27,7 +27,7 @@ Resize images automatically
       Xavier Perseguers
 
    :Copyright:
-      2010-2025
+      2010-2026
 
    :License:
       This document is published under the

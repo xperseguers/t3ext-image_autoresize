@@ -3,9 +3,6 @@
 /**
  * Definitions for routes provided by EXT:image_autoresize
  */
-$typo3Branch = class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class)
-    ? (new \TYPO3\CMS\Core\Information\Typo3Version())->getBranch()
-    : TYPO3_branch;
 return [
     // Register configuration module entry point
     'xMOD_tximageautoresize' => [
@@ -14,6 +11,8 @@ return [
     ],
     'TxImageAutoresize::record_flex_container_add' => [
         'path' => '/image_autoresize/record_flex_container_add',
-        'target' => \Causal\ImageAutoresize\Controller\FormFlexAjaxController::class . '::containerAdd'
+        'target' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 14
+            ? \Causal\ImageAutoresize\Controller\V14\FormFlexAjaxController::class . '::containerAdd'
+            : \Causal\ImageAutoresize\Controller\V10\FormFlexAjaxController::class . '::containerAdd'
     ],
 ];

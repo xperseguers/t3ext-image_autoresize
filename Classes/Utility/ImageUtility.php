@@ -16,13 +16,10 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Utility;
 
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Resource\Driver\DriverRegistry;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\ExtractorRegistry;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
-use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -67,11 +64,7 @@ class ImageUtility
 
         if ($fullExtract && !empty($metadata)) {
             $virtualFileObject = static::getVirtualFileObject($fileName, $metadata);
-            if (version_compare((new Typo3Version())->getBranch(), '11.5', '>=')) {
-                $extractorRegistry = GeneralUtility::makeInstance(ExtractorRegistry::class);
-            } else {
-                $extractorRegistry = ExtractorRegistry::getInstance();
-            }
+            $extractorRegistry = GeneralUtility::makeInstance(ExtractorRegistry::class);
             $extractionServices = $extractorRegistry->getExtractorsWithDriverSupport('Local');
 
             $newMetadata = [
@@ -129,34 +122,22 @@ class ImageUtility
             'pathType' => 'absolute'
         ];
 
-        $typo3Version = (new Typo3Version())->getVersion();
+        // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
         // See https://typo3.org/security/advisory/typo3-core-sa-2024-001
-        $backupLockRootPath = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? null;
-        if (version_compare($typo3Version, '10.4.43', '>=')
-            || version_compare($typo3Version, '11.5.35', '>=')
-            || version_compare($typo3Version, '12.4.11', '>=')) {
-            // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
-            $allowedPaths = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? [];
-            if (is_string($allowedPaths)) {
-                // The setting was a string before and is now an array
-                // For compatibility reasons, we cast a string to an array here for now
-                $allowedPaths = [$allowedPaths];
-            }
-            $backupLockRootPath = $allowedPaths;
-            $allowedPaths[] = $storageConfiguration['basePath'];
-            $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
+        $allowedPaths = $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] ?? [];
+        if (is_string($allowedPaths)) {
+            // The setting was a string before and is now an array
+            // For compatibility reasons, we cast a string to an array here for now
+            $allowedPaths = [$allowedPaths];
         }
-        if (version_compare($typo3Version, '11.5', '>=')) {
-            $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
-            $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
-            $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
-            $recordData['configuration'] = $storageConfiguration;
-            $virtualStorage = GeneralUtility::makeInstance(ResourceStorage::class, $driverObject, $recordData);
-        } else {
-            /** @var ResourceFactory $resourceFactory */
-            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-            $virtualStorage = $resourceFactory->createStorageObject($recordData, $storageConfiguration);
-        }
+        $backupLockRootPath = $allowedPaths;
+        $allowedPaths[] = $storageConfiguration['basePath'];
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $allowedPaths;
+        $driverRegistry = GeneralUtility::makeInstance(DriverRegistry::class);
+        $driverClass = $driverRegistry->getDriverClass($recordData['driver']);
+        $driverObject = GeneralUtility::makeInstance($driverClass, (array)$storageConfiguration);
+        $recordData['configuration'] = $storageConfiguration;
+        $virtualStorage = GeneralUtility::makeInstance(ResourceStorage::class, $driverObject, $recordData);
         // Restore the original lockRootPath
         $GLOBALS['TYPO3_CONF_VARS']['BE']['lockRootPath'] = $backupLockRootPath;
         $name = PathUtility::basename($fileName);

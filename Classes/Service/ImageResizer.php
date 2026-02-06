@@ -224,18 +224,13 @@ class ImageResizer
         }
         $fileExtension = strtolower(substr($fileName, $dotPosition + 1));
 
-        $typo3Version = (new Typo3Version())->getBranch();
         if ($fileExtension === 'png' && !($ruleset['resize_png_with_alpha'] ?? false)) {
             if (ImageUtility::isTransparentPng($fileName)) {
                 $message = sprintf(
                     LocalizationUtility::translate('message.imageTransparent', 'image_autoresize'),
                     $targetFileName
                 );
-                if (version_compare($typo3Version, '12.0', '>=')) {
-                    $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
-                } else {
-                    $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
-                }
+                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
                 return $fileName;
             }
         }
@@ -244,11 +239,7 @@ class ImageResizer
                 LocalizationUtility::translate('message.imageAnimated', 'image_autoresize'),
                 $targetFileName
             );
-            if (version_compare($typo3Version, '12.0', '>=')) {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
-            } else {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
-            }
+            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING);
             return $fileName;
         }
 
@@ -263,11 +254,7 @@ class ImageResizer
                 LocalizationUtility::translate('message.imageNotWritable', 'image_autoresize'),
                 $targetFileName
             );
-            if (version_compare($typo3Version, '12.0', '>=')) {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
-            } else {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
-            }
+            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
             return $fileName;
         }
 
@@ -297,9 +284,9 @@ class ImageResizer
         // Image is bigger than allowed, will now resize it to (hopefully) make it lighter
         /** @var \TYPO3\CMS\Frontend\Imaging\GifBuilder $gifCreator */
         $gifCreator = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Imaging\GifBuilder::class);
-        $typo3Version = (string)GeneralUtility::makeInstance(Typo3Version::class);
+        $typo3Version = (new Typo3Version())->getMajorVersion();
         // We want to respect what the user chose with its ruleset and not blindly auto-rotate!
-        if (version_compare($typo3Version, '13.0', '>=')) {
+        if ($typo3Version >= 13) {
             $scaleCmd = trim(str_replace('-auto-orient', '', $gifCreator->getGraphicalFunctions()->scalecmd));
             $gifCreator->getGraphicalFunctions()->scalecmd = $scaleCmd;
         } else {
@@ -316,7 +303,7 @@ class ImageResizer
         if ((bool)$ruleset['auto_orient'] === true) {
             $orientation = ImageUtility::getOrientation($fileName);
             $isRotated = ImageUtility::isRotated($orientation);
-            if (version_compare($typo3Version, '13.0', '>=')) {
+            if ($typo3Version >= 13) {
                 $gifCreator->getGraphicalFunctions()->scalecmd = '-auto-orient ' . $scaleCmd;
             } else {
                 $gifCreator->scalecmd = '-auto-orient ' . $scaleCmd;
@@ -357,18 +344,14 @@ class ImageResizer
             $currentLocale = (string)setlocale(LC_CTYPE, '0');
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['systemLocale'] = $currentLocale;
         }
-        if (version_compare($typo3Version, '13.0', '>=')) {
+        if ($typo3Version >= 13) {
             $tempFileInfo = $gifCreator->getGraphicalFunctions()->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         } else {
             $tempFileInfo = $gifCreator->imageMagickConvert($fileName, $destExtension, '', '', $imParams, '', $options, true);
         }
         if ($tempFileInfo === null) {
             $message = LocalizationUtility::translate('message.cannotResize', 'image_autoresize');
-            if (version_compare($typo3Version, '12.0', '>=')) {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
-            } else {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
-            }
+            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR);
         } elseif (!$isRotated && filesize($tempFileInfo[3]) >= $originalFileSize - 10240 && $destExtension === $fileExtension) {
             // Conversion leads to same or bigger file (rounded to 10KB to accommodate tiny variations in compression) => skip!
             @unlink($tempFileInfo[3]);
@@ -427,11 +410,7 @@ class ImageResizer
                 // We are in upload process. Do nothing
             }
 
-            if (version_compare($typo3Version, '12.0', '>=')) {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
-            } else {
-                $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Messaging\FlashMessage::INFO);
-            }
+            $this->notify($callbackNotification, $message, \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::INFO);
         } else {
             // Destination file was not written
             $destFileName = $fileName;
@@ -501,10 +480,7 @@ class ImageResizer
             }
             $processFile = false;
             foreach ($ruleset['directories'] as $directoryConfig) {
-                $IsInBasePath = PHP_VERSION_ID >= 80000
-                    ? str_starts_with($targetFileName, $directoryConfig['basePath'] . '/')
-                    : GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath'] . '/');
-                if ($IsInBasePath) {
+                if (str_starts_with($targetFileName, $directoryConfig['basePath'] . '/')) {
                     $relTargetFileName = substr($targetFileName, strlen($directoryConfig['basePath']));
                     $processFile |= empty($directoryConfig['pattern']) || preg_match($directoryConfig['pattern'], $relTargetFileName);
                 }
@@ -512,7 +488,7 @@ class ImageResizer
                     break;  // No need to test other directories
                 }
             }
-            $processFile &= in_array($fileExtension, $ruleset['file_types']);
+            $processFile &= in_array($fileExtension, $ruleset['file_types'], true);
             if ((bool)$processFile) {
                 // We found the ruleset to use!
                 $ret = $ruleset;
