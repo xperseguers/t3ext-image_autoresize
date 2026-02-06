@@ -21,6 +21,7 @@ use Causal\ImageAutoresize\Event\ProcessDefaultConfigurationEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Form\FormResultCompiler;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
@@ -146,10 +147,10 @@ class ConfigurationController
      */
     protected function moduleContent(ServerRequestInterface $request, array $row): void
     {
-        $this->formResultCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormResultCompiler::class);
+        $this->formResultCompiler = GeneralUtility::makeInstance(FormResultCompiler::class);
+        $this->formResultCompiler->addCssFiles();
 
-        $wizard = $this->formResultCompiler->addCssFiles();
-        $wizard .= $this->buildForm($request, $row);
+        $wizard = $this->buildForm($request, $row);
         $wizard .= $this->formResultCompiler->printNeededJSFunctions();
 
         $this->content .= $wizard;
