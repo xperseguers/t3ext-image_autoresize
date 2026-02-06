@@ -253,9 +253,6 @@ class ConfigurationController
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
             $class = new \ReflectionClass($pageRenderer);
             $property = $class->getProperty('nonce');
-            if (PHP_VERSION_ID < 80100) {
-                $property->setAccessible(true);
-            }
             $nonce = $property->getValue($pageRenderer)->consume();
 
             $formContent .= <<<HTML

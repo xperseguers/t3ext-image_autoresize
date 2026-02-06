@@ -117,10 +117,7 @@ class BatchResize extends Command
         $success = true;
         foreach ($directories as $directory) {
             foreach ($processedDirectories as $processedDirectory) {
-                $isInProcessedDirectory = PHP_VERSION_ID >= 80000
-                    ? str_starts_with($directory, $processedDirectory)
-                    : GeneralUtility::isFirstPartOfStr($directory, $processedDirectory);
-                if ($isInProcessedDirectory) {
+                if (str_starts_with($directory, $processedDirectory)) {
                     continue 2;
                 }
             }
@@ -188,10 +185,7 @@ class BatchResize extends Command
             if (!$skip) {
                 // Check if we should skip since in one of the exclude directories
                 foreach ($excludeDirectories as $excludeDirectory) {
-                    $isInExcludeDirectory = PHP_VERSION_ID >= 80000
-                        ? str_starts_with($filePath, $excludeDirectory)
-                        : GeneralUtility::isFirstPartOfStr($filePath, $excludeDirectory);
-                    if ($isInExcludeDirectory || rtrim($excludeDirectory, '/') === $filePath
+                    if (str_starts_with($filePath, $excludeDirectory) || rtrim($excludeDirectory, '/') === $filePath
                     ) {
                         $skip = true;
                         break;

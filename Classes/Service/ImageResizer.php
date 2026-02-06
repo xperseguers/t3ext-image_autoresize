@@ -501,10 +501,7 @@ class ImageResizer
             }
             $processFile = false;
             foreach ($ruleset['directories'] as $directoryConfig) {
-                $IsInBasePath = PHP_VERSION_ID >= 80000
-                    ? str_starts_with($targetFileName, $directoryConfig['basePath'] . '/')
-                    : GeneralUtility::isFirstPartOfStr($targetFileName, $directoryConfig['basePath'] . '/');
-                if ($IsInBasePath) {
+                if (str_starts_with($targetFileName, $directoryConfig['basePath'] . '/')) {
                     $relTargetFileName = substr($targetFileName, strlen($directoryConfig['basePath']));
                     $processFile |= empty($directoryConfig['pattern']) || preg_match($directoryConfig['pattern'], $relTargetFileName);
                 }
@@ -512,7 +509,7 @@ class ImageResizer
                     break;  // No need to test other directories
                 }
             }
-            $processFile &= in_array($fileExtension, $ruleset['file_types']);
+            $processFile &= in_array($fileExtension, $ruleset['file_types'], true);
             if ((bool)$processFile) {
                 // We found the ruleset to use!
                 $ret = $ruleset;
