@@ -212,7 +212,9 @@ class FAL
         }
         $class = static::$reflectedClasses[$className];
         $property = $class->getProperty($propertyName);
-        $property->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
 
         return $property->getValue($object);
     }
