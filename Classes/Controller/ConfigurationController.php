@@ -22,8 +22,11 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormResultCompiler;
+use TYPO3\CMS\Backend\Module\ModuleProvider;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
@@ -91,7 +94,10 @@ class ConfigurationController
     /**
      * Default constructor
      */
-    public function __construct()
+    public function __construct(
+        protected readonly UriBuilder $uriBuilder,
+        protected readonly ModuleProvider $moduleProvider
+    )
     {
         $this->languageService = $GLOBALS['LANG'];
         $this->config = static::readConfiguration();
@@ -300,7 +306,7 @@ HTML;
             ));
         $saveSplitButton->addItem($saveAndCloseButton);
 
-        $buttonBar->addButton($saveSplitButton, \TYPO3\CMS\Backend\Template\Components\ButtonBar::BUTTON_POSITION_LEFT, 2);
+        $buttonBar->addButton($saveSplitButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
 
         // CLOSE button:
         $closeButton = $buttonBar->makeLinkButton()
@@ -571,6 +577,18 @@ HTML;
     {
         $input = 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_mod.xlf:' . $key;
         return $this->languageService->sL($input);
+    }
+
+    protected function resolveReturnUrl(): string
+    {
+        $module = $this->moduleProvider->getModule('extensionmanager', $this->getBackendUser());
+        $routeName = $module ? $module->getIdentifier() : 'dummy';
+        return (string)$this->uriBuilder->buildUriFromRoute($routeName);
+    }
+
+    protected function getBackendUser(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
     }
 }
 

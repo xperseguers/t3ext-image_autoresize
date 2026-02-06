@@ -25,6 +25,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../Classes/Controller/*/FormFlexAjaxController.php',
         ]);
 
+    $services->set(\Causal\ImageAutoresize\Controller\ConfigurationController::class)
+        ->public();
+
     if ((new Typo3Version())->getMajorVersion() >= 14) {
         $services->set(\Causal\ImageAutoresize\Controller\V14\FormFlexAjaxController::class)
             ->public();
