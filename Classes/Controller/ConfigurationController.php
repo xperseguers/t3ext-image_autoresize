@@ -108,12 +108,12 @@ class ConfigurationController
     public function mainAction(ServerRequestInterface $request): ResponseInterface
     {
         $typo3Version = (new Typo3Version())->getMajorVersion();
-        if ($typo3Version >= 11) {
-            $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
-            $this->moduleTemplate = $moduleTemplateFactory->create($request);
-        } else {
-            $this->moduleTemplate = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Template\ModuleTemplate::class);
+        $moduleTemplateFactory = GeneralUtility::makeInstance(ModuleTemplateFactory::class);
+        $this->moduleTemplate = $moduleTemplateFactory->create($request);
+        if ($typo3Version >= 14) {
+            $this->retUrl = $this->resolveReturnUrl();
         }
+
         $this->processData($request);
 
         $formTag = '<form action="" method="post" name="editform" id="EditDocumentController">';
@@ -128,12 +128,6 @@ class ConfigurationController
 
         // Compile document
         $this->addToolbarButtons();
-
-        if ($typo3Version < 12) {
-            $this->moduleTemplate->setContent($this->content);
-            $content = $this->moduleTemplate->renderContent();
-            return new HtmlResponse($content);
-        }
 
         $this->moduleTemplate->assign('content', $this->content);
         return $this->moduleTemplate->renderResponse('Configuration');
@@ -187,24 +181,14 @@ class ConfigurationController
 
         /** @var \TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord::class);
-        if ($typo3Version >= 12) {
-            $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class);
-            $formDataCompilerInput = [
-                'request' => $request,
-                'tableName' => static::virtualTable,
-                'vanillaUid' => $record['uid'],
-                'command' => 'edit',
-                'returnUrl' => '',
-            ];
-        } else {
-            $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class, $formDataGroup);
-            $formDataCompilerInput = [
-                'tableName' => static::virtualTable,
-                'vanillaUid' => $record['uid'],
-                'command' => 'edit',
-                'returnUrl' => '',
-            ];
-        }
+        $formDataCompiler = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Form\FormDataCompiler::class);
+        $formDataCompilerInput = [
+            'request' => $request,
+            'tableName' => static::virtualTable,
+            'vanillaUid' => $record['uid'],
+            'command' => 'edit',
+            'returnUrl' => '',
+        ];
 
         // Load the configuration of virtual table 'tx_imageautoresize'
         $this->loadVirtualTca();
@@ -249,13 +233,12 @@ class ConfigurationController
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('TxImageAutoresize::record_flex_container_add');
         $overriddenAjaxUrl = GeneralUtility::quoteJSvalue($moduleUrl);
 
-        if ($typo3Version >= 12) {
-            $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-            $class = new \ReflectionClass($pageRenderer);
-            $property = $class->getProperty('nonce');
-            $nonce = $property->getValue($pageRenderer)->consume();
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $class = new \ReflectionClass($pageRenderer);
+        $property = $class->getProperty('nonce');
+        $nonce = $property->getValue($pageRenderer)->consume();
 
-            $formContent .= <<<HTML
+        $formContent .= <<<HTML
 <script type="text/javascript" nonce="$nonce">
     var scripts = document.querySelectorAll('script');
     for (var i = 0; i < scripts.length; i++) {
@@ -270,14 +253,6 @@ class ConfigurationController
     }
 </script>
 HTML;
-        } else {
-            // Up to TYPO3 v11:
-            $formContent .= <<<HTML
-<script type="text/javascript">
-    TYPO3.settings.ajaxUrls['record_flex_container_add'] = $overriddenAjaxUrl;
-</script>
-HTML;
-        }
 
         return $formContent;
     }
@@ -293,11 +268,7 @@ HTML;
         $saveSplitButton = $buttonBar->makeSplitButton();
 
         $locallangCore = 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf';
-        if ((new Typo3Version())->getMajorVersion() >= 11) {
-            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-        } else {
-            $iconFactory = $this->moduleTemplate->getIconFactory();
-        }
+        $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
 
         $typo3Version = (new Typo3Version())->getMajorVersion();
         $iconSize = $typo3Version >= 13
@@ -404,19 +375,11 @@ HTML;
             $ffValue = &$data[$field];
             if ($ffValue) {
                 // Remove FlexForm elements if needed
-                if ($typo3Version >= 12) {
-                    foreach ($ffValue['data']['sDEF']['lDEF']['ruleset']['el'] ?? [] as $key => $value) {
-                        if (($value['_ACTION'] ?? '') === 'DELETE') {
-                            unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]);
-                        }
-                        unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]['_ACTION']);
+                foreach ($ffValue['data']['sDEF']['lDEF']['ruleset']['el'] ?? [] as $key => $value) {
+                    if (($value['_ACTION'] ?? '') === 'DELETE') {
+                        unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]);
                     }
-                } else {
-                    $actionCMDs = GeneralUtility::_GP('_ACTION_FLEX_FORMdata');
-                    if (is_array($actionCMDs[$table][$id][$field]['data'])) {
-                        $dataHandler = new CustomDataHandler();
-                        $dataHandler->_ACTION_FLEX_FORMdata($ffValue['data'], $actionCMDs[$table][$id][$field]['data']);
-                    }
+                    unset($ffValue['data']['sDEF']['lDEF']['ruleset']['el'][$key]['_ACTION']);
                 }
                 // Renumber all FlexForm temporary ids
                 $this->persistFlexForm($ffValue['data']);
@@ -436,12 +399,12 @@ HTML;
 
         if ($close || $saveAndClose) {
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
-            if ($typo3Version >= 11) {
-                throw new PropagateResponseException(new RedirectResponse($closeUrl, 303), 1666353555);
+            if ($typo3Version >= 14) {
+                $closeUrl = $this->retUrl;
             } else {
-                \TYPO3\CMS\Core\Utility\HttpUtility::redirect($closeUrl);
+                $closeUrl = (string)$uriBuilder->buildUriFromRoute('tools_ExtensionmanagerExtensionmanager');
             }
+            throw new PropagateResponseException(new RedirectResponse($closeUrl, 303), 1666353555);
         }
     }
 
@@ -572,16 +535,15 @@ HTML;
             </div>';
 
         $typo3Version = (new Typo3Version())->getMajorVersion();
-        if ($typo3Version >= 12) {
-            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-            $iconSize = $typo3Version >= 13
-                ? \TYPO3\CMS\Core\Imaging\IconSize::SMALL
-                : \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL;
-            $icon = $iconFactory->getIcon(
-                'actions-info',
-                $iconSize
-            );
-            $this->content .= '
+        $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+        $iconSize = $typo3Version >= 13
+            ? \TYPO3\CMS\Core\Imaging\IconSize::SMALL
+            : \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL;
+        $icon = $iconFactory->getIcon(
+            'actions-info',
+            $iconSize
+        );
+        $this->content .= '
                 <div class="alert alert-info">
                     <div class="media">
                         <div class="media-left">
@@ -593,23 +555,6 @@ HTML;
                     </div>
                 </div>
             ';
-        } else {
-            $this->content .= '
-                <div class="alert alert-info">
-                    <div class="media">
-                        <div class="media-left">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-info fa-stack-1x"></i>
-                            </span>
-                        </div>
-                        <div class="media-body">
-                            ' . $flashMessage . '
-                        </div>
-                    </div>
-                </div>
-            ';
-        }
     }
 
     /**

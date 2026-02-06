@@ -27,6 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class BatchResize extends Command
@@ -215,16 +216,11 @@ class BatchResize extends Command
 
     /**
      * @param string $message
-     * @param int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity
-     * @return void
+     * @param ContextualFeedbackSeverity $severity
      */
-    public function notify(string $message, $severity)
+    public function notify(string $message, ContextualFeedbackSeverity $severity): void
     {
-        if ((new Typo3Version())->getMajorVersion() >= 12) {
-            $severity = $severity->value;
-        }
-
-        switch ($severity) {
+        switch ($severity->value) {
             case -2:
                 $this->io->note($message);
                 break;

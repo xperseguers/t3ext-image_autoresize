@@ -11,20 +11,13 @@ return [
         'directories' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories',
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories.description',
-            'config' => $typo3Version >= 12
-                ? [
-                    'type' => 'input',
-                    'size' => '50',
-                    'max' => '255',
-                    'eval' => 'trim',
-                    'required' => true,
-                ]
-                : [
-                    'type' => 'input',
-                    'size' => '50',
-                    'max' => '255',
-                    'eval' => 'trim,required',
-                ],
+            'config' => [
+                'type' => 'input',
+                'size' => '50',
+                'max' => '255',
+                'eval' => 'trim',
+                'required' => true,
+            ],
         ],
         'file_types' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.file_types',
@@ -41,74 +34,43 @@ return [
         'threshold' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold',
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold.description',
-            'config' => $typo3Version >= 12
-                ? [
-                    'type' => 'input',
-                    'size' => '10',
-                    'max' => '10',
-                    'eval' => 'trim',
-                    'required' => true,
-                ]
-                : [
-                    'type' => 'input',
-                    'size' => '10',
-                    'max' => '10',
-                    'eval' => 'trim,required',
-                ],
+            'config' => [
+                'type' => 'input',
+                'size' => '10',
+                'max' => '10',
+                'eval' => 'trim',
+                'required' => true,
+            ],
         ],
         'max_width' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_width',
-            'config' => $typo3Version >= 12
-                ? [
-                    'type' => 'input',
-                    'size' => 5,
-                    'max' => 5,
-                    'eval' => 'int',
-                    'checkbox' => false,
-                    'range' => [
-                        'lower' => 100,
-                    ],
-                    'default' => 0,
-                    'required' => true,
-                ]
-                : [
-                    'type' => 'input',
-                    'size' => 5,
-                    'max' => 5,
-                    'eval' => 'int,required',
-                    'checkbox' => 0,
-                    'range' => [
-                        'lower' => 100,
-                    ],
-                    'default' => 0,
+            'config' => [
+                'type' => 'input',
+                'size' => 5,
+                'max' => 5,
+                'eval' => 'int',
+                'checkbox' => false,
+                'range' => [
+                    'lower' => 100,
                 ],
+                'default' => 0,
+                'required' => true,
+            ],
         ],
         'max_height' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_height',
-            'config' => $typo3Version >= 12
-                ? [
-                    'type' => 'input',
-                    'size' => 5,
-                    'max' => 5,
-                    'eval' => 'int',
-                    'checkbox' => false,
-                    'range' => [
-                        'lower' => 100,
-                    ],
-                    'default' => 0,
-                    'required' => true,
-                ]
-                : [
-                    'type' => 'input',
-                    'size' => 5,
-                    'max' => 5,
-                    'eval' => 'int,required',
-                    'checkbox' => 0,
-                    'range' => [
-                        'lower' => 100,
-                    ],
-                    'default' => 0,
+            'config' => [
+                'type' => 'input',
+                'size' => 5,
+                'max' => 5,
+                'eval' => 'int',
+                'checkbox' => false,
+                'range' => [
+                    'lower' => 100,
                 ],
+                'default' => 0,
+                'required' => true,
+            ],
         ],
         'max_size' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size',
@@ -157,11 +119,9 @@ return [
             'config' => [
                 'type' => 'flex',
                 'ds' => $typo3Version >= 14
-                    ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
+                    ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml'
                     : [
-                        'default' => $typo3Version >= 12
-                            ? 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets_v12.xml'
-                            : 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
+                        'default' => 'FILE:EXT:image_autoresize/Configuration/FlexForms/Rulesets.xml',
                     ],
             ],
         ],
