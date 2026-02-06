@@ -51,7 +51,8 @@ class BatchResize extends Command
         $this->addArgument(
             'excludeDirectories',
             InputArgument::OPTIONAL,
-            'Comma-separated list of directories to exclude from processing'
+            'Comma-separated list of directories to exclude from processing',
+            ''
         );
     }
 
