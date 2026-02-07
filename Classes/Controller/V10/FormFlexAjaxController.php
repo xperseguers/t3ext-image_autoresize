@@ -32,6 +32,7 @@ class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxC
     public function containerAdd(ServerRequestInterface $request): ResponseInterface
     {
         $GLOBALS['TCA']['tx_imageautoresize'] = include(ExtensionManagementUtility::extPath('image_autoresize') . 'Configuration/TCA/Module/Options.php');
+        // TODO: Probably not needed anymore:
         $GLOBALS['TCA']['tx_imageautoresize']['ajax'] = true;
 
         // Trick to use a virtual record
