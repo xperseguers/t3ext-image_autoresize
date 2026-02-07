@@ -23,6 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->load('Causal\\ImageAutoresize\\', __DIR__ . '/../Classes/*')
         ->exclude([
             __DIR__ . '/../Classes/Controller/*/FormFlexAjaxController.php',
+            __DIR__ . '/../Classes/Xclass/V14/SchemaMigratorXclassed.php',
         ]);
 
     $services->set(\Causal\ImageAutoresize\Controller\ConfigurationController::class)
