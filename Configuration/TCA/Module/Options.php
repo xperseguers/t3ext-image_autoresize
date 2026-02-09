@@ -6,6 +6,7 @@ return [
     'ctrl' => [
         'title' => 'Options',
         'label' => 'title',
+        'hideTable' => true,
     ],
     'columns' => [
         'directories' => [
