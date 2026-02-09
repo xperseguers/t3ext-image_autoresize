@@ -13,8 +13,8 @@ return [
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.directories.description',
             'config' => [
                 'type' => 'input',
-                'size' => '50',
-                'max' => '255',
+                'size' => 50,
+                'max' => 255,
                 'eval' => 'trim',
                 'required' => true,
             ],
@@ -25,10 +25,10 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'itemsProcFunc' => \Causal\ImageAutoresize\Tca\Graphics::class . '->getImageFileExtensions',
-                'minitems' => '0',
-                'maxitems' => '20',
-                'size' => '6',
-                'multiple' => '0',
+                'minitems' => 0,
+                'maxitems' => 20,
+                'size' => 6,
+                'multiple' => false,
             ],
         ],
         'threshold' => [
@@ -36,8 +36,8 @@ return [
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.threshold.description',
             'config' => [
                 'type' => 'input',
-                'size' => '10',
-                'max' => '10',
+                'size' => 10,
+                'max' => 10,
                 'eval' => 'trim',
                 'required' => true,
             ],
@@ -45,11 +45,7 @@ return [
         'max_width' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_width',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'max' => 5,
-                'eval' => 'int',
-                'checkbox' => false,
+                'type' => 'number',
                 'range' => [
                     'lower' => 100,
                 ],
@@ -60,11 +56,7 @@ return [
         'max_height' => [
             'label' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_height',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'max' => 5,
-                'eval' => 'int',
-                'checkbox' => false,
+                'type' => 'number',
                 'range' => [
                     'lower' => 100,
                 ],
@@ -77,8 +69,8 @@ return [
             'description' => 'LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_size.description',
             'config' => [
                 'type' => 'input',
-                'size' => '10',
-                'max' => '10',
+                'size' => 10,
+                'max' => 10,
                 'eval' => 'trim',
             ],
         ],

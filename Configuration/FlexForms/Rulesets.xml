@@ -71,11 +71,7 @@
 							<max_width>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_width</label>
 								<config>
-									<type>input</type>
-									<size>5</size>
-									<max>5</max>
-									<eval>int</eval>
-									<checkbox>0</checkbox>
+									<type>number</type>
 									<range>
 										<lower>100</lower>
 									</range>
@@ -85,11 +81,7 @@
 							<max_height>
 								<label>LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tx_imageautoresize.max_height</label>
 								<config>
-									<type>input</type>
-									<size>5</size>
-									<max>5</max>
-									<eval>int</eval>
-									<checkbox>0</checkbox>
+									<type>number</type>
 									<range>
 										<lower>100</lower>
 									</range>
