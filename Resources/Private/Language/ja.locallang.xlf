@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="ja">
+    <header/>
+    <body>
+      <trans-unit id="saveConfiguration">
+        <source>Save configuration</source>
+        <target state="needs-translation">Save configuration</target>
+      </trans-unit>
+      <trans-unit id="saveCloseConfiguration">
+        <source>Save and close configuration</source>
+        <target state="needs-translation">Save and close configuration</target>
+      </trans-unit>
+      <trans-unit id="closeConfiguration">
+        <source>Close configuration</source>
+        <target state="needs-translation">Close configuration</target>
+      </trans-unit>
+      <trans-unit id="extension.ai">
+        <source>.ai - Adobe Illustrator</source>
+        <target state="needs-translation">.ai - Adobe Illustrator</target>
+      </trans-unit>
+      <trans-unit id="extension.bmp">
+        <source>.bmp - Windows OS/2 Bitmap Graphics</source>
+        <target state="needs-translation">.bmp - Windows OS/2 Bitmap Graphics</target>
+      </trans-unit>
+      <trans-unit id="extension.gif">
+        <source>.gif - Graphic Interchange Format</source>
+        <target state="needs-translation">.gif - Graphic Interchange Format</target>
+      </trans-unit>
+      <trans-unit id="extension.jpg">
+        <source>.jpg - JPEG/JIFF Image</source>
+        <target state="needs-translation">.jpg - JPEG/JIFF Image</target>
+      </trans-unit>
+      <trans-unit id="extension.jpeg">
+        <source>.jpeg - JPEG/JIFF Image</source>
+        <target state="needs-translation">.jpeg - JPEG/JIFF Image</target>
+      </trans-unit>
+      <trans-unit id="extension.pcx">
+        <source>.pcx - Paintbrush Bitmap Graphic</source>
+        <target state="needs-translation">.pcx - Paintbrush Bitmap Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.png">
+        <source>.png - Portable Network Graphic</source>
+        <target state="needs-translation">.png - Portable Network Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tga">
+        <source>.tga - Truevision Targa Graphic</source>
+        <target state="needs-translation">.tga - Truevision Targa Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tif">
+        <source>.tif - Tagged Image Format</source>
+        <target state="needs-translation">.tif - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="extension.tiff">
+        <source>.tiff - Tagged Image Format</source>
+        <target state="needs-translation">.tiff - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="message.imageTransparent" approved="yes">
+        <source>Image %s has not been resized because transparency has been detected.</source>
+        <target state="final">透明度が検出されたので、画像 %s のサイズが変更されませんでした。</target>
+      </trans-unit>
+      <trans-unit id="message.imageAnimated" approved="yes">
+        <source>Image %s has not been resized because it is an animated GIF.</source>
+        <target state="final">画像 %s はアニメーション GIF なので、サイズが変更されていません。</target>
+      </trans-unit>
+      <trans-unit id="message.imageResized" approved="yes">
+        <source>Image %s has been automatically resized to %s×%s pixels.</source>
+        <target state="final">画像 %s は自動的に %s×%s ピクセルにリサイズされました。</target>
+      </trans-unit>
+      <trans-unit id="message.imageResizedAndRenamed" approved="yes">
+        <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
+        <target state="final">画像 %s は自動的に %s×%s ピクセルにリサイズされ、名前が %s に変更されました。</target>
+      </trans-unit>
+      <trans-unit id="message.imageNotWritable" approved="yes">
+        <source>Image %s cannot be resized because file is not writable.</source>
+        <target state="final">ファイルが書き込み可能ではないので、画像 %s のサイズを変更できません。</target>
+      </trans-unit>
+      <trans-unit id="message.cannotResize" approved="yes">
+        <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
+        <target state="final">ImageMagickまたはGraphicsMagickが正しく設定されていないようなので、画像のサイズを変更できませんでした。</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
