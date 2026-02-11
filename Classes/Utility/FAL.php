@@ -171,10 +171,10 @@ class FAL
                     $value = null;
                     if (isset($metadata[$metadataKey])) {
                         $value = trim((string)$metadata[$metadataKey]);
-                        if (ord($value) === 1) $value = null;
+                        if ($value !== '' && ord($value[0]) === 1) $value = null;
                         switch ($metadataKey) {
                             case 'ColorSpace':
-                                if ($value == 1) {
+                                if ((int)$value === 1) {
                                     $value = 'RGB';
                                 } else {
                                     // Unknown
