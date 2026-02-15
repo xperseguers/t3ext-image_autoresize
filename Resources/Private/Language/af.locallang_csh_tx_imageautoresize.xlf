@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:16Z" product-name="image_autoresize" target-language="af">
+    <header/>
+    <body>
+      <trans-unit id="directories.description" xml:space="preserve">
+				<source>Comma-separated list of directories to be monitored.
+Example: fileadmin/
+
+Wildcards are supported:
+fileadmin/*/images/
+fileadmin/**/images/</source>
+			<target state="needs-translation">Comma-separated list of directories to be monitored.
+Example: fileadmin/
+
+Wildcards are supported:
+fileadmin/*/images/
+fileadmin/**/images/</target></trans-unit>
+      <trans-unit id="file_types.description" xml:space="preserve">
+				<source>Comma-separated list of file types to be handled.
+Example: jpg,jpeg,png,tif,tiff</source>
+			<target state="needs-translation">Comma-separated list of file types to be handled.
+Example: jpg,jpeg,png,tif,tiff</target></trans-unit>
+      <trans-unit id="threshold.description">
+        <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
+        <target state="needs-translation">Images with a file size larger than this value will be resized (allowed units: B|K|M).</target>
+      </trans-unit>
+      <trans-unit id="max_width.description">
+        <source>Images will be resized up to this maximum width.</source>
+        <target state="needs-translation">Images will be resized up to this maximum width.</target>
+      </trans-unit>
+      <trans-unit id="max_height.description">
+        <source>Images will be resized up to this maximum height.</source>
+        <target state="needs-translation">Images will be resized up to this maximum height.</target>
+      </trans-unit>
+      <trans-unit id="max_size.description">
+        <source>Images will be resized up to this maximum size.
+Example: 8M (for a maximum image size of 8 megapixels)</source>
+        <target state="needs-translation">Images will be resized up to this maximum size.
+Example: 8M (for a maximum image size of 8 megapixels)</target>
+      </trans-unit>
+      <trans-unit id="auto_orient.description">
+        <source>Will try to auto-magically orient image (useful with photos).</source>
+        <target state="needs-translation">Will try to auto-magically orient image (useful with photos).</target>
+      </trans-unit>
+      <trans-unit id="keep_metadata.description">
+        <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
+        <target state="needs-translation">If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</target>
+      </trans-unit>
+      <trans-unit id="resize_png_with_alpha.description">
+        <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost</source>
+        <target state="needs-translation">If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost</target>
+      </trans-unit>
+      <trans-unit id="conversion_mapping.description" xml:space="preserve">
+				<source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
+Example:
+bmp =&gt; jpg
+tif =&gt; jpg</source>
+			<target state="needs-translation">Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.
+Example:
+bmp =&gt; jpg
+tif =&gt; jpg</target></trans-unit>
+      <trans-unit id="rulesets.description" xml:space="preserve">
+				<source>You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</source>
+			<target state="needs-translation">You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</target></trans-unit>
+    </body>
+  </file>
+</xliff>
