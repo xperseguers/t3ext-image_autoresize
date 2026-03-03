@@ -47,15 +47,8 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  */
 class ConfigurationController
 {
-
     const virtualTable = 'tx_imageautoresize';
     const virtualRecordId = 1;
-
-    /**
-     * @var string
-     */
-    protected $extKey = 'image_autoresize';
-
 
     /**
      * @var \TYPO3\CMS\Core\Localization\LanguageService
@@ -163,8 +156,6 @@ class ConfigurationController
      */
     protected function buildForm(ServerRequestInterface $request, array $row): string
     {
-        $typo3Version = (new Typo3Version())->getMajorVersion();
-
         $record = [
             'uid' => static::virtualRecordId,
             'pid' => 0,
@@ -469,7 +460,7 @@ HTML;
      */
     protected function loadVirtualTca(): void
     {
-        $GLOBALS['TCA'][static::virtualTable] = include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
+        $GLOBALS['TCA'][static::virtualTable] = include(GeneralUtility::getFileAbsFileName('EXT:image_autoresize/Configuration/TCA/Module/Options.php'));
         if ((new Typo3Version())->getMajorVersion() >= 14) {
             $tcaSchemaFactory = GeneralUtility::makeInstance(TcaSchemaFactory::class);
             $tcaSchemaFactory->rebuild($GLOBALS['TCA']);
