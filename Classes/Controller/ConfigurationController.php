@@ -36,7 +36,6 @@ use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Configuration controller.
@@ -515,10 +514,8 @@ HTML;
             return;
         }
 
-        $extPath = ExtensionManagementUtility::extPath($this->extKey, 'Resources/Public/');
-        $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
+        $pageRenderer->addCssFile('EXT:image_autoresize/Resources/Public/Css/twitter.css');
 
         $totalSpaceClaimed = GeneralUtility::formatSize((int)$data['bytes']);
         $messagePattern = $this->sL('storage.claimed');
