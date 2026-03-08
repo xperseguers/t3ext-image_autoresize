@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-11-08T15:56:07Z" product-name="image_autoresize" target-language="es-ES">
+    <header/>
+    <body>
+      <trans-unit id="title" approved="yes">
+        <source>Image Auto-Resize Configuration</source>
+        <target state="final">Configuración del tamaño automático de la imagen</target>
+      </trans-unit>
+      <trans-unit id="storage.claimed" approved="yes">
+        <source>Total storage claimed: %s (with %s images)</source>
+        <target state="final">Almacenamiento total solicitado: %s (con %s imágenes)</target>
+      </trans-unit>
+      <trans-unit id="social.share" approved="yes">
+        <source>Share result!</source>
+        <target state="final">¡Comparte el resultado!</target>
+      </trans-unit>
+      <trans-unit id="social.twitter" approved="yes">
+        <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
+        <target state="final">#image_autoresize ya ha ahorrado %s de espacio libre en mi sitio web #TYPO3</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

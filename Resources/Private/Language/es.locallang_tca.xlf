@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="es-ES">
+    <header/>
+    <body>
+      <trans-unit id="tx_imageautoresize.directories" approved="yes">
+        <source>Directories</source>
+        <target state="final">Directorios</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve" approved="yes">
+				<source>Comma-separated list of directories to be monitored.
+Example: 1:/ (for fileadmin/)
+
+Wildcards are supported:
+1:/*/images/
+1:/**/images/</source>
+			<target state="final">Lista separada por comas de los directorios que deben supervisarse.
+Ejemplo: 1:/ (para fileadmin/)
+
+Se admiten comodines:
+1:/*/imagenes/
+1:/**/imagenes/</target></trans-unit>
+      <trans-unit id="tx_imageautoresize.file_types" approved="yes">
+        <source>Image types</source>
+        <target state="final">Tipos de imágenes</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold" approved="yes">
+        <source>File size threshold</source>
+        <target state="final">Umbral de tamaño de archivo</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold.description" approved="yes">
+        <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
+        <target state="final">Las imágenes con un tamaño de archivo superior a este valor serán redimensionadas (unidades permitidas: B|K|M).</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_width" approved="yes">
+        <source>Maximum width</source>
+        <target state="final">Anchura máxima</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_height" approved="yes">
+        <source>Maximum height</source>
+        <target state="final">Altura máxima</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size" approved="yes">
+        <source>Maximum image size (pixel area)</source>
+        <target state="final">Tamaño máximo de la imagen (área de píxeles)</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size.description" approved="yes">
+        <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
+        <target state="final">Las imágenes se redimensionarán hasta este tamaño máximo. Ejemplo: 8M (para 8 megapíxeles).</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
+        <source>Automatic orientation</source>
+        <target state="final">Orientación automática</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient.description" approved="yes">
+        <source>Will try to auto-magically orient image (useful with photos).</source>
+        <target state="final">Intentará orientar la imagen automáticamente (útil con fotos).</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata" approved="yes">
+        <source>Keep profile and metadata</source>
+        <target state="final">Mantener perfil y metadatos</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.description" approved="yes">
+        <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
+        <target state="final">Si está marcada, IM no utilizará $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] y por lo tanto, el perfil de color y metadatos como EXIF, IPTC y XMP se mantendrán.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit" approved="yes">
+        <source>Use general setting</source>
+        <target state="final">Utilizar la configuración general</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
+        <source>Yes</source>
+        <target state="final">Sí</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.no" approved="yes">
+        <source>No</source>
+        <target state="final">No</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha" approved="yes">
+        <source>Resize PNG files with alpha-channel</source>
+        <target state="final">Redimensionar archivos PNG con canal alfa</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description" approved="yes">
+        <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
+        <target state="final">Si está marcada, los archivos PNG con un canal alfa se redimensionarán aunque se pierda la transparencia.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping" approved="yes">
+        <source>Image type conversion mapping</source>
+        <target state="final">Asignación de conversión de tipos de imagen</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping.description" approved="yes">
+        <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
+        <target state="final">Lista separada por líneas de instrucciones de asignación de conversiones. Esto le permite convertir automáticamente el tipo de la imagen mientras la redimensiona.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
+        <source>Rule sets</source>
+        <target state="final">Conjuntos de reglas</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve" approved="yes">
+				<source>You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</source>
+			<target state="final">Puede definir tantos conjuntos de reglas como desee.
+Se evaluarán una tras otra con el fin de anular los ajustes generales.
+La evaluación se detiene en cuanto se encuentra un conjunto de reglas coincidente.</target></trans-unit>
+      <trans-unit id="tx_imageautoresize.title" approved="yes">
+        <source>Title</source>
+        <target state="final">Título</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
+        <source>User group rule set</source>
+        <target state="final">Conjunto de reglas de grupo de usuarios</target>
+      </trans-unit>
+      <trans-unit id="tabs.options" approved="yes">
+        <source>Options</source>
+        <target state="final">Opciones</target>
+      </trans-unit>
+      <trans-unit id="tabs.rulesets" approved="yes">
+        <source>Rule Sets</source>
+        <target state="final">Conjuntos de reglas</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

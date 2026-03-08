@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="t3">
+    <header/>
+    <body>
+      <trans-unit id="tx_imageautoresize.directories">
+        <source>Directories</source>
+        <target>crwdns304970:0crwdne304970:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve">
+				<source>Comma-separated list of directories to be monitored.
+Example: 1:/ (for fileadmin/)
+
+Wildcards are supported:
+1:/*/images/
+1:/**/images/</source>
+			<target>crwdns304972:0crwdne304972:0</target></trans-unit>
+      <trans-unit id="tx_imageautoresize.file_types">
+        <source>Image types</source>
+        <target>crwdns304974:0crwdne304974:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold">
+        <source>File size threshold</source>
+        <target>crwdns304976:0crwdne304976:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold.description">
+        <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
+        <target>crwdns304978:0crwdne304978:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_width">
+        <source>Maximum width</source>
+        <target>crwdns304980:0crwdne304980:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_height">
+        <source>Maximum height</source>
+        <target>crwdns304982:0crwdne304982:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size">
+        <source>Maximum image size (pixel area)</source>
+        <target>crwdns304984:0crwdne304984:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size.description">
+        <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
+        <target>crwdns304986:0crwdne304986:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient">
+        <source>Automatic orientation</source>
+        <target>crwdns228391:0crwdne228391:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient.description">
+        <source>Will try to auto-magically orient image (useful with photos).</source>
+        <target>crwdns304988:0crwdne304988:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata">
+        <source>Keep profile and metadata</source>
+        <target>crwdns228393:0crwdne228393:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.description">
+        <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
+        <target>crwdns304990:0$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand']crwdne304990:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
+        <source>Use general setting</source>
+        <target>crwdns228395:0crwdne228395:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes">
+        <source>Yes</source>
+        <target>crwdns228397:0crwdne228397:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.no">
+        <source>No</source>
+        <target>crwdns228399:0crwdne228399:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
+        <source>Resize PNG files with alpha-channel</source>
+        <target>crwdns228401:0crwdne228401:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description">
+        <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
+        <target>crwdns304992:0crwdne304992:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping">
+        <source>Image type conversion mapping</source>
+        <target>crwdns228403:0crwdne228403:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping.description">
+        <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
+        <target>crwdns304994:0crwdne304994:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets">
+        <source>Rule sets</source>
+        <target>crwdns228405:0crwdne228405:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve">
+				<source>You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</source>
+			<target>crwdns304996:0crwdne304996:0</target></trans-unit>
+      <trans-unit id="tx_imageautoresize.title">
+        <source>Title</source>
+        <target>crwdns304998:0crwdne304998:0</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+        <source>User group rule set</source>
+        <target>crwdns228409:0crwdne228409:0</target>
+      </trans-unit>
+      <trans-unit id="tabs.options">
+        <source>Options</source>
+        <target>crwdns228411:0crwdne228411:0</target>
+      </trans-unit>
+      <trans-unit id="tabs.rulesets">
+        <source>Rule Sets</source>
+        <target>crwdns228413:0crwdne228413:0</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
