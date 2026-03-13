@@ -33,10 +33,8 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 if ((new Typo3Version())->getMajorVersion() >= 14) {
     require_once __DIR__ . '/V14/AbstractConfigurationController.php';
@@ -62,11 +60,6 @@ class ConfigurationController extends AbstractConfigurationController
 {
     const virtualTable = 'tx_imageautoresize';
     const virtualRecordId = 1;
-
-    /**
-     * @var string
-     */
-    protected string $extKey = 'image_autoresize';
 
     /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
@@ -347,7 +340,7 @@ class ConfigurationController extends AbstractConfigurationController
      */
     protected function loadVirtualTca(): void
     {
-        $GLOBALS['TCA'][static::virtualTable] = include(ExtensionManagementUtility::extPath($this->extKey) . 'Configuration/TCA/Module/Options.php');
+        $GLOBALS['TCA'][static::virtualTable] = include(GeneralUtility::getFileAbsFileName('EXT:image_autoresize/Configuration/TCA/Module/Options.php'));
         if ($this->typo3Version >= 14) {
             $tcaSchemaFactory = GeneralUtility::makeInstance(TcaSchemaFactory::class);
             $tcaSchemaFactory->rebuild($GLOBALS['TCA']);
@@ -392,10 +385,8 @@ class ConfigurationController extends AbstractConfigurationController
             return;
         }
 
-        $extPath = ExtensionManagementUtility::extPath($this->extKey, 'Resources/Public/');
-        $resourcesPath = PathUtility::getAbsoluteWebPath($extPath);
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->addCssFile($resourcesPath . 'Css/twitter.css');
+        $pageRenderer->addCssFile('EXT:image_autoresize/Resources/Public/Css/twitter.css');
 
         $totalSpaceClaimed = GeneralUtility::formatSize((int)$data['bytes']);
         $messagePattern = $this->sL('storage.claimed');
