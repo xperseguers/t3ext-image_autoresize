@@ -31,6 +31,10 @@ readonly class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\Form
      */
     public function containerAdd(ServerRequestInterface $request): ResponseInterface
     {
+        if ($request->getParsedBody()['tableName'] !== 'tx_imageautoresize') {
+            return parent::containerAdd($request);
+        }
+
         // Trick to use a virtual record
         $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
         $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
