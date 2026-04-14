@@ -8,6 +8,9 @@ $boot = static function () {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Core\Database\Schema\SchemaMigrator::class] = [
             'className' => \Causal\ImageAutoresize\Xclass\V14\SchemaMigratorXclassed::class,
         ];
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Core\Schema\TcaSchemaFactory::class] = [
+            'className' => \Causal\ImageAutoresize\Xclass\V14\TcaSchemaFactoryXclassed::class,
+        ];
     }
 };
 
