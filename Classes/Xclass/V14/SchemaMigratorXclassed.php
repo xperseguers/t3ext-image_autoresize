@@ -19,7 +19,7 @@ namespace Causal\ImageAutoresize\Xclass\V14;
 
 use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
 
-class SchemaMigratorXclassed extends SchemaMigrator
+readonly class SchemaMigratorXclassed extends SchemaMigrator
 {
     protected function parseCreateTableStatements(array $statements): array
     {
