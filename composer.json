@@ -37,7 +37,7 @@
     "php": ">=8.1.0 <=8.5.99",
     "ext-exif": "*",
     "ext-json": "*",
-    "typo3/cms-core": "^12 || ^13 || 14.*.*@dev"
+    "typo3/cms-core": "^12 || ^13 || ^14"
   },
   "autoload": {
     "psr-4": {
