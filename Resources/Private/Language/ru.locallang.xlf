@@ -3,81 +3,81 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="ru">
     <header/>
     <body>
-      <trans-unit id="saveConfiguration">
+      <trans-unit id="saveConfiguration" approved="yes">
         <source>Save configuration</source>
-        <target state="translated">Сохранить конфигурацию</target>
+        <target state="final">Сохранить конфигурацию</target>
       </trans-unit>
-      <trans-unit id="saveCloseConfiguration">
+      <trans-unit id="saveCloseConfiguration" approved="yes">
         <source>Save and close configuration</source>
-        <target state="translated">Сохранить и закрыть конфигурацию</target>
+        <target state="final">Сохранить и закрыть конфигурацию</target>
       </trans-unit>
-      <trans-unit id="closeConfiguration">
+      <trans-unit id="closeConfiguration" approved="yes">
         <source>Close configuration</source>
-        <target state="translated">Закрыть конфигурацию</target>
+        <target state="final">Закрыть конфигурацию</target>
       </trans-unit>
-      <trans-unit id="extension.ai">
+      <trans-unit id="extension.ai" approved="yes">
         <source>.ai - Adobe Illustrator</source>
-        <target state="translated">.ai - Adobe Illustrator</target>
+        <target state="final">.ai - Adobe Illustrator</target>
       </trans-unit>
-      <trans-unit id="extension.bmp">
+      <trans-unit id="extension.bmp" approved="yes">
         <source>.bmp - Windows OS/2 Bitmap Graphics</source>
-        <target state="translated">.bmp - графика Windows OS/2 Bitmap</target>
+        <target state="final">.bmp - графика Windows OS/2 Bitmap</target>
       </trans-unit>
-      <trans-unit id="extension.gif">
+      <trans-unit id="extension.gif" approved="yes">
         <source>.gif - Graphic Interchange Format</source>
-        <target state="translated">.gif - Формат графического обмена</target>
+        <target state="final">.gif - Формат графического обмена</target>
       </trans-unit>
-      <trans-unit id="extension.jpg">
+      <trans-unit id="extension.jpg" approved="yes">
         <source>.jpg - JPEG/JIFF Image</source>
-        <target state="translated">.jpg - JPEG/JIFF изображение</target>
+        <target state="final">.jpg - JPEG/JIFF изображение</target>
       </trans-unit>
-      <trans-unit id="extension.jpeg">
+      <trans-unit id="extension.jpeg" approved="yes">
         <source>.jpeg - JPEG/JIFF Image</source>
-        <target state="translated">.jpeg - JPEG/JIFF изображение</target>
+        <target state="final">.jpeg - JPEG/JIFF изображение</target>
       </trans-unit>
-      <trans-unit id="extension.pcx">
+      <trans-unit id="extension.pcx" approved="yes">
         <source>.pcx - Paintbrush Bitmap Graphic</source>
-        <target state="translated">.pcx - Paintbrush Bitmap Graphic</target>
+        <target state="final">.pcx - Paintbrush Bitmap Graphic</target>
       </trans-unit>
-      <trans-unit id="extension.png">
+      <trans-unit id="extension.png" approved="yes">
         <source>.png - Portable Network Graphic</source>
-        <target state="translated">.png - Portable Network Graphic</target>
+        <target state="final">.png - Portable Network Graphic</target>
       </trans-unit>
-      <trans-unit id="extension.tga">
+      <trans-unit id="extension.tga" approved="yes">
         <source>.tga - Truevision Targa Graphic</source>
-        <target state="translated">.tga - Truevision Targa Graphic</target>
+        <target state="final">.tga - Truevision Targa Graphic</target>
       </trans-unit>
-      <trans-unit id="extension.tif">
+      <trans-unit id="extension.tif" approved="yes">
         <source>.tif - Tagged Image Format</source>
-        <target state="translated">.tif — формат изображений с тегами</target>
+        <target state="final">.tif — формат изображений с тегами</target>
       </trans-unit>
-      <trans-unit id="extension.tiff">
+      <trans-unit id="extension.tiff" approved="yes">
         <source>.tiff - Tagged Image Format</source>
-        <target state="translated">.tiff — формат изображений с тегами</target>
+        <target state="final">.tiff — формат изображений с тегами</target>
       </trans-unit>
-      <trans-unit id="message.imageTransparent">
+      <trans-unit id="message.imageTransparent" approved="yes">
         <source>Image %s has not been resized because transparency has been detected.</source>
-        <target state="translated">Размер изображения %s не был изменен из-за обнаружения прозрачности.</target>
+        <target state="final">Размер изображения %s не был изменен из-за обнаружения прозрачности.</target>
       </trans-unit>
-      <trans-unit id="message.imageAnimated">
+      <trans-unit id="message.imageAnimated" approved="yes">
         <source>Image %s has not been resized because it is an animated GIF.</source>
-        <target state="translated">Размер изображения %s не был изменен, так как это анимированный GIF.</target>
+        <target state="final">Размер изображения %s не был изменен, так как это анимированный GIF.</target>
       </trans-unit>
-      <trans-unit id="message.imageResized">
+      <trans-unit id="message.imageResized" approved="yes">
         <source>Image %s has been automatically resized to %s×%s pixels.</source>
-        <target state="translated">Размер изображения %s был автоматически изменен до %s×%s пикселей.</target>
+        <target state="final">Размер изображения %s был автоматически изменен до %s×%s пикселей.</target>
       </trans-unit>
-      <trans-unit id="message.imageResizedAndRenamed">
+      <trans-unit id="message.imageResizedAndRenamed" approved="yes">
         <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
-        <target state="translated">Изображение %s было автоматически изменено до размера %s×%s пикселей и переименовано в %s.</target>
+        <target state="final">Изображение %s было автоматически изменено до размера %s×%s пикселей и переименовано в %s.</target>
       </trans-unit>
-      <trans-unit id="message.imageNotWritable">
+      <trans-unit id="message.imageNotWritable" approved="yes">
         <source>Image %s cannot be resized because file is not writable.</source>
-        <target state="translated">Размер изображения %s изменить нельзя, так как файл недоступен для записи.</target>
+        <target state="final">Размер изображения %s изменить нельзя, так как файл недоступен для записи.</target>
       </trans-unit>
-      <trans-unit id="message.cannotResize">
+      <trans-unit id="message.cannotResize" approved="yes">
         <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
-        <target state="translated">Не удалось изменить размер изображения, так как ImageMagick или GraphicsMagick, по всей видимости, настроены неправильно.</target>
+        <target state="final">Не удалось изменить размер изображения, так как ImageMagick или GraphicsMagick, по всей видимости, настроены неправильно.</target>
       </trans-unit>
     </body>
   </file>
