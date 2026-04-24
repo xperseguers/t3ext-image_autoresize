@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="tx_imageautoresize.directories">
         <source>Directories</source>
-        <target state="needs-translation">Directories</target>
+        <target state="translated">Каталоги</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve">
 				<source>Comma-separated list of directories to be monitored.
@@ -14,110 +14,110 @@ Example: 1:/ (for fileadmin/)
 Wildcards are supported:
 1:/*/images/
 1:/**/images/</source>
-			<target state="needs-translation">Comma-separated list of directories to be monitored.
-Example: 1:/ (for fileadmin/)
+			<target state="translated">Список каталогов для мониторинга, разделенных запятыми. 
+ Пример: 1:/ (для fileadmin/)
 
-Wildcards are supported:
-1:/*/images/
-1:/**/images/</target></trans-unit>
+ Поддерживаются подстановочные знаки:
+ 1:/*/images/
+ 1:/**/images/</target></trans-unit>
       <trans-unit id="tx_imageautoresize.file_types">
         <source>Image types</source>
-        <target state="needs-translation">Image types</target>
+        <target state="translated">Типы изображений</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.threshold">
         <source>File size threshold</source>
-        <target state="needs-translation">File size threshold</target>
+        <target state="translated">Порог размера файла</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.threshold.description">
         <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
-        <target state="needs-translation">Images with a file size larger than this value will be resized (allowed units: B|K|M).</target>
+        <target state="translated">Изображения с размером файла больше, чем это значение будет изменено (допустимые единицы: B|K|M).</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_width">
         <source>Maximum width</source>
-        <target state="needs-translation">Maximum width</target>
+        <target state="translated">Максимальная ширина</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_height">
         <source>Maximum height</source>
-        <target state="needs-translation">Maximum height</target>
+        <target state="translated">Максимальная высота</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_size">
         <source>Maximum image size (pixel area)</source>
-        <target state="needs-translation">Maximum image size (pixel area)</target>
+        <target state="translated">Максимальный размер изображения (в пикселях)</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.max_size.description">
         <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
-        <target state="needs-translation">Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</target>
+        <target state="translated">Изображения будут изменены до этого максимального размера. Пример: 8M (для 8 мегапикселей).</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.auto_orient">
         <source>Automatic orientation</source>
-        <target state="needs-translation">Automatic orientation</target>
+        <target state="translated">Автоматическая ориентация</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.auto_orient.description">
         <source>Will try to auto-magically orient image (useful with photos).</source>
-        <target state="needs-translation">Will try to auto-magically orient image (useful with photos).</target>
+        <target state="translated">Попробует автоматически ориентировать изображение (полезно с фотографиями).</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata">
         <source>Keep profile and metadata</source>
-        <target state="needs-translation">Keep profile and metadata</target>
+        <target state="translated">Сохранить профиль и метаданные</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata.description">
         <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
-        <target state="needs-translation">If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</target>
+        <target state="translated">Если включено, IM не будет использовать $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] и таким образом, цветовой профиль и метаданные, такие как EXIF, IPTC и XMP будут сохранены.</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
         <source>Use general setting</source>
-        <target state="needs-translation">Use general setting</target>
+        <target state="translated">Использовать общие настройки</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata.yes">
         <source>Yes</source>
-        <target state="needs-translation">Yes</target>
+        <target state="translated">Да</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.keep_metadata.no">
         <source>No</source>
-        <target state="needs-translation">No</target>
+        <target state="translated">Нет</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
         <source>Resize PNG files with alpha-channel</source>
-        <target state="needs-translation">Resize PNG files with alpha-channel</target>
+        <target state="translated">Изменение размера файлов PNG с альфа-каналом</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description">
         <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
-        <target state="needs-translation">If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</target>
+        <target state="translated">Если этот флажок установлен, размер файлов PNG с альфа-каналом будет изменен, но прозрачность будет потеряна.</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.conversion_mapping">
         <source>Image type conversion mapping</source>
-        <target state="needs-translation">Image type conversion mapping</target>
+        <target state="translated">Сопоставление типов изображений</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.conversion_mapping.description">
         <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
-        <target state="needs-translation">Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</target>
+        <target state="translated">Список инструкций по преобразованию, разделенных символами новой строки. Это позволяет автоматически преобразовывать тип изображения при изменении его размера.</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.rulesets">
         <source>Rule sets</source>
-        <target state="needs-translation">Rule sets</target>
+        <target state="translated">Наборы правил</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve">
 				<source>You may define as many rule sets as you wish.
 They will be evaluated one after the other in order to possibly override general settings.
 The evalutation stops as soon as a matching rule set has been found.</source>
-			<target state="needs-translation">You may define as many rule sets as you wish.
-They will be evaluated one after the other in order to possibly override general settings.
-The evalutation stops as soon as a matching rule set has been found.</target></trans-unit>
+			<target state="translated">Вы можете создать столько наборов правил, сколько захотите. 
+ Они будут оцениваться один за другим, чтобы при необходимости переопределить общие настройки. 
+ Оценка прекращается, как только будет найден соответствующий набор правил.</target></trans-unit>
       <trans-unit id="tx_imageautoresize.title">
         <source>Title</source>
-        <target state="needs-translation">Title</target>
+        <target state="translated">Название</target>
       </trans-unit>
       <trans-unit id="tx_imageautoresize.usergroup_ruleset">
         <source>User group rule set</source>
-        <target state="needs-translation">User group rule set</target>
+        <target state="translated">Набор правил для группы пользователей</target>
       </trans-unit>
       <trans-unit id="tabs.options">
         <source>Options</source>
-        <target state="needs-translation">Options</target>
+        <target state="translated">Параметры</target>
       </trans-unit>
       <trans-unit id="tabs.rulesets">
         <source>Rule Sets</source>
-        <target state="needs-translation">Rule Sets</target>
+        <target state="translated">Наборы правил</target>
       </trans-unit>
     </body>
   </file>
