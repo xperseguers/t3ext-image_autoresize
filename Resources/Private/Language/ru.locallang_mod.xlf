@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="title">
         <source>Image Auto-Resize Configuration</source>
-        <target state="needs-translation">Image Auto-Resize Configuration</target>
+        <target state="translated">Настройка автоматического изменения размера изображения</target>
       </trans-unit>
       <trans-unit id="storage.claimed">
         <source>Total storage claimed: %s (with %s images)</source>
