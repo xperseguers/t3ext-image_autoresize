@@ -167,7 +167,7 @@ class BatchResize extends Command
         */
         $callbackNotification = [$this, 'notify'];
 
-        $dirs = GeneralUtility::trimExplode(LF, $input->getArgument('excludeDirectories'), true);
+        $dirs = GeneralUtility::trimExplode(LF, str_replace(',', LF, $input->getArgument('excludeDirectories')), true);
         $excludeDirectories = [];
         foreach ($dirs as $directory) {
             $directoryConfig = FAL::getDirectoryConfig($directory);
