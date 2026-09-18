@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="es-ES">
+    <header/>
+    <body>
+      <trans-unit id="saveConfiguration" approved="yes">
+        <source>Save configuration</source>
+        <target state="final">Salvar la configuración</target>
+      </trans-unit>
+      <trans-unit id="saveCloseConfiguration" approved="yes">
+        <source>Save and close configuration</source>
+        <target state="final">Guardar y cerrar la configuración</target>
+      </trans-unit>
+      <trans-unit id="closeConfiguration" approved="yes">
+        <source>Close configuration</source>
+        <target state="final">Cerrar la configuración</target>
+      </trans-unit>
+      <trans-unit id="extension.ai" approved="yes">
+        <source>.ai - Adobe Illustrator</source>
+        <target state="final">.ai - Adobe Illustrator</target>
+      </trans-unit>
+      <trans-unit id="extension.bmp" approved="yes">
+        <source>.bmp - Windows OS/2 Bitmap Graphics</source>
+        <target state="final">.bmp - Windows OS/2 Bitmap Graphics</target>
+      </trans-unit>
+      <trans-unit id="extension.gif" approved="yes">
+        <source>.gif - Graphic Interchange Format</source>
+        <target state="final">.gif - Graphic Interchange Format</target>
+      </trans-unit>
+      <trans-unit id="extension.jpg" approved="yes">
+        <source>.jpg - JPEG/JIFF Image</source>
+        <target state="final">.jpg - Imagen JPEG/JIFF</target>
+      </trans-unit>
+      <trans-unit id="extension.jpeg" approved="yes">
+        <source>.jpeg - JPEG/JIFF Image</source>
+        <target state="final">.jpeg - Imagen JPEG/JIFF</target>
+      </trans-unit>
+      <trans-unit id="extension.pcx" approved="yes">
+        <source>.pcx - Paintbrush Bitmap Graphic</source>
+        <target state="final">.pcx - Paintbrush Bitmap Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.png" approved="yes">
+        <source>.png - Portable Network Graphic</source>
+        <target state="final">.png - Portable Network Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tga" approved="yes">
+        <source>.tga - Truevision Targa Graphic</source>
+        <target state="final">.tga - Truevision Targa Graphic</target>
+      </trans-unit>
+      <trans-unit id="extension.tif" approved="yes">
+        <source>.tif - Tagged Image Format</source>
+        <target state="final">.tif - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="extension.tiff" approved="yes">
+        <source>.tiff - Tagged Image Format</source>
+        <target state="final">.tiff - Tagged Image Format</target>
+      </trans-unit>
+      <trans-unit id="message.imageTransparent" approved="yes">
+        <source>Image %s has not been resized because transparency has been detected.</source>
+        <target state="final">La imagen %s no ha sido cambiada de tamaño debido a la transparencia que se ha detectado.</target>
+      </trans-unit>
+      <trans-unit id="message.imageAnimated" approved="yes">
+        <source>Image %s has not been resized because it is an animated GIF.</source>
+        <target state="final">La imagen %s no ha sido redimensionada porque es un GIF animado.</target>
+      </trans-unit>
+      <trans-unit id="message.imageResized" approved="yes">
+        <source>Image %s has been automatically resized to %s×%s pixels.</source>
+        <target state="final">La imagen %s ha sido redimensionada automáticamente a %s×%s píxeles.</target>
+      </trans-unit>
+      <trans-unit id="message.imageResizedAndRenamed" approved="yes">
+        <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
+        <target state="final">La imagen %s ha sido redimensionada automáticamente a %s×%s píxeles y ha sido renombrada como %s.</target>
+      </trans-unit>
+      <trans-unit id="message.imageNotWritable" approved="yes">
+        <source>Image %s cannot be resized because file is not writable.</source>
+        <target state="final">La imagen %s no puede ser cambiada de tamaño porque està protegida contra la escritura.</target>
+      </trans-unit>
+      <trans-unit id="message.cannotResize" approved="yes">
+        <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
+        <target state="final">La imagen no pudo ser redimensionada ya que ImageMagick o GraphicsMagick parecen estar configurados incorrectamente.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
