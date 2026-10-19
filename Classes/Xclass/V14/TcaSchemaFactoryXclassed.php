@@ -17,37 +17,31 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Xclass\V14;
 
-use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Schema\SchemaCollection;
 use TYPO3\CMS\Core\Schema\TcaSchema;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
+use TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca;
 
 class TcaSchemaFactoryXclassed extends TcaSchemaFactory
 {
+    private const VIRTUAL_TABLE = 'tx_imageautoresize';
+
     /**
-     * Returns all main schemata
+     * Returns all main schemata. The virtual "tx_imageautoresize" table has no database
+     * table, so it is hidden from everything except FormEngine, which needs it to render
+     * the configuration module.
      *
      * @return SchemaCollection<string, TcaSchema>
      */
     public function all(): SchemaCollection
     {
-        $callStack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-        $callerClass = $callStack[1]['class'] ?? null;
-
-        if ($callerClass !== DataHandler::class) {
-            // If the caller is not DataHandler, we can safely return the schemata as they are.
-             return $this->schemata;
+        $callerClass = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['class'] ?? '';
+        if (is_a($callerClass, InitializeProcessedTca::class, true)) {
+            return $this->schemata;
         }
 
-        $items = [];
-        foreach ($this->schemata as $name => $schema) {
-            // Never ever return "tx_imageautoresize" virtual table
-            if ($name === 'tx_imageautoresize') {
-                continue;
-            }
-            $items[$name] = $schema;
-        }
-
-        return new SchemaCollection($items);
+        $schemata = iterator_to_array($this->schemata);
+        unset($schemata[self::VIRTUAL_TABLE]);
+        return new SchemaCollection($schemata);
     }
 }
