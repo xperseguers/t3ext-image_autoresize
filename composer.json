@@ -51,7 +51,11 @@
       "dev-2-1-stable": "2.1.x-dev"
     },
     "typo3/cms": {
-      "extension-key": "image_autoresize"
+      "extension-key": "image_autoresize",
+      "version": "2.5.3",
+      "Package": {
+        "providesPackages": {}
+      }
     }
   }
 }
