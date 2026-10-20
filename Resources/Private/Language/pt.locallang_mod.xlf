@@ -3,21 +3,21 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-11-08T15:56:07Z" product-name="image_autoresize" target-language="pt-PT">
     <header/>
     <body>
-      <trans-unit id="title">
+      <trans-unit id="title" approved="yes">
         <source>Image Auto-Resize Configuration</source>
-        <target state="translated">Configuração do Image Auto-Resize</target>
+        <target state="final">Configuração do Image Auto-Resize</target>
       </trans-unit>
-      <trans-unit id="storage.claimed">
+      <trans-unit id="storage.claimed" approved="yes">
         <source>Total storage claimed: %s (with %s images)</source>
-        <target state="translated">Total de armazenamento reivindicado: %s (com imagens %s)</target>
+        <target state="final">Total de armazenamento reivindicado: %s (com imagens %s)</target>
       </trans-unit>
-      <trans-unit id="social.share">
+      <trans-unit id="social.share" approved="yes">
         <source>Share result!</source>
-        <target state="translated">Compartilhar resultado!</target>
+        <target state="final">Compartilhar resultado!</target>
       </trans-unit>
-      <trans-unit id="social.twitter">
+      <trans-unit id="social.twitter" approved="yes">
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
-        <target state="translated">#image_autoresize já salvou %s de espaço livre no meu site #TYPO3</target>
+        <target state="final">#image_autoresize já salvou %s de espaço livre no meu site #TYPO3</target>
       </trans-unit>
     </body>
   </file>
