@@ -3,121 +3,121 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="el">
     <header/>
     <body>
-      <trans-unit id="tx_imageautoresize.directories">
+      <trans-unit id="tx_imageautoresize.directories" approved="yes">
         <source>Directories</source>
-        <target state="translated">Φάκελοι</target>
+        <target state="final">Φάκελοι</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve">
+      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve" approved="yes">
 				<source>Comma-separated list of directories to be monitored.
 Example: 1:/ (for fileadmin/)
 
 Wildcards are supported:
 1:/*/images/
 1:/**/images/</source>
-			<target state="translated">Λίστα φακέλων προς παρακολούθηση, χωρισμένων με κόμμα.
+			<target state="final">Λίστα φακέλων προς παρακολούθηση, χωρισμένων με κόμμα.
 Παράδειγμα: 1:/ (για το fileadmin/)
 
 Υποστηρίζονται χαρακτήρες μπαλαντέρ:
 1:/*/images/
 1:/**/images/</target></trans-unit>
-      <trans-unit id="tx_imageautoresize.file_types">
+      <trans-unit id="tx_imageautoresize.file_types" approved="yes">
         <source>Image types</source>
-        <target state="translated">Τύποι εικόνων</target>
+        <target state="final">Τύποι εικόνων</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.threshold">
+      <trans-unit id="tx_imageautoresize.threshold" approved="yes">
         <source>File size threshold</source>
-        <target state="translated">Όριο μεγέθους αρχείου</target>
+        <target state="final">Όριο μεγέθους αρχείου</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.threshold.description">
+      <trans-unit id="tx_imageautoresize.threshold.description" approved="yes">
         <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
-        <target state="translated">Οι εικόνες με μέγεθος αρχείου μεγαλύτερο από αυτήν την τιμή θα αλλάζουν μέγεθος (επιτρεπόμενες μονάδες: B|K|M).</target>
+        <target state="final">Οι εικόνες με μέγεθος αρχείου μεγαλύτερο από αυτήν την τιμή θα αλλάζουν μέγεθος (επιτρεπόμενες μονάδες: B|K|M).</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_width">
+      <trans-unit id="tx_imageautoresize.max_width" approved="yes">
         <source>Maximum width</source>
-        <target state="translated">Μέγιστο πλάτος</target>
+        <target state="final">Μέγιστο πλάτος</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_height">
+      <trans-unit id="tx_imageautoresize.max_height" approved="yes">
         <source>Maximum height</source>
-        <target state="translated">Μέγιστο ύψος</target>
+        <target state="final">Μέγιστο ύψος</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_size">
+      <trans-unit id="tx_imageautoresize.max_size" approved="yes">
         <source>Maximum image size (pixel area)</source>
-        <target state="translated">Μέγιστο μέγεθος εικόνας (έκταση σε pixel)</target>
+        <target state="final">Μέγιστο μέγεθος εικόνας (έκταση σε pixel)</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_size.description">
+      <trans-unit id="tx_imageautoresize.max_size.description" approved="yes">
         <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
-        <target state="translated">Οι εικόνες θα μειώνονται έως αυτό το μέγιστο μέγεθος. Παράδειγμα: 8M (για 8 megapixel).</target>
+        <target state="final">Οι εικόνες θα μειώνονται έως αυτό το μέγιστο μέγεθος. Παράδειγμα: 8M (για 8 megapixel).</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.auto_orient">
+      <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
         <source>Automatic orientation</source>
-        <target state="translated">Αυτόματος προσανατολισμός</target>
+        <target state="final">Αυτόματος προσανατολισμός</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.auto_orient.description">
+      <trans-unit id="tx_imageautoresize.auto_orient.description" approved="yes">
         <source>Will try to auto-magically orient image (useful with photos).</source>
-        <target state="translated">Θα επιχειρήσει να προσανατολίσει αυτόματα την εικόνα (χρήσιμο για φωτογραφίες).</target>
+        <target state="final">Θα επιχειρήσει να προσανατολίσει αυτόματα την εικόνα (χρήσιμο για φωτογραφίες).</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata">
+      <trans-unit id="tx_imageautoresize.keep_metadata" approved="yes">
         <source>Keep profile and metadata</source>
-        <target state="translated">Διατήρηση προφίλ και μεταδεδομένων</target>
+        <target state="final">Διατήρηση προφίλ και μεταδεδομένων</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.description">
+      <trans-unit id="tx_imageautoresize.keep_metadata.description" approved="yes">
         <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
-        <target state="translated">Αν είναι επιλεγμένο, το IM δεν θα χρησιμοποιήσει το $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] και έτσι θα διατηρηθούν το προφίλ χρώματος και μεταδεδομένα όπως EXIF, IPTC και XMP.</target>
+        <target state="final">Αν είναι επιλεγμένο, το IM δεν θα χρησιμοποιήσει το $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] και έτσι θα διατηρηθούν το προφίλ χρώματος και μεταδεδομένα όπως EXIF, IPTC και XMP.</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit" approved="yes">
         <source>Use general setting</source>
-        <target state="translated">Χρήση γενικής ρύθμισης</target>
+        <target state="final">Χρήση γενικής ρύθμισης</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.yes">
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
         <source>Yes</source>
-        <target state="translated">Ναι</target>
+        <target state="final">Ναι</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.no">
+      <trans-unit id="tx_imageautoresize.keep_metadata.no" approved="yes">
         <source>No</source>
-        <target state="translated">Όχι</target>
+        <target state="final">Όχι</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha" approved="yes">
         <source>Resize PNG files with alpha-channel</source>
-        <target state="translated">Αλλαγή μεγέθους αρχείων PNG με κανάλι άλφα</target>
+        <target state="final">Αλλαγή μεγέθους αρχείων PNG με κανάλι άλφα</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description" approved="yes">
         <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
-        <target state="translated">Αν είναι επιλεγμένο, θα αλλάζει το μέγεθος των αρχείων PNG με κανάλι άλφα, ακόμη κι αν χαθεί η διαφάνεια.</target>
+        <target state="final">Αν είναι επιλεγμένο, θα αλλάζει το μέγεθος των αρχείων PNG με κανάλι άλφα, ακόμη κι αν χαθεί η διαφάνεια.</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.conversion_mapping">
+      <trans-unit id="tx_imageautoresize.conversion_mapping" approved="yes">
         <source>Image type conversion mapping</source>
-        <target state="translated">Αντιστοίχιση μετατροπής τύπου εικόνας</target>
+        <target state="final">Αντιστοίχιση μετατροπής τύπου εικόνας</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.conversion_mapping.description">
+      <trans-unit id="tx_imageautoresize.conversion_mapping.description" approved="yes">
         <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
-        <target state="translated">Λίστα οδηγιών αντιστοίχισης μετατροπής, μία ανά γραμμή. Σας επιτρέπει να μετατρέπετε αυτόματα τον τύπο της εικόνας κατά την αλλαγή του μεγέθους της.</target>
+        <target state="final">Λίστα οδηγιών αντιστοίχισης μετατροπής, μία ανά γραμμή. Σας επιτρέπει να μετατρέπετε αυτόματα τον τύπο της εικόνας κατά την αλλαγή του μεγέθους της.</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.rulesets">
+      <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
         <source>Rule sets</source>
-        <target state="translated">Σύνολα κανόνων</target>
+        <target state="final">Σύνολα κανόνων</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve">
+      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve" approved="yes">
 				<source>You may define as many rule sets as you wish.
 They will be evaluated one after the other in order to possibly override general settings.
 The evalutation stops as soon as a matching rule set has been found.</source>
-			<target state="translated">Μπορείτε να ορίσετε όσα σύνολα κανόνων θέλετε.
+			<target state="final">Μπορείτε να ορίσετε όσα σύνολα κανόνων θέλετε.
 Θα αξιολογούνται το ένα μετά το άλλο, ώστε να αντικαθιστούν ενδεχομένως τις γενικές ρυθμίσεις.
 Η αξιολόγηση σταματά μόλις βρεθεί ένα σύνολο κανόνων που ταιριάζει.</target></trans-unit>
-      <trans-unit id="tx_imageautoresize.title">
+      <trans-unit id="tx_imageautoresize.title" approved="yes">
         <source>Title</source>
-        <target state="translated">Τίτλος</target>
+        <target state="final">Τίτλος</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
         <source>User group rule set</source>
-        <target state="translated">Σύνολο κανόνων ομάδας χρηστών</target>
+        <target state="final">Σύνολο κανόνων ομάδας χρηστών</target>
       </trans-unit>
-      <trans-unit id="tabs.options">
+      <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
-        <target state="translated">Επιλογές</target>
+        <target state="final">Επιλογές</target>
       </trans-unit>
-      <trans-unit id="tabs.rulesets">
+      <trans-unit id="tabs.rulesets" approved="yes">
         <source>Rule Sets</source>
-        <target state="translated">Σύνολα κανόνων</target>
+        <target state="final">Σύνολα κανόνων</target>
       </trans-unit>
     </body>
   </file>
