@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="ar">
+    <header/>
+    <body>
+      <trans-unit id="tx_imageautoresize.directories" approved="yes">
+        <source>Directories</source>
+        <target state="final">الأدلة</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve" approved="yes">
+				<source>Comma-separated list of directories to be monitored.
+Example: 1:/ (for fileadmin/)
+
+Wildcards are supported:
+1:/*/images/
+1:/**/images/</source>
+			<target state="final">قائمة بالأدلة المراد مراقبتها، مفصولة بفواصل.
+مثال: 1:/ (لـ fileadmin/)
+
+يتم دعم أحرف البدل:
+1:/*/images/
+1:/**/images/</target></trans-unit>
+      <trans-unit id="tx_imageautoresize.file_types" approved="yes">
+        <source>Image types</source>
+        <target state="final">أنواع الصور</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold" approved="yes">
+        <source>File size threshold</source>
+        <target state="final">حد حجم الملف</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.threshold.description" approved="yes">
+        <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
+        <target state="final">سيتم تغيير حجم الصور التي يزيد حجم ملفها عن هذه القيمة (الوحدات المسموح بها: B|K|M).</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_width" approved="yes">
+        <source>Maximum width</source>
+        <target state="final">أقصى عرض</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_height" approved="yes">
+        <source>Maximum height</source>
+        <target state="final">أقصى ارتفاع</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size" approved="yes">
+        <source>Maximum image size (pixel area)</source>
+        <target state="final">أقصى حجم للصورة (مساحة البكسل)</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.max_size.description" approved="yes">
+        <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
+        <target state="final">سيتم تصغير الصور حتى هذا الحجم الأقصى. مثال: 8M (لـ 8 ميغابكسل).</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
+        <source>Automatic orientation</source>
+        <target state="final">التوجيه التلقائي</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.auto_orient.description" approved="yes">
+        <source>Will try to auto-magically orient image (useful with photos).</source>
+        <target state="final">سيحاول توجيه الصورة تلقائيًا (مفيد مع الصور الفوتوغرافية).</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata" approved="yes">
+        <source>Keep profile and metadata</source>
+        <target state="final">الاحتفاظ بالملف التعريفي والبيانات الوصفية</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.description" approved="yes">
+        <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
+        <target state="final">عند التحديد، لن يستخدم IM الأمر $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand']، وبالتالي سيتم الاحتفاظ بملف تعريف الألوان والبيانات الوصفية مثل EXIF وIPTC وXMP.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit" approved="yes">
+        <source>Use general setting</source>
+        <target state="final">استخدام الإعداد العام</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
+        <source>Yes</source>
+        <target state="final">نعم</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.keep_metadata.no" approved="yes">
+        <source>No</source>
+        <target state="final">لا</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha" approved="yes">
+        <source>Resize PNG files with alpha-channel</source>
+        <target state="final">تغيير حجم ملفات PNG ذات قناة ألفا</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description" approved="yes">
+        <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
+        <target state="final">عند التحديد، سيتم تغيير حجم ملفات PNG ذات قناة ألفا حتى لو فُقدت الشفافية.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping" approved="yes">
+        <source>Image type conversion mapping</source>
+        <target state="final">تعيين تحويل نوع الصورة</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.conversion_mapping.description" approved="yes">
+        <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
+        <target state="final">قائمة بتعليمات تعيين التحويل، كل تعليمة في سطر. تتيح لك تحويل نوع الصورة تلقائيًا أثناء تغيير حجمها.</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
+        <source>Rule sets</source>
+        <target state="final">مجموعات القواعد</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve" approved="yes">
+				<source>You may define as many rule sets as you wish.
+They will be evaluated one after the other in order to possibly override general settings.
+The evalutation stops as soon as a matching rule set has been found.</source>
+			<target state="final">يمكنك تعريف أي عدد تريده من مجموعات القواعد.
+سيتم تقييمها واحدة تلو الأخرى لتجاوز الإعدادات العامة عند الحاجة.
+يتوقف التقييم بمجرد العثور على مجموعة قواعد مطابقة.</target></trans-unit>
+      <trans-unit id="tx_imageautoresize.title" approved="yes">
+        <source>Title</source>
+        <target state="final">العنوان</target>
+      </trans-unit>
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
+        <source>User group rule set</source>
+        <target state="final">مجموعة قواعد مجموعة المستخدمين</target>
+      </trans-unit>
+      <trans-unit id="tabs.options" approved="yes">
+        <source>Options</source>
+        <target state="final">خيارات</target>
+      </trans-unit>
+      <trans-unit id="tabs.rulesets" approved="yes">
+        <source>Rule Sets</source>
+        <target state="final">مجموعات القواعد</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

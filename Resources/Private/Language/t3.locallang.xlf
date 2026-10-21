@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:07Z" product-name="image_autoresize" target-language="t3">
+    <header/>
+    <body>
+      <trans-unit id="saveConfiguration">
+        <source>Save configuration</source>
+        <target>crwdns228279:0crwdne228279:0</target>
+      </trans-unit>
+      <trans-unit id="saveCloseConfiguration">
+        <source>Save and close configuration</source>
+        <target>crwdns228281:0crwdne228281:0</target>
+      </trans-unit>
+      <trans-unit id="closeConfiguration">
+        <source>Close configuration</source>
+        <target>crwdns228283:0crwdne228283:0</target>
+      </trans-unit>
+      <trans-unit id="extension.ai">
+        <source>.ai - Adobe Illustrator</source>
+        <target>crwdns228285:0crwdne228285:0</target>
+      </trans-unit>
+      <trans-unit id="extension.bmp">
+        <source>.bmp - Windows OS/2 Bitmap Graphics</source>
+        <target>crwdns228287:0crwdne228287:0</target>
+      </trans-unit>
+      <trans-unit id="extension.gif">
+        <source>.gif - Graphic Interchange Format</source>
+        <target>crwdns228289:0crwdne228289:0</target>
+      </trans-unit>
+      <trans-unit id="extension.jpg">
+        <source>.jpg - JPEG/JIFF Image</source>
+        <target>crwdns228291:0crwdne228291:0</target>
+      </trans-unit>
+      <trans-unit id="extension.jpeg">
+        <source>.jpeg - JPEG/JIFF Image</source>
+        <target>crwdns228293:0crwdne228293:0</target>
+      </trans-unit>
+      <trans-unit id="extension.pcx">
+        <source>.pcx - Paintbrush Bitmap Graphic</source>
+        <target>crwdns228295:0crwdne228295:0</target>
+      </trans-unit>
+      <trans-unit id="extension.png">
+        <source>.png - Portable Network Graphic</source>
+        <target>crwdns228297:0crwdne228297:0</target>
+      </trans-unit>
+      <trans-unit id="extension.tga">
+        <source>.tga - Truevision Targa Graphic</source>
+        <target>crwdns228299:0crwdne228299:0</target>
+      </trans-unit>
+      <trans-unit id="extension.tif">
+        <source>.tif - Tagged Image Format</source>
+        <target>crwdns228301:0crwdne228301:0</target>
+      </trans-unit>
+      <trans-unit id="extension.tiff">
+        <source>.tiff - Tagged Image Format</source>
+        <target>crwdns228303:0crwdne228303:0</target>
+      </trans-unit>
+      <trans-unit id="message.imageTransparent">
+        <source>Image %s has not been resized because transparency has been detected.</source>
+        <target>crwdns228305:0%scrwdne228305:0</target>
+      </trans-unit>
+      <trans-unit id="message.imageAnimated">
+        <source>Image %s has not been resized because it is an animated GIF.</source>
+        <target>crwdns228307:0%scrwdne228307:0</target>
+      </trans-unit>
+      <trans-unit id="message.imageResized">
+        <source>Image %s has been automatically resized to %s×%s pixels.</source>
+        <target>crwdns304966:0%scrwdnd304966:0%scrwdnd304966:0%scrwdne304966:0</target>
+      </trans-unit>
+      <trans-unit id="message.imageResizedAndRenamed">
+        <source>Image %s has been automatically resized to %s×%s pixels and has been renamed as %s.</source>
+        <target>crwdns304968:0%scrwdnd304968:0%scrwdnd304968:0%scrwdnd304968:0%scrwdne304968:0</target>
+      </trans-unit>
+      <trans-unit id="message.imageNotWritable">
+        <source>Image %s cannot be resized because file is not writable.</source>
+        <target>crwdns228313:0%scrwdne228313:0</target>
+      </trans-unit>
+      <trans-unit id="message.cannotResize">
+        <source>Image could not get resized since ImageMagick or GraphicsMagick seems to be configured incorrectly.</source>
+        <target>crwdns228315:0crwdne228315:0</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
