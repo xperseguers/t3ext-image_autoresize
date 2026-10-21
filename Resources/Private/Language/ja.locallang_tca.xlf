@@ -3,121 +3,121 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-03-18T07:12:21Z" product-name="image_autoresize" target-language="ja">
     <header/>
     <body>
-      <trans-unit id="tx_imageautoresize.directories">
+      <trans-unit id="tx_imageautoresize.directories" approved="yes">
         <source>Directories</source>
-        <target state="translated">ディレクトリ</target>
+        <target state="final">ディレクトリ</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve">
+      <trans-unit id="tx_imageautoresize.directories.description" xml:space="preserve" approved="yes">
 				<source>Comma-separated list of directories to be monitored.
 Example: 1:/ (for fileadmin/)
 
 Wildcards are supported:
 1:/*/images/
 1:/**/images/</source>
-			<target state="translated">監視するディレクトリのカンマ区切りリスト。
+			<target state="final">監視するディレクトリのカンマ区切りリスト。
 例: 1:/ (fileadmin/ の場合)
 
 ワイルドカードを使用できます:
 1:/*/images/
 1:/**/images/</target></trans-unit>
-      <trans-unit id="tx_imageautoresize.file_types">
+      <trans-unit id="tx_imageautoresize.file_types" approved="yes">
         <source>Image types</source>
-        <target state="translated">画像の種類</target>
+        <target state="final">画像の種類</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.threshold">
+      <trans-unit id="tx_imageautoresize.threshold" approved="yes">
         <source>File size threshold</source>
-        <target state="translated">ファイルサイズのしきい値</target>
+        <target state="final">ファイルサイズのしきい値</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.threshold.description">
+      <trans-unit id="tx_imageautoresize.threshold.description" approved="yes">
         <source>Images with a file size larger than this value will be resized (allowed units: B|K|M).</source>
-        <target state="translated">ファイルサイズがこの値より大きい画像はリサイズされます (使用できる単位: B|K|M)。</target>
+        <target state="final">ファイルサイズがこの値より大きい画像はリサイズされます (使用できる単位: B|K|M)。</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_width">
+      <trans-unit id="tx_imageautoresize.max_width" approved="yes">
         <source>Maximum width</source>
-        <target state="translated">最大幅</target>
+        <target state="final">最大幅</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_height">
+      <trans-unit id="tx_imageautoresize.max_height" approved="yes">
         <source>Maximum height</source>
-        <target state="translated">最大高さ</target>
+        <target state="final">最大高さ</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_size">
+      <trans-unit id="tx_imageautoresize.max_size" approved="yes">
         <source>Maximum image size (pixel area)</source>
-        <target state="translated">最大画像サイズ (ピクセル面積)</target>
+        <target state="final">最大画像サイズ (ピクセル面積)</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.max_size.description">
+      <trans-unit id="tx_imageautoresize.max_size.description" approved="yes">
         <source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
-        <target state="translated">画像はこの最大サイズまでリサイズされます。例: 8M (800万画素の場合)。</target>
+        <target state="final">画像はこの最大サイズまでリサイズされます。例: 8M (800万画素の場合)。</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.auto_orient">
+      <trans-unit id="tx_imageautoresize.auto_orient" approved="yes">
         <source>Automatic orientation</source>
-        <target state="translated">自動回転</target>
+        <target state="final">自動回転</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.auto_orient.description">
+      <trans-unit id="tx_imageautoresize.auto_orient.description" approved="yes">
         <source>Will try to auto-magically orient image (useful with photos).</source>
-        <target state="translated">画像の向きを自動的に補正します (写真に便利です)。</target>
+        <target state="final">画像の向きを自動的に補正します (写真に便利です)。</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata">
+      <trans-unit id="tx_imageautoresize.keep_metadata" approved="yes">
         <source>Keep profile and metadata</source>
-        <target state="translated">プロファイルとメタデータを保持</target>
+        <target state="final">プロファイルとメタデータを保持</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.description">
+      <trans-unit id="tx_imageautoresize.keep_metadata.description" approved="yes">
         <source>If ticked, IM will not use $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] and thus, color profile and metadata such as EXIF, IPTC and XMP will be kept.</source>
-        <target state="translated">オンにすると、IM は $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] を使用しないため、カラープロファイルや EXIF、IPTC、XMP などのメタデータが保持されます。</target>
+        <target state="final">オンにすると、IM は $GLOBALS['TYPO3_CONF_VARS']['GFX']['im_stripProfileCommand'] を使用しないため、カラープロファイルや EXIF、IPTC、XMP などのメタデータが保持されます。</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.inherit">
+      <trans-unit id="tx_imageautoresize.keep_metadata.inherit" approved="yes">
         <source>Use general setting</source>
-        <target state="translated">全般設定を使用</target>
+        <target state="final">全般設定を使用</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.yes">
+      <trans-unit id="tx_imageautoresize.keep_metadata.yes" approved="yes">
         <source>Yes</source>
-        <target state="translated">はい</target>
+        <target state="final">はい</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.keep_metadata.no">
+      <trans-unit id="tx_imageautoresize.keep_metadata.no" approved="yes">
         <source>No</source>
-        <target state="translated">いいえ</target>
+        <target state="final">いいえ</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.resize_png_with_alpha">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha" approved="yes">
         <source>Resize PNG files with alpha-channel</source>
-        <target state="translated">アルファチャンネル付きの PNG ファイルをリサイズ</target>
+        <target state="final">アルファチャンネル付きの PNG ファイルをリサイズ</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description">
+      <trans-unit id="tx_imageautoresize.resize_png_with_alpha.description" approved="yes">
         <source>If ticked, PNG files with an alpha channel will be resized even though the transparency will be lost.</source>
-        <target state="translated">オンにすると、アルファチャンネル付きの PNG ファイルは、透明度が失われてもリサイズされます。</target>
+        <target state="final">オンにすると、アルファチャンネル付きの PNG ファイルは、透明度が失われてもリサイズされます。</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.conversion_mapping">
+      <trans-unit id="tx_imageautoresize.conversion_mapping" approved="yes">
         <source>Image type conversion mapping</source>
-        <target state="translated">画像タイプ変換マッピング</target>
+        <target state="final">画像タイプ変換マッピング</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.conversion_mapping.description">
+      <trans-unit id="tx_imageautoresize.conversion_mapping.description" approved="yes">
         <source>Line-separated list of conversion mapping instructions. This lets you automatically convert the type of the image while resizing it.</source>
-        <target state="translated">変換マッピングの指示を1行ずつ並べたリストです。リサイズ時に画像のタイプを自動的に変換できます。</target>
+        <target state="final">変換マッピングの指示を1行ずつ並べたリストです。リサイズ時に画像のタイプを自動的に変換できます。</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.rulesets">
+      <trans-unit id="tx_imageautoresize.rulesets" approved="yes">
         <source>Rule sets</source>
-        <target state="translated">ルールセット</target>
+        <target state="final">ルールセット</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve">
+      <trans-unit id="tx_imageautoresize.rulesets.description" xml:space="preserve" approved="yes">
 				<source>You may define as many rule sets as you wish.
 They will be evaluated one after the other in order to possibly override general settings.
 The evalutation stops as soon as a matching rule set has been found.</source>
-			<target state="translated">ルールセットは必要な数だけ定義できます。
+			<target state="final">ルールセットは必要な数だけ定義できます。
 全般設定を上書きするため、ルールセットは順番に評価されます。
 一致するルールセットが見つかった時点で評価は終了します。</target></trans-unit>
-      <trans-unit id="tx_imageautoresize.title">
+      <trans-unit id="tx_imageautoresize.title" approved="yes">
         <source>Title</source>
-        <target state="translated">タイトル</target>
+        <target state="final">タイトル</target>
       </trans-unit>
-      <trans-unit id="tx_imageautoresize.usergroup_ruleset">
+      <trans-unit id="tx_imageautoresize.usergroup_ruleset" approved="yes">
         <source>User group rule set</source>
-        <target state="translated">ユーザーグループのルールセット</target>
+        <target state="final">ユーザーグループのルールセット</target>
       </trans-unit>
-      <trans-unit id="tabs.options">
+      <trans-unit id="tabs.options" approved="yes">
         <source>Options</source>
-        <target state="translated">オプション</target>
+        <target state="final">オプション</target>
       </trans-unit>
-      <trans-unit id="tabs.rulesets">
+      <trans-unit id="tabs.rulesets" approved="yes">
         <source>Rule Sets</source>
-        <target state="translated">ルールセット</target>
+        <target state="final">ルールセット</target>
       </trans-unit>
     </body>
   </file>
