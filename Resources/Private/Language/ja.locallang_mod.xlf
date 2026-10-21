@@ -3,21 +3,21 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-11-08T15:56:07Z" product-name="image_autoresize" target-language="ja">
     <header/>
     <body>
-      <trans-unit id="title">
+      <trans-unit id="title" approved="yes">
         <source>Image Auto-Resize Configuration</source>
-        <target state="translated">画像の自動リサイズの設定</target>
+        <target state="final">画像の自動リサイズの設定</target>
       </trans-unit>
-      <trans-unit id="storage.claimed">
+      <trans-unit id="storage.claimed" approved="yes">
         <source>Total storage claimed: %s (with %s images)</source>
-        <target state="translated">要求された合計ストレージ: %s (画像 %s 枚)</target>
+        <target state="final">要求された合計ストレージ: %s (画像 %s 枚)</target>
       </trans-unit>
-      <trans-unit id="social.share">
+      <trans-unit id="social.share" approved="yes">
         <source>Share result!</source>
-        <target state="translated">結果をシェアしましょう!</target>
+        <target state="final">結果をシェアしましょう!</target>
       </trans-unit>
-      <trans-unit id="social.twitter">
+      <trans-unit id="social.twitter" approved="yes">
         <source>#image_autoresize already saved %s of free space on my #TYPO3 website</source>
-        <target state="translated">#image_autoresize は私の #TYPO3 サイトですでに %s の空き容量を節約しました</target>
+        <target state="final">#image_autoresize は私の #TYPO3 サイトですでに %s の空き容量を節約しました</target>
       </trans-unit>
     </body>
   </file>
