@@ -5,55 +5,55 @@
     <body>
       <trans-unit id="saveConfiguration">
         <source>Save configuration</source>
-        <target state="needs-translation">Save configuration</target>
+        <target state="translated">設定を保存</target>
       </trans-unit>
       <trans-unit id="saveCloseConfiguration">
         <source>Save and close configuration</source>
-        <target state="needs-translation">Save and close configuration</target>
+        <target state="translated">設定を保存して閉じる</target>
       </trans-unit>
       <trans-unit id="closeConfiguration">
         <source>Close configuration</source>
-        <target state="needs-translation">Close configuration</target>
+        <target state="translated">設定を閉じる</target>
       </trans-unit>
       <trans-unit id="extension.ai">
         <source>.ai - Adobe Illustrator</source>
-        <target state="needs-translation">.ai - Adobe Illustrator</target>
+        <target state="translated">.ai - Adobe Illustrator</target>
       </trans-unit>
       <trans-unit id="extension.bmp">
         <source>.bmp - Windows OS/2 Bitmap Graphics</source>
-        <target state="needs-translation">.bmp - Windows OS/2 Bitmap Graphics</target>
+        <target state="translated">.bmp - Windows OS/2 Bitmap Graphics</target>
       </trans-unit>
       <trans-unit id="extension.gif">
         <source>.gif - Graphic Interchange Format</source>
-        <target state="needs-translation">.gif - Graphic Interchange Format</target>
+        <target state="translated">.gif - Graphic Interchange Format</target>
       </trans-unit>
       <trans-unit id="extension.jpg">
         <source>.jpg - JPEG/JIFF Image</source>
-        <target state="needs-translation">.jpg - JPEG/JIFF Image</target>
+        <target state="translated">.jpg - JPEG/JIFF Image</target>
       </trans-unit>
       <trans-unit id="extension.jpeg">
         <source>.jpeg - JPEG/JIFF Image</source>
-        <target state="needs-translation">.jpeg - JPEG/JIFF Image</target>
+        <target state="translated">.jpeg - JPEG/JIFF Image</target>
       </trans-unit>
       <trans-unit id="extension.pcx">
         <source>.pcx - Paintbrush Bitmap Graphic</source>
-        <target state="needs-translation">.pcx - Paintbrush Bitmap Graphic</target>
+        <target state="translated">.pcx - Paintbrush Bitmap Graphic</target>
       </trans-unit>
       <trans-unit id="extension.png">
         <source>.png - Portable Network Graphic</source>
-        <target state="needs-translation">.png - Portable Network Graphic</target>
+        <target state="translated">.png - Portable Network Graphic</target>
       </trans-unit>
       <trans-unit id="extension.tga">
         <source>.tga - Truevision Targa Graphic</source>
-        <target state="needs-translation">.tga - Truevision Targa Graphic</target>
+        <target state="translated">.tga - Truevision Targa Graphic</target>
       </trans-unit>
       <trans-unit id="extension.tif">
         <source>.tif - Tagged Image Format</source>
-        <target state="needs-translation">.tif - Tagged Image Format</target>
+        <target state="translated">.tif - Tagged Image Format</target>
       </trans-unit>
       <trans-unit id="extension.tiff">
         <source>.tiff - Tagged Image Format</source>
-        <target state="needs-translation">.tiff - Tagged Image Format</target>
+        <target state="translated">.tiff - Tagged Image Format</target>
       </trans-unit>
       <trans-unit id="message.imageTransparent" approved="yes">
         <source>Image %s has not been resized because transparency has been detected.</source>
