@@ -27,8 +27,8 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -374,8 +374,56 @@ class ImageResizer
             $this->reportAdditionalStorageClaimed($originalFileSize - $newFileSize);
 
             // Replace original file
-            @unlink($fileName);
-            @rename($tempFileInfo[3], $destFileName);
+            // If conversion is needed
+            $useFalForConversion = isset($ruleset['conversion_mapping'][$fileExtension])
+                && $destExtension !== $fileExtension
+                && empty($targetDirectory);
+
+            /** @var File|null $falFile */
+            $falFile = null;
+
+            if ($file instanceof File) { // If $file is given
+                $falFile = $file;
+            } else if ($useFalForConversion) {
+                // Otherwise, try to get FAL file from file name
+                try {
+                    $falFile = $this->reverseToFALFile($fileName);
+                } catch (\Throwable) {
+                }
+            }
+
+            if ($useFalForConversion && $falFile instanceof File) {
+
+                $storage = $falFile->getStorage();
+
+                // Get new file name
+                $newFileNameOnly = PathUtility::basename($destFileName);
+
+                try {
+                    if ($falFile->getName() !== $newFileNameOnly) {
+                        // If the file name is changing, update mime-type and rename it via FAL
+                        $falFile->updateProperties(['mime_type' => mime_content_type($tempFileInfo[3])]);
+                        $falFile = $storage->renameFile($falFile, $newFileNameOnly);
+                    }
+                } catch (\TYPO3\CMS\Core\Validation\ResultException $e) {
+                    $this->notify(
+                        $callbackNotification,
+                        $e->getMessage() . ': ' . implode(PHP_EOL, array_column($e->messages, 'message')),
+                        \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR
+                    );
+                    return $fileName;
+                }
+
+                // Replace original file
+                $storage->replaceFile($falFile, $tempFileInfo[3]);
+
+                // delete temporary file
+                @unlink($tempFileInfo[3]);
+            } else {
+                // fallback: replace original file
+                @unlink($fileName);
+                @rename($tempFileInfo[3], $destFileName);
+            }
 
             if ($fileName === $destFileName) {
                 $message = sprintf(
@@ -684,6 +732,17 @@ class ImageResizer
     protected function getIndexer(\TYPO3\CMS\Core\Resource\ResourceStorage $storage)
     {
         return GeneralUtility::makeInstance(Indexer::class, $storage);
+    }
+
+    /**
+     * Reverses a file path to a FAL File object.
+     * @param string $filePath
+     * @return File
+     */
+    private function reverseToFALFile(string $filePath): File
+    {
+        $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+        return $resourceFactory->retrieveFileOrFolderObject($filePath);
     }
 
     private function getTranslatedLabel(string $key): string
