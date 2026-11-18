@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -22,7 +23,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxController
 {
-
     /**
      * Render a single flex form section container to add it to the DOM
      *
@@ -40,11 +40,11 @@ class FormFlexAjaxController extends \TYPO3\CMS\Backend\Controller\FormFlexAjaxC
         $GLOBALS['TCA']['tx_imageautoresize']['ajax'] = true;
 
         // Trick to use a virtual record
-        $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
+        $dataProviders = & $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
         $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
             'before' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
-            ]
+            ],
         ];
 
         $record = [

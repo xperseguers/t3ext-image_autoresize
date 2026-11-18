@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -17,14 +18,12 @@ declare(strict_types=1);
 namespace Causal\ImageAutoresize\EventListener;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extensionmanager\Event\AvailableActionsForExtensionEvent;
 
 class ExtensionManagerEventListener
 {
-
     /**
      * Extends the list of actions for EXT:image_autoresize to link to
      * the configuration module.
@@ -33,8 +32,9 @@ class ExtensionManagerEventListener
      */
     public function processActions(AvailableActionsForExtensionEvent $event): void
     {
-        if ($event->getPackageKey() !== 'image_autoresize')
+        if ($event->getPackageKey() !== 'image_autoresize') {
             return;
+        }
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $moduleUrl = (string)$uriBuilder->buildUriFromRoute('xMOD_tximageautoresize');

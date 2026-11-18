@@ -1,4 +1,5 @@
 <?php
+
 defined('TYPO3') || die();
 
 $typo3Version = (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion();
@@ -127,7 +128,7 @@ return [
 				auto_orient,keep_metadata,resize_png_with_alpha,conversion_mapping,
 			--div--;LLL:EXT:image_autoresize/Resources/Private/Language/locallang_tca.xlf:tabs.rulesets,
 				rulesets
-		'],
+		', ],
     ],
     'palettes' => [
         'dimensions' => ['showitem' => 'max_width,max_height,max_size'],

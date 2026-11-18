@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -23,8 +24,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * TCA Helper class.
  *
  * @category    TCA
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */

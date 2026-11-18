@@ -39,6 +39,9 @@
     "ext-json": "*",
     "typo3/cms-core": "^12 || ^13 || ^14"
   },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "~3.95.10"
+  },
   "autoload": {
     "psr-4": {
       "Causal\\ImageAutoresize\\": "Classes/"
@@ -56,6 +59,20 @@
       "Package": {
         "providesPackages": {}
       }
+    }
+  },
+  "scripts": {
+    "cs": [
+      "php-cs-fixer fix -v --dry-run --config .php-cs-fixer.php"
+    ],
+    "csfix": [
+      "php-cs-fixer fix -v --config .php-cs-fixer.php"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "typo3/cms-composer-installers": true,
+      "typo3/class-alias-loader": true
     }
   }
 }

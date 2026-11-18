@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -16,25 +17,22 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Backend\Form\FormDataProvider;
 
-use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Backend\Form\FormDataProvider\AbstractDatabaseRecordProvider;
+use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
  * Virtual form data provider.
  *
  * @category    Form\FormDataProvider
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class VirtualDatabaseEditRow extends AbstractDatabaseRecordProvider implements FormDataProviderInterface
 {
-
     /**
      * @var array
      */
-    static $row;
+    public static $row;
 
     /**
      * Initializes the virtual configuration.

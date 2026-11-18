@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -52,14 +53,11 @@ namespace Causal\ImageAutoresize\Utility;
  *
  *
  * @category    Utility
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class JpegExifOrient
 {
-
     /**
      * Sets the Exif Orientation for a given JPG file.
      *
@@ -170,29 +168,47 @@ class JpegExifOrient
 
         // Check Tag mark
         if ($is_motorola) {
-            if ($exif_data[2] !== 0) return;
-            if ($exif_data[3] !== 0x2A) return;
+            if ($exif_data[2] !== 0) {
+                return;
+            }
+            if ($exif_data[3] !== 0x2A) {
+                return;
+            }
         } else {
-            if ($exif_data[3] !== 0) return;
-            if ($exif_data[2] !== 0x2A) return;
+            if ($exif_data[3] !== 0) {
+                return;
+            }
+            if ($exif_data[2] !== 0x2A) {
+                return;
+            }
         }
 
         // Get first IFD offset (offset to IFD0)
         if ($is_motorola) {
-            if ($exif_data[4] !== 0) return;
-            if ($exif_data[5] !== 0) return;
+            if ($exif_data[4] !== 0) {
+                return;
+            }
+            if ($exif_data[5] !== 0) {
+                return;
+            }
             $offset = $exif_data[6];
             $offset <<= 8;
             $offset += $exif_data[7];
         } else {
-            if ($exif_data[7] !== 0) return;
-            if ($exif_data[6] !== 0) return;
+            if ($exif_data[7] !== 0) {
+                return;
+            }
+            if ($exif_data[6] !== 0) {
+                return;
+            }
             $offset = $exif_data[5];
             $offset <<= 8;
             $offset += $exif_data[4];
         }
         // Check end of data segment
-        if ($offset > $length - 2) return;
+        if ($offset > $length - 2) {
+            return;
+        }
 
         // Get the number of directory entries contained in this IFD
         if ($is_motorola) {
@@ -204,13 +220,17 @@ class JpegExifOrient
             $number_of_tags <<= 8;
             $number_of_tags += $exif_data[$offset];
         }
-        if ($number_of_tags === 0) return;
+        if ($number_of_tags === 0) {
+            return;
+        }
         $offset += 2;
 
         // Search for Orientation Tag in IFD0
         while (true) {
             // Check end of data segment
-            if ($offset > $length - 12) return;
+            if ($offset > $length - 12) {
+                return;
+            }
             // Get Tag number
             if ($is_motorola) {
                 $tagnum = $exif_data[$offset];
@@ -222,8 +242,12 @@ class JpegExifOrient
                 $tagnum += $exif_data[$offset];
             }
             // Found Orientation Tag
-            if ($tagnum === 0x0112) break;
-            if (--$number_of_tags === 0) return;
+            if ($tagnum === 0x0112) {
+                break;
+            }
+            if (--$number_of_tags === 0) {
+                return;
+            }
             $offset += 12;
         }
 

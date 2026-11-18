@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -49,8 +50,7 @@ final class ImageResizedEvent
         string $destination,
         int $newWidth,
         int $newHeight
-    )
-    {
+    ) {
         $this->operation = $operation;
         $this->source = $source;
         $this->destination = $destination;

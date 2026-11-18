@@ -17,10 +17,10 @@ declare(strict_types=1);
 
 namespace Causal\ImageAutoresize\Xclass\V14;
 
+use TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca;
 use TYPO3\CMS\Core\Schema\SchemaCollection;
 use TYPO3\CMS\Core\Schema\TcaSchema;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
-use TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca;
 
 class TcaSchemaFactoryXclassed extends TcaSchemaFactory
 {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -25,8 +26,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -78,7 +77,7 @@ class BatchResize extends Command
             // Process watched directories
             $directories = $this->imageResizer->getAllDirectories();
         } else {
-            $dirs = GeneralUtility::trimExplode(LF, str_replace(",", LF, $defaultDirectories), true);
+            $dirs = GeneralUtility::trimExplode(LF, str_replace(',', LF, $defaultDirectories), true);
             $directories = [];
             foreach ($dirs as $directory) {
                 $directoryConfig = FAL::getDirectoryConfig($directory);

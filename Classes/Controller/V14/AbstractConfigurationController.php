@@ -46,8 +46,7 @@ abstract class AbstractConfigurationController
         private readonly FormDataCompiler $formDataCompiler,
         private readonly FormResultFactory $formResultFactory,
         private readonly FormResultHandler $formResultHandler
-    )
-    {
+    ) {
         $this->typo3Version = (new Typo3Version())->getMajorVersion();
         $this->languageService = $GLOBALS['LANG'];
         $this->config = static::readConfiguration();
@@ -84,12 +83,12 @@ abstract class AbstractConfigurationController
         $record = array_merge($record, $row);
 
         // Trick to use a virtual record
-        $dataProviders =& $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
+        $dataProviders = & $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
 
         $dataProviders[\Causal\ImageAutoresize\Backend\Form\FormDataProvider\VirtualDatabaseEditRow::class] = [
             'before' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
-            ]
+            ],
         ];
 
         // Initialize record in our virtual provider

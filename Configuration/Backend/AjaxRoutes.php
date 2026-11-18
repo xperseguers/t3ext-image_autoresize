@@ -10,6 +10,6 @@ return [
         'path' => '/record/flex/containeradd',
         'target' => (new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() >= 14
             ? \Causal\ImageAutoresize\Controller\V14\FormFlexAjaxController::class . '::containerAdd'
-            : \Causal\ImageAutoresize\Controller\V10\FormFlexAjaxController::class . '::containerAdd'
+            : \Causal\ImageAutoresize\Controller\V10\FormFlexAjaxController::class . '::containerAdd',
     ],
 ];

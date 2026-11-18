@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -22,10 +23,10 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Driver\LocalDriver;
-use TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent;
+use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
 use TYPO3\CMS\Core\Resource\Event\AfterFileReplacedEvent;
 use TYPO3\CMS\Core\Resource\Event\BeforeFileAddedEvent;
-use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
+use TYPO3\CMS\Core\Resource\Event\SanitizeFileNameEvent;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -33,7 +34,6 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 
 class CoreResourceStorageEventListener
 {
-
     /**
      * @var ImageResizer
      */
@@ -201,7 +201,8 @@ class CoreResourceStorageEventListener
         if ($autoExtractMetadata && is_array(static::$metadata) && !empty(static::$metadata)) {
             \Causal\ImageAutoresize\Utility\FAL::indexFile(
                 $event->getFile(),
-                '', '',
+                '',
+                '',
                 (int)static::$metadata['COMPUTED']['Width'],
                 (int)static::$metadata['COMPUTED']['Height'],
                 static::$metadata
@@ -226,8 +227,7 @@ class CoreResourceStorageEventListener
         string &$targetFileName,
         string $targetDirectory,
         ?File $file = null
-    ): string
-    {
+    ): string {
         $newFileName = static::$imageResizer->processFile(
             $fileName,
             $targetFileName,

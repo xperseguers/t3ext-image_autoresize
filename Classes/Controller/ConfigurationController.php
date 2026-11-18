@@ -33,33 +33,27 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 if ((new Typo3Version())->getMajorVersion() >= 14) {
     require_once __DIR__ . '/V14/AbstractConfigurationController.php';
-    abstract class AbstractConfigurationController extends \Causal\ImageAutoresize\Controller\V14\AbstractConfigurationController
-    {
-    }
+    abstract class AbstractConfigurationController extends \Causal\ImageAutoresize\Controller\V14\AbstractConfigurationController {}
 } else {
     require_once __DIR__ . '/V12/AbstractConfigurationController.php';
-    abstract class AbstractConfigurationController extends \Causal\ImageAutoresize\Controller\V12\AbstractConfigurationController
-    {
-    }
+    abstract class AbstractConfigurationController extends \Causal\ImageAutoresize\Controller\V12\AbstractConfigurationController {}
 }
 
 /**
  * Configuration controller.
  *
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class ConfigurationController extends AbstractConfigurationController
 {
-    const virtualTable = 'tx_imageautoresize';
-    const virtualRecordId = 1;
+    public const virtualTable = 'tx_imageautoresize';
+    public const virtualRecordId = 1;
 
     /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
@@ -214,7 +208,6 @@ class ConfigurationController extends AbstractConfigurationController
      * Processes submitted data and stores it to localconf.php.
      *
      * @param ServerRequestInterface $request
-     * @return void
      */
     protected function processData(ServerRequestInterface $request): void
     {
@@ -238,7 +231,9 @@ class ConfigurationController extends AbstractConfigurationController
 
             if (count($inputData_tmp[$table]) > 1) {
                 foreach ($inputData_tmp[$table] as $key => $values) {
-                    if ($key === $id) continue;
+                    if ($key === $id) {
+                        continue;
+                    }
                     ArrayUtility::mergeRecursiveWithOverrule($data, $values);
                 }
             }
@@ -291,7 +286,7 @@ class ConfigurationController extends AbstractConfigurationController
         $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $configurationFileName = static::getConfigurationFileName();
 
-        $configuration = is_file($configurationFileName) ? include($configurationFileName) : [];
+        $configuration = is_file($configurationFileName) ? include ($configurationFileName) : [];
         if (!is_array($configuration) || empty($configuration)) {
             $configuration = static::getDefaultConfiguration();
             $configuration = $eventDispatcher->dispatch(new ProcessDefaultConfigurationEvent($configuration))->getConfiguration();
@@ -462,14 +457,12 @@ class ConfigurationController extends AbstractConfigurationController
 // using a trick here
 class CustomDataHandler extends \TYPO3\CMS\Core\DataHandling\DataHandler
 {
-
     /**
      * Actions for flex form element (move, delete)
      * allows to remove and move flexform sections
      *
      * @param array &$valueArray by reference
      * @param array $actionCMDs
-     * @return void
      */
     public function _ACTION_FLEX_FORMdata(&$valueArray, $actionCMDs)
     {

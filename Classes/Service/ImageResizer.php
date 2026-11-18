@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -28,7 +29,6 @@ use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Index\Indexer;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -36,14 +36,11 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  * This is a utility class to resize pictures based on rules.
  *
  * @category    Service
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class ImageResizer
 {
-
     /**
      * @var array
      */
@@ -52,7 +49,7 @@ class ImageResizer
     /**
      * @var array|null
      */
-    protected $lastMetadata = null;
+    protected $lastMetadata;
 
     /**
      * Initializes the hook configuration as a meaningful ordered list
@@ -128,8 +125,7 @@ class ImageResizer
         string $fileName,
         ?\TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null,
         ?array $ruleset = null
-    ): ?string
-    {
+    ): ?string {
         if ($ruleset === null) {
             $ruleset = $this->getRuleset($fileName, $fileName, $backendUser);
         }
@@ -182,7 +178,7 @@ class ImageResizer
      * @param string $targetDirectory
      * @param File $file
      * @param \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser
-     * @param callback $callbackNotification Callback to send notification
+     * @param callable $callbackNotification Callback to send notification
      * @return string File name that was finally written
      */
     public function processFile(
@@ -192,8 +188,7 @@ class ImageResizer
         ?File $file = null,
         ?\TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser = null,
         $callbackNotification = null
-    ): string
-    {
+    ): string {
         $this->lastMetadata = null;
 
         if (!(empty($targetFileName) && empty($targetDirectory))) {
@@ -317,7 +312,7 @@ class ImageResizer
             && $metadata['width'] > 0
             && isset($metadata['height'])
             && $metadata['height'] > 0
-            && $metadata['width'] * $metadata['height'] > $ruleset['max_size']
+            && $ruleset['max_size'] < $metadata['width'] * $metadata['height']
         ) {
             $factor = sqrt($ruleset['max_size'] / ($metadata['width'] * $metadata['height']));
 
@@ -329,13 +324,13 @@ class ImageResizer
             // Invert max_width and max_height as the picture
             // will be automatically rotated
             $options = [
-                'maxW' => (int) $ruleset['max_height'],
-                'maxH' => (int) $ruleset['max_width'],
+                'maxW' => (int)$ruleset['max_height'],
+                'maxH' => (int)$ruleset['max_width'],
             ];
         } else {
             $options = [
-                'maxW' => (int) $ruleset['max_width'],
-                'maxH' => (int) $ruleset['max_height'],
+                'maxW' => (int)$ruleset['max_width'],
+                'maxH' => (int)$ruleset['max_height'],
             ];
         }
 
@@ -380,12 +375,17 @@ class ImageResizer
             if ($fileName === $destFileName) {
                 $message = sprintf(
                     $this->getTranslatedLabel('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageResized'),
-                    $targetFileName, $tempFileInfo[0], $tempFileInfo[1]
+                    $targetFileName,
+                    $tempFileInfo[0],
+                    $tempFileInfo[1]
                 );
             } else {
                 $message = sprintf(
                     $this->getTranslatedLabel('LLL:EXT:image_autoresize/Resources/Private/Language/locallang.xlf:message.imageResizedAndRenamed'),
-                    $targetFileName, $tempFileInfo[0], $tempFileInfo[1], PathUtility::basename($targetDestFileName)
+                    $targetFileName,
+                    $tempFileInfo[0],
+                    $tempFileInfo[1],
+                    PathUtility::basename($targetDestFileName)
                 );
             }
 
@@ -431,7 +431,7 @@ class ImageResizer
     /**
      * Sends a notification.
      *
-     * @param callback $callbackNotification Callback to send notification
+     * @param callable $callbackNotification Callback to send notification
      * @param string $message
      * @param int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity $severity
      */
@@ -456,8 +456,7 @@ class ImageResizer
         string $sourceFileName,
         string $targetFileName,
         ?BackendUserAuthentication $backendUser = null
-    ): ?array
-    {
+    ): ?array {
         $ret = null;
 
         // Extract the extension
@@ -472,8 +471,9 @@ class ImageResizer
                 continue;
             }
             if (count($ruleset['usergroup']) > 0 && (
-                    $backendUser === null ||
-                    count(array_intersect($ruleset['usergroup'], $beGroups)) === 0)
+                $backendUser === null ||
+                    count(array_intersect($ruleset['usergroup'], $beGroups)) === 0
+            )
             ) {
                 // Backend user is not member of a group configured for the current rule set
                 continue;
@@ -597,9 +597,10 @@ class ImageResizer
                     if (!is_numeric($value)) {
                         $unit = strtoupper(substr($value, -1));
                         $factor = 1 * ($unit === 'K' ? 1024 : ($unit === 'M' ? 1024 * 1024 : 0));
-                        $value = intval(trim((string)substr($value, 0, strlen($value) - 1))) * $factor;
+                        $value = (int)(trim((string)substr($value, 0, strlen($value) - 1))) * $factor;
                     }
-                // Beware: fall-back to next value processing
+                    // Beware: fall-back to next value processing
+                    // no break
                 case 'max_width':
                 case 'max_height':
                     if ($value <= 0) {
@@ -611,11 +612,11 @@ class ImageResizer
                     if (!is_numeric($value)) {
                         $unit = strtoupper(substr($value, -1));
                         $factor = 1 * ($unit === 'M' ? 1000000 : 1);
-                        $value = intval(trim((string)substr($value, 0, strlen($value) - 1))) * $factor;
+                        $value = (int)(trim((string)substr($value, 0, strlen($value) - 1))) * $factor;
                     }
                     break;
                 case 'conversion_mapping':
-                    if (strpos($value, CRLF) !== false) {
+                    if (str_contains($value, CRLF)) {
                         $mapping = GeneralUtility::trimExplode(CRLF, $value, true);
                     } else {
                         $mapping = GeneralUtility::trimExplode(',', $value, true);

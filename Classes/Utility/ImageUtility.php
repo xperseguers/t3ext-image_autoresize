@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -27,14 +28,11 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  * This is a generic image utility.
  *
  * @category    Utility
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class ImageUtility
 {
-
     /**
      * Returns the EXIF orientation of a given picture.
      *
@@ -119,7 +117,7 @@ class ImageUtility
         ];
         $storageConfiguration = [
             'basePath' => PathUtility::dirname($fileName),
-            'pathType' => 'absolute'
+            'pathType' => 'absolute',
         ];
 
         // Borrow business logic from \TYPO3\CMS\Core\Utility\PathUtility::isAllowedAdditionalPath()
@@ -248,7 +246,7 @@ class ImageUtility
         } else {
             // Fall back to hack
             $encodedText = utf8_encode($text);
-            if (strpos($encodedText, 'Ã') === false) {
+            if (!str_contains($encodedText, 'Ã')) {
                 $text = $encodedText;
             }
         }
@@ -271,7 +269,7 @@ class ImageUtility
                 $components[$key] = 0;
             }
         }
-        list($hours, $minutes, $seconds) = $components;
+        [$hours, $minutes, $seconds] = $components;
 
         return $hours + ($minutes / 60) + ($seconds / 3600);
     }
@@ -324,10 +322,10 @@ class ImageUtility
         $byte25 = ord(substr($bytes, 1, 1));
         if ($byte24 === 16 || $byte25 === 6 || $byte25 === 4) {
             return true;
-        } else {
-            $content = file_get_contents($fileName);
-            return strpos($content, 'tRNS') !== false;
         }
+        $content = file_get_contents($fileName);
+        return str_contains($content, 'tRNS');
+
     }
 
     /**

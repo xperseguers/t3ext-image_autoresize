@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -28,14 +29,11 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  * This is a FAL-manipulation utility.
  *
  * @category    Utility
- * @package     TYPO3
- * @subpackage  tx_imageautoresize
  * @author      Xavier Perseguers <xavier@causal.ch>
  * @license     https://www.gnu.org/licenses/gpl-3.0.html
  */
 class FAL
 {
-
     /**
      * @var array
      */
@@ -58,8 +56,7 @@ class FAL
         int $width,
         int $height,
         array $metadata = []
-    ): void
-    {
+    ): void {
         if ($file === null) {
             $file = static::findExistingFile($origFileName);
         }
@@ -171,7 +168,9 @@ class FAL
                     $value = null;
                     if (isset($metadata[$metadataKey])) {
                         $value = trim((string)$metadata[$metadataKey]);
-                        if ($value !== '' && ord($value[0]) === 1) $value = null;
+                        if ($value !== '' && ord($value[0]) === 1) {
+                            $value = null;
+                        }
                         switch ($metadataKey) {
                             case 'ColorSpace':
                                 if ((int)$value === 1) {
