@@ -78,7 +78,7 @@ class BatchResize extends Command
             // Process watched directories
             $directories = $this->imageResizer->getAllDirectories();
         } else {
-            $dirs = GeneralUtility::trimExplode(LF, $defaultDirectories, true);
+            $dirs = GeneralUtility::trimExplode(LF, str_replace(",", LF, $defaultDirectories), true);
             $directories = [];
             foreach ($dirs as $directory) {
                 $directoryConfig = FAL::getDirectoryConfig($directory);
