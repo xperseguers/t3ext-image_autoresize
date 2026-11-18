@@ -33,7 +33,7 @@ Wildcards are supported:
 				<source>Maximum image size (pixel area)</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.max_size.description">
-				<source>Images will be resized up to this maximum size. Example: 8M (for 8 megapixels).</source>
+				<source>Maximum number of pixels (width × height) of the resized image. Use the suffix M for megapixels, e.g. 8M. This is not a file size; use the threshold to skip small files.</source>
 			</trans-unit>
 			<trans-unit id="tx_imageautoresize.auto_orient">
 				<source>Automatic orientation</source>
