@@ -240,7 +240,14 @@ class ImageUtility
     {
         if (function_exists('mb_detect_encoding')) {
             $sourceEncoding = mb_detect_encoding($text ?? '', mb_detect_order(), true);
-            if ($sourceEncoding && $sourceEncoding !== 'UTF-8') {
+            if ($sourceEncoding === false) {
+                // The default detect order is ASCII + UTF-8 only, so strict detection
+                // fails for legacy IPTC/EXIF values written in ISO-8859-1/Windows-1252
+                // (e.g. "\xD6sterreich"). Such a value would otherwise be passed on
+                // unchanged and rejected by a utf8mb4 column.
+                $sourceEncoding = 'Windows-1252';
+            }
+            if ($sourceEncoding !== 'UTF-8' && $sourceEncoding !== 'ASCII') {
                 $text = mb_convert_encoding($text ?? '', 'UTF-8', $sourceEncoding);
             }
         } else {
